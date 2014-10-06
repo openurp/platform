@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<profiles>
+  <profile name="openurp" pattern="org.openurp.*.ws">
+   <interceptors>
+      <interceptor name="web.Interceptor.hibernate"/>
+      <interceptor name="web.Interceptor.cors"/>
+      <!--<interceptor name="web.Interceptor.security"/>-->
+    </interceptors>
+  </profile>
+</profiles>
