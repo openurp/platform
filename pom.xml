@@ -15,6 +15,7 @@
     <module>kernel</module>
     <module>web</module>
     <module>ws</module>
+    <module>server</module>
   </modules>
   
 </project>
