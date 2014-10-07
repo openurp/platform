@@ -27,6 +27,14 @@
     </dependency>
     <dependency>
       <groupId>org.beangle.webmvc</groupId>
+      <artifactId>beangle-webmvc-bootstrap-ui</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.beangle.webmvc</groupId>
+      <artifactId>beangle-webmvc-webxml-plugin</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.beangle.webmvc</groupId>
       <artifactId>beangle-webmvc-entity-plugin</artifactId>
     </dependency>
     <dependency>
