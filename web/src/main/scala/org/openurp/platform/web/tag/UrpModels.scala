@@ -1,15 +1,14 @@
 package org.openurp.platform.web.tag
 
 import java.{ util => ju }
-
 import org.beangle.commons.bean.PropertyUtils
 import org.beangle.commons.io.IOs
 import org.beangle.commons.lang.{ ClassLoaders, Strings }
 import org.beangle.webmvc.view.tag.{ AbstractModels, ComponentContext }
 import org.beangle.webmvc.view.tag.components.ClosingUIBean
 import org.beangle.webmvc.view.tag.freemarker.TagModel
-
 import javax.servlet.http.HttpServletRequest
+import org.beangle.commons.lang.Primitives
 
 object UrpService {
   var config = readConfig()
@@ -42,22 +41,15 @@ class CodeSelect(context: ComponentContext) extends ClosingUIBean(context) {
     uri = UrpService.config("base") + code + ".json"
     if (null == this.id) generateIdIfEmpty()
     if (null == value) value = requestParameter(name)
-    if ((value.isInstanceOf[String]) && Strings.isEmpty(value.asInstanceOf[String])) value = null
-  }
-
-  def isSelected(obj: Object): Boolean = {
-    if (null == value) return false
-    else try {
-      var nobj = obj
-      if (obj.isInstanceOf[Tuple2[_, _]]) nobj = obj.asInstanceOf[Tuple2[Object, _]]._1
-      else if (obj.isInstanceOf[ju.Map.Entry[_, _]]) nobj = obj.asInstanceOf[ju.Map.Entry[Object, _]].getKey()
-      val rs = value.equals(nobj) || value.equals(PropertyUtils.getProperty(nobj, keyName))
-      return rs || value.toString().equals(nobj.toString()) ||
-        value.toString().equals(String.valueOf(PropertyUtils.getProperty(nobj, keyName).toString))
-    } catch {
-      case e: Exception =>
-        e.printStackTrace()
-        return false
+    if (null != value) {
+      value match {
+        case str: String => if (Strings.isEmpty(str)) null else str
+        case tuple: Tuple2[_, _] => tuple._1.toString
+        case _ =>
+          if (Primitives.isWrapperType(value.getClass())) value.toString()
+          else PropertyUtils.getProperty(value, keyName).toString
+      }
     }
   }
+
 }

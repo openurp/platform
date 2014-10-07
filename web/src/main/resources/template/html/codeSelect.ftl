@@ -13,5 +13,8 @@
       var data = datas[i], value = data.code ? data.code : data.id
       select.append('<option value="'+value+'" title="'+data.name+'">'+data.name+'</option>');
     }
+    [#if tag.value??]
+    select.val("${tag.value}")
+    [/#if]
   })
 </script>
