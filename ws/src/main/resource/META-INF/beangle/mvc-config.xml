@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <profiles>
   <profile name="openurp" pattern="org.openurp.*.ws">
+   <url path="/" suffix=""  style="plur-seo" />
    <interceptors>
       <interceptor name="web.Interceptor.hibernate"/>
       <interceptor name="web.Interceptor.cors"/>
