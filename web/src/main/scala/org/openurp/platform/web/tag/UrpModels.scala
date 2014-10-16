@@ -28,6 +28,6 @@ object UrpService {
 
 class UrpModels(context: ComponentContext, request: HttpServletRequest) extends AbstractModels(context, request) {
   def service(url: String): String = {
-    UrpService.base + url + ".json"
+    UrpService.base + url
   }
 }
