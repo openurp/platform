@@ -6,4 +6,5 @@
   <bean id="DataSource.default" class="org.beangle.commons.jndi.JndiDataSourceFactory">
     <constructor-arg value="jdbc/urp"/>
   </bean>
+
 </beans>
