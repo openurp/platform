@@ -8,7 +8,7 @@ import java.util.Collection
 class RemoteConfigurerTest extends FunSpec with Matchers {
   describe("RemoteConfigurer") {
     it("parse json") {
-      val configurer = new RemoteConfigurer(null)
+      val configurer = new RemoteConfig(null)
       val properties = configurer.parse("""{"code":"0","name":"居民身份证","id":0}""")
       val iter = properties.entrySet.iterator
       while (iter.hasNext) {

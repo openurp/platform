@@ -15,7 +15,7 @@ object Startup {
     val base = new File(System.getProperty("java.io.tmpdir"))
     tomcat.enableNaming()
     val resource = new ContextResource()
-    resource.setName("jdbc/dataSource")
+    resource.setName("jdbc/urp")
     resource.setAuth("Container")
     resource.setType("javax.sql.DataSource")
     resource.setScope("Sharable")

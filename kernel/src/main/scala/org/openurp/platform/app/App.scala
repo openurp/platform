@@ -1,30 +1,37 @@
 package org.openurp.platform.app
 
-import org.beangle.data.model.bean.NamedBean
-import org.beangle.data.model.IdGrowSlow
-import org.beangle.data.model.bean.IntIdBean
-import collection.mutable
+import java.net.URL
 
-class App extends IntIdBean with NamedBean with IdGrowSlow {
-  var datasources: Seq[DataSource] = new mutable.ListBuffer[DataSource]
-  var remark: String = _
-}
+import org.beangle.commons.io.IOs
+import org.beangle.commons.lang.{ ClassLoaders, SystemInfo }
+import org.beangle.commons.logging.Logging
+import org.openurp.platform.resource.{ Config, RemoteConfig }
+import org.openurp.platform.ws.ServiceConfig
 
-class DataSourceCfg extends IntIdBean with NamedBean with IdGrowSlow {
-  var url: String = _
-  var driverClassName: String = _
-  var remark: String = _
-}
+object App extends Logging {
+  private val location = "META-INF/openurp/app.properties"
+  val properties = readProperties
 
-class DataSource extends IntIdBean with IdGrowSlow {
-  var app: App = _
-  var config: DataSourceCfg = _
-  var username: String = _
-  var password: String = _
-  /**
-   * 最大活动连接数
-   */
-  var maxActive: Int = _
-  var key: String = _
-  var remark: String = _
+  def name: String = properties("name")
+
+  def secret: String = {
+    SystemInfo.properties.get("openurp.app.secret") match {
+      case Some(b) => b
+      case None => properties("secret")
+    }
+  }
+
+  private def readProperties: Map[String, String] = {
+    val configs = ClassLoaders.getResources(location)
+    if (configs.isEmpty) {
+      warn(s"Cannot find $location")
+      Map.empty
+    } else {
+      IOs.readJavaProperties(configs.head)
+    }
+  }
+
+  def getResourceConfig(resourceKey: String): Config = {
+    new RemoteConfig(new URL(ServiceConfig.base + "/app/" + name + "/resource/" + resourceKey + ".json?secret=" + secret))
+  }
 }

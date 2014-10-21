@@ -9,12 +9,12 @@ import javax.net.ssl.HttpsURLConnection
 import javax.script.ScriptEngineManager
 import java.{ util => ju }
 
-trait Configurer {
+trait Config {
 
   def properties: ju.Properties
 }
 
-class RemoteConfigurer(val url: URL) extends Configurer {
+class RemoteConfig(val url: URL) extends Config {
 
   def properties: ju.Properties = {
     parse(getResponseText(url))
@@ -27,7 +27,13 @@ class RemoteConfigurer(val url: URL) extends Configurer {
     val iter = engine.eval("result =" + string).asInstanceOf[ju.Map[_, _]].entrySet().iterator()
     while (iter.hasNext) {
       val one = iter.next.asInstanceOf[ju.Map.Entry[_, AnyRef]]
-      result.put(one.getKey.toString, one.getValue.toString())
+      val value = one.getValue match {
+        case d: java.lang.Double =>
+          if (java.lang.Double.compare(d, d.intValue) > 0) d.toString
+          else String.valueOf(d.intValue)
+        case a: Any => a.toString
+      }
+      result.put(one.getKey.toString, value)
     }
     result
   }
