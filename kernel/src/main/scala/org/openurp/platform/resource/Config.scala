@@ -1,13 +1,10 @@
 package org.openurp.platform.resource
 
-import java.net.URL
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import javax.net.ssl.HostnameVerifier
-import java.net.HttpURLConnection
-import javax.net.ssl.HttpsURLConnection
-import javax.script.ScriptEngineManager
+import java.io.{ BufferedReader, InputStreamReader }
+import java.net.{ HttpURLConnection, URL }
 import java.{ util => ju }
+
+import javax.script.ScriptEngineManager
 
 trait Config {
 
