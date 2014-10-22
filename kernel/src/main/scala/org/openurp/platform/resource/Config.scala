@@ -4,6 +4,8 @@ import java.io.{ BufferedReader, InputStreamReader }
 import java.net.{ HttpURLConnection, URL }
 import java.{ util => ju }
 
+import language.existentials
+
 import javax.script.ScriptEngineManager
 
 trait Config {
