@@ -32,6 +32,6 @@ object App extends Logging {
   }
 
   def getResourceConfig(resourceKey: String): Config = {
-    new RemoteConfig(new URL(ServiceConfig.base + "/app/" + name + "/resource/" + resourceKey + ".json?secret=" + secret))
+    new RemoteConfig(new URL(ServiceConfig.dataBase + "/app/" + name + "/resource/" + resourceKey + ".json?secret=" + secret))
   }
 }
