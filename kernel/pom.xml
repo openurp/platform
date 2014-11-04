@@ -16,7 +16,6 @@
     <bundle.namespace>org.openurp.platform</bundle.namespace>
   </properties>
 
-
   <dependencies>
     <dependency>
       <groupId>org.beangle.data</groupId>

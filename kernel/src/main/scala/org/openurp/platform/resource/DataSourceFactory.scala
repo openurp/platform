@@ -17,7 +17,9 @@ class TomcatDataSourceFactory(val resourceKey: String) extends Factory[DataSourc
   def result: DataSource = {
     if (null == clazz) throw new RuntimeException("ClassNotFoundException org.apache.tomcat.jdbc.pool.DataSourceFactory")
     val parsePoolProperties = clazz.getMethod("parsePoolProperties", classOf[ju.Properties])
-    val configuration = parsePoolProperties.invoke(null, App.getResourceConfig(resourceKey).properties)
+    val properties = App.getResourceConfig(resourceKey).properties
+    if (properties.containsKey("maxActive")) properties.put("maxTotal", properties.remove("maxActive"))
+    val configuration = parsePoolProperties.invoke(null, properties)
     val dataSourceClass = ClassLoaders.loadClass("org.apache.tomcat.jdbc.pool.DataSource")
     val constructor = dataSourceClass.getConstructor(ClassLoaders.loadClass("org.apache.tomcat.jdbc.pool.PoolConfiguration"))
     val dataSource = constructor.newInstance(configuration)
