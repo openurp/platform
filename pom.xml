@@ -8,9 +8,10 @@
   </parent>
   <groupId>org.openurp</groupId>
   <artifactId>openurp-platform</artifactId>
+  <version>0.0.1-SNAPSHOT</version>  
   <packaging>pom</packaging>
   <name>OpenURP Platform Parent</name>
-  
+
   <modules>
     <module>kernel</module>
     <module>web</module>
