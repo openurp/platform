@@ -44,6 +44,7 @@
     <dependency>
       <groupId>org.openurp.platform</groupId>
       <artifactId>openurp-platform-kernel</artifactId>
+      <version>${project.version}</version>
     </dependency>
   </dependencies>
 </project>
