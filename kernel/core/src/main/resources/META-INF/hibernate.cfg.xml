@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='utf-8'?>  
+<!DOCTYPE hibernate-configuration PUBLIC  
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"  
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd"> 
+
+<hibernate-configuration>
+  <session-factory>
+    <mapping resource="org/openurp/app/func/model/AppFuncPermission.hbm.xml"/>
+    <mapping resource="org/openurp/app/func/model/FuncResource.hbm.xml"/>
+
+    <mapping resource="org/openurp/app/model/AppBean.hbm.xml"/>
+
+    <mapping resource="org/openurp/app/nav/model/MenuBean.hbm.xml"/>
+    <mapping resource="org/openurp/app/nav/model/MenuProfileBean.hbm.xml"/>
+
+    <mapping resource="org/openurp/app/resource/model/DataSource.hbm.xml"/>
+
+    <mapping resource="org/openurp/base/model/BuildingBean.hbm.xml"/>
+    <mapping resource="org/openurp/base/model/CalendarBean.hbm.xml"/>
+    <mapping resource="org/openurp/base/model/CampusBean.hbm.xml"/>
+    <mapping resource="org/openurp/base/model/CourseUnitBean.hbm.xml"/>
+    <mapping resource="org/openurp/base/model/DepartmentBean.hbm.xml"/>
+    <mapping resource="org/openurp/base/model/HolidayBean.hbm.xml"/>
+    <mapping resource="org/openurp/base/model/PersonBean.hbm.xml"/>
+    <mapping resource="org/openurp/base/model/RoomBean.hbm.xml"/>
+    <mapping resource="org/openurp/base/model/SchoolBean.hbm.xml"/>
+    <mapping resource="org/openurp/base/model/SemesterBean.hbm.xml"/>
+    <mapping resource="org/openurp/base/model/TeacherBean.hbm.xml"/>
+    <mapping resource="org/openurp/base/model/TeacherJournalBean.hbm.xml"/>
+    <mapping resource="org/openurp/base/model/TimeSettingBean.hbm.xml"/>
+
+    <mapping resource="org/openurp/base/model/code/CodeCategory.hbm.xml"/>
+    <mapping resource="org/openurp/base/model/code/CodeMeta.hbm.xml"/>
+    <mapping resource="org/openurp/base/model/code/ministry.hbm.xml"/>
+    <mapping resource="org/openurp/base/model/code/nation.hbm.xml"/>
+    <mapping resource="org/openurp/base/model/code/school.hbm.xml"/>
+
+    <mapping resource="org/openurp/security/model/FieldBean.hbm.xml"/>
+    <mapping resource="org/openurp/security/model/Member.hbm.xml"/>
+    <mapping resource="org/openurp/security/model/UrpRoleBean.hbm.xml"/>
+    <mapping resource="org/openurp/security/model/UrpUserBean.hbm.xml"/>
+    <mapping resource="org/openurp/security/model/UserProfileBean.hbm.xml"/>
+    <mapping resource="org/openurp/security/model/function.hbm.xml"/>
+  </session-factory>
+</hibernate-configuration>

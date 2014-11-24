@@ -1,0 +1,38 @@
+package org.openurp.app.ws.resource
+
+import org.beangle.commons.collection.Properties
+import org.beangle.data.jpa.dao.OqlBuilder
+import org.beangle.data.model.dao.EntityDao
+import org.beangle.webmvc.api.action.ActionSupport
+import org.beangle.webmvc.api.annotation.{ action, mapping, param, response }
+import org.openurp.app.resource.model.DataSourceBean
+import org.openurp.app.model.AppBean
+
+@action("")
+class IndexWS(entityDao: EntityDao) extends ActionSupport {
+
+  @mapping(value = "{name}")
+  @response
+  def index(@param("app") app: String, @param("name") name: String): AnyRef = {
+    val secret = get("secret", "")
+    val apps = entityDao.findBy(classOf[AppBean], "name", List(app))
+    if (apps.isEmpty) return "error:error_app_name"
+    val exist = apps.head
+    if (exist.secret != secret) return "error:error_secret"
+
+    val query = OqlBuilder.from(classOf[DataSourceBean], "ds")
+    query.where("ds.app=:app and ds.name=:key", exist, name)
+    val set = entityDao.search(query)
+    if (set != null && set.size > 0) {
+      val rs = set.head
+      val ds = new Properties
+      ds.put("username", rs.username)
+      ds.put("password", rs.password)
+      ds.put("url", rs.config.url)
+      ds.put("maxActive", rs.maxActive)
+      ds.put("driverClassName", rs.config.driverClassName)
+      ds
+    } else "error:error_resource_key"
+  }
+
+}

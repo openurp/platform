@@ -1,0 +1,46 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.openurp.platform.kernel</groupId>
+    <artifactId>openurp-platform-kernel-parent</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <groupId>org.openurp.platform.kernel</groupId>
+  <artifactId>openurp-platform-kernel-ws</artifactId>
+  <packaging>jar</packaging>
+  <name>OpenURP Platform Kernel WebService</name>
+  
+  <properties>
+    <bundle.symbolicName>org.openurp.platform.kernel.ws</bundle.symbolicName>
+    <bundle.namespace>org.openurp</bundle.namespace>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.openurp.platform</groupId>
+      <artifactId>openurp-platform-kernel</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.beangle.webmvc</groupId>
+      <artifactId>beangle-webmvc-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.beangle.webmvc</groupId>
+      <artifactId>beangle-webmvc-webxml-plugin</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.beangle.webmvc</groupId>
+      <artifactId>beangle-webmvc-entity-plugin</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.beangle.webmvc</groupId>
+      <artifactId>beangle-webmvc-serializer-plugin</artifactId>
+    </dependency>
+  </dependencies>
+</project>

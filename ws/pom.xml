@@ -2,8 +2,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.openurp</groupId>
-    <artifactId>openurp-platform</artifactId>
+    <groupId>org.openurp.platform</groupId>
+    <artifactId>openurp-platform-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <groupId>org.openurp.platform</groupId>
@@ -12,14 +12,14 @@
   <name>OpenURP Platform WebService</name>
   
   <properties>
-    <bundle.symbolicName>org.openurp.platform</bundle.symbolicName>
-    <bundle.namespace>org.openurp.platform</bundle.namespace>
+    <bundle.symbolicName>org.openurp.platform.ws</bundle.symbolicName>
+    <bundle.namespace>org.openurp</bundle.namespace>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>org.openurp.platform</groupId>
-      <artifactId>openurp-platform-kernel</artifactId>
+      <artifactId>openurp-platform-api</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
