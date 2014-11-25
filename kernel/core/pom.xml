@@ -14,7 +14,6 @@
   <properties>
     <bundle.symbolicName>org.openurp.platform.kernel.core</bundle.symbolicName>
     <bundle.namespace>org.openurp.platform</bundle.namespace>
-    <beangle.security.version>4.0.3-SNAPSHOT</beangle.security.version>
   </properties>
 
   <dependencies>
