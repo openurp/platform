@@ -18,8 +18,8 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.openurp.platform</groupId>
-      <artifactId>openurp-platform-kernel</artifactId>
+      <groupId>org.openurp.platform.kernel</groupId>
+      <artifactId>openurp-platform-kernel-core</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>

@@ -1,4 +1,4 @@
-package org.openurp.platform.code.model
+package org.openurp.platform.code
 
 import org.beangle.data.model.bean.{ CodedBean, IntIdBean, NamedBean, TemporalOnBean, UpdatedBean }
 

@@ -43,9 +43,7 @@ class UrpRoleBean extends IntIdBean with NamedBean with UpdatedBean with Enabled
   override def getName: String = {
     name
   }
-  def depth: Int = {
-    Strings.count(indexno, ".")
-  }
+
   def index: Int = {
     val lastPart = Strings.substringAfterLast(indexno, ".")
     if (lastPart.isEmpty) Integer.valueOf(indexno) else Integer.valueOf(lastPart)
