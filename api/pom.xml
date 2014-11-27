@@ -24,7 +24,6 @@
     <dependency>
       <groupId>org.beangle.security</groupId>
       <artifactId>beangle-security-core</artifactId>
-      <version>${beangle.security.version}</version>
     </dependency>
     <dependency>
       <groupId>c3p0</groupId>

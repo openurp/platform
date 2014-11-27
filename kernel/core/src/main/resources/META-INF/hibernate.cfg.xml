@@ -15,26 +15,6 @@
 
     <mapping resource="org/openurp/app/resource/model/DataSource.hbm.xml"/>
 
-    <mapping resource="org/openurp/base/model/BuildingBean.hbm.xml"/>
-    <mapping resource="org/openurp/base/model/CalendarBean.hbm.xml"/>
-    <mapping resource="org/openurp/base/model/CampusBean.hbm.xml"/>
-    <mapping resource="org/openurp/base/model/CourseUnitBean.hbm.xml"/>
-    <mapping resource="org/openurp/base/model/DepartmentBean.hbm.xml"/>
-    <mapping resource="org/openurp/base/model/HolidayBean.hbm.xml"/>
-    <mapping resource="org/openurp/base/model/PersonBean.hbm.xml"/>
-    <mapping resource="org/openurp/base/model/RoomBean.hbm.xml"/>
-    <mapping resource="org/openurp/base/model/SchoolBean.hbm.xml"/>
-    <mapping resource="org/openurp/base/model/SemesterBean.hbm.xml"/>
-    <mapping resource="org/openurp/base/model/TeacherBean.hbm.xml"/>
-    <mapping resource="org/openurp/base/model/TeacherJournalBean.hbm.xml"/>
-    <mapping resource="org/openurp/base/model/TimeSettingBean.hbm.xml"/>
-
-    <mapping resource="org/openurp/base/model/code/CodeCategory.hbm.xml"/>
-    <mapping resource="org/openurp/base/model/code/CodeMeta.hbm.xml"/>
-    <mapping resource="org/openurp/base/model/code/ministry.hbm.xml"/>
-    <mapping resource="org/openurp/base/model/code/nation.hbm.xml"/>
-    <mapping resource="org/openurp/base/model/code/school.hbm.xml"/>
-
     <mapping resource="org/openurp/security/model/FieldBean.hbm.xml"/>
     <mapping resource="org/openurp/security/model/Member.hbm.xml"/>
     <mapping resource="org/openurp/security/model/UrpRoleBean.hbm.xml"/>

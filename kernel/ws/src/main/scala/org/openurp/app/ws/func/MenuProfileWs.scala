@@ -1,4 +1,4 @@
-package org.openurp.app.ws.nav
+package org.openurp.app.ws.func
 
 import org.beangle.webmvc.entity.action.RestfulService
 import org.beangle.security.blueprint.Menu
@@ -11,6 +11,8 @@ import org.beangle.data.model.dao.EntityDao
 import org.beangle.webmvc.entity.helper.QueryHelper
 import org.beangle.security.blueprint.MenuProfile
 import org.openurp.app.nav.model.MenuProfileBean
+import org.beangle.webmvc.api.annotation.param
+import org.beangle.webmvc.api.annotation.mapping
 
 class MenuProfileWS extends ActionSupport {
 
@@ -23,10 +25,11 @@ class MenuProfileWS extends ActionSupport {
   }
 
   @response
-  def index(): Seq[Any] = {
-    val rs = entityDao.search(getQueryBuilder())
+  @mapping("")
+  def index(@param("app") app: String): Seq[Any] = {
+    val rs = entityDao.search(getQueryBuilder().where("menuProfile.app.name=:name", app))
     val mps = new collection.mutable.ListBuffer[Properties]
-    for (one <- rs) { 
+    for (one <- rs) {
       val mp = new Properties(one, "id", "name")
       mp.add("app", one.app, "id", "title")
       mps += mp

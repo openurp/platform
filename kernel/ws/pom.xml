@@ -8,7 +8,7 @@
   </parent>
   <groupId>org.openurp.platform.kernel</groupId>
   <artifactId>openurp-platform-kernel-ws</artifactId>
-  <packaging>jar</packaging>
+  <packaging>war</packaging>
   <name>OpenURP Platform Kernel WebService</name>
   
   <properties>
@@ -21,6 +21,10 @@
       <groupId>org.openurp.platform.kernel</groupId>
       <artifactId>openurp-platform-kernel-core</artifactId>
       <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.beangle.security</groupId>
+      <artifactId>beangle-security-blueprint</artifactId>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>

@@ -3,7 +3,7 @@
   <!-- FIXME support parent -->
   <profile name="openurp-securityws" pattern="org.openurp.security.ws">
    <action suffix="WS" defaultMethod="index"/>
-   <url path="/" suffix=""  style="plur-seo" />
+   <url path="/security" suffix=""  style="plur-seo" />
    <interceptors>
       <interceptor name="web.Interceptor.hibernate"/>
       <interceptor name="web.Interceptor.cors"/>
@@ -11,7 +11,7 @@
   </profile>
   <profile name="openurp-appws" pattern="org.openurp.app.ws">
    <action suffix="WS" defaultMethod="index"/>
-   <url path="/" suffix=""  style="plur-seo" />
+   <url path="/app/{app}/" suffix=""  style="plur-seo" />
    <interceptors>
       <interceptor name="web.Interceptor.hibernate"/>
       <interceptor name="web.Interceptor.cors"/>

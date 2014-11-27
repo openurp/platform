@@ -10,6 +10,7 @@
       <generator class="auto_increment" />
     </id>
     <property name="code" length="30" unique="true" not-null="true" />
+    <property name="name" length="100" not-null="true" />
     <property name="locked" not-null="true" />
     <property name="enabled" not-null="true" />
     <property name="remark" length="100" />
@@ -17,7 +18,6 @@
     <property name="endOn" />
     <property name="password" not-null="true" />
     <property name="passwordExpiredOn" />
-    <many-to-one name="person" not-null="true" />
     <bag name="members" collection-type="seq" cascade="all">
       <key column="user_id" />
       <one-to-many class="Member" />
