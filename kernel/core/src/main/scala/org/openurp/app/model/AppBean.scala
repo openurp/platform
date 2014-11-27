@@ -1,11 +1,10 @@
 package org.openurp.app.model
 
 import collection.mutable
+
 import org.beangle.data.model.bean.{ IntIdBean, NamedBean }
 import org.openurp.app.App
-import org.openurp.app.resource.model.DataSourceBean
-import org.openurp.app.func.model.FuncResourceBean
-import org.openurp.app.func.model.AppFuncPermissionBean
+import org.openurp.app.func.model.{ AppFuncPermissionBean, FuncResourceBean }
 
 class AppBean extends IntIdBean with NamedBean with App {
   var secret: String = _

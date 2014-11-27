@@ -1,4 +1,4 @@
-package org.openurp.app.nav
+package org.openurp.app.func
 
 import org.openurp.app.App
 

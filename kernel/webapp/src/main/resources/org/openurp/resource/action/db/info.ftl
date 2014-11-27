@@ -6,23 +6,23 @@
 <table class="infoTable">
   <tr>
     <td class="title" width="20%">名称</td>
-    <td class="content">${dataSourceCfg.name}</td>
+    <td class="content">${db.name}</td>
   </tr>
   <tr>
     <td class="title" width="20%">URL</td>
-    <td class="content">${dataSourceCfg.url}</td>
+    <td class="content">${db.url}</td>
   </tr>
   <tr>
     <td class="title" width="20%">DriverClassName</td>
-    <td class="content" >${dataSourceCfg.driverClassName!}</td>
+    <td class="content" >${db.driverClassName!}</td>
   </tr>
   <tr>
     <td class="title" width="20%">用户名</td>
-    <td class="content" >${dataSourceCfg.username!}</td>
+    <td class="content" >${db.username!}</td>
   </tr>
   <tr>
     <td class="title" width="20%">备注</td>
-    <td class="content" >${dataSourceCfg.remark!}</td>
+    <td class="content" >${db.remark!}</td>
   </tr>
 </table>
 

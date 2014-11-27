@@ -4,11 +4,9 @@ import org.beangle.commons.collection.Properties
 import org.beangle.data.jpa.dao.OqlBuilder
 import org.beangle.data.model.dao.EntityDao
 import org.beangle.webmvc.api.action.ActionSupport
-import org.beangle.webmvc.api.annotation.response
+import org.beangle.webmvc.api.annotation.{ mapping, param, response }
 import org.beangle.webmvc.entity.helper.QueryHelper
-import org.openurp.app.nav.Menu
-import org.beangle.webmvc.api.annotation.mapping
-import org.beangle.webmvc.api.annotation.param
+import org.openurp.app.func.Menu
 
 class MenuWS extends ActionSupport {
 

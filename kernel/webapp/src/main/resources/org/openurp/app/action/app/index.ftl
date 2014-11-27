@@ -1,6 +1,6 @@
 [#ftl]
 [@b.head/]
-[@b.toolbar title="App"/]
+[@b.toolbar title="应用管理"/]
 <table class="indexpanel">
   <tr>
     <td class="index_view">

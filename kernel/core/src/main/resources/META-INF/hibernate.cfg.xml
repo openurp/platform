@@ -7,13 +7,13 @@
   <session-factory>
     <mapping resource="org/openurp/app/func/model/AppFuncPermission.hbm.xml"/>
     <mapping resource="org/openurp/app/func/model/FuncResource.hbm.xml"/>
+    <mapping resource="org/openurp/app/func/model/MenuBean.hbm.xml"/>
+    <mapping resource="org/openurp/app/func/model/MenuProfileBean.hbm.xml"/>
 
     <mapping resource="org/openurp/app/model/AppBean.hbm.xml"/>
+    <mapping resource="org/openurp/app/model/DataSourceBean.hbm.xml"/>
 
-    <mapping resource="org/openurp/app/nav/model/MenuBean.hbm.xml"/>
-    <mapping resource="org/openurp/app/nav/model/MenuProfileBean.hbm.xml"/>
-
-    <mapping resource="org/openurp/app/resource/model/DataSource.hbm.xml"/>
+    <mapping resource="org/openurp/resource/model/DbBean.hbm.xml"/>
 
     <mapping resource="org/openurp/security/model/FieldBean.hbm.xml"/>
     <mapping resource="org/openurp/security/model/Member.hbm.xml"/>

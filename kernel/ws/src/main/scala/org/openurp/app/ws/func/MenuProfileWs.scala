@@ -10,7 +10,7 @@ import org.beangle.webmvc.api.action.ActionSupport
 import org.beangle.data.model.dao.EntityDao
 import org.beangle.webmvc.entity.helper.QueryHelper
 import org.beangle.security.blueprint.MenuProfile
-import org.openurp.app.nav.model.MenuProfileBean
+import org.openurp.app.func.model.MenuProfileBean
 import org.beangle.webmvc.api.annotation.param
 import org.beangle.webmvc.api.annotation.mapping
 

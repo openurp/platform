@@ -5,7 +5,7 @@ import org.beangle.data.jpa.dao.OqlBuilder
 import org.beangle.data.model.dao.EntityDao
 import org.beangle.webmvc.api.action.ActionSupport
 import org.beangle.webmvc.api.annotation.{ action, mapping, param, response }
-import org.openurp.app.resource.model.DataSourceBean
+import org.openurp.app.model.DataSourceBean
 import org.openurp.app.model.AppBean
 
 @action("")
@@ -28,9 +28,9 @@ class IndexWS(entityDao: EntityDao) extends ActionSupport {
       val ds = new Properties
       ds.put("username", rs.username)
       ds.put("password", rs.password)
-      ds.put("url", rs.config.url)
+      ds.put("url", rs.db.url)
       ds.put("maxActive", rs.maxActive)
-      ds.put("driverClassName", rs.config.driverClassName)
+      ds.put("driverClassName", rs.db.driverClassName)
       ds
     } else "error:error_resource_key"
   }

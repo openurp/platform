@@ -1,12 +1,13 @@
-package org.openurp.app.nav.model
+package org.openurp.app.func.model
 
 import collection.mutable
-
 import org.beangle.data.model.bean.{ EnabledBean, HierarchicalBean, IntIdBean, NamedBean }
 import org.beangle.security.blueprint.{ FuncResource => BeangleFuncResource }
 import org.openurp.app.App
 import org.openurp.app.func.FuncResource
-import org.openurp.app.nav.{ Menu, MenuProfile }
+import org.beangle.security.blueprint.{FuncResource => BeangleFuncResource}
+import org.openurp.app.func.Menu
+import org.openurp.app.func.MenuProfile
 
 class MenuProfileBean extends IntIdBean with NamedBean with EnabledBean with MenuProfile {
   var app: App = _

@@ -4,21 +4,21 @@ import org.beangle.commons.codec.binary.Des
 import org.beangle.webmvc.api.annotation.ignore
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
-import org.openurp.app.service.DataSourceService
 import java.security.MessageDigest
 import org.beangle.commons.codec.binary.Hex
 import javax.crypto.Cipher
 import java.util.Arrays
 import javax.crypto.spec.SecretKeySpec
-import org.openurp.app.resource.model.DataSourceBean
 import org.openurp.app.model.AppBean
+import org.openurp.app.model.DataSourceBean
+import org.openurp.resource.service.DbService
 
-class AppAction(dataSourceService: DataSourceService) extends RestfulAction[AppBean] {
+class AppAction(dbService: DbService) extends RestfulAction[AppBean] {
 
   override def shortName = "app"
 
   def datasource(): String = {
-    put("dataSources", dataSourceService.findDataSource())
+    put("dataSources", dbService.list())
     forward()
   }
 
@@ -30,10 +30,10 @@ class AppAction(dataSourceService: DataSourceService) extends RestfulAction[AppB
       val removed = new collection.mutable.HashSet[DataSourceBean]
       val ids = getAll("ds", classOf[Integer]).toSet
       sets foreach { ds =>
-        if (ids.contains(ds.config.id)) {
-          processed += ds.config.id
+        if (ids.contains(ds.db.id)) {
+          processed += ds.db.id
           val originPassword = ds.password
-          populate(ds, "ds" + ds.config.id)
+          populate(ds, "ds" + ds.db.id)
           ds.password =
             if (null == ds.password) originPassword
             else encrypt(ds.password)

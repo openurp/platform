@@ -1,4 +1,7 @@
 [@b.textfield name="app.name" label="名称" value="${app.name!}" required="true" maxlength="200"/]
+[@b.textfield name="app.title" label="标题" value="${app.title!}" required="true" maxlength="200"/]
+[@b.radios name="app.appType" label="类型" items={'web-data-service':'web数据服务 ','web-app-service':'web应用服务 ','web-app':'web应用'} value="${app.appType!}" required="true" /]
+[@b.textfield name="app.url" label="URL" value="${app.url!}" required="true" maxlength="200" style="width:300px"/]
 [@b.field label="引用资源"]
   <div style="margin-left:120px;">
     <style>.itable th, .itable td{padding:3px 5px;}</style>
@@ -15,16 +18,16 @@
       <tbody>
         [#list app.datasources as v]
           <tr>
-            <td>${v.config.name}</td>
-            <td><input name="ds${v.config.id}.name" value="${v.name!}" style="width:80px"/></td>
-            <td><input name="ds${v.config.id}.username" value="${v.username!}" style="width:80px"/></td>
-            <td><input type="password" name="ds${v.config.id}.password" value="" style="width:80px"/></td>
+            <td>${v.db.name}</td>
+            <td><input name="ds${v.db.id}.name" value="${v.name!}" style="width:80px"/></td>
+            <td><input name="ds${v.db.id}.username" value="${v.username!}" style="width:80px"/></td>
+            <td><input type="password" name="ds${v.db.id}.password" value="" style="width:80px"/></td>
             <td>
-               <input name="ds" type="hidden" value="${v.config.id}"/>
-               <input name="ds${v.config.id}.config.id" type="hidden" value="${v.config.id}"/>
-               <input class="maxActive" name="ds${v.config.id}.maxActive" value="${v.maxActive}" style="width:60px"/>
+               <input name="ds" type="hidden" value="${v.db.id}"/>
+               <input name="ds${v.db.id}.config.id" type="hidden" value="${v.db.id}"/>
+               <input class="maxActive" name="ds${v.db.id}.maxActive" value="${v.maxActive}" style="width:60px"/>
             </td>
-            <td><input name="ds${v.config.id}.remark" value="${v.remark!}" style="width:100px"/></td>
+            <td><input name="ds${v.db.id}.remark" value="${v.remark!}" style="width:100px"/></td>
             <td><button class="delDataSourceBtn">删除</button></td>
            </tr>
         [/#list]
@@ -33,7 +36,7 @@
     <p><button class="addBtn">添加</button><p>
   </div>
 [/@]
-[@b.textfield name="app.secret" label="密钥" value="${app.secret}" maxlength="200"/]
+[@b.textfield name="app.secret" label="密钥" value="${app.secret!}" maxlength="200"/]
 [@b.textarea name="app.remark" label="备注" value="${app.remark!}" maxlength="200"/]
 [@b.formfoot]
   [@b.reset/]&nbsp;&nbsp;[@b.submit value="action.submit" onsubmit="beforeSubmit"/]

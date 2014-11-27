@@ -1,19 +1,19 @@
-package org.openurp.app.action.datasource
+package org.openurp.resource.action
 
 import java.sql.DriverManager
 import collection.mutable.ListBuffer
 import org.beangle.webmvc.entity.action.RestfulAction
-import org.openurp.app.resource.model.DataSourceCfgBean
+import org.openurp.resource.model.DbBean
 
-class ConfigAction extends RestfulAction[DataSourceCfgBean] {
+class DbAction extends RestfulAction[DbBean] {
 
-  override def shortName = "dataSourceCfg"
+  override def shortName = "db"
     
   def test(): String = {
     val username = get("username", "")
     val password = get("password", "")
-    val entities = getModels[DataSourceCfgBean](entityName, getIds(shortName, entityMetaData.getType(entityName).get.idType))
-    val result = new ListBuffer[Tuple2[DataSourceCfgBean, Boolean]]
+    val entities = getModels[DbBean](entityName, getIds(shortName, entityMetaData.getType(entityName).get.idType))
+    val result = new ListBuffer[Tuple2[DbBean, Boolean]]
     for (cfg <- entities) {
       try {
         Class.forName(cfg.driverClassName)
