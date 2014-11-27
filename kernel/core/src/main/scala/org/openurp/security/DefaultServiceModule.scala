@@ -6,7 +6,7 @@ import org.openurp.security.service.internal.ProfileServiceImpl
 import org.openurp.security.service.internal.RoleManagerImpl
 import org.openurp.security.service.internal.FuncPermissionManagerImpl
 
-class DefaultModule extends AbstractBindModule {
+class DefaultServiceModule extends AbstractBindModule {
 
   protected override def binding() {
     bind(classOf[UserManagerImpl], classOf[RoleManagerImpl])

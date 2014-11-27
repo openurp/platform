@@ -6,7 +6,7 @@
 <hibernate-configuration>
   <session-factory>
     <mapping resource="org/openurp/app/func/model/AppFuncPermission.hbm.xml"/>
-    <mapping resource="org/openurp/app/func/model/FuncResource.hbm.xml"/>
+    <mapping resource="org/openurp/app/func/model/FuncResourceBean.hbm.xml"/>
     <mapping resource="org/openurp/app/func/model/MenuBean.hbm.xml"/>
     <mapping resource="org/openurp/app/func/model/MenuProfileBean.hbm.xml"/>
 

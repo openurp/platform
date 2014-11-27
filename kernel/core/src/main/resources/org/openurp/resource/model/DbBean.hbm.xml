@@ -7,7 +7,7 @@
   <class name="DbBean">
     <cache usage="read-write" />
     <id name="id" unsaved-value="null" type="integer">
-      <generator class="date" />
+      <generator class="auto_increment" />
     </id>
     <property name="name" unique="true" not-null="true" />
     <property name="url" not-null="true" />

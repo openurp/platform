@@ -4,27 +4,12 @@
   bg.ui.load("tabletree");
 </script>
 [#assign labInfo][#if user.id??]${b.text("action.modify")}[#else]${b.text("action.new")}[/#if] ${b.text("entity.user")}[/#assign]
-[@b.toolbar title=labInfo]bar.addBack("${b.text("action.back")}");[/@]
+[@b.toolbar title="修改用户角色"]bar.addBack("${b.text("action.back")}");[/@]
 [@b.messages/]
 [@b.tabs id="userinfotabs"]
-[@b.form name="userForm" action="!save" class="listform" theme="list" onsubmit="return validateMembers()"]
-  <input type="hidden" name="user.id" value="${user.id!}" />
-  [@b.tab label="ui.userInfo"]
-    [@b.textfield name="user.name" value="${user.name!}" style="width:200px;" required="true" maxlength="30"/]
-    [@b.radios name="user.enabled" value=user.enabled items="1:action.activate,0:action.freeze"/]
-    [@b.textfield name="user.fullname" value="${user.fullname!}" style="width:200px;" required="true" maxlength="50" /]
-    [@b.password label="user.password" name="password" value="" maxlength=settings.maxPwdLength?string showStrength="true"/]
-    [@b.email name="user.mail" value="${user.mail!}" style="width:300px;" required="true" maxlength="50"/]
-    [#if isadmin|| isme]
-    [@b.startend label="user.effective-invalid" name="user.effectiveAt,user.invalidAt" required="true,false" start=user.effectiveAt end=user.invalidAt format="datetime" disabled="disabled"/]
-    [#else]
-    [@b.startend label="user.effective-invalid" name="user.effectiveAt,user.invalidAt" required="true,false" start=user.effectiveAt end=user.invalidAt format="datetime"/]
-    [/#if]
-    [@b.datepicker name="user.passwordExpiredAt" value=user.passwordExpiredAt format="datetime"/]
-    [@b.textarea cols="50" rows="1" name="user.remark" value=user.remark! maxlength="50"/]
-    [@b.formfoot][@b.reset/]&nbsp;&nbsp;[@b.submit value="action.submit"/][/@]
-  [/@]
   [@b.tab label="user.members"]
+  [@b.form name="userForm" action="!save" class="listform" theme="list" onsubmit="return validateMembers()"]
+  
     [@b.grid  items=roles?sort_by("indexno") var="role" sortable="false"]
       [@b.row]
         <tr [#if role??]id="${role.indexno}"[/#if]>
@@ -53,10 +38,16 @@
         </tr>
       [/@]
     [/@]
+    [@b.formfoot]
+       <input type="hidden" name="user.id" value="${user.id!}" />
+        [@b.reset/]&nbsp;&nbsp;[@b.submit value="action.submit"/]
+      [/@]
   [/@]
 [/@]
   [#if user.id??]
-  [@b.tab label="全局数据权限" href="/security/profile!info?forEdit=1&user.id=${user.id}" /]
+  [@b.tab label="全局数据权限" ]
+  [@b.div href="/security/profile!info?forEdit=1&user.id=${user.id}" /]
+  [/@]
   [/#if]
 [/@]
 <script  type="text/javascript">

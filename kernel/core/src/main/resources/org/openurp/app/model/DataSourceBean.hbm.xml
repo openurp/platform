@@ -7,7 +7,7 @@
   <class name="DataSourceBean">
     <cache usage="read-write" />
     <id name="id" unsaved-value="null" type="integer">
-      <generator class="date" />
+      <generator class="auto_increment" />
     </id>
     <many-to-one name="app" not-null="true" />
     <many-to-one name="db" not-null="true" />
