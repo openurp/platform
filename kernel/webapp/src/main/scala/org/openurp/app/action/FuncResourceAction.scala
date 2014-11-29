@@ -51,6 +51,9 @@ class FuncResourceAction extends RestfulAction[FuncResource] {
     return forward()
   }
 
+  protected override def editSetting(entity: FuncResource): Unit = {
+    put("apps", entityDao.getAll(classOf[App]))
+  }
   //  protected PropertyExtractor getPropertyExtractor() {
   //    return new ResourcePropertyExtractor(getTextResource())
   //  }
@@ -60,7 +63,7 @@ class FuncResourceAction extends RestfulAction[FuncResource] {
   }
 
   protected override def indexSetting(): Unit = {
-    val rs= populate(entityName,"resource")
+    val rs = populate(entityName, "resource")
     put("apps", entityDao.getAll(classOf[App]))
   }
 

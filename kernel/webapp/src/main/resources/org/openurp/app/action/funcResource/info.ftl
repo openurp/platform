@@ -2,7 +2,7 @@
 [@b.head/]
 [#include "../nav.ftl"/]
 [#include "scope.ftl"/]
-[@b.toolbar title="security.resource.info"]bar.addBack();[/@]
+[@b.toolbar title="app.funcresource.info"]bar.addBack();[/@]
 <table class="infoTable">
   <tr>
    <td class="title" width="15%">标题:</td>

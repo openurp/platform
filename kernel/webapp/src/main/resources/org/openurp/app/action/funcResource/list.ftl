@@ -2,8 +2,7 @@
 [@b.head/]
 [#include "scope.ftl"/]
 [#include "../status.ftl"/]
-[@b.form name="resourceForm" id="resourceForm" action="!search"]
-[@b.grid items=resources var="resource"  sortable="true" filterable="true"]
+[@b.grid items=resources var="resource" sortable="true"]
   [@b.gridbar title='系统资源']
   function activate(enabled){return action.multi('activate','确定操作?','&enabled='+enabled);}
   bar.addItem("${b.text("action.new")}",action.add());
@@ -12,22 +11,6 @@
   bar.addItem("${b.text("action.activate")}",activate(1),'action-activate');
   bar.addItem("${b.text("action.delete")}",action.remove());
   bar.addItem("${b.text("action.export")}",action.exportData("title:common.title,name:common.name,scope:可见范围,enabled:common.status,remark:common.remark",null,"fileName=资源信息"));
-  [/@]
-  
-  [@b.filter property="scope"]
-    <select name="resource.scope" style="width:95%" onchange="bg.form.submit(this.form)">
-    <option value="">...</option>
-    [#list scopes?keys as i]
-    <option value="${i}" [#if (Parameters['resource.scope']!"")="${i}"]selected="selected"[/#if]>${scopes[i?string]}</option>
-    [/#list]
-    </select>
-  [/@]
-  [@b.filter property="enabled"]
-    <select  name="resource.enabled" style="width:95%;" onchange="bg.form.submit(this.form)">
-      <option value="" [#if (Parameters['resource.enabled']!"")=""]selected="selected"[/#if]>..</option>
-      <option value="true" [#if (Parameters['resource.enabled']!"")="true"]selected="selected"[/#if]>${b.text("action.activate")}</option>
-      <option value="false" [#if (Parameters['resource.enabled']!"")="false"]selected="selected"[/#if]>${b.text("action.freeze")}</option>
-    </select>
   [/@]
   [@b.row]
     [@b.boxcol /]
@@ -38,6 +21,5 @@
     [@b.col  width="10%" property="enabled" title="common.status"][@enableInfo resource.enabled/][/@]
     [@b.col  width="15%" property="remark" title="common.remark"/]
   [/@]
-[/@]
 [/@]
 [@b.foot/]
