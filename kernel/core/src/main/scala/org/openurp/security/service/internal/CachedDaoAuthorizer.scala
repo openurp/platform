@@ -1,4 +1,4 @@
-package org.openurp.security.manager.impl
+package org.openurp.security.service.internal
 
 import org.beangle.security.context.SecurityContext
 import org.beangle.security.authz.Authorizer
@@ -6,7 +6,7 @@ import org.beangle.security.authz.Authority
 import org.beangle.security.authc.Account
 import org.beangle.commons.security.Request
 import org.beangle.commons.cache.Cache
-import org.beangle.security.blueprint.Scope
+import org.beangle.security.blueprint.Scopes
 import org.beangle.commons.cache.CacheManager
 import org.openurp.security.service.FuncPermissionManager
 
@@ -20,8 +20,8 @@ class CachedDaoAuthorizer(permissionService: FuncPermissionManager, cacheManager
     val rscOption = permissionService.getResource(resourceName)
     if (rscOption.isEmpty) return unknownIsPublic
     rscOption.get.scope match {
-      case Scope.Public => true
-      case Scope.Protected => principal != SecurityContext.Anonymous
+      case Scopes.Public => true
+      case Scopes.Protected => principal != SecurityContext.Anonymous
       case _ => principal != SecurityContext.Anonymous && principal.asInstanceOf[Account].authorities.exists { role => isAuthorized(role, resourceName) }
     }
   }

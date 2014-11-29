@@ -7,12 +7,12 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <groupId>org.openurp.platform</groupId>
-  <artifactId>openurp-platform-ws</artifactId>
+  <artifactId>openurp-platform-ds</artifactId>
   <packaging>jar</packaging>
-  <name>OpenURP Platform WebService</name>
+  <name>OpenURP Platform Data WebService</name>
   
   <properties>
-    <bundle.symbolicName>org.openurp.platform.ws</bundle.symbolicName>
+    <bundle.symbolicName>org.openurp.platform.ds</bundle.symbolicName>
     <bundle.namespace>org.openurp</bundle.namespace>
   </properties>
 
@@ -23,8 +23,9 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.beangle.security</groupId>
-      <artifactId>beangle-security-web</artifactId>
+      <groupId>org.openurp.platform.security</groupId>
+      <artifactId>openurp-platform-security-app</artifactId>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>

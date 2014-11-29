@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.openurp</groupId>
     <artifactId>openurp-parent</artifactId>
-    <version>0.0.6</version>
+    <version>0.0.7-SNAPSHOT</version>
   </parent>
   <groupId>org.openurp.platform</groupId>
   <artifactId>openurp-platform-parent</artifactId>
@@ -14,10 +14,12 @@
 
   <modules>
     <module>api</module>
+    <module>kernel</module>
+    <module>security</module>
+    <module>server</module>
+    <module>ds</module>
     <module>web</module>
     <module>ws</module>
-    <module>kernel</module>
-    <module>server</module>
   </modules>
   
 </project>
