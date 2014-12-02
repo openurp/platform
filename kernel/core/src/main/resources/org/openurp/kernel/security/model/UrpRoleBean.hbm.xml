@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+  "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+  "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.openurp.kernel.security.model"
+  default-access="org.beangle.data.jpa.hibernate.PropertyAccessor">
+  <class name="UrpRoleBean" entity-name="org.beangle.security.blueprint.Role">
+    <id name="id" type="integer">
+      <generator class="auto_increment" />
+    </id>
+    <property name="name" />
+    <property name="updatedAt" />
+    <many-to-one name="app" not-null="true"/>
+    <many-to-one name="creator" class="org.beangle.security.blueprint.User" />
+    <property name="enabled" />
+    <property name="indexno" not-null="true" />
+    <many-to-one name="parent" class="org.beangle.security.blueprint.Role" />
+    <bag name="children" inverse="true" cascade="all-delete-orphan"
+      collection-type="seq">
+      <key column="parent_id" />
+      <one-to-many class="org.beangle.security.blueprint.Role" />
+    </bag>
+    <bag name="members" inverse="true" cascade="all-delete-orphan"
+      collection-type="seq">
+      <key column="role_id" not-null="true" />
+      <one-to-many class="Member" />
+    </bag>
+    <map name="properties" collection-type="map" cascade="all,delete-orphan">
+      <key column="role_id" />
+      <map-key-many-to-many column="field_id"
+        class="org.beangle.security.blueprint.Field" />
+      <element column="value_id" type="string" length="2000" />
+    </map>
+  </class>
+</hibernate-mapping>

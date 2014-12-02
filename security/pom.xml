@@ -1,0 +1,44 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.openurp.platform</groupId>
+    <artifactId>openurp-platform-parent</artifactId>
+    <version>0.0.1</version>
+  </parent>
+  
+  <groupId>org.openurp.platform.security</groupId>
+  <artifactId>openurp-platform-security-parent</artifactId>
+  <packaging>pom</packaging>
+  <name>OpenURP Platform Security Parent</name>
+  
+  <properties>
+    <bundle.symbolicName>org.openurp.platform.security</bundle.symbolicName>
+    <bundle.namespace>org.openurp</bundle.namespace>
+  </properties>
+
+  <modules>
+    <module>app</module>
+    <module>user</module>
+  </modules>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.openurp.platform</groupId>
+      <artifactId>openurp-platform-api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.beangle.security</groupId>
+      <artifactId>beangle-security-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.beangle.webmvc</groupId>
+      <artifactId>beangle-webmvc-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+    </dependency>
+  </dependencies>
+</project>

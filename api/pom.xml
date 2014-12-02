@@ -1,0 +1,35 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.openurp.platform</groupId>
+    <artifactId>openurp-platform-parent</artifactId>
+    <version>0.0.1</version>
+  </parent>
+  <groupId>org.openurp.platform</groupId>
+  <artifactId>openurp-platform-api</artifactId>
+  <packaging>jar</packaging>
+  <name>OpenURP Platform API</name>
+  
+  <properties>
+    <bundle.symbolicName>org.openurp.platform.api</bundle.symbolicName>
+    <bundle.namespace>org.openurp.platform</bundle.namespace>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.beangle.data</groupId>
+      <artifactId>beangle-data-model</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.beangle.security</groupId>
+      <artifactId>beangle-security-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>c3p0</groupId>
+      <artifactId>c3p0</artifactId>
+      <version>0.9.1.2</version>
+      <optional>true</optional>
+    </dependency>
+  </dependencies>
+</project>

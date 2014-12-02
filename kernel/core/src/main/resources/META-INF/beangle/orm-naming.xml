@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modules>
+  <module package = "org.openurp.kernel" pluralize="true" schema="kernel"/>
+  <module package = "org.beangle.security" pluralize="true" schema="kernel"/>
+</modules>

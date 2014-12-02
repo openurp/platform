@@ -1,0 +1,10 @@
+<Context>
+<Resource 
+  name="jdbc/dataSource"
+  driverClassName="org.postgresql.Driver"
+  url="jdbc:postgresql://localhost:5432/postgres" 
+  type="javax.sql.DataSource"
+  username="postgres"
+  password=""
+  />
+</Context>
