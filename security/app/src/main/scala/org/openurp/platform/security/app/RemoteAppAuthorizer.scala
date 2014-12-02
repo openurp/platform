@@ -12,7 +12,6 @@ import org.beangle.commons.cache.Cache
 import java.net.URL
 import org.openurp.platform.util.JSON
 import org.beangle.security.authz.Authority
-import scala.reflect.internal.Scopes
 import java.{ util => ju }
 import org.beangle.commons.collection.Properties
 

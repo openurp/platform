@@ -16,7 +16,6 @@
     <module>api</module>
     <module>kernel</module>
     <module>security</module>
-    <module>server</module>
     <module>ds</module>
     <module>web</module>
     <module>ws</module>
