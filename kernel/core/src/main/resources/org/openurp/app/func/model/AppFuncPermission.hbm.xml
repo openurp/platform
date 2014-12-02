@@ -9,7 +9,7 @@
       <generator class="auto_increment" />
     </id>
     <many-to-one name="app" not-null="true"/>
-    <property name="resource" not-null="true" />
+    <many-to-one name="resource" not-null="true" />
     <property name="actions"/>
     <property name="restrictions"/>
   </class>

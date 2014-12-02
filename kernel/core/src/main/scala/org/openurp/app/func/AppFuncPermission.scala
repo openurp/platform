@@ -6,7 +6,7 @@ trait AppFuncPermission {
 
   def app: App
 
-  def resource: String
+  def resource: FuncResource
 
   def actions: String
   

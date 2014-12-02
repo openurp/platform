@@ -6,7 +6,7 @@
    <interceptors>
       <interceptor name="web.Interceptor.hibernate"/>
       <interceptor name="web.Interceptor.cors"/>
-      <interceptor name="web.Interceptor.appsecurity"/>
+      <interceptor name="web.Interceptor.security"/>
     </interceptors>
   </profile>
 </profiles>

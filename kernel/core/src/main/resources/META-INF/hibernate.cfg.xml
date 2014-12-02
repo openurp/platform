@@ -11,6 +11,7 @@
     <mapping resource="org/openurp/app/func/model/MenuProfileBean.hbm.xml"/>
 
     <mapping resource="org/openurp/app/model/AppBean.hbm.xml"/>
+    <mapping resource="org/openurp/app/model/AccessTokenBean.hbm.xml"/>
     <mapping resource="org/openurp/app/model/DataSourceBean.hbm.xml"/>
 
     <mapping resource="org/openurp/resource/model/DbBean.hbm.xml"/>

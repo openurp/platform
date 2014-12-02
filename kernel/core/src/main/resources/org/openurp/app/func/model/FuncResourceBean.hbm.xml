@@ -5,7 +5,7 @@
   default-access="org.beangle.data.jpa.hibernate.PropertyAccessor">
 
   <typedef name="scope" class="org.beangle.data.jpa.hibernate.udt.EnumType">
-    <param name="enumClass">org.beangle.security.blueprint.Scope</param>
+    <param name="enumClass">org.beangle.security.blueprint.Scopes</param>
   </typedef>
   
   <class name="FuncResourceBean" entity-name="org.openurp.app.func.FuncResource">

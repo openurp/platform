@@ -40,11 +40,16 @@
     </dependency>
     <dependency>
       <groupId>org.beangle.webmvc</groupId>
-      <artifactId>beangle-webmvc-tag</artifactId>
+      <artifactId>beangle-webmvc-entity-plugin</artifactId>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.beangle.webmvc</groupId>
+      <artifactId>beangle-webmvc-bootstrap-ui</artifactId>
     </dependency>
     <dependency>
       <groupId>org.beangle.webmvc</groupId>
-      <artifactId>beangle-webmvc-entity-plugin</artifactId>
+      <artifactId>beangle-webmvc-config-plugin</artifactId>
     </dependency>
     <dependency>
       <groupId>org.beangle.webmvc</groupId>

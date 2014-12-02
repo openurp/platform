@@ -7,8 +7,9 @@ import org.beangle.webmvc.api.action.ActionSupport
 import org.beangle.webmvc.api.annotation.{ mapping, param, response }
 import org.beangle.webmvc.entity.helper.QueryHelper
 import org.openurp.app.func.Menu
+import org.beangle.webmvc.api.action.EntityActionSupport
 
-class MenuWS extends ActionSupport {
+class MenuWS extends EntityActionSupport[Menu] {
 
   var entityDao: EntityDao = _
 

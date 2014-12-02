@@ -13,8 +13,9 @@ import org.beangle.security.blueprint.MenuProfile
 import org.openurp.app.func.model.MenuProfileBean
 import org.beangle.webmvc.api.annotation.param
 import org.beangle.webmvc.api.annotation.mapping
+import org.beangle.webmvc.api.action.EntityActionSupport
 
-class MenuProfileWS extends ActionSupport {
+class MenuProfileWS extends EntityActionSupport[MenuProfileBean] {
 
   var entityDao: EntityDao = _
 
