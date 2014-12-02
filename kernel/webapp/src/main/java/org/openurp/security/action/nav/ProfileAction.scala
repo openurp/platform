@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Beangle.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.openurp.security.action.nav
+package org.openurp.kernel.security.action.nav
 
 import org.beangle.commons.dao.query.builder.OqlBuilder
 import org.beangle.commons.entity.Entity

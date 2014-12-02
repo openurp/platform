@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Beangle.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.openurp.security.action.helper
+package org.openurp.kernel.security.action.helper
 
 import org.beangle.commons.text.i18n.TextResource
 import org.beangle.commons.transfer.exporter.DefaultPropertyExtractor

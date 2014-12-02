@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+  "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+  "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.openurp.kernel.security.model"
+  default-access="org.beangle.data.jpa.hibernate.PropertyAccessor">
+
+  <class name="Member">
+    <id name="id" type="long">
+      <generator class="auto_increment" />
+    </id>
+    <many-to-one name="user" not-null="true" />
+    <many-to-one name="role" not-null="true" />
+    <property name="member" not-null="true" />
+    <property name="granter" not-null="true" />
+    <property name="manager" not-null="true" />
+    <property name="updatedAt"/>
+  </class>
+
+</hibernate-mapping>

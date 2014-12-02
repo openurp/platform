@@ -22,7 +22,7 @@ import org.beangle.commons.inject.bind.AbstractBindModule
 import org.beangle.ems.avatar.web.action.BoardAction
 import org.beangle.ems.avatar.web.action.MyUploadAction
 import org.beangle.ems.security.helper.UserDashboardHelper
-import org.openurp.security.action.*
+import org.openurp.kernel.security.action.*
 
  final class DefaultModule extends AbstractBindModule {
 
@@ -32,19 +32,19 @@ import org.openurp.security.action.*
     bind(PermissionAction.class, RoleAction.class, IndexAction.class, MyAction.class, PasswordAction.class,
         ResourceAction.class, UserAction.class, FieldAction.class, ProfileAction.class)
 
-    bind(org.openurp.security.action.session.LogAction.class,
-        org.openurp.security.action.session.MonitorAction.class).property("entityDao",
+    bind(org.openurp.kernel.security.action.session.LogAction.class,
+        org.openurp.kernel.security.action.session.MonitorAction.class).property("entityDao",
         ref("sessionEntityDao"))
 
-    bind(org.openurp.security.action.nav.MenuAction.class,
-        org.openurp.security.action.nav.IndexAction.class,
-        org.openurp.security.action.nav.ProfileAction.class)
+    bind(org.openurp.kernel.security.action.nav.MenuAction.class,
+        org.openurp.kernel.security.action.nav.IndexAction.class,
+        org.openurp.kernel.security.action.nav.ProfileAction.class)
 
     bind(UserDashboardHelper.class).shortName()
 
     // data security
-    bind(org.openurp.security.action.data.ResourceAction.class,
-        org.openurp.security.action.data.PermissionAction.class)
+    bind(org.openurp.kernel.security.action.data.ResourceAction.class,
+        org.openurp.kernel.security.action.data.PermissionAction.class)
 
     // avatar
     bind(BoardAction.class, org.beangle.ems.avatar.web.action.MyAction.class, MyUploadAction.class,

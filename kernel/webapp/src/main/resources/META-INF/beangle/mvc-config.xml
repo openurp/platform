@@ -1,10 +1,11 @@
 <?xml version="1.0"?>
 <profiles>
-  <profile name="openurp-kernelapp" pattern="org.openurp.*.action">
-   <interceptors>
+  <profile name="openurp-kernelapp" pattern="org.openurp.kernel.*.action">
+    <url path="/" suffix=""  style="seo" />
+    <interceptors>
       <interceptor name="web.Interceptor.hibernate"/>
       <!--<interceptor name="web.Interceptor.security"/>-->
       <interceptor name="web.Interceptor.flash"/>
-    </interceptors>
+     </interceptors>
   </profile>
 </profiles>

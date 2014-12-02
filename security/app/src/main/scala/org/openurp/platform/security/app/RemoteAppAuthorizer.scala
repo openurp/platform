@@ -41,7 +41,6 @@ class RemoteAppAuthorizer(val cacheManager: CacheManager) extends Authorizer {
     }
   }
 
-  //FIXME change resource name to id
   private def isAuthorized(principal: Any, resourceId: Integer): Boolean = {
     val account = principal.asInstanceOf[Account]
     val name = account.principal.toString

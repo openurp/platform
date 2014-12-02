@@ -5,22 +5,22 @@
 
 <hibernate-configuration>
   <session-factory>
-    <mapping resource="org/openurp/app/func/model/AppFuncPermission.hbm.xml"/>
-    <mapping resource="org/openurp/app/func/model/FuncResourceBean.hbm.xml"/>
-    <mapping resource="org/openurp/app/func/model/MenuBean.hbm.xml"/>
-    <mapping resource="org/openurp/app/func/model/MenuProfileBean.hbm.xml"/>
+    <mapping resource="org/openurp/kernel/app/func/model/AppFuncPermission.hbm.xml"/>
+    <mapping resource="org/openurp/kernel/app/func/model/FuncResourceBean.hbm.xml"/>
+    <mapping resource="org/openurp/kernel/app/func/model/MenuBean.hbm.xml"/>
+    <mapping resource="org/openurp/kernel/app/func/model/MenuProfileBean.hbm.xml"/>
 
-    <mapping resource="org/openurp/app/model/AppBean.hbm.xml"/>
-    <mapping resource="org/openurp/app/model/AccessTokenBean.hbm.xml"/>
-    <mapping resource="org/openurp/app/model/DataSourceBean.hbm.xml"/>
+    <mapping resource="org/openurp/kernel/app/model/AppBean.hbm.xml"/>
+    <mapping resource="org/openurp/kernel/app/model/AccessTokenBean.hbm.xml"/>
+    <mapping resource="org/openurp/kernel/app/model/DataSourceBean.hbm.xml"/>
 
-    <mapping resource="org/openurp/resource/model/DbBean.hbm.xml"/>
+    <mapping resource="org/openurp/kernel/resource/model/DbBean.hbm.xml"/>
 
-    <mapping resource="org/openurp/security/model/FieldBean.hbm.xml"/>
-    <mapping resource="org/openurp/security/model/Member.hbm.xml"/>
-    <mapping resource="org/openurp/security/model/UrpRoleBean.hbm.xml"/>
-    <mapping resource="org/openurp/security/model/UrpUserBean.hbm.xml"/>
-    <mapping resource="org/openurp/security/model/UserProfileBean.hbm.xml"/>
-    <mapping resource="org/openurp/security/model/function.hbm.xml"/>
+    <mapping resource="org/openurp/kernel/security/model/FieldBean.hbm.xml"/>
+    <mapping resource="org/openurp/kernel/security/model/Member.hbm.xml"/>
+    <mapping resource="org/openurp/kernel/security/model/UrpRoleBean.hbm.xml"/>
+    <mapping resource="org/openurp/kernel/security/model/UrpUserBean.hbm.xml"/>
+    <mapping resource="org/openurp/kernel/security/model/UserProfileBean.hbm.xml"/>
+    <mapping resource="org/openurp/kernel/security/model/function.hbm.xml"/>
   </session-factory>
 </hibernate-configuration>

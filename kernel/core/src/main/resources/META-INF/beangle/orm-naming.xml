@@ -1,16 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <modules>
-  <module package = "org.openurp.app" pluralize="true" schema="app"/>
-  <module package = "org.openurp.resource" pluralize="true" schema="resource"/>
-  <module package = "org.openurp.base" pluralize="true" schema="base">
-    <class annotation = "org.beangle.data.model.annotation.code" prefix="gb_" value="nation" />
-    <class annotation = "org.beangle.data.model.annotation.code" prefix="jb_" value="ministry" />
-    <class annotation = "org.beangle.data.model.annotation.code" prefix="xb_" value="school" />
-  </module>
-  <module package = "org.openurp.security" pluralize="true" schema="security">
-    <class annotation = "org.beangle.data.model.annotation.code" prefix="gb_" value="nation" />
-    <class annotation = "org.beangle.data.model.annotation.code" prefix="jb_" value="ministry" />
-    <class annotation = "org.beangle.data.model.annotation.code" prefix="xb_" value="school" />
-  </module>
-  <module package = "org.beangle.security" pluralize="true" schema="security"/>
+  <module package = "org.openurp.kernel" pluralize="true" schema="kernel"/>
+  <module package = "org.beangle.security" pluralize="true" schema="kernel"/>
 </modules>

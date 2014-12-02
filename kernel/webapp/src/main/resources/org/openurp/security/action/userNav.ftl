@@ -1,7 +1,0 @@
-[#ftl]
-[@b.navbar title="权限管理"]
-  [@b.navlist]
-    [@b.navitem title="entity.user" href="/security/authority/user"]用户管理[/@]
-    [@b.navitem title="entity.role" href="/security/authority/role"]角色管理[/@]
-  [/@]
-[/@]

@@ -16,23 +16,23 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Beangle.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.openurp.security.action.helper
+package org.openurp.kernel.security.action.helper
 
 import java.util.List
 import java.util.Map
 import java.util.Set
 import org.beangle.data.model.dao.EntityDao
-import org.openurp.security.FuncResource
-import org.openurp.security.MenuProfile
-import org.openurp.security.Role
-import org.openurp.security.Menu
+import org.openurp.kernel.security.FuncResource
+import org.openurp.kernel.security.MenuProfile
+import org.openurp.kernel.security.Role
+import org.openurp.kernel.security.Menu
 import org.beangle.security.context.ContextHolder
 import org.beangle.webmvc.api.context.Params
-import org.openurp.security.service.FuncPermissionService
-import org.openurp.security.service.ProfileService
+import org.openurp.kernel.security.service.FuncPermissionService
+import org.openurp.kernel.security.service.ProfileService
 import org.beangle.security.session.SessionRegistry
 import org.beangle.commons.collection.page.Page
-import org.openurp.security.User
+import org.openurp.kernel.security.User
 import org.beangle.webmvc.api.context.ContextHolder
 
 /**
