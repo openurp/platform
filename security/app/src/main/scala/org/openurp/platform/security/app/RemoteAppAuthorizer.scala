@@ -14,6 +14,7 @@ import org.openurp.platform.util.JSON
 import org.beangle.security.authz.Authority
 import java.{ util => ju }
 import org.beangle.commons.collection.Properties
+import org.beangle.commons.lang.JDouble
 
 class RemoteAppAuthorizer(val cacheManager: CacheManager) extends Authorizer {
 
@@ -27,11 +28,11 @@ class RemoteAppAuthorizer(val cacheManager: CacheManager) extends Authorizer {
         if (resource.scope != "Private") true
         else isAuthorized(principal, resource.id)
       case None =>
-        val url = ServiceConfig.wsBase + "/app/" + App.name + "/func/resources/info.json?name=" + resourceName
+        val url = ServiceConfig.wsBase + "/kernel/app/" + App.name + "/func/resources/info.json?name=" + resourceName
         val script = IOs.readString(new URL(url).openStream())
         val r = JSON.parse(script).asInstanceOf[Properties]
         if (!r.isEmpty) {
-          val resource = new Resource(Integer.valueOf(r("id").toString()), r("scope").toString())
+          val resource = new Resource(Integer.valueOf(r("id").asInstanceOf[Number].intValue), r("scope").toString())
           resources.put(resourceName, resource)
           if (resource.scope != "Private") true
           else isAuthorized(principal, resource.id)
@@ -41,21 +42,19 @@ class RemoteAppAuthorizer(val cacheManager: CacheManager) extends Authorizer {
   }
 
   private def isAuthorized(principal: Any, resourceId: Integer): Boolean = {
+    //FIXME
+    if (!principal.isInstanceOf[Account]) return false
+
     val account = principal.asInstanceOf[Account]
     val name = account.principal.toString
     permissions.get(name) match {
       case Some(actions) => actions.contains(resourceId)
       case None =>
-        val url = ServiceConfig.wsBase + "/app/" + App.name + "/func/resources/permission.json?client=" + name
+        val url = ServiceConfig.wsBase + "/kernel/app/" + App.name + "/func/resources/permission.json?client=" + name
         val resources = new collection.mutable.HashSet[Integer]
-        val iter = JSON.parse(IOs.readString(new URL(url).openStream())).asInstanceOf[Properties].values.iterator
-        while (iter.hasNext) {
-          val n = iter.next.toString()
-          resources += Integer.valueOf(n)
-        }
-        val resourceSet = resources.toSet
-        permissions.put(name, resourceSet)
-        resourceSet.contains(resourceId)
+        resources ++= JSON.parse(IOs.readString(new URL(url).openStream())).asInstanceOf[Iterable[Number]].map { n => Integer.valueOf(n.intValue) }
+        permissions.put(name, resources.toSet)
+        resources.contains(resourceId)
     }
   }
 

@@ -1,12 +1,13 @@
 package org.openurp.kernel.security.model
 
 import java.{ util => ju }
-
 import org.beangle.commons.lang.Strings
 import org.beangle.data.model.bean.{ CodedBean, EnabledBean, HierarchicalBean, IntIdBean, LongIdBean, NamedBean, StringIdBean, TemporalOnBean, UpdatedBean }
 import org.beangle.security.blueprint.{ Field, Profile, Role, User }
 import org.beangle.security.session.SessionProfile
 import org.openurp.kernel.app.App
+import org.openurp.platform.code.BaseCodeBean
+import org.beangle.data.model.annotation.code
 
 object Member {
   object Ship extends Enumeration(1) {
@@ -45,6 +46,7 @@ class UrpRoleBean extends IntIdBean with NamedBean with UpdatedBean with Enabled
   }
 
   def index: Int = {
+    if (Strings.isEmpty(indexno)) return 1;
     val lastPart = Strings.substringAfterLast(indexno, ".")
     if (lastPart.isEmpty) Integer.valueOf(indexno) else Integer.valueOf(lastPart)
   }
@@ -55,6 +57,11 @@ class UrpRoleBean extends IntIdBean with NamedBean with UpdatedBean with Enabled
   }
 }
 
+/**
+ * 人员分类
+ */
+class UserCategoryBean extends BaseCodeBean
+
 class UrpUserBean extends LongIdBean with CodedBean with NamedBean with UpdatedBean with TemporalOnBean with EnabledBean with User {
   var locked: Boolean = _
   var password: String = _
@@ -62,7 +69,7 @@ class UrpUserBean extends LongIdBean with CodedBean with NamedBean with UpdatedB
   var remark: String = _
   var members: collection.mutable.Buffer[Member] = new collection.mutable.ListBuffer[Member]
   var profiles: collection.mutable.Buffer[Profile] = new collection.mutable.ListBuffer[Profile]
-  var category: String = _
+  var category: UserCategoryBean = _
   def credential = password
   def roles = members.filter(m => m.member).map(m => m.role)
   def accountExpired: Boolean = {
@@ -94,10 +101,10 @@ class Member extends LongIdBean with UpdatedBean {
   import Member.Ship._
   def is(ship: Ship): Boolean = {
     ship match {
-      case IsMember  => member
+      case IsMember => member
       case IsManager => manager
       case IsGranter => granter
-      case _         => false
+      case _ => false
     }
   }
 }

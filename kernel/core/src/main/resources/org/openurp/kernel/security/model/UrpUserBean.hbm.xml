@@ -13,6 +13,7 @@
     <property name="name" length="100" not-null="true" />
     <property name="locked" not-null="true" />
     <property name="enabled" not-null="true" />
+    <many-to-one name="category" not-null="true"/>
     <property name="remark" length="100" />
     <property name="beginOn" />
     <property name="endOn" />

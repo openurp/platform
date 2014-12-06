@@ -20,6 +20,7 @@
     <mapping resource="org/openurp/kernel/security/model/Member.hbm.xml"/>
     <mapping resource="org/openurp/kernel/security/model/UrpRoleBean.hbm.xml"/>
     <mapping resource="org/openurp/kernel/security/model/UrpUserBean.hbm.xml"/>
+    <mapping resource="org/openurp/kernel/security/model/UserCategoryBean.hbm.xml"/>
     <mapping resource="org/openurp/kernel/security/model/UserProfileBean.hbm.xml"/>
     <mapping resource="org/openurp/kernel/security/model/function.hbm.xml"/>
   </session-factory>

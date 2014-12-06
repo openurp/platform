@@ -31,7 +31,7 @@ object App extends Logging {
     }
   }
 
-  def getResourceConfig(resourceKey: String): Config = {
-    new RemoteConfig(new URL(ServiceConfig.dsBase + "/app/" + name + "/resource/" + resourceKey + ".json?secret=" + secret))
+  def getDatasourceConfig(resourceKey: String): Config = {
+    new RemoteConfig(new URL(ServiceConfig.dsBase + "/app/" + name + "/resource/datasources/" + resourceKey + ".json?secret=" + secret))
   }
 }

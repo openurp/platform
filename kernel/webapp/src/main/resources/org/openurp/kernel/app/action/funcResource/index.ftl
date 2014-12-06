@@ -1,6 +1,5 @@
 [#ftl]
 [@b.head/]
-[@b.toolbar title="应用功能点管理"/]
 [#include "scope.ftl"/]
 <table class="indexpanel">
   <tr>

@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+  "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+  "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.openurp.kernel.security.model"
+  default-access="org.beangle.data.jpa.hibernate.PropertyAccessor">
+
+  <class name="UserCategoryBean">
+    <id name="id" unsaved-value="null" type="long">
+      <generator class="auto_increment" />
+    </id>
+    <property name="code" length="30" unique="true" not-null="true" />
+    <property name="name" length="100" not-null="true" />
+  </class>
+</hibernate-mapping>

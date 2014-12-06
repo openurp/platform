@@ -6,7 +6,7 @@ user.remark=备注
 user.roles=角色
 user.members=成员
 user.name=姓名
-user.category=身份
+user.category.name=身份
 user.beginOn-endOn=生效日期
 
 role.users=成员

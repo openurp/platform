@@ -15,7 +15,7 @@
     [@b.boxcol width="5%"/]
     [@b.col property="code" width="15%"]${user.code}[/@]
     [@b.col property="name" width="15%"/]
-    [@b.col property="category" title="身份" width="25%"/]
+    [@b.col property="category.name" title="身份" width="25%"/]
     [@b.col property="beginOn" title="user.beginOn-endOn" width="12%"]${user.beginOn?string("yyyy-MM")}~${(user.endOn?string("yyyy-MM"))!}[/@]
     [@b.col property="enabled" width="8%"][@enableInfo user.enabled/][/@]
   [/@]

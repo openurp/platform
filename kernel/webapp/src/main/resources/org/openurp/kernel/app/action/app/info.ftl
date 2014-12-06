@@ -23,7 +23,7 @@
       <tbody>
         [#list app.datasources as v]
           <tr>
-            <td>${v.config.name}</td>
+            <td>${v.db.name}</td>
             <td align="center">${v.name}</td>
             <td align="center">${v.username}</td>
             <td align="center">${v.password}</td>

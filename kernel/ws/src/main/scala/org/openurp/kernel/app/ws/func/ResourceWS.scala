@@ -8,6 +8,7 @@ import org.beangle.webmvc.api.action.EntityActionSupport
 import org.beangle.webmvc.api.annotation.{ param, response }
 import org.openurp.kernel.app.auth.service.TokenRepository
 import org.openurp.kernel.app.func.model.{ AppFuncPermissionBean, FuncResourceBean }
+import org.beangle.webmvc.api.annotation.mapping
 
 class ResourceWS extends EntityActionSupport[FuncResourceBean] {
 
@@ -31,7 +32,8 @@ class ResourceWS extends EntityActionSupport[FuncResourceBean] {
   }
 
   @response
-  def public(@param("app") app: String): Seq[Any] = {
+  @mapping("public")
+  def pu(@param("app") app: String): Seq[Any] = {
     val query = OqlBuilder.from(classOf[FuncResourceBean], "fr").where("fr.app.name=:name", app).where("fr.scope=:scope", Scopes.Public)
     entityDao.search(query)
   }

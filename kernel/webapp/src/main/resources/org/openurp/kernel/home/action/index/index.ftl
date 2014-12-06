@@ -28,7 +28,7 @@ body { padding-top: 50px; }
 <div class="container">
 <div class="row">
 [@b.div id="menu" class="col-md-1"]
-[@display menus?first/]
+[#if menus?size>0][@display menus?first/][/#if]
 [/@]
 [@b.div id="main" class="col-md-11"]
   选择一个菜单

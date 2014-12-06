@@ -6,9 +6,9 @@ import org.beangle.data.model.dao.EntityDao
 import org.beangle.webmvc.api.action.ActionSupport
 import org.beangle.webmvc.api.annotation.{ action, mapping, param, response }
 import org.openurp.kernel.app.model.{ AppBean, DataSourceBean }
+import org.beangle.webmvc.api.action.EntityActionSupport
 
-@action("")
-class IndexWS(entityDao: EntityDao) extends ActionSupport {
+class DatasourceWS(entityDao: EntityDao) extends EntityActionSupport[DataSourceBean] {
 
   @mapping(value = "{name}")
   @response

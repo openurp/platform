@@ -8,7 +8,7 @@
   </parent>
   <groupId>org.openurp.platform.kernel</groupId>
   <artifactId>openurp-platform-kernel-webapp</artifactId>
-  <packaging>jar</packaging>
+  <packaging>war</packaging>
   <name>OpenURP Platform Kernel Webapp</name>
   
   <properties>

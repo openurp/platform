@@ -1,7 +1,6 @@
 [#ftl]
 [@b.head/]
 <div>
-[#include "../userNav.ftl"/]
 <table class="indexpanel">
 <tr>
   <td class="index_view">

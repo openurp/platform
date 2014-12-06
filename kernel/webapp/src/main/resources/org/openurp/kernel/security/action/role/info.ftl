@@ -8,7 +8,7 @@ bar.addBack("${b.text("action.back")}");
    <td class="title" width="10%">${b.text("common.name")}:</td>
    <td class="content" width="40%"> ${role.name}</td>
    <td class="title" width="10%">${b.text("common.creator")}:</td>
-   <td class="content" width="40%">${role.owner.name!}  </td>
+   <td class="content" width="40%">${role.creator.name!}  </td>
   </tr>
   <tr>
    <td class="title" >${b.text("common.createdAt")}:</td>
