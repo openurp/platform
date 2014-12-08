@@ -50,7 +50,7 @@ class UserAction extends RestfulAction[UrpUserBean] {
   }
 
   override def info(id: String): String = {
-    val userId = Params.converter.convert(id, classOf[java.lang.Long])
+    val userId = Params.converter.convert(id, classOf[java.lang.Long]).orNull
     var managed: UrpUserBean = null
     if (null != userId) {
       managed = entityDao.get(classOf[UrpUserBean], userId)
