@@ -3,27 +3,6 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-  <bean id="web.Interceptor.security">
-      <constructor-arg >
-        <list></list>
-      </constructor-arg>
-      <constructor-arg value="?"/>
-      <constructor-arg value="?"/>
-      <constructor-arg value="?"/>
-  </bean>
 
-  <bean id="org.beangle.security.web.access.SecurityFilter">
-      <constructor-arg >
-        <list></list>
-      </constructor-arg>
-      <constructor-arg value="?"/>
-      <constructor-arg value="?"/>
-      <constructor-arg value="?"/>
-  </bean>
-  <bean id="org.beangle.security.authc.RealmAuthenticator">
-      <constructor-arg >
-        <list></list>
-      </constructor-arg>
-  </bean>
   <bean id="web.RequestConvertor.mvc" class="org.beangle.webmvc.execution.impl.MvcRequestConvertor" primary="true"/>
 </beans>

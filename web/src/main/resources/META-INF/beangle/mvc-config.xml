@@ -3,7 +3,7 @@
   <profile name="openurp" pattern="org.openurp.*.action">
    <interceptors>
       <interceptor name="web.Interceptor.hibernate"/>
-      <!--<interceptor name="web.Interceptor.security"/>-->
+      <interceptor name="web.Interceptor.security"/>
       <interceptor name="web.Interceptor.flash"/>
     </interceptors>
   </profile>
