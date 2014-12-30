@@ -85,7 +85,7 @@ class RoleAction(val roleManager: RoleManager, val userService: UserService) ext
     }
     populateConditions(entityQuery)
     val orderBy = get("orderBy", "role.indexno")
-    entityQuery.limit(getPageLimit()).orderBy(orderBy)
+    entityQuery.limit(getPageLimit).orderBy(orderBy)
   }
   //
   //  protected PropertyExtractor getPropertyExtractor() {

@@ -84,7 +84,7 @@ class AccountAction extends RestfulAction[UrpUserBean] {
       userQuery.where(roleCondition)
     }
     populateConditions(userQuery)
-    userQuery.orderBy(get(Order.OrderStr).orNull).limit(getPageLimit())
+    userQuery.orderBy(get(Order.OrderStr).orNull).limit(getPageLimit)
     return userQuery
   }
 
