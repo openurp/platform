@@ -45,6 +45,7 @@
     <dependency>
       <groupId>org.beangle.webmvc</groupId>
       <artifactId>beangle-webmvc-config-plugin</artifactId>
+      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.beangle.webmvc</groupId>
