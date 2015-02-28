@@ -1,7 +1,0 @@
-BaseCodeBean.code=代码
-BaseCodeBean.name=名称
-BaseCodeBean.enName=英文名称
-BaseCodeBean.beginOn=生效时间
-BaseCodeBean.endOn=失效时间
-BaseCodeBean.updatedAt=修改时间
-BaseCodeBean.remark=备注

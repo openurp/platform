@@ -6,7 +6,6 @@ import org.beangle.data.model.bean.{ CodedBean, EnabledBean, HierarchicalBean, I
 import org.beangle.security.blueprint.{ Field, Profile, Role, User }
 import org.beangle.security.session.SessionProfile
 import org.openurp.kernel.app.App
-import org.openurp.platform.code.BaseCodeBean
 import org.beangle.data.model.annotation.code
 
 object Member {
@@ -60,7 +59,10 @@ class UrpRoleBean extends IntIdBean with NamedBean with UpdatedBean with Enabled
 /**
  * 人员分类
  */
-class UserCategoryBean extends BaseCodeBean
+class UserCategoryBean extends IntIdBean with CodedBean with TemporalOnBean with NamedBean with UpdatedBean {
+  var enName: String = _
+  var remark: String = _
+}
 
 class UrpUserBean extends LongIdBean with CodedBean with NamedBean with UpdatedBean with TemporalOnBean with EnabledBean with User {
   var locked: Boolean = _
