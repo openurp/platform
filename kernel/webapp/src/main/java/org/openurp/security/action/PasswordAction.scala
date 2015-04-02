@@ -20,7 +20,7 @@ package org.openurp.kernel.security.action
 
 import java.util.Map
 
-import org.beangle.commons.collection.CollectUtils
+import org.beangle.commons.collection.Collections
 import org.beangle.commons.entity.util.ValidEntityKeyPredicate
 import org.beangle.ems.web.action.SecurityActionSupport
 import org.beangle.security.blueprint.Settings
@@ -72,7 +72,7 @@ import org.beangle.security.blueprint.service.UserService
   private String updateAccount(Long userId) {
     String email = get("mail")
     String pwd = get("password")
-    Map<String, Object> valueMap = CollectUtils.newHashMap()
+    Map<String, Object> valueMap = Collections.newHashMap()
     valueMap.put("password", pwd)
     valueMap.put("mail", email)
     entityDao.update(User.class, "id", new Object[] { userId }, valueMap)

@@ -81,8 +81,8 @@ class UserDashboardHelper {
     if (null != menuProfileId) {
       val menuProfile =  entityDao.get(classOf[MenuProfile], menuProfileId)
       val menus = menuService.getMenus(menuProfile, user, user.getProfiles())
-      val resources = CollectUtils.newHashSet(permissionService.getResources(user))
-      val roleMenusMap = CollectUtils.newHashMap()
+      val resources = Collections.newHashSet(permissionService.getResources(user))
+      val roleMenusMap = Collections.newHashMap()
 
       for (role <-  user.roles) {
         roleMenusMap.put(role, menuService.getMenus(menuProfile, role, Boolean.TRUE))

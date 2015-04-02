@@ -20,7 +20,7 @@ package org.openurp.kernel.security.action.data
 
 import java.util.Map
 
-import org.beangle.commons.collection.CollectUtils
+import org.beangle.commons.collection.Collections
 import org.beangle.commons.entity.Entity
 import org.beangle.commons.lang.Strings
 import org.beangle.security.blueprint.data.DataField
@@ -56,7 +56,7 @@ import org.beangle.struts2.convention.route.Action
         addError("名称重复")
         return forward(new Action(this, "edit"))
       }
-      Map<String, DataField> fields = CollectUtils.newHashMap()
+      Map<String, DataField> fields = Collections.newHashMap()
       for (DataField field : resource.getFields()) {
         fields.put(field.getName(), field)
       }
