@@ -52,7 +52,7 @@ class AppAction(dbService: DbService) extends RestfulAction[AppBean] {
       redirect("search", "info.save.success")
     } catch {
       case e: Exception => {
-        info("saveAndForwad failure", e)
+        logger.info("saveAndForwad failure", e)
         redirect("search", "info.save.failure")
       }
     }

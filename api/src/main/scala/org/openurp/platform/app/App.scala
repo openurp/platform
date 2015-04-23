@@ -24,7 +24,7 @@ object App extends Logging {
   private def readProperties: Map[String, String] = {
     val configs = ClassLoaders.getResources(location)
     if (configs.isEmpty) {
-      warn(s"Cannot find $location")
+      logger.warn(s"Cannot find $location")
       Map.empty
     } else {
       IOs.readJavaProperties(configs.head)
