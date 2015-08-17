@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.openurp</groupId>
     <artifactId>openurp-parent</artifactId>
-    <version>0.0.11</version>
+    <version>0.0.13-SNAPSHOT</version>
   </parent>
   <groupId>org.openurp.platform</groupId>
   <artifactId>openurp-platform-parent</artifactId>
@@ -12,13 +12,37 @@
   <packaging>pom</packaging>
   <name>OpenURP Platform Parent</name>
 
+  <properties>
+  </properties>
+
   <modules>
     <module>api</module>
     <module>kernel</module>
     <module>security</module>
-    <module>ds</module>
-    <module>web</module>
-    <module>ws</module>
   </modules>
-  
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.openurp.platform.api</groupId>
+        <artifactId>openurp-platform-api-core</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.openurp.platform.kernel</groupId>
+        <artifactId>openurp-platform-kernel-core</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.openurp.platform.security</groupId>
+        <artifactId>openurp-platform-security-core</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.openurp.platform.security</groupId>
+        <artifactId>openurp-platform-security-app</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 </project>
