@@ -4,7 +4,7 @@ import org.beangle.security.blueprint.service.ProfileService
 import org.beangle.security.blueprint.FuncResource
 import org.beangle.security.blueprint.User
 import org.beangle.security.blueprint.Profile
-import org.beangle.security.blueprint.Field
+import org.beangle.security.blueprint.Dimension
 
 class ProfileServiceImpl extends ProfileService {
 
@@ -12,11 +12,11 @@ class ProfileServiceImpl extends ProfileService {
     Seq.empty
   }
 
-  def getFieldValues(field: Field, keys: Any*): Seq[Any] = {
+  def getDimensionValues(field: Dimension, keys: Any*): Seq[Any] = {
     Seq.empty
   }
 
-  def getField(fieldName: String): Field = {
+  def getDimension(fieldName: String): Dimension = {
     null
   }
 

@@ -50,7 +50,7 @@ object DefaultMapping extends Mapping {
       e.name is (notnull, length(100))))
 
     bind[UrpUserProfile](classOf[Profile].getName).on(e => declare(
-      e.user is notnull,
+      e.user & e.app are notnull,
       e.properties is eleLength(2000)))
 
     bind[AppMenu](classOf[Menu].getName).on(e => declare(
@@ -74,8 +74,7 @@ object DefaultMapping extends Mapping {
       e.filters is (notnull, length(600))))
 
     bind[UrpSessionProfile](classOf[SessionProfile].getName).on(e => declare(
-      e.app & e.category are notnull,
-      e.category is length(200)))
+      e.app & e.role are notnull))
 
   }
 
