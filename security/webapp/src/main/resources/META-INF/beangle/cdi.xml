@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <cdi>
   <container name="web">
-    <module class="org.openurp.platform.security.auth.action.DefaultModule"/>
-    <module class="org.openurp.platform.security.account.action.DefaultModule"/>
+    <module class="org.openurp.platform.security.action.DefaultModule"/>
   </container>
 </cdi>

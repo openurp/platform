@@ -1,17 +1,8 @@
 <?xml version="1.0"?>
 <mvc>
-  <profile name="openurp-kernelws" package="org.openurp.kernel.*.ws">
+  <profile name="openurp-platform-kernelws" package="org.openurp.platform.kernel.ws">
    <action suffix="WS" defaultMethod="index"/>
-   <url path="/" suffix="" style="plur-seo" />
-   <interceptors>
-      <interceptor name="web.Interceptor.hibernate"/>
-      <interceptor name="web.Interceptor.cors"/>
-    </interceptors>
-  </profile>
-
-  <profile name="openurp-appws" package="org.openurp.kernel.app.ws">
-   <action suffix="WS" defaultMethod="index"/>
-   <url path="/app/{app}/" suffix=""  style="plur-seo" />
+   <url path="/kernel/{app}/" suffix="" style="plur-seo" />
    <interceptors>
       <interceptor name="web.Interceptor.hibernate"/>
       <interceptor name="web.Interceptor.cors"/>

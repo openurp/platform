@@ -1,13 +1,15 @@
 package org.openurp.platform.security.model
 
 import java.{ util => ju }
-import org.beangle.commons.lang.Strings
+
+import org.beangle.commons.collection.Collections
+import org.beangle.commons.lang.{ Numbers, Strings }
 import org.beangle.data.model.{ Coded, Enabled, Hierarchical, IntId, LongId, Named, StringId, TemporalOn, Updated }
-import org.beangle.security.blueprint.{ Field, Profile, Role, User }
+import org.beangle.security.blueprint.{ Dimension, Profile, Role, User }
 import org.beangle.security.session.SessionProfile
-import org.openurp.platform.kernel.app.model.App
-import org.beangle.data.model.annotation.code
-import org.beangle.commons.lang.Numbers
+import org.openurp.platform.kernel.model.App
+
+import UrpMember.Ship.{ Granter, Manager, Member, Ship }
 
 object UrpMember {
   object Ship extends Enumeration(1) {
@@ -18,7 +20,7 @@ object UrpMember {
   }
 }
 
-class UrpField extends IntId with Named with Field {
+class UrpDimension extends IntId with Named with Dimension {
   var title: String = _
   var source: String = _
   var multiple: Boolean = _
@@ -26,21 +28,26 @@ class UrpField extends IntId with Named with Field {
   var typeName: String = _
   var keyName: String = _
   var properties: String = _
+  var apps = Collections.newBuffer[App]
 }
 
+/**
+ * 用户在某个App上的配置
+ */
 class UrpUserProfile extends LongId with Profile {
   var user: User = _
-  var properties = new collection.mutable.HashMap[Field, String]
-}
-
-class UrpRole extends IntId with Named with Updated with Enabled
-  with Hierarchical[org.beangle.security.blueprint.Role] with Profile with Role {
-
   var app: App = _
-  var properties: collection.mutable.Map[Field, String] = new collection.mutable.HashMap[Field, String]
+  var properties = new collection.mutable.HashMap[Dimension, String]
+}
+class AppDimension {}
+class UrpRole extends IntId with Named with Updated with Enabled
+    with Hierarchical[org.beangle.security.blueprint.Role] with Profile with Role {
+  var app: App = _
+  var properties: collection.mutable.Map[Dimension, String] = new collection.mutable.HashMap[Dimension, String]
   var creator: User = _
   var members: collection.mutable.Seq[UrpMember] = new collection.mutable.ListBuffer[UrpMember]
   var remark: String = _
+
   override def getName: String = {
     name
   }
@@ -50,6 +57,7 @@ class UrpRole extends IntId with Named with Updated with Enabled
     val lastPart = Strings.substringAfterLast(indexno, ".")
     if (lastPart.isEmpty) Numbers.toInt(indexno) else Numbers.toInt(lastPart)
   }
+
   def this(id: Int, name: String) {
     this()
     this.id = id
@@ -72,9 +80,13 @@ class UrpUser extends LongId with Coded with Named with Updated with TemporalOn 
   var remark: String = _
   var members: collection.mutable.Buffer[UrpMember] = new collection.mutable.ListBuffer[UrpMember]
   var profiles: collection.mutable.Buffer[Profile] = new collection.mutable.ListBuffer[Profile]
+  var properties = Collections.newMap[Dimension, String]
   var category: UserCategory = _
+
   def credential = password
+
   def roles = members.filter(m => m.member).map(m => m.role)
+
   def accountExpired: Boolean = {
     null != endOn && (new ju.Date).after(endOn)
   }
@@ -113,7 +125,8 @@ class UrpMember extends LongId with Updated {
 }
 
 class UrpSessionProfile extends StringId with SessionProfile {
-  var category: String = _
+  var app: App = _
+  var role: Role = _
   var capacity: Int = _
   var maxSession: Int = _
   var timeout: Short = _

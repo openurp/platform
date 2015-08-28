@@ -12,7 +12,7 @@ class RemoteAppRealm extends AbstractAccountRealm {
 
   protected override def determinePrincipal(token: AuthenticationToken): String = {
     val ticket = token.details(TokenName).toString
-    val url = ServiceConfig.wsBase + "/kernel/app/" + App.name + "/security/validate.json?token=" + ticket
+    val url = ServiceConfig.wsBase + "/kernel/" + App.name + "/validate.json?token=" + ticket
     val result = IOs.readString(new URL(url).openStream())
     val prefix = "app_id\":\""
     val start = result.indexOf(prefix)

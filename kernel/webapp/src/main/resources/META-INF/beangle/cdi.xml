@@ -1,11 +1,6 @@
 <?xml version="1.0"?>
 <cdi>
-  <container>
-    <module class="org.openurp.platform.kernel.resource.service.DefaultModule"/>
-  </container>
   <container name="web">
-    <module class="org.openurp.platform.kernel.app.action.DefaultModule"/>
-    <module class="org.openurp.platform.kernel.resource.action.DefaultModule"/>
-    <module class="org.openurp.platform.kernel.home.action.DefaultModule"/>
+    <module class="org.openurp.platform.kernel.action.DefaultModule"/>
   </container>
 </cdi>

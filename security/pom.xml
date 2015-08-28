@@ -21,6 +21,7 @@
     <module>core</module>
     <module>app</module>
     <module>webapp</module>
+    <module>ws</module>
   </modules>
 
   <dependencies>

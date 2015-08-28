@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <mvc>
-  <profile name="openurp-kernelapp" package="org.openurp.platform.security.*.action">
+  <profile name="openurp-platform-security-webapp" package="org.openurp.platform.security.action">
     <url path="/security" suffix=""  style="seo" />
     <interceptors>
       <interceptor name="web.Interceptor.hibernate"/>

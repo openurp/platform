@@ -20,7 +20,7 @@ package org.openurp.platform.security.helper
 
 import org.beangle.commons.lang.Strings
 import org.beangle.data.model.dao.EntityDao
-import org.beangle.security.blueprint.{Field, Profile, User}
+import org.beangle.security.blueprint.{Dimension, Profile, User}
 import org.beangle.security.blueprint.service.{DataResolver, ProfileService}
 import org.beangle.security.context.SecurityContext
 import org.beangle.webmvc.api.context.{ContextHolder, Params}
@@ -34,20 +34,20 @@ class ProfileHelper(entityDao: EntityDao, profileService: ProfileService) {
   def populateInfo(profiles: Seq[_ <: Profile]) {
     val fieldMaps = new collection.mutable.HashMap[String, Map[String, AnyRef]]
     for (profile <- profiles) {
-      val aoFields = new collection.mutable.HashMap[String, AnyRef]
+      val aoDimensions = new collection.mutable.HashMap[String, AnyRef]
       for ((field, value) <- profile.properties) {
         val fieldName = field.name
         if (Strings.isNotEmpty(value)) {
           if (null == field.source) {
-            aoFields.put(fieldName, value)
+            aoDimensions.put(fieldName, value)
           } else if (value.equals("*")) {
-            aoFields.put(fieldName, "不限")
+            aoDimensions.put(fieldName, "不限")
           } else {
-            aoFields.put(fieldName, getProperty(profile, field))
+            aoDimensions.put(fieldName, getProperty(profile, field))
           }
         }
       }
-      fieldMaps.put(Properties.get[Any](profile, "id").toString, aoFields.toMap)
+      fieldMaps.put(Properties.get[Any](profile, "id").toString, aoDimensions.toMap)
     }
     ContextHolder.context.attribute("profiles", profiles)
     ContextHolder.context.attribute("fieldMaps", fieldMaps)
@@ -55,40 +55,40 @@ class ProfileHelper(entityDao: EntityDao, profileService: ProfileService) {
 
   def fillEditInfo(profile: Profile, isAdmin: Boolean): Unit = {
     val userId = SecurityContext.session.principal.id.asInstanceOf[java.lang.Long]
-    val mngFields = new collection.mutable.HashMap[String, Object]
-    val aoFields = new collection.mutable.HashMap[String, Object]
+    val mngDimensions = new collection.mutable.HashMap[String, Object]
+    val aoDimensions = new collection.mutable.HashMap[String, Object]
 
     val myProfiles = entityDao.get(classOf[User], userId).profiles
-    val ignores = getIgnoreFields(myProfiles)
-    ContextHolder.context.attribute("ignoreFields", ignores)
-    val holderIgnoreFields = new collection.mutable.HashSet[Field]
-    ContextHolder.context.attribute("holderIgnoreFields", holderIgnoreFields)
-    val fields = entityDao.getAll(classOf[Field])
+    val ignores = getIgnoreDimensions(myProfiles)
+    ContextHolder.context.attribute("ignoreDimensions", ignores)
+    val holderIgnoreDimensions = new collection.mutable.HashSet[Dimension]
+    ContextHolder.context.attribute("holderIgnoreDimensions", holderIgnoreDimensions)
+    val fields = entityDao.getAll(classOf[Dimension])
     ContextHolder.context.attribute("fields", fields)
     for (field <- fields) {
-      var mngFieldValues = new collection.mutable.ListBuffer[Any]
-      mngFieldValues ++= profileService.getFieldValues(field)
+      var mngDimensionValues = new collection.mutable.ListBuffer[Any]
+      mngDimensionValues ++= profileService.getDimensionValues(field)
       if (!isAdmin) {
-        mngFieldValues --= (mngFieldValues -- getMyProfileValues(myProfiles, field))
+        mngDimensionValues --= (mngDimensionValues -- getMyProfileValues(myProfiles, field))
       } else ignores += field
 
       var fieldValue = ""
       val property = profile.getProperty(field) foreach { p => fieldValue = p }
-      if ("*".equals(fieldValue)) holderIgnoreFields.add(field)
+      if ("*".equals(fieldValue)) holderIgnoreDimensions.add(field)
 
-      mngFields.put(field.name, mngFieldValues)
+      mngDimensions.put(field.name, mngDimensionValues)
       if (null == field.source) {
-        aoFields.put(field.name, fieldValue)
+        aoDimensions.put(field.name, fieldValue)
       } else {
-        aoFields.put(field.name, getProperty(profile, field))
+        aoDimensions.put(field.name, getProperty(profile, field))
       }
     }
-    ContextHolder.context.attribute("mngFields", mngFields)
-    ContextHolder.context.attribute("aoFields", aoFields)
+    ContextHolder.context.attribute("mngDimensions", mngDimensions)
+    ContextHolder.context.attribute("aoDimensions", aoDimensions)
     ContextHolder.context.attribute("profile", profile)
   }
 
-  private def getMyProfileValues(profiles: Seq[Profile], field: Field): Seq[AnyRef] = {
+  private def getMyProfileValues(profiles: Seq[Profile], field: Dimension): Seq[AnyRef] = {
     val values = new collection.mutable.ListBuffer[AnyRef]
     for (profile <- profiles) {
       profile.getProperty(field) foreach { value =>
@@ -102,8 +102,8 @@ class ProfileHelper(entityDao: EntityDao, profileService: ProfileService) {
     return values
   }
 
-  private def getIgnoreFields(profiles: Seq[Profile]): collection.mutable.Set[Field] = {
-    val ignores = new collection.mutable.HashSet[Field]
+  private def getIgnoreDimensions(profiles: Seq[Profile]): collection.mutable.Set[Dimension] = {
+    val ignores = new collection.mutable.HashSet[Dimension]
     for (profile <- profiles) {
       for ((field, value) <- profile.properties) {
         if ("*".equals(value)) ignores.add(field)
@@ -112,10 +112,10 @@ class ProfileHelper(entityDao: EntityDao, profileService: ProfileService) {
     ignores
   }
 
-  private def getProperty(profile: Profile, field: Field): AnyRef = {
+  private def getProperty(profile: Profile, field: Dimension): AnyRef = {
     profile.getProperty(field) match {
       case Some(p) =>
-        if ("*" == p) profileService.getFieldValues(field)
+        if ("*" == p) profileService.getDimensionValues(field)
         else dataResolver.unmarshal(field, p)
       case None => null
     }
@@ -123,10 +123,10 @@ class ProfileHelper(entityDao: EntityDao, profileService: ProfileService) {
   def populateSaveInfo(profile: Profile, isAdmin: Boolean) {
     val userId = SecurityContext.session.principal.id.asInstanceOf[java.lang.Long]
     val myProfiles = entityDao.get(classOf[User], userId).profiles
-    val ignoreFields = getIgnoreFields(myProfiles)
-    for (field <- entityDao.getAll(classOf[Field])) {
+    val ignoreDimensions = getIgnoreDimensions(myProfiles)
+    for (field <- entityDao.getAll(classOf[Dimension])) {
       val values = Params.getAll(field.name).asInstanceOf[Array[String]]
-      if ((ignoreFields.contains(field) || isAdmin) && Params.getBoolean("ignoreField" + field.id).getOrElse(false)) {
+      if ((ignoreDimensions.contains(field) || isAdmin) && Params.getBoolean("ignoreDimension" + field.id).getOrElse(false)) {
         profile.setProperty(field, "*")
       } else {
         if (null == values || values.length == 0) {
@@ -136,7 +136,7 @@ class ProfileHelper(entityDao: EntityDao, profileService: ProfileService) {
           if (null != field.keyName) {
             val keys = new collection.mutable.HashSet[String]
             keys ++= values
-            val allValues: Seq[_] = profileService.getFieldValues(field) match {
+            val allValues: Seq[_] = profileService.getDimensionValues(field) match {
               case originValues: Seq[_] => originValues
               case singleValue => List(singleValue)
             }

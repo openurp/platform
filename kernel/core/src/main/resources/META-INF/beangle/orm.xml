@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <orm>
-  <mapping class="org.openurp.platform.kernel.app.model.DefaultMapping"/>
-  <mapping class="org.openurp.platform.kernel.resource.model.DefaultMapping"/>
+  <mapping class="org.openurp.platform.kernel.model.DefaultMapping"/>
   <naming>
     <profile package = "org.openurp.platform.kernel" pluralize="true" schema="kernel"/>
   </naming>

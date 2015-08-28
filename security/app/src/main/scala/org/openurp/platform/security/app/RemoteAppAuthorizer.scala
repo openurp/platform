@@ -28,7 +28,7 @@ class RemoteAppAuthorizer(val cacheManager: CacheManager) extends Authorizer {
         if (resource.scope != "Private") true
         else isAuthorized(principal, resource.id)
       case None =>
-        val url = ServiceConfig.wsBase + "/kernel/app/" + App.name + "/func/resources/info.json?name=" + resourceName
+        val url = ServiceConfig.wsBase + "/kernel/" + App.name + "/func-resources/info.json?name=" + resourceName
         val script = IOs.readString(new URL(url).openStream())
         val r = JSON.parse(script).asInstanceOf[Properties]
         if (!r.isEmpty) {
@@ -50,7 +50,7 @@ class RemoteAppAuthorizer(val cacheManager: CacheManager) extends Authorizer {
     permissions.get(name) match {
       case Some(actions) => actions.contains(resourceId)
       case None =>
-        val url = ServiceConfig.wsBase + "/kernel/app/" + App.name + "/func/resources/permission.json?client=" + name
+        val url = ServiceConfig.wsBase + "/kernel/" + App.name + "/func-resources/permission.json?client=" + name
         val resources = new collection.mutable.HashSet[Integer]
         resources ++= JSON.parse(IOs.readString(new URL(url).openStream())).asInstanceOf[Iterable[Number]].map { n => Integer.valueOf(n.intValue) }
         permissions.put(name, resources.toSet)

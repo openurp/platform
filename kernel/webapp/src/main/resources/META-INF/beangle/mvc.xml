@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <mvc>
-  <profile name="openurp-kernelapp" package="org.openurp.platform.kernel.*.action">
+  <profile name="openurp-kernelapp" package="org.openurp.platform.kernel.action">
     <url path="/kernel" suffix=""  style="seo" />
     <interceptors>
       <interceptor name="web.Interceptor.hibernate"/>
