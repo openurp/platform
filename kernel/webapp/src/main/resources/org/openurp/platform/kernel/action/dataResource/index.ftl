@@ -14,7 +14,6 @@
         [/#list]
       </select>
       [/@]
-      [@b.select name="resource.app.id" label="应用" items=apps option="id,title" empty="..." style="width:100px"/]
       <input type="hidden" name="orderBy" value="resource.name"/>
     [/@]
     </td>

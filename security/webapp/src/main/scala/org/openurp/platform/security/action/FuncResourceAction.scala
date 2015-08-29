@@ -1,12 +1,13 @@
-package org.openurp.platform.kernel.action
+package org.openurp.platform.security.action
 
 import org.beangle.data.jpa.dao.OqlBuilder
 import org.beangle.data.model.Entity
-import org.beangle.security.blueprint.{ FuncResource, Menu, Permission }
+import org.beangle.webmvc.api.annotation.ignore
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
-import org.openurp.platform.kernel.service.AppFuncPermissionManager
 import org.openurp.platform.kernel.model.App
+import org.openurp.platform.security.model.{ FuncPermission, FuncResource, Menu }
+import org.openurp.platform.security.service.FuncPermissionManager
 
 /**
  * 系统模块管理响应类
@@ -15,14 +16,14 @@ import org.openurp.platform.kernel.model.App
  */
 class FuncResourceAction extends RestfulAction[FuncResource] {
 
-  var appFuncPermissionManager: AppFuncPermissionManager = _
+  var funcPermissionManager: FuncPermissionManager = _
   /**
    * 禁用或激活一个或多个模块
    */
   def activate(): View = {
     val resourceIds = getIntIds("resource")
     val enabled = getBoolean("enabled", false)
-    appFuncPermissionManager.activate(resourceIds, enabled.booleanValue())
+    funcPermissionManager.activate(resourceIds, enabled.booleanValue())
     return redirect("search", "info.save.success")
   }
 
@@ -42,7 +43,7 @@ class FuncResourceAction extends RestfulAction[FuncResource] {
     query.join("menu.resources", "r").where("r.id=:resourceId", entity.id)
       .orderBy("menu.profile.id,menu.indexno")
 
-    val roleQuery = OqlBuilder.from(classOf[Permission], "auth")
+    val roleQuery = OqlBuilder.from(classOf[FuncPermission], "auth")
     roleQuery.where("auth.resource=:resource", entity).select("auth.role")
     put(shortName, entity)
     put("roles", entityDao.search(roleQuery))

@@ -25,13 +25,6 @@ class DataResourceWS extends ActionSupport with EntitySupport[DataResource] {
   }
 
   @response
-  @mapping("public")
-  def pu(@param("app") app: String): Seq[Any] = {
-    val query = OqlBuilder.from(classOf[DataResource], "fr").where("fr.scope=:scope", Scopes.Public)
-    entityDao.search(query)
-  }
-
-  @response
   def permission(@param("app") app: String, @param("client") client: String): Seq[Integer] = {
     val query = OqlBuilder.from(classOf[AppDataPermission], "adp").where("adp.app.name=:client", client)
     query.where("adp.resource.app.name=:app", app)

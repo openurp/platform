@@ -4,6 +4,7 @@ import java.security.Principal
 
 import org.beangle.data.model.{ Enabled, IntId, LongId, Named, TemporalAt }
 import org.beangle.security.authz.{ Permission, Resource, Scopes }
+import org.openurp.platform.kernel.model.App
 
 class FuncResource extends IntId with Named with Enabled with Resource {
   var app: App = _

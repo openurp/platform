@@ -5,7 +5,7 @@ import org.beangle.data.model.dao.EntityDao
 import org.beangle.webmvc.api.action.ActionSupport
 import org.beangle.webmvc.api.annotation.param
 import org.openurp.platform.api.app.App
-import org.beangle.security.blueprint.Menu
+import org.openurp.platform.security.model.Menu
 
 class IndexAction extends ActionSupport {
   var entityDao: EntityDao = _

@@ -1,9 +1,9 @@
 package org.openurp.platform.kernel.service.impl
 
 import org.beangle.data.model.dao.EntityDao
-import org.openurp.platform.kernel.service.AppFuncPermissionManager
+import org.openurp.platform.kernel.service.AppDataPermissionManager
 
-class AppFuncPermissionManagerImpl(val entityDao: EntityDao) extends AppFuncPermissionManager {
+class AppDataPermissionManagerImpl(val entityDao: EntityDao) extends AppDataPermissionManager {
 
   def activate(resourceId: Array[Integer], active: Boolean): Unit = {
 

@@ -3,13 +3,12 @@ package org.openurp.platform.security.ws
 import org.beangle.commons.collection.Properties
 import org.beangle.data.jpa.dao.OqlBuilder
 import org.beangle.data.model.dao.EntityDao
-import org.beangle.webmvc.api.action.EntitySupport
+import org.beangle.webmvc.api.action.{ ActionSupport, EntitySupport }
 import org.beangle.webmvc.api.annotation.{ mapping, param, response }
 import org.beangle.webmvc.entity.helper.QueryHelper
-import org.beangle.webmvc.api.action.ActionSupport
-import org.beangle.security.blueprint.Menu
+import org.openurp.platform.security.model.Menu
 
-class MenuWS extends ActionSupport with  EntitySupport[Menu] {
+class MenuWS extends ActionSupport with EntitySupport[Menu] {
 
   var entityDao: EntityDao = _
 

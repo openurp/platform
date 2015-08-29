@@ -108,7 +108,7 @@ class User extends LongId with Coded with Named with Updated with TemporalOn wit
   var passwordExpiredOn: ju.Date = _
   var remark: String = _
   var members: collection.mutable.Buffer[Member] = new collection.mutable.ListBuffer[Member]
-  var profiles: collection.mutable.Buffer[Profile] = new collection.mutable.ListBuffer[Profile]
+  var profiles: collection.mutable.Buffer[UserProfile] = new collection.mutable.ListBuffer[UserProfile]
   var properties = Collections.newMap[Dimension, String]
   var category: UserCategory = _
 

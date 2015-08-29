@@ -20,7 +20,5 @@
   <modules>
     <module>core</module>
     <module>web</module>
-    <module>ds</module>
-    <module>ws</module>
   </modules>
 </project>
