@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <cdi>
   <container name="web">
-    <module class="org.openurp.kernel.app.ws.DefaultModule"/>
+    <module class="org.openurp.platform.security.ws.DefaultModule"/>
   </container>
 </cdi>
