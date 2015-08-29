@@ -26,17 +26,12 @@
 .container{
     width:100%;
 }
-
 #menu .nav > li > a {
-    padding: 10px 10px;
+   padding: 10px 10px;
 }
 </style>
 
-[#if fixed]
-[#assign navbarclass="navbar-fixed-top"]
-[#else]
-[#assign navbarclass=""]
-[/#if]
+[#if fixed][#assign navbarclass="navbar-fixed-top"][#else][#assign navbarclass=""][/#if]
 
 [@b.navbar class=navbarclass brand=brand style="margin-bottom: 0px;"]
   [@b.navlist]

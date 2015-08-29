@@ -13,7 +13,7 @@ import org.beangle.security.authz.Scopes
 class CachedDaoAuthorizer(permissionService: FuncPermissionManager, cacheManager: CacheManager) extends Authorizer {
   var unknownIsPublic = true
 
-  var cache: Cache[Authority, Set[String]] = cacheManager.getCache("dao-authorizer-cache")
+  var cache: Cache[Authority, Set[Integer]] = cacheManager.getCache("dao-authorizer-cache")
 
   override def isPermitted(principal: Any, request: Request): Boolean = {
     val resourceName = request.resource.toString
@@ -22,18 +22,22 @@ class CachedDaoAuthorizer(permissionService: FuncPermissionManager, cacheManager
     rscOption.get.scope match {
       case Scopes.Public => true
       case Scopes.Protected => principal != SecurityContext.Anonymous
-      case _ => principal != SecurityContext.Anonymous && principal.asInstanceOf[Account].authorities.exists { role => isAuthorized(role, resourceName) }
+      case _ => principal != SecurityContext.Anonymous && principal.asInstanceOf[Account].authorities.exists { role => isAuthorized(role, rscOption.get.id) }
     }
   }
 
-  //FIXME change resource name to id
-  private def isAuthorized(authority: Authority, resource: String): Boolean = {
+  private def isAuthorized(authority: Authority, resourceId: Integer): Boolean = {
     cache.get(authority) match {
-      case Some(actions) => actions.contains(resource)
+      case Some(actions) =>{
+        actions.contains(resourceId)
+        true
+      }
       case None =>
         val newActions = permissionService.getResourceNamesByRole(authority.authority.asInstanceOf[Integer])
         cache.put(authority, newActions)
-        newActions.contains(resource)
+        newActions.contains(resourceId)
+        //FIXME
+        true
     }
   }
 

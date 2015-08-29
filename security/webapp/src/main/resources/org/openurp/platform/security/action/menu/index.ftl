@@ -1,6 +1,6 @@
 [#ftl]
 [@b.head/]
-[#include "../../nav.ftl"/]
+[#include "../func-nav.ftl"/]
 <table  class="indexpanel">
   <tr>
     <td class="index_view">

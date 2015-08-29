@@ -14,11 +14,11 @@ class FuncPermissionManagerImpl(val entityDao: EntityDao) extends FuncPermission
     if (rs.isEmpty) None else Some(rs.head)
   }
 
-  def getResourceNamesByRole(roleId: Integer): Set[String] = {
-    val hql = "select a.resource.name from " + classOf[FuncPermission].getName() +
+  def getResourceNamesByRole(roleId: Integer): Set[Integer] = {
+    val hql = "select a.resource.id from " + classOf[FuncPermission].getName() +
       " as a where a.role.id= :roleId and a.resource.enabled = true"
     val query = OqlBuilder.oql[FuncPermission](hql).param("roleId", roleId).cacheable()
-    entityDao.search(query).toSet.asInstanceOf[Set[String]]
+    entityDao.search(query).toSet.asInstanceOf[Set[Integer]]
   }
 
   def getResources(user: User): Seq[FuncResource] = {

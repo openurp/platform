@@ -4,7 +4,7 @@
     <url path="/security" suffix=""  style="seo" />
     <interceptors>
       <interceptor name="web.Interceptor.hibernate"/>
-      <!--<interceptor name="web.Interceptor.security"/>-->
+      <interceptor name="web.Interceptor.security"/>
       <interceptor name="web.Interceptor.flash"/>
      </interceptors>
   </profile>

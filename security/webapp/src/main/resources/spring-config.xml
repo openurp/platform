@@ -5,4 +5,23 @@
 
 
   <bean id="web.RequestConvertor.mvc" class="org.beangle.webmvc.execution.impl.MvcRequestConvertor" primary="true"/>
+  
+  <bean id="web.Interceptor.security">
+    <constructor-arg>
+      <list>
+        <ref bean="security.Filter.authorization" />
+      </list>
+    </constructor-arg>
+    <constructor-arg value="?" />
+    <constructor-arg value="?" />
+    <constructor-arg value="?" />
+  </bean>
+
+  <bean id="security.Authenticator.realm">
+    <constructor-arg>
+      <list>
+        <ref bean="security.Realm.dao" />
+      </list>
+    </constructor-arg>
+  </bean>
 </beans>

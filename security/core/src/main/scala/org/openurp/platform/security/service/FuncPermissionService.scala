@@ -6,7 +6,7 @@ trait FuncPermissionService {
 
   def getResource(name: String): Option[FuncResource]
 
-  def getResourceNamesByRole(roleId: Integer): Set[String]
+  def getResourceNamesByRole(roleId: Integer): Set[Integer]
 
   def getResources(user: User): Seq[FuncResource]
 
