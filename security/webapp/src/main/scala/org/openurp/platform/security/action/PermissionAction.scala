@@ -20,14 +20,12 @@ package org.openurp.platform.security.action
 
 import org.beangle.commons.lang.{ Numbers, Strings }
 import org.beangle.data.jpa.dao.OqlBuilder
-import org.beangle.security.blueprint.{ FuncPermission, FuncResource, Menu, MenuProfile, Resource, Role, User }
-import org.beangle.security.blueprint.service.MenuService
 import org.beangle.webmvc.api.annotation.{ mapping, param }
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.platform.api.security.Securities
-import org.openurp.platform.security.model.UrpUser
-import org.openurp.platform.security.service.FuncPermissionManager
+import org.openurp.platform.security.model.{ FuncPermission, FuncResource, Menu, MenuProfile, Role, User }
+import org.openurp.platform.security.service.{ FuncPermissionManager, MenuService }
 
 /**
  * 权限分配与管理响应类
@@ -46,7 +44,7 @@ class PermissionAction extends RestfulAction[FuncPermission] {
   override def edit(@param("role.id") id: String): String = {
     val roleId = Numbers.convert2Int(id)
     val role = entityDao.get(classOf[Role], roleId)
-    val user = entityDao.get(classOf[User], Securities.loginUserId).asInstanceOf[UrpUser]
+    val user = entityDao.get(classOf[User], Securities.loginUserId).asInstanceOf[User]
     put("manager", user)
     val mngRoles = new collection.mutable.ListBuffer[Role]
     for (m <- user.members) {
@@ -138,7 +136,7 @@ class PermissionAction extends RestfulAction[FuncPermission] {
     // 管理员拥有的菜单权限和系统资源
     val manager = entityDao.get(classOf[User], Securities.loginUserId)
     var mngMenus: collection.Set[Menu] = null
-    val mngResources = new collection.mutable.HashSet[Resource]
+    val mngResources = new collection.mutable.HashSet[FuncResource]
     if (Securities.isAdmin) {
       mngMenus = menuProfile.menus.toSet
     } else {

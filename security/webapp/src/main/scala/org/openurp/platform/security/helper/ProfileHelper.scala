@@ -18,13 +18,13 @@
  */
 package org.openurp.platform.security.helper
 
+import org.beangle.commons.bean.Properties
 import org.beangle.commons.lang.Strings
 import org.beangle.data.model.dao.EntityDao
-import org.beangle.security.blueprint.{Dimension, Profile, User}
-import org.beangle.security.blueprint.service.{DataResolver, ProfileService}
 import org.beangle.security.context.SecurityContext
-import org.beangle.webmvc.api.context.{ContextHolder, Params}
-import org.beangle.commons.bean.Properties
+import org.beangle.webmvc.api.context.{ ContextHolder, Params }
+import org.openurp.platform.security.model.{ Dimension, Profile, User }
+import org.openurp.platform.security.service.{ DataResolver, ProfileService }
 
 class ProfileHelper(entityDao: EntityDao, profileService: ProfileService) {
   var dataResolver: DataResolver = _

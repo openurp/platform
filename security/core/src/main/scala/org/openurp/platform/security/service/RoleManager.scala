@@ -1,18 +1,16 @@
 package org.openurp.platform.security.service
 
-import org.beangle.security.blueprint.{ Role, User }
-import org.beangle.security.blueprint.service.RoleService
-import org.openurp.platform.security.model.UrpRole
+import org.openurp.platform.security.model.{ Role, User }
 
 trait RoleManager extends RoleService {
 
-  def isManagedBy(manager: User, role: UrpRole): Boolean
+  def isManagedBy(manager: User, role: Role): Boolean
 
-  def create(creator: User, role: UrpRole): Unit
+  def create(creator: User, role: Role): Unit
 
   def move(role: Role, parent: Role, indexno: Int): Unit
 
-  def remove(manager: User, roles: Seq[UrpRole]): Unit
+  def remove(manager: User, roles: Seq[Role]): Unit
 
   def get(id: Integer): Role = {
     null

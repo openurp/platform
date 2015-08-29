@@ -1,14 +1,14 @@
-package org.openurp.platform.kernel.ws
+package org.openurp.platform.security.ws
 
 import org.beangle.commons.collection.Properties
 import org.beangle.data.jpa.dao.OqlBuilder
 import org.beangle.data.model.dao.EntityDao
-import org.beangle.security.blueprint.Scopes
 import org.beangle.webmvc.api.action.{ ActionSupport, EntitySupport }
 import org.beangle.webmvc.api.annotation.{ mapping, param, response }
 import org.openurp.platform.kernel.service.TokenRepository
-import org.openurp.platform.kernel.model.AppFuncPermission
-import org.beangle.security.blueprint.FuncResource
+import org.openurp.platform.kernel.model.AppDataPermission
+import org.openurp.platform.security.model.FuncResource
+import org.beangle.security.authz.Scopes
 
 class FuncResourceWS extends ActionSupport with EntitySupport[FuncResource] {
 
@@ -33,17 +33,9 @@ class FuncResourceWS extends ActionSupport with EntitySupport[FuncResource] {
 
   @response
   @mapping("public")
-  def pu(@param("app") app: String): Seq[Any] = {
+  def pub(@param("app") app: String): Seq[Any] = {
     val query = OqlBuilder.from(classOf[FuncResource], "fr").where("fr.app.name=:name", app).where("fr.scope=:scope", Scopes.Public)
     entityDao.search(query)
   }
 
-  @response
-  def permission(@param("app") app: String, @param("client") client: String): Seq[Integer] = {
-    val query = OqlBuilder.from(classOf[AppFuncPermission], "afp").where("afp.app.name=:client", client)
-    query.where("afp.resource.app.name=:app", app)
-    query.select("afp.resource.id")
-    val rs = entityDao.search(query)
-    rs.asInstanceOf[Seq[Integer]]
-  }
 }

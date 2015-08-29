@@ -6,7 +6,7 @@ class DefaultModule extends AbstractBindModule {
 
   protected override def binding() {
     bind(classOf[DatasourceWS])
-    bind(classOf[FuncResourceWS])
+    bind(classOf[DataResourceWS])
     bind(classOf[LoginWS], classOf[ValidateWS])
   }
 }

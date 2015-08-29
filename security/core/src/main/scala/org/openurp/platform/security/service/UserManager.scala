@@ -1,18 +1,16 @@
 package org.openurp.platform.security.service
 
-import org.openurp.platform.security.model.UrpUser
-import org.beangle.security.blueprint.service.UserService
-import org.openurp.platform.security.model.UrpMember
+import org.openurp.platform.security.model.{ Member, MemberShip, User }
 
 trait UserManager extends UserService {
 
-  def getMembers(user: UrpUser, ship: UrpMember.Ship.Ship): Seq[UrpMember]
+  def getMembers(user: User, ship: MemberShip.Ship): Seq[Member]
 
-  def isManagedBy(manager: UrpUser, user: UrpUser): Boolean
+  def isManagedBy(manager: User, user: User): Boolean
 
-  def create(creator: UrpUser, user: UrpUser)
+  def create(creator: User, user: User)
 
-  def updateState(manager: UrpUser, userIds: Array[java.lang.Long], active: Boolean): Int
+  def updateState(manager: User, userIds: Array[java.lang.Long], active: Boolean): Int
 
-  def remove(creator: UrpUser, user: UrpUser)
+  def remove(creator: User, user: User)
 }

@@ -25,14 +25,14 @@ import org.beangle.data.jpa.dao.OqlBuilder
 import org.beangle.data.model.dao.Condition
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
-import org.openurp.platform.security.model.{UrpMember, UrpUser}
+import org.openurp.platform.security.model.{ MemberShip, User }
 import org.openurp.platform.security.service.UserManager
 /**
  * 用户管理响应处理类
  *
  * @author chaostone 2005-9-29
  */
-class AccountAction extends RestfulAction[UrpUser] {
+class AccountAction extends RestfulAction[User] {
 
   var userManager: UserManager = _
 
@@ -45,15 +45,15 @@ class AccountAction extends RestfulAction[UrpUser] {
     true
   }
 
-  protected override def getQueryBuilder(): OqlBuilder[UrpUser] = {
-    val manager = entityDao.get(classOf[UrpUser], getUserId())
-    val userQuery = OqlBuilder.from(classOf[UrpUser], "user")
+  protected override def getQueryBuilder(): OqlBuilder[User] = {
+    val manager = entityDao.get(classOf[User], getUserId())
+    val userQuery = OqlBuilder.from(classOf[User], "user")
     // 查询角色
     val sb = new StringBuilder("exists(from user.members m where ")
     val params = new collection.mutable.ListBuffer[Object]
     var queryRole = false
     if (!isAdmin()) {
-      val members = userManager.getMembers(manager, UrpMember.Ship.Manager)
+      val members = userManager.getMembers(manager, MemberShip.Manager)
       val mngRoles = members.map(m => m.role)
       if (mngRoles.isEmpty) {
         sb.append("1=0")
@@ -90,8 +90,8 @@ class AccountAction extends RestfulAction[UrpUser] {
   /**
    * 保存用户信息
    */
-  protected def saveAndForward(user: UrpUser): View = {
-    if (entityDao.duplicate(classOf[UrpUser], user.id, "name", user.code)) {
+  protected def saveAndForward(user: User): View = {
+    if (entityDao.duplicate(classOf[User], user.id, "name", user.code)) {
       addMessage("security.error.usernameNotAvaliable", user.code)
       return forward(to(this, "edit"))
     }
@@ -100,7 +100,7 @@ class AccountAction extends RestfulAction[UrpUser] {
     if (Strings.isNotEmpty(errorMsg)) { return forward(to(this, "edit"), errorMsg); }
     processPassword(user)
     if (!user.persisted) {
-      val creator = userManager.get(getUserId()).asInstanceOf[UrpUser]
+      val creator = userManager.get(getUserId()).asInstanceOf[User]
       userManager.create(creator, user)
     } else {
       entityDao.saveOrUpdate(user)
@@ -108,7 +108,7 @@ class AccountAction extends RestfulAction[UrpUser] {
     return redirect("search", "info.save.success")
   }
 
-  protected override def editSetting(user: UrpUser) {
+  protected override def editSetting(user: User) {
     //    val manager = entityDao.get(classOf[User], getUserId())
     //    val roles = new collection.mutable.HashSet[Role]
     //    val curMemberMap = new collection.mutable.HashMap[Role, Member]
@@ -136,15 +136,15 @@ class AccountAction extends RestfulAction[UrpUser] {
    */
   override def remove(): View = {
     val userIds = getLongIds("user")
-    val creator = userManager.get(getUserId()).asInstanceOf[UrpUser]
+    val creator = userManager.get(getUserId()).asInstanceOf[User]
     val toBeRemoved = userManager.getUsers(userIds: _*)
     val sb = new StringBuilder()
-    var removed: UrpUser = null
+    var removed: User = null
     var success = 0
     var expected = toBeRemoved.size
     try {
       for (one <- toBeRemoved) {
-        removed = one.asInstanceOf[UrpUser]
+        removed = one.asInstanceOf[User]
         // 不能删除自己
         if (!one.id.equals(getUserId())) {
           userManager.remove(creator, removed)
@@ -173,7 +173,7 @@ class AccountAction extends RestfulAction[UrpUser] {
     val userIds = getLongIds("user")
     val isActivate = get("isActivate", "true")
     var successCnt: Int = 0
-    val manager = userManager.get(getUserId()).asInstanceOf[UrpUser]
+    val manager = userManager.get(getUserId()).asInstanceOf[User]
     var msg = "security.info.freeze.success"
     if (Strings.isNotEmpty(isActivate) && "false".equals(isActivate)) {
       successCnt = userManager.updateState(manager, userIds, false)
@@ -185,12 +185,12 @@ class AccountAction extends RestfulAction[UrpUser] {
     return redirect("search")
   }
 
-  protected def checkUser(user: UrpUser): String = {
+  protected def checkUser(user: User): String = {
     if (!user.persisted && entityDao.exists(entityName, "name", user.code)) "error.model.existed";
     else ""
   }
 
-  protected def processPassword(user: UrpUser) {
+  protected def processPassword(user: User) {
     var password = get("password").orNull
     if (Strings.isNotBlank(password)) {
       user.password = Digests.md5Hex(password)

@@ -1,17 +1,16 @@
 package org.openurp.platform.kernel.model
 
-import scala.collection.mutable
-import org.beangle.data.model.{ IntId, Named }
-import org.beangle.security.blueprint.{ FuncPermission, FuncResource }
 import org.beangle.commons.collection.Collections
+import org.beangle.data.model.{ IntId, Named }
+import java.security.Principal
 
-class App extends IntId with Named {
+class App extends IntId with Named with Principal {
   var secret: String = _
   var title: String = _
   var datasources = Collections.newBuffer[DataSource]
-  var funcResources: mutable.Set[FuncResource] = new mutable.HashSet[FuncResource]
-  var funcPermissions = Collections.newBuffer[AppFuncPermission]
+  var dataPermissions = Collections.newBuffer[AppDataPermission]
   var remark: String = _
   var appType: String = _
   var url: String = _
+  def getName = name
 }

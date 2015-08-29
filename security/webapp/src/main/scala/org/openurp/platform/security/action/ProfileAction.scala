@@ -18,22 +18,20 @@
  */
 package org.openurp.platform.security.action
 
-import org.beangle.security.blueprint.User
-import org.beangle.security.blueprint.service.{ DataResolver, ProfileService }
-import org.beangle.security.blueprint.service.impl.CsvDataResolver
+import org.beangle.commons.lang.Numbers
 import org.beangle.security.context.SecurityContext
+import org.beangle.webmvc.api.annotation.{ mapping, param }
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.platform.security.helper.ProfileHelper
-import org.openurp.platform.security.model.UrpUserProfile
-import org.beangle.webmvc.api.annotation.mapping
-import org.beangle.webmvc.api.annotation.param
-import org.beangle.commons.lang.Numbers
+import org.openurp.platform.security.model.{ User, UserProfile }
+import org.openurp.platform.security.service.{ DataResolver, ProfileService }
+import org.openurp.platform.security.service.impl.CsvDataResolver
 
 /**
  * @author chaostone
  */
-class ProfileAction(profileService: ProfileService) extends RestfulAction[UrpUserProfile] {
+class ProfileAction(profileService: ProfileService) extends RestfulAction[UserProfile] {
 
   val dataResolver: DataResolver = CsvDataResolver
   def tip(): String = {
@@ -56,7 +54,7 @@ class ProfileAction(profileService: ProfileService) extends RestfulAction[UrpUse
     return forward()
   }
 
-  protected override def saveAndRedirect(profile: UrpUserProfile): View = {
+  protected override def saveAndRedirect(profile: UserProfile): View = {
     val helper = new ProfileHelper(entityDao, profileService)
     helper.dataResolver = dataResolver
     helper.populateSaveInfo(profile, isAdmin())
@@ -69,9 +67,9 @@ class ProfileAction(profileService: ProfileService) extends RestfulAction[UrpUse
     }
   }
 
-  protected override def editSetting(profile: UrpUserProfile): Unit = {
+  protected override def editSetting(profile: UserProfile): Unit = {
     if (!profile.persisted) {
-      profile.asInstanceOf[UrpUserProfile].user = entityDao.get(classOf[User], getLongId("use"))
+      profile.asInstanceOf[UserProfile].user = entityDao.get(classOf[User], getLongId("use"))
     }
     val helper = new ProfileHelper(entityDao, profileService)
     helper.fillEditInfo(profile, isAdmin())

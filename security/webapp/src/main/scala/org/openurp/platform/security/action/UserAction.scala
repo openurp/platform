@@ -24,19 +24,18 @@ import org.beangle.commons.collection.Order
 import org.beangle.commons.lang.Strings
 import org.beangle.data.jpa.dao.OqlBuilder
 import org.beangle.data.model.dao.{ Condition, Operation }
-import org.beangle.security.blueprint.{ Role, User }
 import org.beangle.webmvc.api.context.Params
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.platform.security.helper.UserDashboardHelper
-import org.openurp.platform.security.model.{ UrpMember, UrpUser }
+import org.openurp.platform.security.model.{ Member, MemberShip, Role, User }
 import org.openurp.platform.security.service.UserManager
 /**
  * 用户管理响应处理类
  *
  * @author chaostone 2005-9-29
  */
-class UserAction extends RestfulAction[UrpUser] {
+class UserAction extends RestfulAction[User] {
 
   var userManager: UserManager = _
   private var userDashboardHelper: UserDashboardHelper = _
@@ -50,15 +49,15 @@ class UserAction extends RestfulAction[UrpUser] {
 
   override def info(id: String): String = {
     val userId = Params.converter.convert(id, classOf[java.lang.Long]).orNull
-    var managed: UrpUser = null
+    var managed: User = null
     if (null != userId) {
-      managed = entityDao.get(classOf[UrpUser], userId)
+      managed = entityDao.get(classOf[User], userId)
     } else {
       get("user.name") foreach { name =>
-        managed = userManager.get(name).orNull.asInstanceOf[UrpUser]
+        managed = userManager.get(name).orNull.asInstanceOf[User]
       }
     }
-    val me = entityDao.get(classOf[UrpUser], getUserId())
+    val me = entityDao.get(classOf[User], getUserId())
     if (null != managed) {
       if (me.equals(managed) || userManager.isManagedBy(me, managed)) {
         userDashboardHelper.buildDashboard(managed)
@@ -72,15 +71,15 @@ class UserAction extends RestfulAction[UrpUser] {
     return forward()
   }
 
-  protected override def getQueryBuilder(): OqlBuilder[UrpUser] = {
-    val manager = entityDao.get(classOf[UrpUser], getUserId())
-    val userQuery = OqlBuilder.from(classOf[UrpUser], "user")
+  protected override def getQueryBuilder(): OqlBuilder[User] = {
+    val manager = entityDao.get(classOf[User], getUserId())
+    val userQuery = OqlBuilder.from(classOf[User], "user")
     // 查询角色
     val sb = new StringBuilder("exists(from user.members m where ")
     val params = new collection.mutable.ListBuffer[Object]
     var queryRole = false
     if (!isAdmin()) {
-      val members = userManager.getMembers(manager, UrpMember.Ship.Manager)
+      val members = userManager.getMembers(manager, MemberShip.Manager)
       val mngRoles = members.map(m => m.role)
       if (mngRoles.isEmpty) {
         sb.append("1=0")
@@ -118,20 +117,20 @@ class UserAction extends RestfulAction[UrpUser] {
    * 保存用户信息
    */
   protected def saveAndForward(entity: User): View = {
-    val user = entity.asInstanceOf[UrpUser]
+    val user = entity.asInstanceOf[User]
     if (entityDao.duplicate(classOf[User], user.id, "name", user.code)) {
       addMessage("security.error.usernameNotAvaliable", user.code)
       return forward(to(this, "edit"))
     }
     val userMembers = user.members
-    val memberMap = new collection.mutable.HashMap[Role, UrpMember]
+    val memberMap = new collection.mutable.HashMap[Role, Member]
     for (gm <- userMembers) {
-      memberMap.put(gm.role, gm.asInstanceOf[UrpMember])
+      memberMap.put(gm.role, gm.asInstanceOf[Member])
     }
-    val newMembers = new collection.mutable.HashSet[UrpMember]
-    val removedMembers = new collection.mutable.HashSet[UrpMember]
-    val manager = entityDao.get(classOf[UrpUser], getUserId())
-    val members = userManager.getMembers(manager, UrpMember.Ship.Granter)
+    val newMembers = new collection.mutable.HashSet[Member]
+    val removedMembers = new collection.mutable.HashSet[Member]
+    val manager = entityDao.get(classOf[User], getUserId())
+    val members = userManager.getMembers(manager, MemberShip.Granter)
     for (member <- members) {
       var myMember = memberMap(member.role)
       val isMember = getBoolean("member" + member.role.id, false)
@@ -143,7 +142,7 @@ class UserAction extends RestfulAction[UrpUser] {
           removedMembers.add(myMember)
         }
       } else {
-        if (null == myMember) myMember = new UrpMember(user, member.role)
+        if (null == myMember) myMember = new Member(user, member.role)
         myMember.updatedAt = new Date()
         myMember.member = isMember
         myMember.granter = isGranter
@@ -155,11 +154,11 @@ class UserAction extends RestfulAction[UrpUser] {
     return redirect("search", "info.save.success")
   }
 
-  protected override def editSetting(user: UrpUser) {
-    val manager = entityDao.get(classOf[UrpUser], getUserId())
+  protected override def editSetting(user: User) {
+    val manager = entityDao.get(classOf[User], getUserId())
     val roles = new collection.mutable.HashSet[Role]
-    val curMemberMap = new collection.mutable.HashMap[Role, UrpMember]
-    val members = userManager.getMembers(manager, UrpMember.Ship.Granter)
+    val curMemberMap = new collection.mutable.HashMap[Role, Member]
+    val members = userManager.getMembers(manager, MemberShip.Granter)
     for (gm <- members) {
       roles.add(gm.role)
       curMemberMap.put(gm.role, gm)
@@ -167,7 +166,7 @@ class UserAction extends RestfulAction[UrpUser] {
     put("roles", roles)
 
     val userMembers = user.members
-    val memberMap = new collection.mutable.HashMap[Role, UrpMember]
+    val memberMap = new collection.mutable.HashMap[Role, Member]
     for (gm <- userMembers) {
       memberMap.put(gm.role, gm)
     }

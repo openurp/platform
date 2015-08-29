@@ -2,9 +2,8 @@ package org.openurp.platform.security.action
 
 import org.beangle.data.jpa.dao.OqlBuilder
 import org.beangle.data.model.dao.EntityDao
-import org.beangle.security.blueprint.{ DataPermission, Dimension, FuncResource, Menu, MenuProfile }
 import org.beangle.webmvc.api.action.ActionSupport
-import org.openurp.platform.security.model.UrpMember
+import org.openurp.platform.security.model.{ DataPermission, Dimension, FuncResource, Member, Menu, MenuProfile }
 
 class IndexAction extends ActionSupport {
 
@@ -36,7 +35,7 @@ class IndexAction extends ActionSupport {
   }
 
   private def populateUserStat(): Unit = {
-    val userQuery = OqlBuilder.from(classOf[UrpMember], "gm")
+    val userQuery = OqlBuilder.from(classOf[Member], "gm")
     userQuery.select("gm.role.indexno,gm.role.name,gm.user.enabled,count(*)").groupBy(
       "gm.role.indexno,gm.role.name,gm.user.enabled")
     val datas = entityDao.search(userQuery)

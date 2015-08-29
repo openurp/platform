@@ -2,18 +2,12 @@ package org.openurp.platform.security.model
 
 import java.security.Principal
 import org.beangle.data.model.{ Enabled, IntId, LongId, Named, TemporalAt }
-import org.beangle.security.blueprint.{ DataPermission, DataResource }
-import org.beangle.security.blueprint.Role
 import org.openurp.platform.kernel.model.App
-import org.beangle.security.blueprint.FuncResource
+import org.openurp.platform.kernel.model.DataResource
+import org.beangle.security.authz.Permission
 
-class UrpDataResource extends IntId with Named with DataResource {
-  var title: String = _
-  var actions: String = _
-  var remark: String = _
-}
 
-class UrpDataPermission extends LongId with TemporalAt with DataPermission {
+class DataPermission extends LongId with TemporalAt with Permission {
   var app: App = _
   var resource: DataResource = _
   var funcResource: FuncResource = _

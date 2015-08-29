@@ -1,10 +1,7 @@
-package org.openurp.platform.security.service.internal
+package org.openurp.platform.security.service.impl
 
-import org.beangle.security.blueprint.service.ProfileService
-import org.beangle.security.blueprint.FuncResource
-import org.beangle.security.blueprint.User
-import org.beangle.security.blueprint.Profile
-import org.beangle.security.blueprint.Dimension
+import org.openurp.platform.security.model.{ Dimension, FuncResource, Profile, User }
+import org.openurp.platform.security.service.ProfileService
 
 class ProfileServiceImpl extends ProfileService {
 

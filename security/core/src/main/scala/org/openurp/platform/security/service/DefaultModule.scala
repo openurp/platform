@@ -1,7 +1,7 @@
 package org.openurp.platform.security.service
 
 import org.beangle.commons.inject.bind.AbstractBindModule
-import org.openurp.platform.security.service.internal.{FuncPermissionManagerImpl, ProfileServiceImpl, RoleManagerImpl, UserManagerImpl}
+import org.openurp.platform.security.service.impl.{ FuncPermissionManagerImpl, ProfileServiceImpl, RoleManagerImpl, UserManagerImpl }
 
 class DefaultModule extends AbstractBindModule {
 

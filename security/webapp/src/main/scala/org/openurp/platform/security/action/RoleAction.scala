@@ -22,14 +22,12 @@ import java.sql.Date
 
 import org.beangle.data.jpa.dao.OqlBuilder
 import org.beangle.data.model.util.Hierarchicals
-import org.beangle.security.blueprint.{ Role, User }
-import org.beangle.security.blueprint.service.{ DataResolver, ProfileService, UserService }
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.platform.kernel.model.App
 import org.openurp.platform.security.helper.ProfileHelper
-import org.openurp.platform.security.model.UrpRole
-import org.openurp.platform.security.service.RoleManager
+import org.openurp.platform.security.model.{ Role, User }
+import org.openurp.platform.security.service.{ DataResolver, ProfileService, RoleManager, UserService }
 /**
  * 角色信息维护响应类
  *
@@ -93,7 +91,7 @@ class RoleAction(val roleManager: RoleManager, val userService: UserService) ext
   //  }
 
   protected override def saveAndRedirect(entity: Role): View = {
-    val role = entity.asInstanceOf[UrpRole]
+    val role = entity.asInstanceOf[Role]
     if (entity.persisted) {
       if (!roleManager.isManagedBy(entityDao.get(classOf[User], getUserId()), role)) {
         return redirect("search", "不能修改该组,你没有" + role.parent.name + "的管理权限");
@@ -119,7 +117,7 @@ class RoleAction(val roleManager: RoleManager, val userService: UserService) ext
     roleManager.move(role, parent, indexno)
     if (!role.enabled) {
       val family = Hierarchicals.getFamily(role.asInstanceOf[Role])
-      for (one <- family) one.asInstanceOf[UrpRole].enabled = false
+      for (one <- family) one.asInstanceOf[Role].enabled = false
       entityDao.saveOrUpdate(family)
     }
     return redirect("search", "info.save.success")
@@ -162,7 +160,7 @@ class RoleAction(val roleManager: RoleManager, val userService: UserService) ext
    */
   override def remove(): View = {
     val curUser = userService.get(getUserId())
-    roleManager.remove(curUser, entityDao.find(classOf[UrpRole], getIntIds("role")))
+    roleManager.remove(curUser, entityDao.find(classOf[Role], getIntIds("role")))
     redirect("search", "info.remove.success")
   }
 

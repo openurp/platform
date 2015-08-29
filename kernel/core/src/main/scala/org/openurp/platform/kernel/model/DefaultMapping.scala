@@ -2,9 +2,7 @@ package org.openurp.platform.kernel.model
 
 import scala.reflect.runtime.universe
 
-import org.beangle.commons.lang.annotation.beta
 import org.beangle.data.model.bind.Mapping
-import org.beangle.security.blueprint.{ FuncResource, Menu, MenuProfile }
 
 object DefaultMapping extends Mapping {
 
@@ -17,7 +15,7 @@ object DefaultMapping extends Mapping {
       e.url is (notnull, length(200)),
       e.appType is (notnull, length(50)),
       e.remark is (length(200)),
-      e.funcResources is depends("app"),
+      e.dataPermissions is depends("app"),
       e.datasources is depends("app")))
 
     bind[DataSource].on(e => declare(
@@ -32,17 +30,17 @@ object DefaultMapping extends Mapping {
       e.token is (unique, notnull, length(200)),
       e.expiredAt is notnull))
 
-    bind[AppFuncPermission].on(e => declare(
+    bind[AppDataPermission].on(e => declare(
       e.app & e.resource are notnull,
       e.actions is length(500),
       e.restrictions is length(500)))
 
-    bind[AppFuncResource](classOf[FuncResource].getName).on(e => declare(
-      e.name is (notnull, length(200)),
-      e.app & e.scope are notnull,
+    bind[DataResource].on(e => declare(
+      e.name & e.typeName are (notnull, length(200)),
+      e.scope is notnull,
       e.title is (notnull, length(200)),
       e.remark & e.actions are length(200)))
-      
+
     bind[Db].on(e => declare(
       e.name is (notnull, length(100), unique),
       e.driverClassName is (notnull, length(100)),

@@ -1,8 +1,7 @@
 package org.openurp.platform.security.service
 
-import org.beangle.security.blueprint.FuncResource
-import org.beangle.security.blueprint.service.FuncPermissionService
-import org.beangle.security.blueprint.Role
+import org.openurp.platform.security.model.FuncResource
+import org.openurp.platform.security.model.Role
 
 trait FuncPermissionManager extends FuncPermissionService {
   

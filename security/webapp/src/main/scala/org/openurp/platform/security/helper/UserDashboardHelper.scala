@@ -19,11 +19,10 @@
 package org.openurp.platform.security.helper
 
 import org.beangle.data.model.dao.EntityDao
-import org.beangle.security.blueprint.{ Menu, MenuProfile, Role }
-import org.beangle.security.blueprint.service.{ FuncPermissionService, MenuService, ProfileService }
 import org.beangle.security.session.SessionRegistry
 import org.beangle.webmvc.api.context.{ ContextHolder, Params }
-import org.openurp.platform.security.model.UrpUser
+import org.openurp.platform.security.model.{ Menu, MenuProfile, Role, User }
+import org.openurp.platform.security.service.{ FuncPermissionService, MenuService, ProfileService }
 
 /**
  * @author chaostone
@@ -43,7 +42,7 @@ class UserDashboardHelper {
 
   //  var sessioninfoLogService :SessioninfoLogService =_
 
-  def buildDashboard(user: UrpUser): Unit = {
+  def buildDashboard(user: User): Unit = {
     ContextHolder.context.attribute("user", user)
     populateMenus(user)
     //    populateSessioninfoLogs(user)
@@ -61,7 +60,7 @@ class UserDashboardHelper {
   //    ContextHolder.context.attribute("sessioninfoLogs", page)
   //  }
 
-  private def populateMenus(user: UrpUser) {
+  private def populateMenus(user: User) {
     val menuProfiles = menuService.getProfiles(user)
     ContextHolder.context.attribute("menuProfiles", menuProfiles)
     var menuProfileId = Params.get("menuProfileId", classOf[Integer]).orNull

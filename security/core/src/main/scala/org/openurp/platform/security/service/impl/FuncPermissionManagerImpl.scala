@@ -1,10 +1,8 @@
-package org.openurp.platform.security.service.internal
+package org.openurp.platform.security.service.impl
 
-import org.beangle.data.model.dao.EntityDao
 import org.beangle.data.jpa.dao.OqlBuilder
-import org.beangle.security.blueprint.FuncPermission
-import org.beangle.security.blueprint.FuncResource
-import org.beangle.security.blueprint.Role
+import org.beangle.data.model.dao.EntityDao
+import org.openurp.platform.security.model.{ FuncPermission, FuncResource, Role, User }
 import org.openurp.platform.security.service.FuncPermissionManager
 
 class FuncPermissionManagerImpl(val entityDao: EntityDao) extends FuncPermissionManager {
@@ -23,11 +21,11 @@ class FuncPermissionManagerImpl(val entityDao: EntityDao) extends FuncPermission
     entityDao.search(query).toSet.asInstanceOf[Set[String]]
   }
 
-  def getResources(user: org.beangle.security.blueprint.User): Seq[FuncResource] = {
+  def getResources(user: User): Seq[FuncResource] = {
     null
   }
 
-  def getPermissions(role: org.beangle.security.blueprint.Role): Seq[FuncPermission] = {
+  def getPermissions(role: Role): Seq[FuncPermission] = {
     null
   }
 

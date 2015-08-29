@@ -1,4 +1,4 @@
-package org.openurp.platform.security.service.internal
+package org.openurp.platform.security.service.impl
 
 import org.beangle.security.context.SecurityContext
 import org.beangle.security.authz.Authorizer
@@ -6,9 +6,9 @@ import org.beangle.security.authz.Authority
 import org.beangle.security.authc.Account
 import org.beangle.commons.security.Request
 import org.beangle.commons.cache.Cache
-import org.beangle.security.blueprint.Scopes
 import org.beangle.commons.cache.CacheManager
 import org.openurp.platform.security.service.FuncPermissionManager
+import org.beangle.security.authz.Scopes
 
 class CachedDaoAuthorizer(permissionService: FuncPermissionManager, cacheManager: CacheManager) extends Authorizer {
   var unknownIsPublic = true

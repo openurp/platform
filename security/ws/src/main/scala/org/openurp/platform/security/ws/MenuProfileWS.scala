@@ -3,11 +3,10 @@ package org.openurp.platform.security.ws
 import org.beangle.commons.collection.{ Order, Properties }
 import org.beangle.data.jpa.dao.OqlBuilder
 import org.beangle.data.model.dao.EntityDao
-import org.beangle.security.blueprint.MenuProfile
 import org.beangle.webmvc.api.action.{ ActionSupport, EntitySupport }
 import org.beangle.webmvc.api.annotation.{ mapping, param, response }
 import org.beangle.webmvc.entity.helper.QueryHelper
-import org.openurp.platform.security.model.AppMenuProfile
+import org.openurp.platform.security.model.MenuProfile
 
 class MenuProfileWS extends ActionSupport with EntitySupport[MenuProfile] {
 
@@ -26,7 +25,7 @@ class MenuProfileWS extends ActionSupport with EntitySupport[MenuProfile] {
     val mps = new collection.mutable.ListBuffer[Properties]
     for (one <- rs) {
       val mp = new Properties(one, "id", "name")
-      mp.add("app", one.asInstanceOf[AppMenuProfile].app, "id", "title")
+      mp.add("app", one.asInstanceOf[MenuProfile].app, "id", "title")
       mps += mp
     }
     mps

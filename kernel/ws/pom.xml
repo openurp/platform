@@ -23,10 +23,6 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.beangle.security</groupId>
-      <artifactId>beangle-security-blueprint_2.11</artifactId>
-    </dependency>
-    <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
     </dependency>

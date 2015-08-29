@@ -20,7 +20,7 @@ package org.openurp.platform.security.action
 
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
-import org.beangle.security.blueprint.Dimension
+import org.openurp.platform.security.model.Dimension
 
 /**
  * 数据限制域元信息配置类
