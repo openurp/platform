@@ -30,7 +30,6 @@
    padding: 10px 10px;
 }
 #urp_app_nav{
-    display: block;
     float: left;
     height:50px;
     width:50px;
