@@ -56,7 +56,7 @@
 [#if fixed][#assign navbarclass="navbar-fixed-top"][#else][#assign navbarclass=""][/#if]
 [#list apps as app][#if app.name==appName][#assign appTitle = app.title/][#break/][/#if][/#list]
 [#assign brand]
- <a id="urp_app_nav" href="#" title="更多应用..." data-toggle="popover" data-placement="bottom"> <i class="nav_logo glyphicon glyphicon-th"></i></a>
+ <a id="urp_app_nav" href="#" title="更多应用..." data-toggle="popover" data-placement="bottom"> <span class="nav_logo glyphicon glyphicon-th"></span></a>
  [@b.a href="!index" class="navbar-brand"]${appTitle}[/@]
 [/#assign]
 
