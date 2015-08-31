@@ -14,16 +14,16 @@ class IndexAction extends ActionSupport {
   var entityDao: EntityDao = _
 
   def index(): String = {
-
     val query = OqlBuilder.from(classOf[Menu], "menu")
     query.where("menu.profile.app.name=:app", AppConfig.appName).where("menu.parent is null")
     query.orderBy("menu.indexno")
     put("menus", entityDao.search(query))
     val apps = entityDao.getAll(classOf[App])
+    put("appName",AppConfig.appName)
     put("apps", apps)
     if (!apps.isEmpty) {
-      AppHelper.setAppId(get("app.id",classOf[Integer]).getOrElse(apps.head.id))
-      put("appId",AppHelper.getAppId())
+      AppHelper.setAppId(get("app.id", classOf[Integer]).getOrElse(apps.head.id))
+      put("appId", AppHelper.getAppId())
     }
     forward()
   }
