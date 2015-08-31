@@ -9,6 +9,7 @@ import org.beangle.security.mgt.SecurityManager
 import org.beangle.security.session.SessionId
 import org.beangle.webmvc.api.context.ContextHolder
 import org.beangle.security.web.authc.WebDetails
+import org.beangle.security.context.SecurityContext
 
 class LoginAction(val securityManager: SecurityManager) extends ActionSupport {
 
@@ -23,4 +24,10 @@ class LoginAction(val securityManager: SecurityManager) extends ActionSupport {
     securityManager.login(token, SessionId(request.getSession.getId))
     redirect(to(classOf[IndexAction], "index"), null);
   }
+
+  def logout(): View = {
+    securityManager.logout(SecurityContext.session)
+    redirect("index", null)
+  }
+
 }

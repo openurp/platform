@@ -13,4 +13,6 @@ trait MenuService {
   def getProfiles(user: User): Seq[MenuProfile]
 
   def getProfiles(role: Role): Seq[MenuProfile]
+
+  def move(menu: Menu, location: Menu, index: Int): Unit
 }

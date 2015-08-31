@@ -12,6 +12,10 @@ class FuncResource extends IntId with Named with Enabled with Resource {
   var title: String = _
   var actions: String = _
   var remark: String = _
+
+  def description: String = {
+    name + " " + title
+  }
 }
 
 class FuncPermission extends LongId with TemporalAt with Permission {

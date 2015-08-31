@@ -8,6 +8,7 @@ import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.platform.kernel.model.App
 import org.openurp.platform.security.model.{ FuncPermission, FuncResource, Menu }
 import org.openurp.platform.security.service.FuncPermissionManager
+import org.openurp.platform.security.helper.AppHelper
 
 /**
  * 系统模块管理响应类
@@ -52,7 +53,7 @@ class FuncResourceAction extends RestfulAction[FuncResource] {
   }
 
   protected override def editSetting(entity: FuncResource): Unit = {
-    put("apps", entityDao.getAll(classOf[App]))
+    put("apps", AppHelper.getApps(entityDao))
   }
   //  protected PropertyExtractor getPropertyExtractor() {
   //    return new ResourcePropertyExtractor(getTextResource())
@@ -64,7 +65,7 @@ class FuncResourceAction extends RestfulAction[FuncResource] {
 
   protected override def indexSetting(): Unit = {
     val rs = populate(entityName, "resource")
-    put("apps", entityDao.getAll(classOf[App]))
+    put("apps", AppHelper.getApps(entityDao))
   }
 
 }

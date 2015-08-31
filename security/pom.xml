@@ -26,11 +26,6 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.openurp.platform.core</groupId>
-      <artifactId>openurp-platform-core-api</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
       <groupId>org.beangle.security</groupId>
       <artifactId>beangle-security-web_2.11</artifactId>
     </dependency>

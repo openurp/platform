@@ -13,32 +13,47 @@ import org.openurp.platform.security.model.FuncPermission
 import org.openurp.platform.security.model.Menu
 import org.beangle.webmvc.api.annotation.param
 import org.openurp.platform.security.model.FuncPermission
+import org.openurp.platform.security.helper.AppHelper
 
 class MenuAction(val menuService: MenuService) extends RestfulAction[Menu] {
 
   protected override def indexSetting(): Unit = {
-    put("profiles", entityDao.getAll(classOf[MenuProfile]))
+    var profiles = entityDao.search(OqlBuilder.from(classOf[MenuProfile], "mp").orderBy("mp.app.name")).toBuffer
+    AppHelper.getAppId foreach { appId =>
+      val defaultProfiles = profiles.filter(mp => mp.app.id == appId)
+      val newProfiles = Collections.newBuffer[MenuProfile]
+      newProfiles ++= defaultProfiles
+      newProfiles ++= (profiles -- defaultProfiles)
+      profiles = newProfiles
+    }
+    put("profiles", profiles)
   }
 
   protected override def editSetting(menu: Menu): Unit = {
-    put("profiles", entityDao.getAll(classOf[MenuProfile]))
+    //search profile in app scope
+    val profile = entityDao.get(classOf[MenuProfile], menu.profile.id);
+    val profileQuery = OqlBuilder.from(classOf[MenuProfile], "mp").where("mp.app=:app", profile.app)
+    put("profiles", entityDao.search(profileQuery))
+
     var folders = Collections.newBuffer[Menu]
-    val builder = OqlBuilder.from(classOf[FuncResource], "r")
-    if (null != menu.profile && null != menu.profile.id) {
-      val profile = entityDao.get(classOf[MenuProfile], menu.profile.id)
-      // 查找可以作为父节点的菜单
-      val folderBuilder = OqlBuilder.from(classOf[Menu], "m")
-      folderBuilder.where("m.entry is null and m.profile=:profile", profile)
-      folderBuilder.orderBy("m.indexno")
-      val rs = entityDao.search(folderBuilder)
-      folders ++= rs
-      if (null != menu.parent && !folders.contains(menu.parent)) folders += menu.parent
-      folders --= Hierarchicals.getFamily(menu)
-    }
-    val resources = Collections.newBuffer[FuncResource]
-    resources ++= entityDao.search(builder)
-    resources --= menu.resources
+
+    // 查找可以作为父节点的菜单
+    val folderBuilder = OqlBuilder.from(classOf[Menu], "m")
+    folderBuilder.where("m.entry is null and m.profile=:profile", profile)
+    folderBuilder.orderBy("m.indexno")
+    val rs = entityDao.search(folderBuilder)
+    folders ++= rs
+    if (null != menu.parent && !folders.contains(menu.parent)) folders += menu.parent
+    folders --= Hierarchicals.getFamily(menu)
     put("parents", folders)
+
+    val alternatives = Collections.newBuffer[FuncResource]
+    val resources = Collections.newBuffer[FuncResource]
+    val funcBuilder = OqlBuilder.from(classOf[FuncResource], "r").where("r.app=:app", profile.app)
+    alternatives ++= entityDao.search(funcBuilder)
+    resources ++= alternatives
+    alternatives --= menu.resources
+    put("alternatives", alternatives)
     put("resources", resources)
   }
 
@@ -63,7 +78,7 @@ class MenuAction(val menuService: MenuService) extends RestfulAction[Menu] {
     var parent: Menu = null
     if (None != newParentId) parent = entityDao.get(classOf[Menu], newParentId.get)
 
-    //menuService.move(menu, parent, indexno)
+    menuService.move(menu, parent, indexno)
     entityDao.saveOrUpdate(menu)
     if (!menu.enabled) {
       val family = Hierarchicals.getFamily(menu)

@@ -30,6 +30,10 @@
       <artifactId>openurp-platform-security-core</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.openurp.platform.api</groupId>
+      <artifactId>openurp-platform-api-core</artifactId>
+    </dependency>
+    <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
     </dependency>

@@ -3,16 +3,16 @@ package org.openurp.platform.security.app
 import java.net.URL
 import org.beangle.commons.io.IOs
 import org.beangle.security.authc.{ AbstractAccountRealm, Account, AccountStore, AuthenticationToken, BadCredentialsException }
-import org.openurp.platform.app.App
+import org.openurp.platform.api.app.AppConfig
 import org.openurp.platform.security.app.AuthConfig.TokenName
-import org.openurp.platform.ws.ServiceConfig
+import org.openurp.platform.api.ws.ServiceConfig
 import org.beangle.security.authc.DefaultAccount
 
 class RemoteAppRealm extends AbstractAccountRealm {
 
   protected override def determinePrincipal(token: AuthenticationToken): String = {
     val ticket = token.details(TokenName).toString
-    val url = ServiceConfig.wsBase + "/kernel/" + App.name + "/validate.json?token=" + ticket
+    val url = ServiceConfig.wsBase + "/kernel/" + AppConfig.appName + "/validate.json?token=" + ticket
     val result = IOs.readString(new URL(url).openStream())
     val prefix = "app_id\":\""
     val start = result.indexOf(prefix)

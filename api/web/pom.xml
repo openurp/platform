@@ -37,8 +37,8 @@
       <artifactId>beangle-webmvc-tag_2.11</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.openurp.platform.core</groupId>
-      <artifactId>openurp-platform-core-api</artifactId>
+      <groupId>org.openurp.platform.api</groupId>
+      <artifactId>openurp-platform-api-core</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>

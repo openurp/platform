@@ -19,7 +19,6 @@
 package org.openurp.platform.security.action
 
 import java.sql.Date
-
 import org.beangle.data.jpa.dao.OqlBuilder
 import org.beangle.data.model.util.Hierarchicals
 import org.beangle.webmvc.api.view.View
@@ -28,6 +27,8 @@ import org.openurp.platform.kernel.model.App
 import org.openurp.platform.security.helper.ProfileHelper
 import org.openurp.platform.security.model.{ Role, User }
 import org.openurp.platform.security.service.{ DataResolver, ProfileService, RoleManager, UserService }
+import org.openurp.platform.security.helper.AppHelper
+import org.openurp.platform.api.security.Securities._
 /**
  * 角色信息维护响应类
  *
@@ -39,15 +40,8 @@ class RoleAction(val roleManager: RoleManager, val userService: UserService) ext
 
   var profileService: ProfileService = _
 
-  def getUserId(): java.lang.Long = {
-    //SecurityContext.session.principal.asInstanceOf[Account].id.asInstanceOf[java.lang.Long]
-    1L
-  }
-  def isAdmin(): Boolean = {
-    true
-  }
   protected override def indexSetting(): Unit = {
-    put("apps", entityDao.getAll(classOf[App]))
+    put("apps",AppHelper.getApps(entityDao))
   }
   /**
    * 对组可管理意为<br>
@@ -62,9 +56,9 @@ class RoleAction(val roleManager: RoleManager, val userService: UserService) ext
   override def editSetting(role: Role): Unit = {
     put("role", role)
     val query = OqlBuilder.from(classOf[Role], "role")
-    if (!isAdmin()) {
+    if (!isAdmin) {
       query.join("role.members", "gm")
-      query.where("gm.user.id=:me and gm.manager=true", getUserId())
+      query.where("gm.user.id=:me and gm.manager=true", loginUserId)
     }
     val parents = new collection.mutable.ListBuffer[Role]
     parents ++= entityDao.search(query)
@@ -77,9 +71,9 @@ class RoleAction(val roleManager: RoleManager, val userService: UserService) ext
 
   protected override def getQueryBuilder(): OqlBuilder[Role] = {
     val entityQuery = OqlBuilder.from(classOf[Role], "role")
-    if (!isAdmin()) {
+    if (!isAdmin) {
       entityQuery.join("role.members", "gm")
-      entityQuery.where("gm.user.id=:me and gm.manager=true", getUserId())
+      entityQuery.where("gm.user.id=:me and gm.manager=true", loginUserId)
     }
     populateConditions(entityQuery)
     val orderBy = get("orderBy", "role.indexno")
@@ -93,14 +87,14 @@ class RoleAction(val roleManager: RoleManager, val userService: UserService) ext
   protected override def saveAndRedirect(entity: Role): View = {
     val role = entity.asInstanceOf[Role]
     if (entity.persisted) {
-      if (!roleManager.isManagedBy(entityDao.get(classOf[User], getUserId()), role)) {
+      if (!roleManager.isManagedBy(entityDao.get(classOf[User], loginUserId), role)) {
         return redirect("search", "不能修改该组,你没有" + role.parent.name + "的管理权限");
       }
     }
     if (entityDao.duplicate(classOf[Role], role.id, "name", role.getName())) return redirect("edit",
       "error.notUnique")
     if (!role.persisted) {
-      val creator = userService.get(getUserId())
+      val creator = userService.get(loginUserId)
       role.indexno = "tmp"
       role.creator = creator
       roleManager.create(creator, role)
@@ -134,7 +128,7 @@ class RoleAction(val roleManager: RoleManager, val userService: UserService) ext
   def editProfile(): String = {
     val role = entityDao.get(classOf[Role], getIntId("role"))
     val helper = new ProfileHelper(entityDao, profileService)
-    helper.fillEditInfo(role, isAdmin())
+    helper.fillEditInfo(role, isAdmin)
     put("role", role)
     forward()
   }
@@ -150,7 +144,7 @@ class RoleAction(val roleManager: RoleManager, val userService: UserService) ext
     val helper = new ProfileHelper(entityDao, profileService)
     helper.dataResolver = dataResolver
     val role = entityDao.get(classOf[Role], getIntId("role"))
-    helper.populateSaveInfo(role, isAdmin())
+    helper.populateSaveInfo(role, isAdmin)
     entityDao.saveOrUpdate(role)
     redirect("profile", "info.save.success")
   }
@@ -159,7 +153,7 @@ class RoleAction(val roleManager: RoleManager, val userService: UserService) ext
    * 删除一个或多个角色
    */
   override def remove(): View = {
-    val curUser = userService.get(getUserId())
+    val curUser = userService.get(loginUserId)
     roleManager.remove(curUser, entityDao.find(classOf[Role], getIntIds("role")))
     redirect("search", "info.remove.success")
   }

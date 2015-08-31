@@ -2,15 +2,15 @@ package org.openurp.platform.security.app
 
 import org.beangle.security.authz.Authorizer
 import org.beangle.commons.security.Request
-import org.openurp.platform.app.App
+import org.openurp.platform.api.app.AppConfig
 import org.beangle.security.context.SecurityContext
-import org.openurp.platform.ws.ServiceConfig
+import org.openurp.platform.api.ws.ServiceConfig
 import org.beangle.security.authc.Account
 import org.beangle.commons.cache.CacheManager
 import org.beangle.commons.io.IOs
 import org.beangle.commons.cache.Cache
 import java.net.URL
-import org.openurp.platform.util.JSON
+import org.openurp.platform.api.util.JSON
 import org.beangle.security.authz.Authority
 import java.{ util => ju }
 import org.beangle.commons.collection.Properties
@@ -28,7 +28,7 @@ class RemoteAppAuthorizer(val cacheManager: CacheManager) extends Authorizer {
         if (resource.scope != "Private") true
         else isAuthorized(principal, resource.id)
       case None =>
-        val url = ServiceConfig.wsBase + "/kernel/" + App.name + "/func-resources/info.json?name=" + resourceName
+        val url = ServiceConfig.wsBase + "/kernel/" + AppConfig.appName + "/func-resources/info.json?name=" + resourceName
         val script = IOs.readString(new URL(url).openStream())
         val r = JSON.parse(script).asInstanceOf[Properties]
         if (!r.isEmpty) {
@@ -50,7 +50,7 @@ class RemoteAppAuthorizer(val cacheManager: CacheManager) extends Authorizer {
     permissions.get(name) match {
       case Some(actions) => actions.contains(resourceId)
       case None =>
-        val url = ServiceConfig.wsBase + "/kernel/" + App.name + "/func-resources/permission.json?client=" + name
+        val url = ServiceConfig.wsBase + "/kernel/" + AppConfig.appName + "/func-resources/permission.json?client=" + name
         val resources = new collection.mutable.HashSet[Integer]
         resources ++= JSON.parse(IOs.readString(new URL(url).openStream())).asInstanceOf[Iterable[Number]].map { n => Integer.valueOf(n.intValue) }
         permissions.put(name, resources.toSet)

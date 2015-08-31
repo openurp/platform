@@ -16,10 +16,9 @@
     [@b.boxcol /]
     [@b.treecol property="name" width="36%" title="common.name"][@b.a href="!info?id=${role.id}"]${role.indexno} ${role.name}[/@]
     [/@]
-    [@b.col width="10%" property="creator.name" title="common.creator"]${(role.creator.fullname)!}[/@]
-    [@b.col width="10%" property="enabled" title="common.status"][@enableInfo role.enabled/][/@]
-    [@b.col width="15%" property="app.title" title="应用"/]
-    [@b.col width="12%" property="updatedAt" title="common.updatedAt"]${(role.updatedAt?string("yy-MM-dd"))!}[/@]
+    [@b.col width="18%" property="creator.name" title="common.creator"]${(role.creator.fullname)!}[/@]
+    [@b.col width="13%" property="enabled" title="common.status"][@enableInfo role.enabled/][/@]
+    [@b.col width="14%" property="updatedAt" title="common.updatedAt"]${(role.updatedAt?string("yy-MM-dd"))!}[/@]
     [@b.col title="权限" width="12%"][@b.a target="_blank" href="permission!edit?role.id=${role.id}"]<span class="icon-action action-config"></span>功能权限[/@][/@]
     </tr>
   [/@]

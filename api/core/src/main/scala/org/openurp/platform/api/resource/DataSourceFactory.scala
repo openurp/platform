@@ -9,7 +9,7 @@ import com.mchange.v2.c3p0.ComboPooledDataSource
 
 import javax.naming.spi.ObjectFactory
 import javax.sql.DataSource
-import org.openurp.platform.api.app.App
+import org.openurp.platform.api.app.AppConfig
 
 class TomcatDataSourceFactory(val resourceKey: String) extends Factory[DataSource] {
   val clazz = loadClass[ObjectFactory]
@@ -17,7 +17,7 @@ class TomcatDataSourceFactory(val resourceKey: String) extends Factory[DataSourc
   def result: DataSource = {
     if (null == clazz) throw new RuntimeException("ClassNotFoundException org.apache.tomcat.jdbc.pool.DataSourceFactory")
     val parsePoolProperties = clazz.getMethod("parsePoolProperties", classOf[ju.Properties])
-    val properties = App.getDatasourceConfig(resourceKey).properties
+    val properties = AppConfig.getDatasourceConfig(resourceKey).properties
     if (properties.containsKey("maxActive")) properties.put("maxTotal", properties.remove("maxActive"))
     val configuration = parsePoolProperties.invoke(null, properties)
     val dataSourceClass = ClassLoaders.load("org.apache.tomcat.jdbc.pool.DataSource")
@@ -40,7 +40,7 @@ class C3p0DataSourceFactory(val resourceKey: String) extends Factory[DataSource]
 
   def result: DataSource = {
     val cpds = new ComboPooledDataSource(true)
-    val properties = App.getDatasourceConfig(resourceKey).properties
+    val properties = AppConfig.getDatasourceConfig(resourceKey).properties
     if (properties.containsKey("maxActive")) properties.put("maxPoolSize", properties.remove("maxActive"))
     if (properties.containsKey("url")) properties.put("jdbcUrl", properties.remove("url"))
     if (properties.containsKey("driverClassName")) properties.put("driverClass", properties.remove("driverClassName"))

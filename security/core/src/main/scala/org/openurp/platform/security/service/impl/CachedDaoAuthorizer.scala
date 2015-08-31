@@ -28,16 +28,11 @@ class CachedDaoAuthorizer(permissionService: FuncPermissionManager, cacheManager
 
   private def isAuthorized(authority: Authority, resourceId: Integer): Boolean = {
     cache.get(authority) match {
-      case Some(actions) =>{
-        actions.contains(resourceId)
-        true
-      }
+      case Some(actions) => actions.contains(resourceId)
       case None =>
         val newActions = permissionService.getResourceNamesByRole(authority.authority.asInstanceOf[Integer])
         cache.put(authority, newActions)
         newActions.contains(resourceId)
-        //FIXME
-        true
     }
   }
 
