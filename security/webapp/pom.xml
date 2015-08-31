@@ -8,7 +8,7 @@
   </parent>
   <groupId>org.openurp.platform.security</groupId>
   <artifactId>openurp-platform-security-webapp</artifactId>
-  <packaging>jar</packaging>
+  <packaging>war</packaging>
   <name>OpenURP Platform Security Webapp</name>
 
   <properties>
