@@ -2,14 +2,13 @@ package org.openurp.platform.security.model
 
 import scala.reflect.runtime.universe
 import org.beangle.data.model.bind.Mapping
-import org.beangle.security.session.SessionProfile
-
 
 object DefaultMapping extends Mapping {
 
   def binding(): Unit = {
     defaultIdGenerator("auto_increment")
-
+    defaultCache("openurp.platform.security","read-write")
+    
     bind[Dimension].on(e => declare(
       e.name & e.title are (notnull, length(40)),
       e.source is length(500),
@@ -63,7 +62,6 @@ object DefaultMapping extends Mapping {
       e.name is (notnull, length(100)),
       e.menus is depends("profile")))
 
-
     bind[FuncResource].on(e => declare(
       e.name is (notnull, length(200)),
       e.app & e.scope are notnull,
@@ -74,8 +72,8 @@ object DefaultMapping extends Mapping {
       e.resource & e.beginAt are notnull,
       e.filters is (notnull, length(600))))
 
-    bind[SessionProfileBean](classOf[SessionProfile].getName).on(e => declare(
-      e.app & e.role are notnull))
+    bind[SessionProfileBean].on(e => declare(
+      e.app & e.category are notnull)).cacheable()
 
   }
 

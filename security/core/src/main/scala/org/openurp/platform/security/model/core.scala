@@ -1,12 +1,15 @@
 package org.openurp.platform.security.model
 
+import java.security.Principal
 import java.{ util => ju }
+
 import org.beangle.commons.collection.Collections
 import org.beangle.commons.lang.{ Numbers, Strings }
-import org.beangle.data.model.{ Coded, Enabled, Hierarchical, IntId, LongId, Named, StringId, TemporalOn, Updated }
-import org.beangle.security.session.SessionProfile
+import org.beangle.data.model.{ Coded, Enabled, Hierarchical, IntId, LongId, Named, TemporalOn, Updated }
+import org.beangle.security.session.profile.SessionProfile
 import org.openurp.platform.kernel.model.App
-import java.security.Principal
+
+import MemberShip.{ Granter, Manager, Member, Ship }
 
 object Property {
   val All = "*"
@@ -100,6 +103,9 @@ class Role extends IntId with Named with Updated with Enabled with Hierarchical[
 class UserCategory extends IntId with Coded with TemporalOn with Named with Updated {
   var enName: String = _
   var remark: String = _
+  override def toString = {
+    name
+  }
 }
 
 class User extends LongId with Coded with Named with Updated with TemporalOn with Enabled with Profile with Principal {
@@ -153,9 +159,9 @@ class Member extends LongId with Updated {
   }
 }
 
-class SessionProfileBean extends StringId with SessionProfile {
+class SessionProfileBean extends LongId with SessionProfile {
   var app: App = _
-  var role: Role = _
+  var category: UserCategory = _
   var capacity: Int = _
   var maxSession: Int = _
   var timeout: Short = _

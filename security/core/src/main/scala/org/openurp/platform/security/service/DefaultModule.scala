@@ -9,6 +9,8 @@ import org.beangle.security.session.jdbc.DBSessionRegistry
 import org.beangle.data.jdbc.query.JdbcExecutor
 import org.beangle.security.session.DefaultSessionBuilder
 import org.openurp.platform.security.service.impl.MenuServiceImpl
+import org.openurp.platform.security.service.impl.SessionProfileProvider
+import org.openurp.platform.security.service.impl.AppDBSessionRegistry
 
 class DefaultModule extends AbstractBindModule {
 
@@ -20,8 +22,8 @@ class DefaultModule extends AbstractBindModule {
     bind("security.Realm.dao", classOf[DaoUserRealm])
     bind(classOf[DaoUserStore])
     bind("security.Authorizer.dao", classOf[CachedDaoAuthorizer])
-//    bind(classOf[DBSessionRegistry]).primary()
-//    bind(classOf[JdbcExecutor])
-//    bind(classOf[DefaultSessionBuilder])
+    bind(classOf[AppDBSessionRegistry]).primary()
+    bind(classOf[JdbcExecutor])
+    bind(classOf[SessionProfileProvider])
   }
 }
