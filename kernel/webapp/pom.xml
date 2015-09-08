@@ -46,13 +46,8 @@
       <artifactId>beangle-webmvc-webxml-plugin_2.11</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.beangle.webmvc</groupId>
-      <artifactId>beangle-webmvc-bootstrap-ui_2.11</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.beangle.webmvc</groupId>
-      <artifactId>beangle-webmvc-config-plugin_2.11</artifactId>
-      <scope>runtime</scope>
+      <groupId>org.beangle.webui</groupId>
+      <artifactId>beangle-webui-bootstrap_2.11</artifactId>
     </dependency>
     <dependency>
       <groupId>org.beangle.webmvc</groupId>

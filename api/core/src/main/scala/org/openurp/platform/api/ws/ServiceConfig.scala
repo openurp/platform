@@ -6,26 +6,21 @@ import org.beangle.commons.lang.SystemInfo
 
 object ServiceConfig {
 
-  val location = "META-INF/openurp/service.properties"
+  val urphome = SystemInfo.properties.get("OPENURP_HOME").getOrElse(SystemInfo.user.home + "/.openurp")
+
+  val location = urphome + "/service.properties"
 
   val wsBase = "http://" + readConfig(location, "service", "localhost:8080")
 
   val dsBase = "http://" + readConfig(location, "data", "localhost:8080")
 
   def readConfig(location: String, property: String, defaultValue: String): String = {
-    SystemInfo.properties.get("openurp." + property + ".base") match {
-      case Some(b) => b
-      case None => {
-        val configs = ClassLoaders.getResources(location)
-        if (configs.isEmpty) {
-          SystemInfo.properties.get("openurp.base") match {
-            case Some(v) => property + "." + v
-            case None => defaultValue
-          }
-        } else {
-          IOs.readJavaProperties(configs.head).getOrElse(property, defaultValue)
-        }
-      }
+    val configs = ClassLoaders.getResources(location)
+    if (configs.isEmpty) {
+      defaultValue
+    } else {
+      val p = IOs.readJavaProperties(configs.head)
+      p.get(property).orElse(p.get("openurp.base").map(v => property + "." + v)).getOrElse(defaultValue)
     }
   }
 }

@@ -13,6 +13,8 @@
   <name>OpenURP Platform Parent</name>
 
   <properties>
+    <beangle.webui.version>0.0.1-SNAPSHOT</beangle.webui.version>
+    <beangle.data.version>4.2.4-SNAPSHOT</beangle.data.version>
   </properties>
 
   <modules>
@@ -27,6 +29,11 @@
       <dependency>
         <groupId>org.openurp.platform.api</groupId>
         <artifactId>openurp-platform-api-core</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.openurp.platform.api</groupId>
+        <artifactId>openurp-platform-api-datasource</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
@@ -48,6 +55,11 @@
         <groupId>org.openurp.platform.portal</groupId>
         <artifactId>openurp-platform-portal-nav</artifactId>
         <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.beangle.webui</groupId>
+        <artifactId>beangle-webui-bootstrap_2.11</artifactId>
+        <version>${beangle.webui.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

@@ -3,7 +3,7 @@ package org.openurp.platform.api.web.tag
 import org.beangle.commons.io.IOs
 import org.beangle.commons.lang.{ ClassLoaders, Primitives, Strings, SystemInfo }
 import org.beangle.webmvc.view.tag.{ AbstractModels, ComponentContext }
-import org.beangle.webmvc.view.tag.components.ClosingUIBean
+import org.beangle.webmvc.view.tag.ClosingUIBean
 import org.beangle.webmvc.view.tag.freemarker.TagModel
 
 import javax.servlet.http.HttpServletRequest

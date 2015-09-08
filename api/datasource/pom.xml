@@ -6,28 +6,39 @@
     <artifactId>openurp-platform-api-parent</artifactId>
     <version>0.0.2-SNAPSHOT</version>
   </parent>
-  <artifactId>openurp-platform-api-web</artifactId>
+  <groupId>org.openurp.platform.api</groupId>
+  <artifactId>openurp-platform-api-datasource</artifactId>
   <packaging>jar</packaging>
-  <name>OpenURP Platform API Web</name>
+  <name>OpenURP Platform API DataSource</name>
 
   <properties>
-    <bundle.symbolicName>org.openurp.platform.api.web</bundle.symbolicName>
+    <bundle.symbolicName>org.openurp.platform.api.datasource</bundle.symbolicName>
     <bundle.namespace>org.openurp.platform</bundle.namespace>
+    <HikariCP.version>2.4.1</HikariCP.version>
   </properties>
 
   <dependencies>
     <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>javax.servlet-api</artifactId>
+      <groupId>org.beangle.data</groupId>
+      <artifactId>beangle-data-model_2.11</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.beangle.webmvc</groupId>
-      <artifactId>beangle-webmvc-view_2.11</artifactId>
+      <groupId>org.beangle.data</groupId>
+      <artifactId>beangle-data-jdbc_2.11</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.beangle.security</groupId>
+      <artifactId>beangle-security-core_2.11</artifactId>
     </dependency>
     <dependency>
       <groupId>org.openurp.platform.api</groupId>
       <artifactId>openurp-platform-api-core</artifactId>
       <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.zaxxer</groupId>
+      <artifactId>HikariCP</artifactId>
+      <version>${HikariCP.version}</version>
     </dependency>
   </dependencies>
 </project>

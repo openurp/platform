@@ -18,6 +18,10 @@
 
  <dependencies>
     <dependency>
+      <groupId>org.openurp.platform.api</groupId>
+      <artifactId>openurp-platform-api-datasource</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.openurp.platform.security</groupId>
       <artifactId>openurp-platform-security-core</artifactId>
     </dependency>
@@ -33,18 +37,27 @@
       <groupId>org.beangle.webmvc</groupId>
       <artifactId>beangle-webmvc-core_2.11</artifactId>
     </dependency>
+    
+    <dependency>
+      <groupId>org.beangle.spring</groupId>
+      <artifactId>beangle-spring-hibernate_2.11</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-ehcache</artifactId>
+    </dependency>
+    
     <dependency>
       <groupId>org.beangle.webmvc</groupId>
       <artifactId>beangle-webmvc-webxml-plugin_2.11</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.beangle.webmvc</groupId>
-      <artifactId>beangle-webmvc-bootstrap-ui_2.11</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.beangle.webmvc</groupId>
-      <artifactId>beangle-webmvc-config-plugin_2.11</artifactId>
-      <scope>runtime</scope>
+      <groupId>org.beangle.webui</groupId>
+      <artifactId>beangle-webui-bootstrap_2.11</artifactId>
     </dependency>
     <dependency>
       <groupId>org.beangle.webmvc</groupId>

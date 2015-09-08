@@ -35,6 +35,7 @@ class SessionProfileProvider(entityDao: EntityDao) extends ProfileProvider {
   def getProfiles(): Iterable[SessionProfile] = {
     val query = OqlBuilder.from(classOf[SessionProfileBean], "sp")
     query.where("sp.app.name=:appName", AppConfig.appName)
-    entityDao.search(query)
+    val rs = entityDao.search(query)
+    if (rs.isEmpty) return List(DefaultSessionProfile) else rs
   }
 }

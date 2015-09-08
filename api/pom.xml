@@ -19,6 +19,7 @@
 
   <modules>
     <module>core</module>
+    <module>datasource</module>
     <module>web</module>
   </modules>
 </project>
