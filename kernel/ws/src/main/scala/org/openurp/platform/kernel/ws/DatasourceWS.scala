@@ -25,11 +25,17 @@ class DatasourceWS(entityDao: EntityDao) extends ActionSupport with EntitySuppor
     if (set != null && set.size > 0) {
       val rs = set.head
       val ds = new Properties
-      ds.put("username", rs.username)
+      ds.put("user", rs.username)
       ds.put("password", rs.password)
-      ds.put("url", rs.db.url)
-      ds.put("maxActive", rs.maxActive)
-      ds.put("driverClassName", rs.db.driverClassName)
+      ds.put("driver", rs.db.driver)
+      if (rs.db.url != null) {
+        ds.put("url", rs.db.url)
+      } else {
+        ds.put("serverName", rs.db.serverName)
+        ds.put("databaseName", rs.db.databaseName)
+        ds.put("portNumber", rs.db.portNumber)
+      }
+      ds.put("maximumPoolSize", rs.maxActive)
       ds
     } else "error:error_resource_key"
   }

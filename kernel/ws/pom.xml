@@ -18,6 +18,10 @@
 
   <dependencies>
     <dependency>
+      <groupId>org.openurp.platform.api</groupId>
+      <artifactId>openurp-platform-api-datasource</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.openurp.platform.kernel</groupId>
       <artifactId>openurp-platform-kernel-core</artifactId>
     </dependency>
@@ -45,5 +49,19 @@
       <groupId>org.beangle.webmvc</groupId>
       <artifactId>beangle-webmvc-serializer-plugin_2.11</artifactId>
     </dependency>
+    
+    <dependency>
+      <groupId>org.beangle.spring</groupId>
+      <artifactId>beangle-spring-hibernate_2.11</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-ehcache</artifactId>
+    </dependency>
+
   </dependencies>
 </project>

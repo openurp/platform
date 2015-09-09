@@ -17,7 +17,7 @@ object AppConfig extends Logging {
   val appPath: String = properties("appPath")
 
   def secret: String = {
-    properties("secret")
+    properties.get("secret").getOrElse(appName)
   }
 
   private def readProperties(): Map[String, String] = {

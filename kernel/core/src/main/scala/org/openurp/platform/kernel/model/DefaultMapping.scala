@@ -43,7 +43,8 @@ object DefaultMapping extends Mapping {
 
     bind[Db].on(e => declare(
       e.name is (notnull, length(100), unique),
-      e.driverClassName is (notnull, length(100)),
+      e.driver is (notnull, length(100)),
+      e.databaseName & e.serverName is length(100),
       e.url is (notnull, length(200)),
       e.remark is (length(200))))
   }
