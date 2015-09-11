@@ -41,7 +41,7 @@ class UserAction extends RestfulAction[User] {
   private var userDashboardHelper: UserDashboardHelper = _
 
   def getUserId(): java.lang.Long = {
-    10000L
+    2014004//10000L
   }
   def isAdmin(): Boolean = {
     true

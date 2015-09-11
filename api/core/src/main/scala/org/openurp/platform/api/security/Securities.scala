@@ -11,5 +11,4 @@ object Securities {
   def isAdmin: Boolean = {
     loginUserId == 1L
   }
-
 }

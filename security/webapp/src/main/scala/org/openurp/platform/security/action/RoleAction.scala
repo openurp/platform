@@ -56,10 +56,10 @@ class RoleAction(val roleManager: RoleManager, val userService: UserService) ext
   override def editSetting(role: Role): Unit = {
     put("role", role)
     val query = OqlBuilder.from(classOf[Role], "role")
-    if (!isAdmin) {
-      query.join("role.members", "gm")
-      query.where("gm.user.id=:me and gm.manager=true", loginUserId)
-    }
+//    if (!isAdmin) {
+//      query.join("role.members", "gm")
+//      query.where("gm.user.id=:me and gm.manager=true", loginUserId)
+//    }
     val parents = new collection.mutable.ListBuffer[Role]
     parents ++= entityDao.search(query)
     parents --= Hierarchicals.getFamily(role)
@@ -71,10 +71,10 @@ class RoleAction(val roleManager: RoleManager, val userService: UserService) ext
 
   protected override def getQueryBuilder(): OqlBuilder[Role] = {
     val entityQuery = OqlBuilder.from(classOf[Role], "role")
-    if (!isAdmin) {
-      entityQuery.join("role.members", "gm")
-      entityQuery.where("gm.user.id=:me and gm.manager=true", loginUserId)
-    }
+//    if (!isAdmin) {
+//      entityQuery.join("role.members", "gm")
+//      entityQuery.where("gm.user.id=:me and gm.manager=true", loginUserId)
+//    }
     populateConditions(entityQuery)
     val orderBy = get("orderBy", "role.indexno")
     entityQuery.limit(getPageLimit).orderBy(orderBy)

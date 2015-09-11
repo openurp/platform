@@ -11,6 +11,7 @@ class DefaultModule extends AbstractBindModule {
     bind(classOf[FuncResourceAction], classOf[MenuAction])
     bind(classOf[IndexAction])
     bind(classOf[LoginAction])
+    bind(classOf[SessionProfileAction])
   }
 
 }
