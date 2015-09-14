@@ -7,5 +7,4 @@ object Securities {
   def user: String = {
     SecurityContext.session.principal.getName()
   }
-
 }

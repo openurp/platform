@@ -8,12 +8,12 @@ bar.addBack("${b.text("action.back")}");
    <td class="title" width="10%">${b.text("common.name")}:</td>
    <td class="content" width="40%"> ${role.name}</td>
    <td class="title" width="10%">${b.text("common.creator")}:</td>
-   <td class="content" width="40%">${role.creator.name!}  </td>
+   <td class="content" width="40%">${(role.creator.name)!}  </td>
   </tr>
   <tr>
-   <td class="title" >${b.text("common.createdAt")}:</td>
-   <td class="content">${role.createdAt?string("yyyy-MM-dd")}</td>
-   <td class="title" >${b.text("common.updatedAt")}:</td>
+   <td class="title" >创建时间:</td>
+   <td class="content">${(role.createdAt?string("yyyy-MM-dd"))!}</td>
+   <td class="title" >修改时间:</td>
    <td class="content">${role.updatedAt?string("yyyy-MM-dd")}</td>
   </tr>
   <tr>
@@ -23,10 +23,6 @@ bar.addBack("${b.text("action.back")}");
     [#else]${b.text("action.freeze")}
     [/#if]
   </td>
-  </tr>
-  <tr>
-  <td class="title" >${b.text("role.users")}:</td>
-  <td  class="content" colspan="3">[#list role.members?sort_by(["user","name"]) as m] [#if m.user.enabled][@ems.userinfo user=m.user/][#else]<s>[@ems.userinfo user=m.user/]</s>[/#if]&nbsp;[/#list]</td>
   </tr>
   <tr>
   <td class="title" >${b.text("common.remark")}:</td>
