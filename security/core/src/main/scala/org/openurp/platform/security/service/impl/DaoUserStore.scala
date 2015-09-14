@@ -14,7 +14,7 @@ class DaoUserStore(userService: UserService, entityDao: EntityDao) extends Accou
 
     userService.get(principal.toString) match {
       case Some(user) =>
-        val account = new DefaultAccount(user.id, user.name)
+        val account = new DefaultAccount(user.code)
         account.accountExpired = user.accountExpired
         account.accountLocked = user.locked
         account.credentialExpired = user.credentialExpired

@@ -1,9 +1,9 @@
-package org.openurp.platform.kernel.ws
+package org.openurp.platform.security.oauth.action
 
 import org.beangle.commons.collection.Properties
 import org.beangle.webmvc.api.action.ActionSupport
 import org.beangle.webmvc.api.annotation.{ param, response }
-import org.openurp.platform.kernel.service.TokenRepository
+import org.openurp.platform.security.oauth.TokenRepository
 
 class ValidateWS(val tokenRepository: TokenRepository) extends ActionSupport {
 
@@ -13,9 +13,9 @@ class ValidateWS(val tokenRepository: TokenRepository) extends ActionSupport {
     if (null == token) {
       properties.put("error", "token needed")
     } else {
-      tokenRepository.getApp(token) match {
+      tokenRepository.get(token) match {
         case Some(app) =>
-          properties.put("app_id", app)
+          token
         case None =>
           properties.put("error", "cannot find app")
       }

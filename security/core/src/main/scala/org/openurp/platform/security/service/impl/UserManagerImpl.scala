@@ -1,13 +1,16 @@
 package org.openurp.platform.security.service.impl
 
 import java.{ util => ju }
-
 import org.beangle.data.model.dao.EntityDao
 import org.openurp.platform.security.model.{ User, UserProfile }
 import org.openurp.platform.security.model.Member
 import org.openurp.platform.security.model.MemberShip
 import org.openurp.platform.security.model.MemberShip.{ Granter, Manager, Member, Ship }
 import org.openurp.platform.security.service.UserManager
+import org.beangle.data.jpa.dao.OqlBuilder
+import org.openurp.platform.security.model.Root
+import org.openurp.platform.kernel.model.App
+import org.openurp.platform.security.model.Role
 
 class UserManagerImpl(val entityDao: EntityDao) extends UserManager {
 
@@ -16,20 +19,29 @@ class UserManagerImpl(val entityDao: EntityDao) extends UserManager {
     if (rs.isEmpty) None else Some(rs.head)
   }
 
-  def get(id: java.lang.Long): User = {
+  def get(id: Long): User = {
     entityDao.get(classOf[User], id)
   }
 
-  def getUsers(ids: java.lang.Long*): Seq[User] = {
+  def getUsers(ids: Long*): Seq[User] = {
     entityDao.find(classOf[User], ids.toList)
   }
 
   import MemberShip._
-  def getMembers(user: User, ship: Ship): Seq[Member] = {
-    ship match {
-      case Manager => user.members.filter(m => m.manager)
-      case Granter => user.members.filter(m => m.granter)
-      case Member => user.members.filter(m => m.member)
+  def getMembers(user: User, app: App, ship: Ship): Seq[Member] = {
+    if (isRoot(user, app.name)) {
+      val members = entityDao.search(OqlBuilder.from(classOf[Role], "r").where("r.app=:app", app)).map(r => new Member(user, r))
+      members.foreach { m =>
+        m.is(Manager)
+        m.is(Granter)
+      }
+      members
+    } else {
+      ship match {
+        case Manager => user.members.filter(m => m.manager && m.role.app == app)
+        case Granter => user.members.filter(m => m.granter && m.role.app == app)
+        case Member => user.members.filter(m => m.member && m.role.app == app)
+      }
     }
   }
 
@@ -38,9 +50,8 @@ class UserManagerImpl(val entityDao: EntityDao) extends UserManager {
     true
   }
 
-  //FIXME
-  def isRoot(user: User): Boolean = {
-    false
+  def isRoot(user: User, appName: String): Boolean = {
+    !entityDao.search(OqlBuilder.from(classOf[Root], "r").where("r.user=:user and r.app.name=:appName", user, appName)).isEmpty
   }
 
   def create(creator: User, user: User): Unit = {
@@ -50,7 +61,7 @@ class UserManagerImpl(val entityDao: EntityDao) extends UserManager {
     //    publish(new UserCreationEvent(Collections.singletonList(newUser)));
   }
 
-  def updateState(manager: User, userIds: Array[java.lang.Long], active: Boolean): Int = {
+  def updateState(manager: User, userIds: Iterable[Long], active: Boolean): Int = {
     0
   }
   def remove(manager: User, user: User): Unit = {

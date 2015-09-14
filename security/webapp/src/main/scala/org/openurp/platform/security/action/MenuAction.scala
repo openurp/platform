@@ -70,10 +70,10 @@ class MenuAction(val menuService: MenuService) extends RestfulAction[Menu] {
   }
 
   protected override def saveAndRedirect(menu: Menu): View = {
-    val resources = entityDao.find(classOf[FuncResource], getAll("resourceId", classOf[Integer]))
+    val resources = entityDao.find(classOf[FuncResource], getIntIds("resource"))
     menu.resources.clear()
     menu.resources ++= resources
-    val newParentId = get("parent.id", classOf[Integer])
+    val newParentId = getInt("parent.id")
     val indexno = getInt("indexno", 0)
     var parent: Menu = null
     if (None != newParentId) parent = entityDao.get(classOf[Menu], newParentId.get)
@@ -129,7 +129,7 @@ class MenuAction(val menuService: MenuService) extends RestfulAction[Menu] {
   //  }
   //
   override def info(@param("id") id: String): String = {
-    val menu = this.entityDao.get(classOf[Menu], Integer.valueOf(id))
+    val menu = this.entityDao.get(classOf[Menu], Integer.parseInt(id))
     put("menu", menu)
     if (!menu.resources.isEmpty) {
       val roleQuery = OqlBuilder.from(classOf[FuncPermission], "auth")

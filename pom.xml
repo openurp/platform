@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.openurp</groupId>
     <artifactId>openurp-parent</artifactId>
-    <version>0.0.13-SNAPSHOT</version>
+    <version>0.0.13</version>
   </parent>
   <groupId>org.openurp.platform</groupId>
   <artifactId>openurp-platform-parent</artifactId>
@@ -15,6 +15,9 @@
   <properties>
     <beangle.webui.version>0.0.1-SNAPSHOT</beangle.webui.version>
     <beangle.data.version>4.2.4-SNAPSHOT</beangle.data.version>
+    <beangle.security.version>4.0.9-SNAPSHOT</beangle.security.version>
+    <beangle.webmvc.version>0.2.10-SNAPSHOT</beangle.webmvc.version>
+    <beangle.spring.version>4.0.12-SNAPSHOT</beangle.spring.version>
   </properties>
 
   <modules>

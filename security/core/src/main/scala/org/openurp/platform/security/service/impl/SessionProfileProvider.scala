@@ -13,8 +13,7 @@ import org.openurp.platform.security.model.User
 class SessionProfileProvider(entityDao: EntityDao) extends ProfileProvider {
 
   def getProfile(auth: Account): SessionProfile = {
-    val id = auth.id.asInstanceOf[java.lang.Long]
-    val user = entityDao.get(classOf[User], id)
+    val user = entityDao.findBy(classOf[User],"code", List(auth.getName())).head
     val query = OqlBuilder.from(classOf[SessionProfileBean], "sp")
     query.where("sp.category=:category", user.category).where("sp.app.name=:appName", AppConfig.appName)
     query.cacheable()

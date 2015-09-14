@@ -7,8 +7,8 @@ object DefaultMapping extends Mapping {
 
   def binding(): Unit = {
     defaultIdGenerator("auto_increment")
-    defaultCache("openurp.platform.security","read-write")
-    
+    defaultCache("openurp.platform.security", "read-write")
+
     bind[Dimension].on(e => declare(
       e.name & e.title are (notnull, length(40)),
       e.source is length(500),
@@ -74,6 +74,9 @@ object DefaultMapping extends Mapping {
 
     bind[SessionProfileBean].on(e => declare(
       e.app & e.category are notnull)).cacheable()
+
+    bind[Root].on(e => declare(
+      e.app & e.user & e.updatedAt are notnull))
 
   }
 

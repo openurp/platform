@@ -30,7 +30,7 @@ class FuncPermissionManagerImpl(val entityDao: EntityDao) extends FuncPermission
     null
   }
 
-  def activate(resourceId: Array[Integer], active: Boolean): Unit = {
+  def activate(resourceId: Iterable[Int], active: Boolean): Unit = {
 
   }
 

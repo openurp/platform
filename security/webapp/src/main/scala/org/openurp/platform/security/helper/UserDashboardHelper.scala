@@ -63,12 +63,13 @@ class UserDashboardHelper {
   private def populateMenus(user: User) {
     val menuProfiles = menuService.getProfiles(user)
     ContextHolder.context.attribute("menuProfiles", menuProfiles)
-    var menuProfileId = Params.get("menuProfileId", classOf[Integer]).orNull
-    if (null == menuProfileId && !menuProfiles.isEmpty) {
-      menuProfileId = menuProfiles(0).id
+    var menuProfileId = Params.getInt("menuProfileId")
+    if (None == menuProfileId && !menuProfiles.isEmpty) {
+      menuProfileId = Some(menuProfiles(0).id)
     }
-    if (null != menuProfileId) {
-      val menuProfile = entityDao.get(classOf[MenuProfile], menuProfileId)
+    
+    if (None != menuProfileId) {
+      val menuProfile = entityDao.get(classOf[MenuProfile], menuProfileId.get)
       val menus = menuService.getMenus(menuProfile, user, user.profiles)
       val resources = permissionService.getResources(user).toSet
       val roleMenusMap = new collection.mutable.HashMap[Role, Seq[Menu]]

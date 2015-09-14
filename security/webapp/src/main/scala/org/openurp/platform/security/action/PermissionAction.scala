@@ -42,9 +42,9 @@ class PermissionAction extends RestfulAction[FuncPermission] {
    */
   @mapping(value = "{role.id}/edit")
   override def edit(@param("role.id") id: String): String = {
-    val roleId = Numbers.convert2Int(id)
+    val roleId = Numbers.toInt(id)
     val role = entityDao.get(classOf[Role], roleId)
-    val user = entityDao.get(classOf[User], Securities.loginUserId).asInstanceOf[User]
+    val user = entityDao.findBy(classOf[User], "code", List(Securities.user)).head
     put("manager", user)
     val mngRoles = new collection.mutable.ListBuffer[Role]
     for (m <- user.members) {
@@ -61,12 +61,12 @@ class PermissionAction extends RestfulAction[FuncPermission] {
     var menus = new collection.mutable.ListBuffer[Menu]
     if (null != menuProfile) {
       var resources: collection.Seq[Object] = null
-      if (Securities.isAdmin) {
+      if (isAdmin(user)) {
         menus ++= menuProfile.menus
         resources = entityDao.getAll(classOf[FuncResource])
       } else {
         resources = new collection.mutable.ListBuffer[FuncResource]
-        val params = new collection.mutable.HashMap[String, Object]
+        val params = new collection.mutable.HashMap[String, Any]
         val hql = "select distinct fp.resource from " + classOf[FuncPermission].getName + " fp where fp.role.id = :roleId"
         val menuSet = new collection.mutable.HashSet[Menu]
         for (m <- user.members) {
@@ -134,10 +134,10 @@ class PermissionAction extends RestfulAction[FuncPermission] {
     val newResources = entityDao.findBy(classOf[FuncResource], "id", Strings.split(get("resourceId", "")).map(a => Integer.valueOf(a))).toSet
 
     // 管理员拥有的菜单权限和系统资源
-    val manager = entityDao.get(classOf[User], Securities.loginUserId)
+    val manager = entityDao.findBy(classOf[User], "code", List(Securities.user)).head
     var mngMenus: collection.Set[Menu] = null
     val mngResources = new collection.mutable.HashSet[FuncResource]
-    if (Securities.isAdmin) {
+    if (isAdmin(manager)) {
       mngMenus = menuProfile.menus.toSet
     } else {
       mngMenus = menuService.getMenus(menuProfile, manager, manager.profiles).toSet
@@ -156,5 +156,9 @@ class PermissionAction extends RestfulAction[FuncPermission] {
     if (null != displayFreezen) where.param("displayFreezen", displayFreezen)
 
     redirect(where, "info.save.success")
+  }
+
+  private def isAdmin(user: User): Boolean = {
+    user.id == 1L
   }
 }

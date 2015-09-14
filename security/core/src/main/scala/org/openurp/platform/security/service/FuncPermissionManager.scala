@@ -5,7 +5,7 @@ import org.openurp.platform.security.model.Role
 
 trait FuncPermissionManager extends FuncPermissionService {
   
-  def activate(resourceId: Array[Integer], active: Boolean): Unit
+  def activate(resourceId: Iterable[Int], active: Boolean): Unit
 
   def authorize(role: Role, resources: Set[FuncResource])
 

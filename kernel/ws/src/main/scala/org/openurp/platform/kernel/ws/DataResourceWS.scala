@@ -5,7 +5,6 @@ import org.beangle.data.jpa.dao.OqlBuilder
 import org.beangle.data.model.dao.EntityDao
 import org.beangle.webmvc.api.action.{ ActionSupport, EntitySupport }
 import org.beangle.webmvc.api.annotation.{ mapping, param, response }
-import org.openurp.platform.kernel.service.TokenRepository
 import org.openurp.platform.kernel.model.AppDataPermission
 import org.openurp.platform.kernel.model.DataResource
 import org.beangle.security.authz.Scopes
@@ -13,8 +12,6 @@ import org.beangle.security.authz.Scopes
 class DataResourceWS extends ActionSupport with EntitySupport[DataResource] {
 
   var entityDao: EntityDao = _
-
-  var tokenRespository: TokenRepository = _
 
   @response
   def info(@param("name") name: String): Properties = {

@@ -6,9 +6,9 @@ trait UserService {
 
   def get(code: String): Option[User]
 
-  def get(id: java.lang.Long): User
+  def get(id: Long): User
 
-  def getUsers(id: java.lang.Long*): Seq[User]
+  def getUsers(id: Long*): Seq[User]
 
-  def isRoot(user: User): Boolean
+  def isRoot(user: User,appName:String): Boolean
 }

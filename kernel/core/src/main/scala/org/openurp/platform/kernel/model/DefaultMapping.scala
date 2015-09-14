@@ -25,11 +25,6 @@ object DefaultMapping extends Mapping {
       e.name is length(100),
       e.remark is length(200)))
 
-    bind[AccessToken].on(e => declare(
-      e.app is (unique, notnull),
-      e.token is (unique, notnull, length(200)),
-      e.expiredAt is notnull))
-
     bind[AppDataPermission].on(e => declare(
       e.app & e.resource are notnull,
       e.actions is length(500),

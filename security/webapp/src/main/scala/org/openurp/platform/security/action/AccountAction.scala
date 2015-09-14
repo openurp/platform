@@ -27,6 +27,7 @@ import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.platform.security.model.{ MemberShip, User }
 import org.openurp.platform.security.service.UserManager
+import org.openurp.platform.api.security.Securities
 /**
  * 用户管理响应处理类
  *
@@ -36,34 +37,13 @@ class AccountAction extends RestfulAction[User] {
 
   var userManager: UserManager = _
 
-  //FIXME
-  def getUserId(): java.lang.Long = {
-    1L
-  }
-  //FXIME
-  def isAdmin(): Boolean = {
-    true
-  }
-
   protected override def getQueryBuilder(): OqlBuilder[User] = {
-    val manager = entityDao.get(classOf[User], getUserId())
+    val manager = loginUser
     val userQuery = OqlBuilder.from(classOf[User], "user")
     // 查询角色
     val sb = new StringBuilder("exists(from user.members m where ")
     val params = new collection.mutable.ListBuffer[Object]
     var queryRole = false
-    if (!isAdmin()) {
-      val members = userManager.getMembers(manager, MemberShip.Manager)
-      val mngRoles = members.map(m => m.role)
-      if (mngRoles.isEmpty) {
-        sb.append("1=0")
-      } else {
-        sb.append("m.role in(:roles) and m.member=true")
-        params += mngRoles
-      }
-      queryRole = true
-      userQuery.where("user.id != :meId", getUserId())
-    }
     val roleName = get("roleName", "")
     if (Strings.isNotEmpty(roleName)) {
       if (queryRole) sb.append(" and ")
@@ -99,9 +79,9 @@ class AccountAction extends RestfulAction[User] {
     var errorMsg = checkUser(user)
     if (Strings.isNotEmpty(errorMsg)) { return forward(to(this, "edit"), errorMsg); }
     processPassword(user)
+
     if (!user.persisted) {
-      val creator = userManager.get(getUserId()).asInstanceOf[User]
-      userManager.create(creator, user)
+      userManager.create(loginUser, user)
     } else {
       entityDao.saveOrUpdate(user)
     }
@@ -131,12 +111,15 @@ class AccountAction extends RestfulAction[User] {
     //    put("settings", new Settings(getConfig()))
   }
 
+  private def loginUser: User = {
+    entityDao.findBy(classOf[User], "code", List(Securities.user)).head
+  }
   /**
    * 删除一个或多个用户
    */
   override def remove(): View = {
     val userIds = getLongIds("user")
-    val creator = userManager.get(getUserId()).asInstanceOf[User]
+    val creator = loginUser
     val toBeRemoved = userManager.getUsers(userIds: _*)
     val sb = new StringBuilder()
     var removed: User = null
@@ -146,7 +129,7 @@ class AccountAction extends RestfulAction[User] {
       for (one <- toBeRemoved) {
         removed = one.asInstanceOf[User]
         // 不能删除自己
-        if (!one.id.equals(getUserId())) {
+        if (one.id != creator.id) {
           userManager.remove(creator, removed)
           success += 1
         } else {
@@ -173,7 +156,7 @@ class AccountAction extends RestfulAction[User] {
     val userIds = getLongIds("user")
     val isActivate = get("isActivate", "true")
     var successCnt: Int = 0
-    val manager = userManager.get(getUserId()).asInstanceOf[User]
+    val manager = loginUser
     var msg = "security.info.freeze.success"
     if (Strings.isNotEmpty(isActivate) && "false".equals(isActivate)) {
       successCnt = userManager.updateState(manager, userIds, false)

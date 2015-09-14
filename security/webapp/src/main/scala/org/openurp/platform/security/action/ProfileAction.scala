@@ -27,29 +27,26 @@ import org.openurp.platform.security.helper.ProfileHelper
 import org.openurp.platform.security.model.{ User, UserProfile }
 import org.openurp.platform.security.service.{ DataResolver, ProfileService }
 import org.openurp.platform.security.service.impl.CsvDataResolver
+import org.openurp.platform.security.service.UserService
 
 /**
  * @author chaostone
  */
 class ProfileAction(profileService: ProfileService) extends RestfulAction[UserProfile] {
 
+  var userService: UserService = _
   val dataResolver: DataResolver = CsvDataResolver
   def tip(): String = {
     forward()
-  }
-
-  def isAdmin(): Boolean = {
-    SecurityContext.session.principal.id.asInstanceOf[java.lang.Long]
-    true
   }
 
   /**
    * 查看限制资源界面
    */
   @mapping(value = "{id}")
-  override def info(@param("userId") userId:String): String = {
+  override def info(@param("userId") userId: String): String = {
     val helper = new ProfileHelper(entityDao, profileService)
-    val profiles = entityDao.get(classOf[User], Numbers.convert2Long(userId)).profiles
+    val profiles = entityDao.get(classOf[User], Numbers.toLong(userId)).profiles
     helper.populateInfo(profiles)
     return forward()
   }
@@ -57,7 +54,8 @@ class ProfileAction(profileService: ProfileService) extends RestfulAction[UserPr
   protected override def saveAndRedirect(profile: UserProfile): View = {
     val helper = new ProfileHelper(entityDao, profileService)
     helper.dataResolver = dataResolver
-    helper.populateSaveInfo(profile, isAdmin())
+    //FIXME
+    helper.populateSaveInfo(profile, true)
     if (profile.properties.isEmpty) {
       if (profile.persisted) entityDao.remove(profile)
       redirect("info", "info.save.success")
@@ -72,7 +70,8 @@ class ProfileAction(profileService: ProfileService) extends RestfulAction[UserPr
       profile.asInstanceOf[UserProfile].user = entityDao.get(classOf[User], getLongId("use"))
     }
     val helper = new ProfileHelper(entityDao, profileService)
-    helper.fillEditInfo(profile, isAdmin())
+    //FIXME
+    helper.fillEditInfo(profile, true)
   }
 
 }

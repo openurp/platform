@@ -97,6 +97,10 @@ class Role extends IntId with Named with Updated with Enabled with Hierarchical[
   }
 }
 
+class Root extends IntId with Updated{
+  var app:App=_
+  var user:User=_
+}
 /**
  * 人员分类
  */
@@ -159,7 +163,7 @@ class Member extends LongId with Updated {
   }
 }
 
-class SessionProfileBean extends LongId with SessionProfile {
+class SessionProfileBean extends IntId with SessionProfile {
   var app: App = _
   var category: UserCategory = _
   var capacity: Int = _

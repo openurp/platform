@@ -19,6 +19,7 @@
 
   <modules>
     <module>core</module>
+    <module>oauth</module>
     <module>app</module>
     <module>webapp</module>
     <module>ws</module>

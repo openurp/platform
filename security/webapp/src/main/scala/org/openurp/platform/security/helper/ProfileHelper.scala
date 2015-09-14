@@ -25,6 +25,7 @@ import org.beangle.security.context.SecurityContext
 import org.beangle.webmvc.api.context.{ ContextHolder, Params }
 import org.openurp.platform.security.model.{ Dimension, Profile, User }
 import org.openurp.platform.security.service.{ DataResolver, ProfileService }
+import org.openurp.platform.api.security.Securities
 
 class ProfileHelper(entityDao: EntityDao, profileService: ProfileService) {
   var dataResolver: DataResolver = _
@@ -54,11 +55,11 @@ class ProfileHelper(entityDao: EntityDao, profileService: ProfileService) {
   }
 
   def fillEditInfo(profile: Profile, isAdmin: Boolean): Unit = {
-    val userId = SecurityContext.session.principal.id.asInstanceOf[java.lang.Long]
+    val me = entityDao.findBy(classOf[User], "code", List(Securities.user)).head
     val mngDimensions = new collection.mutable.HashMap[String, Object]
     val aoDimensions = new collection.mutable.HashMap[String, Object]
 
-    val myProfiles = entityDao.get(classOf[User], userId).profiles
+    val myProfiles = me.profiles
     val ignores = getIgnoreDimensions(myProfiles)
     ContextHolder.context.attribute("ignoreDimensions", ignores)
     val holderIgnoreDimensions = new collection.mutable.HashSet[Dimension]
@@ -121,8 +122,8 @@ class ProfileHelper(entityDao: EntityDao, profileService: ProfileService) {
     }
   }
   def populateSaveInfo(profile: Profile, isAdmin: Boolean) {
-    val userId = SecurityContext.session.principal.id.asInstanceOf[java.lang.Long]
-    val myProfiles = entityDao.get(classOf[User], userId).profiles
+    val me = entityDao.findBy(classOf[User], "code", List(Securities.user)).head
+    val myProfiles = me.profiles
     val ignoreDimensions = getIgnoreDimensions(myProfiles)
     for (field <- entityDao.getAll(classOf[Dimension])) {
       val values = Params.getAll(field.name).asInstanceOf[Array[String]]
