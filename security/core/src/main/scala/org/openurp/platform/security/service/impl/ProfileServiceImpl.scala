@@ -10,7 +10,8 @@ class ProfileServiceImpl extends ProfileService {
   }
 
   def getDimensionValues(field: Dimension, keys: Any*): Seq[Any] = {
-    Seq.empty
+    List(Map("id" -> 1L, "code" -> "001", "name" -> "会计学院"), Map("id" -> 2L, "code" -> "002", "name" -> "国际金融学院"))
+    //    Seq.empty
   }
 
   def getDimension(fieldName: String): Dimension = {

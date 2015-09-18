@@ -28,6 +28,9 @@ import org.openurp.platform.security.model.{ User, UserProfile }
 import org.openurp.platform.security.service.{ DataResolver, ProfileService }
 import org.openurp.platform.security.service.impl.CsvDataResolver
 import org.openurp.platform.security.service.UserService
+import org.beangle.webmvc.api.annotation.ignore
+import org.beangle.data.jpa.dao.OqlBuilder
+import org.beangle.data.model.dao.Operation
 
 /**
  * @author chaostone
@@ -40,13 +43,17 @@ class ProfileAction(profileService: ProfileService) extends RestfulAction[UserPr
     forward()
   }
 
+  @ignore
+  protected override def shortName: String = {
+    "profile"
+  }
   /**
    * 查看限制资源界面
    */
-  @mapping(value = "{id}")
-  override def info(@param("userId") userId: String): String = {
+  def appinfo(@param("profile.user.id") userId: String, @param("profile.app.id") appId: String): String = {
     val helper = new ProfileHelper(entityDao, profileService)
-    val profiles = entityDao.get(classOf[User], Numbers.toLong(userId)).profiles
+    val builder = OqlBuilder.from(classOf[UserProfile], "up").where("up.user.id=:userId and up.app.id=:appId", Numbers.toLong(userId), Numbers.toInt(appId))
+    val profiles = entityDao.search(builder)
     helper.populateInfo(profiles)
     return forward()
   }
@@ -55,23 +62,36 @@ class ProfileAction(profileService: ProfileService) extends RestfulAction[UserPr
     val helper = new ProfileHelper(entityDao, profileService)
     helper.dataResolver = dataResolver
     //FIXME
-    helper.populateSaveInfo(profile, true)
+    helper.populateSaveInfo(profile, true, profile.app)
     if (profile.properties.isEmpty) {
-      if (profile.persisted) entityDao.remove(profile)
-      redirect("info", "info.save.success")
+      if (profile.persisted) {
+        profile.user.profiles -= profile
+        entityDao.remove(profile)
+      }
+      redirect("appinfo", s"&profile.app.id=${profile.app.id}&profile.user.id=${profile.user.id}", "info.save.success")
     } else {
       entityDao.saveOrUpdate(profile)
-      redirect("info", "info.save.success")
+      redirect("appinfo", s"&profile.app.id=${profile.app.id}&profile.user.id=${profile.user.id}", "info.save.success")
     }
   }
-
-  protected override def editSetting(profile: UserProfile): Unit = {
-    if (!profile.persisted) {
-      profile.asInstanceOf[UserProfile].user = entityDao.get(classOf[User], getLongId("use"))
+  @ignore
+  protected override def removeAndRedirect(entities: Seq[UserProfile]): View = {
+    val profile = entities.head
+    profile.user.profiles -= profile
+    try {
+      entityDao.execute(Operation.saveOrUpdate(profile.user).remove(entities))
+//      remove(entities)
+      redirect("appinfo", s"&profile.app.id=${profile.app.id}&profile.user.id=${profile.user.id}", "info.remove.success")
+    } catch {
+      case e: Exception => {
+        logger.info("removeAndForwad failure", e)
+        redirect("appinfo", s"&profile.app.id=${profile.app.id}&profile.user.id=${profile.user.id}", "info.delete.failure")
+      }
     }
+  }
+  protected override def editSetting(profile: UserProfile): Unit = {
     val helper = new ProfileHelper(entityDao, profileService)
-    //FIXME
-    helper.fillEditInfo(profile, true)
+    helper.fillEditInfo(profile, true, profile.app)
   }
 
 }

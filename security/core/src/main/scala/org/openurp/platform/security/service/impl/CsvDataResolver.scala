@@ -6,7 +6,6 @@ import org.beangle.commons.conversion.impl.DefaultConversion
 import org.beangle.commons.bean.Properties
 import org.openurp.platform.security.model.Dimension
 
-
 object CsvDataResolver extends DataResolver {
 
   def marshal(field: Dimension, items: Seq[Any]): String = {
@@ -46,9 +45,9 @@ object CsvDataResolver extends DataResolver {
     if (null != field.properties) properties ++= Strings.split(field.properties, ",")
 
     val datas = Strings.split(source, ",")
-    val clazz = Class.forName(field.typeName).asInstanceOf[Class[T]]
     val rs = new collection.mutable.ListBuffer[T];
     if (properties.isEmpty) {
+      val clazz = Class.forName(field.typeName).asInstanceOf[Class[T]]
       val conversion = DefaultConversion.Instance;
       for (data <- datas) rs += conversion.convert(data, clazz)
       return rs
@@ -62,7 +61,7 @@ object CsvDataResolver extends DataResolver {
       }
       properties ++= names
       (startIndex until datas.length) foreach { i =>
-        val obj = clazz.newInstance().asInstanceOf[AnyRef]
+        val obj = newInstance(field)
         val dataItems = Strings.split(datas(i), ";")
         (0 until properties.size) foreach { j =>
           Properties.copy(obj, properties(j), dataItems(j))
@@ -71,5 +70,13 @@ object CsvDataResolver extends DataResolver {
       }
     }
     rs
+  }
+
+  def newInstance(field: Dimension): Object = {
+    try {
+      Class.forName(field.typeName).newInstance().asInstanceOf[Object]
+    } catch {
+      case t: Throwable => new collection.mutable.HashMap[String, Any]
+    }
   }
 }

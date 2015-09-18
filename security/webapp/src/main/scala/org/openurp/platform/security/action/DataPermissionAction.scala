@@ -21,29 +21,35 @@ package org.openurp.platform.security.action
 import org.beangle.webmvc.api.annotation.ignore
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
-import org.openurp.platform.kernel.model.App
-import org.openurp.platform.security.model.Dimension
+import org.openurp.platform.kernel.model.DataResource
+import org.openurp.platform.security.model.DataPermission
+import org.openurp.platform.security.model.FuncResource
+import org.openurp.platform.security.model.Role
 
 /**
- * 数据限制域元信息配置类
+ * 数据限制模式元信息配置类
  *
  * @author chaostone
  */
-class DimensionAction extends RestfulAction[Dimension] {
-
-  override def editSetting(dimension: Dimension): Unit = {
-    val apps = entityDao.getAll(classOf[App]).toBuffer -- dimension.apps
-    put("apps", apps)
+class DataPermissionAction extends RestfulAction[DataPermission] {
+  @ignore
+  protected override def shortName: String = {
+    return "permission"
   }
-  protected override def saveAndRedirect(field: Dimension): View = {
-    if (entityDao.duplicate(classOf[Dimension], field.id, "name", field.name)) {
-      addError("名称重复")
+
+  protected override def editSetting(dataPermission: DataPermission): Unit = {
+    put("roles", entityDao.getAll(classOf[Role]))
+    put("funcResources", entityDao.getAll(classOf[FuncResource]))
+    put("dataResources", entityDao.getAll(classOf[DataResource]))
+  }
+
+  protected override def saveAndRedirect(dataPermission: DataPermission): View = {
+    if (entityDao.duplicate(classOf[DataPermission], dataPermission.id, "remark", dataPermission.remark)) {
+      addError("限制模式描述重复")
       return forward(to(this, "edit"))
+    } else {
+      entityDao.saveOrUpdate(dataPermission)
+      redirect("search", "info.save.success")
     }
-    field.apps.clear()
-    val appId2nd = getAll("appId2nd", classOf[Int])
-    field.apps ++= entityDao.find(classOf[App], appId2nd)
-    entityDao.saveOrUpdate(field)
-    redirect("search", "info.save.success")
   }
 }

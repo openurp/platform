@@ -26,9 +26,12 @@ import org.beangle.webmvc.api.context.{ ContextHolder, Params }
 import org.openurp.platform.security.model.{ Dimension, Profile, User }
 import org.openurp.platform.security.service.{ DataResolver, ProfileService }
 import org.openurp.platform.api.security.Securities
+import org.openurp.platform.security.service.impl.CsvDataResolver
+import org.openurp.platform.kernel.model.App
+import org.beangle.data.jpa.dao.OqlBuilder
 
 class ProfileHelper(entityDao: EntityDao, profileService: ProfileService) {
-  var dataResolver: DataResolver = _
+  var dataResolver: DataResolver = CsvDataResolver
   /**
    * 查看限制资源界面
    */
@@ -54,7 +57,7 @@ class ProfileHelper(entityDao: EntityDao, profileService: ProfileService) {
     ContextHolder.context.attribute("fieldMaps", fieldMaps)
   }
 
-  def fillEditInfo(profile: Profile, isAdmin: Boolean): Unit = {
+  def fillEditInfo(profile: Profile, isAdmin: Boolean, app: App): Unit = {
     val me = entityDao.findBy(classOf[User], "code", List(Securities.user)).head
     val mngDimensions = new collection.mutable.HashMap[String, Object]
     val aoDimensions = new collection.mutable.HashMap[String, Object]
@@ -64,7 +67,7 @@ class ProfileHelper(entityDao: EntityDao, profileService: ProfileService) {
     ContextHolder.context.attribute("ignoreDimensions", ignores)
     val holderIgnoreDimensions = new collection.mutable.HashSet[Dimension]
     ContextHolder.context.attribute("holderIgnoreDimensions", holderIgnoreDimensions)
-    val fields = entityDao.getAll(classOf[Dimension])
+    val fields = getDimensions(app)
     ContextHolder.context.attribute("fields", fields)
     for (field <- fields) {
       var mngDimensionValues = new collection.mutable.ListBuffer[Any]
@@ -81,7 +84,8 @@ class ProfileHelper(entityDao: EntityDao, profileService: ProfileService) {
       if (null == field.source) {
         aoDimensions.put(field.name, fieldValue)
       } else {
-        aoDimensions.put(field.name, getProperty(profile, field))
+        val p = getProperty(profile, field)
+        if (null != p) aoDimensions.put(field.name, p)
       }
     }
     ContextHolder.context.attribute("mngDimensions", mngDimensions)
@@ -121,16 +125,20 @@ class ProfileHelper(entityDao: EntityDao, profileService: ProfileService) {
       case None => null
     }
   }
-  def populateSaveInfo(profile: Profile, isAdmin: Boolean) {
+  private def getDimensions(app: App): Seq[Dimension] = {
+    entityDao.search(OqlBuilder.from(classOf[Dimension], "dim").where(":app in elements(dim.apps)", app))
+  }
+
+  def populateSaveInfo(profile: Profile, isAdmin: Boolean, app: App) {
     val me = entityDao.findBy(classOf[User], "code", List(Securities.user)).head
     val myProfiles = me.profiles
     val ignoreDimensions = getIgnoreDimensions(myProfiles)
-    for (field <- entityDao.getAll(classOf[Dimension])) {
-      val values = Params.getAll(field.name).asInstanceOf[Array[String]]
+    for (field <- getDimensions(app: App)) {
+      val values = Params.getAll(field.name).asInstanceOf[Iterable[String]]
       if ((ignoreDimensions.contains(field) || isAdmin) && Params.getBoolean("ignoreDimension" + field.id).getOrElse(false)) {
         profile.setProperty(field, "*")
       } else {
-        if (null == values || values.length == 0) {
+        if (null == values || values.size == 0) {
           profile.setProperty(field, null)
         } else {
           var storedValue: String = null
@@ -146,7 +154,7 @@ class ProfileHelper(entityDao: EntityDao, profileService: ProfileService) {
             }
             storedValue = dataResolver.marshal(field, filtered)
           } else {
-            storedValue = Strings.join(values: _*)
+            storedValue = Strings.join(values.toSeq: _*)
           }
           profile.setProperty(field, storedValue)
         }

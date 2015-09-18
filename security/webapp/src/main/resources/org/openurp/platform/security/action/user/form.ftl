@@ -14,7 +14,7 @@
       [@b.row]
         <tr [#if role??]id="${role.indexno}"[/#if]>
         [@b.col title="common.index" width="5%"]${role_index+1}[/@]
-        [@b.treecol title="entity.role" property="name"]
+        [@b.treecol title="角色" property="name"]
           <span [#if !role.enabled]class="ui-disabled" title="${b.text('action.freeze')}"[/#if]>
           ${role.indexno} ${role.name}[#if !role.enabled] (禁用)[/#if]
           </span>
@@ -46,7 +46,7 @@
 [/@]
   [#if user.id??]
   [@b.tab label="全局数据权限" ]
-  [@b.div href="/security/profile!info?forEdit=1&user.id=${user.id}" /]
+  [@b.div href="/security/profile!appinfo?forEdit=1&profile.user.id=${user.id}&profile.app.id=${Parameters['app.id']}" /]
   [/@]
   [/#if]
 [/@]

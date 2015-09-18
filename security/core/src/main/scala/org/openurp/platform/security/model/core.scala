@@ -70,7 +70,7 @@ trait Profile {
 class UserProfile extends LongId with Profile {
   var user: User = _
   var app: App = _
-  var properties = new collection.mutable.HashMap[Dimension, String]
+  var properties = Collections.newMap[Dimension, String]
 }
 
 class Role extends IntId with Named with Updated with Enabled with Hierarchical[Role] with Profile with Principal {
@@ -97,9 +97,9 @@ class Role extends IntId with Named with Updated with Enabled with Hierarchical[
   }
 }
 
-class Root extends IntId with Updated{
-  var app:App=_
-  var user:User=_
+class Root extends IntId with Updated {
+  var app: App = _
+  var user: User = _
 }
 /**
  * 人员分类

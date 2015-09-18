@@ -29,6 +29,7 @@ import org.openurp.platform.security.model.{ Role, User }
 import org.openurp.platform.security.service.{ DataResolver, ProfileService, RoleManager, UserService }
 import org.openurp.platform.security.helper.AppHelper
 import org.openurp.platform.api.security.Securities
+import org.openurp.platform.security.service.impl.CsvDataResolver
 /**
  * 角色信息维护响应类
  *
@@ -36,7 +37,7 @@ import org.openurp.platform.api.security.Securities
  */
 class RoleAction(val roleManager: RoleManager, val userService: UserService) extends RestfulAction[Role] {
 
-  var dataResolver: DataResolver = _
+  var dataResolver: DataResolver = CsvDataResolver
 
   var profileService: ProfileService = _
 
@@ -128,7 +129,7 @@ class RoleAction(val roleManager: RoleManager, val userService: UserService) ext
     val role = entityDao.get(classOf[Role], getIntId("role"))
     val me = entityDao.findBy(classOf[User], "code", List(Securities.user)).head
     val helper = new ProfileHelper(entityDao, profileService)
-    helper.fillEditInfo(role, userService.isRoot(me, role.app.name))
+    helper.fillEditInfo(role, userService.isRoot(me, role.app.name), role.app)
     put("role", role)
     forward()
   }
@@ -145,7 +146,7 @@ class RoleAction(val roleManager: RoleManager, val userService: UserService) ext
     val helper = new ProfileHelper(entityDao, profileService)
     helper.dataResolver = dataResolver
     val role = entityDao.get(classOf[Role], getIntId("role"))
-    helper.populateSaveInfo(role, userService.isRoot(me, role.app.name))
+    helper.populateSaveInfo(role, userService.isRoot(me, role.app.name), role.app)
     entityDao.saveOrUpdate(role)
     redirect("profile", "info.save.success")
   }
