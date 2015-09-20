@@ -4,13 +4,13 @@
   <parent>
     <groupId>org.openurp.platform.kernel</groupId>
     <artifactId>openurp-platform-kernel-parent</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
   </parent>
   <groupId>org.openurp.platform.kernel</groupId>
   <artifactId>openurp-platform-kernel-webapp</artifactId>
-  <packaging>jar</packaging>
+  <packaging>war</packaging>
   <name>OpenURP Platform Kernel Webapp</name>
-  
+
   <properties>
     <bundle.symbolicName>org.openurp.platform.kernel.webapp</bundle.symbolicName>
     <bundle.namespace>org.openurp</bundle.namespace>
@@ -18,13 +18,24 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.openurp.platform.kernel</groupId>
-      <artifactId>openurp-platform-kernel-core</artifactId>
-      <version>${project.version}</version>
+      <groupId>org.openurp.platform.api</groupId>
+      <artifactId>openurp-platform-api-datasource</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.beangle.security</groupId>
-      <artifactId>beangle-security-blueprint</artifactId>
+      <groupId>org.openurp.platform.kernel</groupId>
+      <artifactId>openurp-platform-kernel-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.openurp.platform.portal</groupId>
+      <artifactId>openurp-platform-portal-nav</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.openurp.platform.security</groupId>
+      <artifactId>openurp-platform-security-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.openurp.platform.api</groupId>
+      <artifactId>openurp-platform-api-core</artifactId>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>
@@ -32,27 +43,23 @@
     </dependency>
     <dependency>
       <groupId>org.beangle.webmvc</groupId>
-      <artifactId>beangle-webmvc-core</artifactId>
+      <artifactId>beangle-webmvc-core_2.11</artifactId>
     </dependency>
     <dependency>
       <groupId>org.beangle.webmvc</groupId>
-      <artifactId>beangle-webmvc-webxml-plugin</artifactId>
+      <artifactId>beangle-webmvc-webxml-plugin_2.11</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.beangle.webui</groupId>
+      <artifactId>beangle-webui-bootstrap_2.11</artifactId>
     </dependency>
     <dependency>
       <groupId>org.beangle.webmvc</groupId>
-      <artifactId>beangle-webmvc-bootstrap-ui</artifactId>
+      <artifactId>beangle-webmvc-entity-plugin_2.11</artifactId>
     </dependency>
     <dependency>
       <groupId>org.beangle.webmvc</groupId>
-      <artifactId>beangle-webmvc-config-plugin</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.beangle.webmvc</groupId>
-      <artifactId>beangle-webmvc-entity-plugin</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.beangle.webmvc</groupId>
-      <artifactId>beangle-webmvc-serializer-plugin</artifactId>
+      <artifactId>beangle-webmvc-serializer-plugin_2.11</artifactId>
     </dependency>
   </dependencies>
 </project>

@@ -1,0 +1,5 @@
+[#ftl]
+[@b.head/]
+[#include "../data-nav.ftl"/]
+[@b.div href="!search"/]
+[@b.foot/]

@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<beans>
-   <bean id="DataSource.default" class="org.beangle.commons.jndi.JndiDataSourceFactory">
-    <constructor-arg value="jdbc/dataSource"/>
-  </bean>
-</beans>

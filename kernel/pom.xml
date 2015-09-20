@@ -4,14 +4,14 @@
   <parent>
     <groupId>org.openurp.platform</groupId>
     <artifactId>openurp-platform-parent</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
   </parent>
-  
+
   <groupId>org.openurp.platform.kernel</groupId>
   <artifactId>openurp-platform-kernel-parent</artifactId>
   <packaging>pom</packaging>
   <name>OpenURP Platform Kernel Parent</name>
-  
+
   <properties>
     <bundle.symbolicName>org.openurp.platform.kernel</bundle.symbolicName>
     <bundle.namespace>org.openurp</bundle.namespace>
@@ -21,7 +21,5 @@
     <module>core</module>
     <module>ws</module>
     <module>webapp</module>
-<!--
--->
   </modules>
 </project>

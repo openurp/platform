@@ -4,37 +4,35 @@
   <parent>
     <groupId>org.openurp.platform</groupId>
     <artifactId>openurp-platform-parent</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
   </parent>
-  
+
   <groupId>org.openurp.platform.security</groupId>
   <artifactId>openurp-platform-security-parent</artifactId>
   <packaging>pom</packaging>
   <name>OpenURP Platform Security Parent</name>
-  
+
   <properties>
     <bundle.symbolicName>org.openurp.platform.security</bundle.symbolicName>
     <bundle.namespace>org.openurp</bundle.namespace>
   </properties>
 
   <modules>
+    <module>core</module>
+    <module>oauth</module>
     <module>app</module>
-    <module>user</module>
+    <module>webapp</module>
+    <module>ws</module>
   </modules>
 
   <dependencies>
     <dependency>
-      <groupId>org.openurp.platform</groupId>
-      <artifactId>openurp-platform-api</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
       <groupId>org.beangle.security</groupId>
-      <artifactId>beangle-security-web</artifactId>
+      <artifactId>beangle-security-web_2.11</artifactId>
     </dependency>
     <dependency>
       <groupId>org.beangle.webmvc</groupId>
-      <artifactId>beangle-webmvc-core</artifactId>
+      <artifactId>beangle-webmvc-core_2.11</artifactId>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>

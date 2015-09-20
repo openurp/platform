@@ -3,12 +3,13 @@ package org.openurp.platform.security.app
 import org.beangle.commons.cache.concurrent.ConcurrentMapCacheManager
 import org.beangle.commons.inject.bind.AbstractBindModule
 
-class DefaultModule extends AbstractBindModule {
+object DefaultModule extends AbstractBindModule {
 
   protected override def binding() {
     bind("security.Realm.remoteApp", classOf[RemoteAppRealm])
-    bind("security.Authorizer.remoteApp", classOf[RemoteAppAuthorizer])
-    bind("security.Filter.appPreauth", classOf[AppPreauthFilter])
+    bind("security.Realm.remoteUser", classOf[RemoteUserRealm])
+    bind("security.Authorizer.remoteApp", classOf[RemoteAuthorizer])
+    bind("security.Filter.appPreauth", classOf[TokenPreauthFilter])
     bind(classOf[ConcurrentMapCacheManager])
   }
 }

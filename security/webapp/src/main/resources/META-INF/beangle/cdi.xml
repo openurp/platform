@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<cdi>
+  <container name="web">
+    <module class="org.openurp.platform.security.action.DefaultModule"/>
+  </container>
+  <container>
+    <module class="org.openurp.platform.security.action.DefaultSecurityModule"/>
+  </container>
+</cdi>

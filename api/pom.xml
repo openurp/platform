@@ -4,32 +4,22 @@
   <parent>
     <groupId>org.openurp.platform</groupId>
     <artifactId>openurp-platform-parent</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
   </parent>
-  <groupId>org.openurp.platform</groupId>
-  <artifactId>openurp-platform-api</artifactId>
-  <packaging>jar</packaging>
-  <name>OpenURP Platform API</name>
-  
+
+  <groupId>org.openurp.platform.api</groupId>
+  <artifactId>openurp-platform-api-parent</artifactId>
+  <packaging>pom</packaging>
+  <name>OpenURP Platform API Parent</name>
+
   <properties>
-    <bundle.symbolicName>org.openurp.platform.api</bundle.symbolicName>
-    <bundle.namespace>org.openurp.platform</bundle.namespace>
+    <bundle.symbolicName>org.openurp.platform.api.parent</bundle.symbolicName>
+    <bundle.namespace>org.openurp</bundle.namespace>
   </properties>
 
-  <dependencies>
-    <dependency>
-      <groupId>org.beangle.data</groupId>
-      <artifactId>beangle-data-model</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.beangle.security</groupId>
-      <artifactId>beangle-security-core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>c3p0</groupId>
-      <artifactId>c3p0</artifactId>
-      <version>0.9.1.2</version>
-      <optional>true</optional>
-    </dependency>
-  </dependencies>
+  <modules>
+    <module>core</module>
+    <module>datasource</module>
+    <module>web</module>
+  </modules>
 </project>

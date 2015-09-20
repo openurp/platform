@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<cdi>
+  <container>
+    <module class="org.openurp.platform.security.service.DefaultModule"/>
+  </container>
+</cdi>

@@ -1,0 +1,8 @@
+[#ftl]
+[@b.navbar title="权限管理" style="margin-bottom: 0px;"]
+  [@b.navlist]
+    [@b.navitem href="/security/dimension"]数据限制维度[/@]
+    [@b.navitem href="/security/data-permission"]数据授权[/@]
+    [@b.navitem href="/security/account/my?nav=true"]我的账户[/@]
+  [/@]
+[/@]
