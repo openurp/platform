@@ -19,7 +19,7 @@ class DaoUserStore(userService: UserService, entityDao: EntityDao) extends Accou
         account.accountLocked = user.locked
         account.credentialExpired = user.credentialExpired
         account.disabled = !user.enabled
-        account.authorities = user.roles.filter(role => role.app.name == AppConfig.appName).map(role => new org.beangle.security.authz.Role(role.id))
+        account.authorities = user.roles.filter(role => role.app.name == AppConfig.appName).map(role =>role.id)
         account.details += "credential" -> user.credential
         Some(account)
       case None => None

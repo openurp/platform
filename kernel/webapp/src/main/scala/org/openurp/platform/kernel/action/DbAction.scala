@@ -15,7 +15,7 @@ class DbAction extends RestfulAction[Db] {
   def test(): String = {
     val username = get("user", "")
     val password = get("password", "")
-    val entities = getModels[Db](entityName, getIds(shortName, entityMetaData.getType(entityName).get.idType))
+    val entities = getModels[Db](entityName, ids(shortName, entityMetaData.getType(entityName).get.idType))
     val result = new ListBuffer[Tuple2[Db, Boolean]]
     for (cfg <- entities) {
       try {

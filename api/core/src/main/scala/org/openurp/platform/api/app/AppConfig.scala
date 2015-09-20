@@ -45,6 +45,12 @@ object AppConfig extends Logging {
     result.toMap
   }
 
+  def getAppConfigFile: Option[File] = {
+    val homefile = new File(urphome + appPath + ".xml")
+    if (homefile.exists) Some(homefile)
+    else None
+  }
+
   def getFile(path: String): Option[File] = {
     val homefile = new File(urphome + appPath + path)
     if (homefile.exists) Some(homefile)
