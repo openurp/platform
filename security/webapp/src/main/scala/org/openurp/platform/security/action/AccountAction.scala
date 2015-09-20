@@ -118,7 +118,7 @@ class AccountAction extends RestfulAction[User] {
    * 删除一个或多个用户
    */
   override def remove(): View = {
-    val userIds = getLongIds("user")
+    val userIds = longIds("user")
     val creator = loginUser
     val toBeRemoved = userManager.getUsers(userIds: _*)
     val sb = new StringBuilder()
@@ -153,7 +153,7 @@ class AccountAction extends RestfulAction[User] {
    * 禁用或激活一个或多个用户
    */
   def activate(): View = {
-    val userIds = getLongIds("user")
+    val userIds = longIds("user")
     val isActivate = get("isActivate", "true")
     var successCnt: Int = 0
     val manager = loginUser

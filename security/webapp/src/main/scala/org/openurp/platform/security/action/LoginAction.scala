@@ -7,7 +7,7 @@ import org.beangle.webmvc.api.annotation.param
 import org.beangle.webmvc.api.view.View
 import org.beangle.security.mgt.SecurityManager
 import org.beangle.security.session.SessionId
-import org.beangle.webmvc.api.context.ContextHolder
+import org.beangle.webmvc.api.context.ActionContextHolder
 import org.beangle.security.web.authc.WebDetails
 import org.beangle.security.context.SecurityContext
 
@@ -18,7 +18,7 @@ class LoginAction(val securityManager: SecurityManager) extends ActionSupport {
   }
 
   def login(@param("username") username: String, @param("password") password: String): View = {
-    val request = ContextHolder.context.request
+    val request = ActionContextHolder.context.request
     val token = new UsernamePasswordAuthenticationToken(username, password)
     token.details = WebDetails.get(request)
     securityManager.login(token, SessionId(request.getSession.getId))

@@ -118,7 +118,7 @@ class RoleAction(val roleManager: RoleManager, val userService: UserService) ext
   }
 
   def profile(): String = {
-    val role = entityDao.get(classOf[Role], getIntId("role"))
+    val role = entityDao.get(classOf[Role], intId("role"))
     val helper = new ProfileHelper(entityDao, profileService)
     helper.populateInfo(List(role))
     put("role", role)
@@ -126,7 +126,7 @@ class RoleAction(val roleManager: RoleManager, val userService: UserService) ext
   }
 
   def editProfile(): String = {
-    val role = entityDao.get(classOf[Role], getIntId("role"))
+    val role = entityDao.get(classOf[Role], intId("role"))
     val me = entityDao.findBy(classOf[User], "code", List(Securities.user)).head
     val helper = new ProfileHelper(entityDao, profileService)
     helper.fillEditInfo(role, userService.isRoot(me, role.app.name), role.app)
@@ -135,7 +135,7 @@ class RoleAction(val roleManager: RoleManager, val userService: UserService) ext
   }
 
   def removeProfile(): View = {
-    val role = entityDao.get(classOf[Role], getIntId("role"))
+    val role = entityDao.get(classOf[Role], intId("role"))
     role.properties.clear()
     entityDao.saveOrUpdate(role)
     redirect("profile", "info.save.success")
@@ -145,7 +145,7 @@ class RoleAction(val roleManager: RoleManager, val userService: UserService) ext
     val me = entityDao.findBy(classOf[User], "code", List(Securities.user)).head
     val helper = new ProfileHelper(entityDao, profileService)
     helper.dataResolver = dataResolver
-    val role = entityDao.get(classOf[Role], getIntId("role"))
+    val role = entityDao.get(classOf[Role], intId("role"))
     helper.populateSaveInfo(role, userService.isRoot(me, role.app.name), role.app)
     entityDao.saveOrUpdate(role)
     redirect("profile", "info.save.success")
@@ -156,7 +156,7 @@ class RoleAction(val roleManager: RoleManager, val userService: UserService) ext
    */
   override def remove(): View = {
     val me = entityDao.findBy(classOf[User], "code", List(Securities.user)).head
-    roleManager.remove(me, entityDao.find(classOf[Role], getIntIds("role")))
+    roleManager.remove(me, entityDao.find(classOf[Role], intIds("role")))
     redirect("search", "info.remove.success")
   }
 

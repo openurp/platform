@@ -54,7 +54,7 @@ class PermissionAction extends RestfulAction[FuncPermission] {
     val menuProfiles = menuService.getProfiles(role)
     put("menuProfiles", menuProfiles)
 
-    var menuProfile = menuService.getProfile(role, getIntId("menuProfile"))
+    var menuProfile = menuService.getProfile(role, intId("menuProfile"))
     if (null == menuProfile && !menuProfiles.isEmpty) {
       menuProfile = menuProfiles(0)
     }
@@ -129,8 +129,8 @@ class PermissionAction extends RestfulAction[FuncPermission] {
    * 保存模块级权限
    */
   override def save(): View = {
-    val role = entityDao.get(classOf[Role], getIntId("role"))
-    val menuProfile = entityDao.get(classOf[MenuProfile], getIntId("menuProfile"))
+    val role = entityDao.get(classOf[Role], intId("role"))
+    val menuProfile = entityDao.get(classOf[MenuProfile], intId("menuProfile"))
     val newResources = entityDao.findBy(classOf[FuncResource], "id", Strings.split(get("resourceId", "")).map(a => Integer.valueOf(a))).toSet
 
     // 管理员拥有的菜单权限和系统资源

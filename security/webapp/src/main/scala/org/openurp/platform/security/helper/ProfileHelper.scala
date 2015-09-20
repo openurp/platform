@@ -22,7 +22,7 @@ import org.beangle.commons.bean.Properties
 import org.beangle.commons.lang.Strings
 import org.beangle.data.model.dao.EntityDao
 import org.beangle.security.context.SecurityContext
-import org.beangle.webmvc.api.context.{ ContextHolder, Params }
+import org.beangle.webmvc.api.context.{ ActionContextHolder, Params }
 import org.openurp.platform.security.model.{ Dimension, Profile, User }
 import org.openurp.platform.security.service.{ DataResolver, ProfileService }
 import org.openurp.platform.api.security.Securities
@@ -53,8 +53,8 @@ class ProfileHelper(entityDao: EntityDao, profileService: ProfileService) {
       }
       fieldMaps.put(Properties.get[Any](profile, "id").toString, aoDimensions.toMap)
     }
-    ContextHolder.context.attribute("profiles", profiles)
-    ContextHolder.context.attribute("fieldMaps", fieldMaps)
+    ActionContextHolder.context.attribute("profiles", profiles)
+    ActionContextHolder.context.attribute("fieldMaps", fieldMaps)
   }
 
   def fillEditInfo(profile: Profile, isAdmin: Boolean, app: App): Unit = {
@@ -64,11 +64,11 @@ class ProfileHelper(entityDao: EntityDao, profileService: ProfileService) {
 
     val myProfiles = me.profiles
     val ignores = getIgnoreDimensions(myProfiles)
-    ContextHolder.context.attribute("ignoreDimensions", ignores)
+    ActionContextHolder.context.attribute("ignoreDimensions", ignores)
     val holderIgnoreDimensions = new collection.mutable.HashSet[Dimension]
-    ContextHolder.context.attribute("holderIgnoreDimensions", holderIgnoreDimensions)
+    ActionContextHolder.context.attribute("holderIgnoreDimensions", holderIgnoreDimensions)
     val fields = getDimensions(app)
-    ContextHolder.context.attribute("fields", fields)
+    ActionContextHolder.context.attribute("fields", fields)
     for (field <- fields) {
       var mngDimensionValues = new collection.mutable.ListBuffer[Any]
       mngDimensionValues ++= profileService.getDimensionValues(field)
@@ -88,9 +88,9 @@ class ProfileHelper(entityDao: EntityDao, profileService: ProfileService) {
         if (null != p) aoDimensions.put(field.name, p)
       }
     }
-    ContextHolder.context.attribute("mngDimensions", mngDimensions)
-    ContextHolder.context.attribute("aoDimensions", aoDimensions)
-    ContextHolder.context.attribute("profile", profile)
+    ActionContextHolder.context.attribute("mngDimensions", mngDimensions)
+    ActionContextHolder.context.attribute("aoDimensions", aoDimensions)
+    ActionContextHolder.context.attribute("profile", profile)
   }
 
   private def getMyProfileValues(profiles: Seq[Profile], field: Dimension): Seq[AnyRef] = {

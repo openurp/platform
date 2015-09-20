@@ -1,6 +1,6 @@
 package org.openurp.platform.security.helper
 import org.beangle.webmvc.api.context.Params
-import org.beangle.webmvc.api.context.ContextHolder
+import org.beangle.webmvc.api.context.ActionContextHolder
 import org.beangle.data.model.dao.EntityDao
 import org.openurp.platform.kernel.model.App
 import org.beangle.data.jpa.dao.OqlBuilder
@@ -8,7 +8,7 @@ import org.beangle.data.jpa.dao.OqlBuilder
 object AppHelper {
 
   def setAppId(id: Integer): Unit = {
-    ContextHolder.context.request.getSession.setAttribute("app.id", id)
+    ActionContextHolder.context.request.getSession.setAttribute("app.id", id)
   }
 
   def getAppId(): Option[Integer] = {
@@ -16,7 +16,7 @@ object AppHelper {
       case Some(id) =>
         setAppId(id); Some(id)
       case None =>
-        val appId = ContextHolder.context.request.getSession.getAttribute("app.id").asInstanceOf[Integer]
+        val appId = ActionContextHolder.context.request.getSession.getAttribute("app.id").asInstanceOf[Integer]
         if (null == appId) None else Some(appId)
     }
   }

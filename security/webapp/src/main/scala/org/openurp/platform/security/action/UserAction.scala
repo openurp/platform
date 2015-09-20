@@ -81,7 +81,7 @@ class UserAction extends RestfulAction[User] {
     val sb = new StringBuilder("exists(from user.members m where ")
     val params = new collection.mutable.ListBuffer[Object]
     var queryRole = false
-    val app = entityDao.get(classOf[App], getIntId("app"))
+    val app = entityDao.get(classOf[App], intId("app"))
     if (!userManager.isRoot(manager, app.name)) {
       val members = userManager.getMembers(manager, app, MemberShip.Manager)
       val mngRoles = members.map(m => m.role)
@@ -118,7 +118,7 @@ class UserAction extends RestfulAction[User] {
   protected def saveAndForward(entity: User): View = {
     val user = entity.asInstanceOf[User]
     val userMembers = user.members
-    val app = entityDao.get(classOf[App], getIntId("app"))
+    val app = entityDao.get(classOf[App], intId("app"))
     val memberMap = new collection.mutable.HashMap[Role, Member]
     for (gm <- userMembers if gm.role.app == app) {
       memberMap.put(gm.role, gm.asInstanceOf[Member])
@@ -151,7 +151,7 @@ class UserAction extends RestfulAction[User] {
   }
 
   protected override def editSetting(user: User) {
-    val app = entityDao.get(classOf[App], getIntId("app"))
+    val app = entityDao.get(classOf[App], intId("app"))
     val manager = loginUser
     val isAdmin= userManager.isRoot(user, app.name)
     val roles = new collection.mutable.HashSet[Role]

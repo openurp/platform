@@ -70,7 +70,7 @@ class MenuAction(val menuService: MenuService) extends RestfulAction[Menu] {
   }
 
   protected override def saveAndRedirect(menu: Menu): View = {
-    val resources = entityDao.find(classOf[FuncResource], getIntIds("resource"))
+    val resources = entityDao.find(classOf[FuncResource], intIds("resource"))
     menu.resources.clear()
     menu.resources ++= resources
     val newParentId = getInt("parent.id")

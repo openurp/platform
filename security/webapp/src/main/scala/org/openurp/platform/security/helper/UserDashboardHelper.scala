@@ -20,7 +20,7 @@ package org.openurp.platform.security.helper
 
 import org.beangle.data.model.dao.EntityDao
 import org.beangle.security.session.SessionRegistry
-import org.beangle.webmvc.api.context.{ ContextHolder, Params }
+import org.beangle.webmvc.api.context.{ ActionContextHolder, Params }
 import org.openurp.platform.security.model.{ Menu, MenuProfile, Role, User }
 import org.openurp.platform.security.service.{ FuncPermissionService, MenuService, ProfileService }
 
@@ -43,7 +43,7 @@ class UserDashboardHelper {
   //  var sessioninfoLogService :SessioninfoLogService =_
 
   def buildDashboard(user: User): Unit = {
-    ContextHolder.context.attribute("user", user)
+    ActionContextHolder.context.attribute("user", user)
     populateMenus(user)
     //    populateSessioninfoLogs(user)
     //    populateOnlineActivities(user)
@@ -51,18 +51,18 @@ class UserDashboardHelper {
   }
   //
   //  private def populateOnlineActivities(user: User) {
-  //    ContextHolder.context.attribute("sessioninfos", sessionRegistry.getSessioninfos(user.code, true))
+  //    ActionContextHolder.context.attribute("sessioninfos", sessionRegistry.getSessioninfos(user.code, true))
   //  }
 
   //  private def populateSessioninfoLogs(user:User) {
   //    List<SessioninfoLogBean> page = sessioninfoLogService.getLoggers(user.code, 5)
   //    if (page instanceof Page) page = ((Page<SessioninfoLogBean>) page).getItems()
-  //    ContextHolder.context.attribute("sessioninfoLogs", page)
+  //    ActionContextHolder.context.attribute("sessioninfoLogs", page)
   //  }
 
   private def populateMenus(user: User) {
     val menuProfiles = menuService.getProfiles(user)
-    ContextHolder.context.attribute("menuProfiles", menuProfiles)
+    ActionContextHolder.context.attribute("menuProfiles", menuProfiles)
     var menuProfileId = Params.getInt("menuProfileId")
     if (None == menuProfileId && !menuProfiles.isEmpty) {
       menuProfileId = Some(menuProfiles(0).id)
@@ -77,9 +77,9 @@ class UserDashboardHelper {
       for (m <- user.members) {
         if (m.member) roleMenusMap.put(m.role, menuService.getMenus(menuProfile, m.role, Some(true)))
       }
-      ContextHolder.context.attribute("menus", menus)
-      ContextHolder.context.attribute("roleMenusMap", roleMenusMap)
-      ContextHolder.context.attribute("resources", resources)
+      ActionContextHolder.context.attribute("menus", menus)
+      ActionContextHolder.context.attribute("roleMenusMap", roleMenusMap)
+      ActionContextHolder.context.attribute("resources", resources)
     }
   }
 
