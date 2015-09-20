@@ -13,11 +13,7 @@
   <name>OpenURP Platform Parent</name>
 
   <properties>
-    <beangle.webui.version>0.0.1-SNAPSHOT</beangle.webui.version>
-    <beangle.data.version>4.2.4-SNAPSHOT</beangle.data.version>
-    <beangle.security.version>4.0.9-SNAPSHOT</beangle.security.version>
-    <beangle.webmvc.version>0.2.10-SNAPSHOT</beangle.webmvc.version>
-    <beangle.spring.version>4.0.12-SNAPSHOT</beangle.spring.version>
+    <beangle.webui.version>0.0.1</beangle.webui.version>
   </properties>
 
   <modules>

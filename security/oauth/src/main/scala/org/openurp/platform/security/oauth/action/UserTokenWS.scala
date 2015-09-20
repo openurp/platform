@@ -11,7 +11,7 @@ import org.openurp.platform.security.oauth.TokenRepository
 import org.openurp.platform.security.oauth.AccessToken
 import java.{ util => ju }
 
-class AccessTokenWS(val tokenRepository: TokenRepository) extends ActionSupport {
+class UserTokenWS(val tokenRepository: TokenRepository) extends ActionSupport {
 
   var entityDao: EntityDao = _
 

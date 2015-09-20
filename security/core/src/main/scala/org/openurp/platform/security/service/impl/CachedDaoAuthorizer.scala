@@ -1,38 +1,40 @@
 package org.openurp.platform.security.service.impl
 
-import org.beangle.security.context.SecurityContext
-import org.beangle.security.authz.Authorizer
-import org.beangle.security.authz.Authority
-import org.beangle.security.authc.Account
+import org.beangle.commons.cache.{ Cache, CacheManager }
 import org.beangle.commons.security.Request
-import org.beangle.commons.cache.Cache
-import org.beangle.commons.cache.CacheManager
+import org.beangle.security.authc.Account
+import org.beangle.security.authz.{ Authorizer, Scopes }
+import org.beangle.security.session.Session
 import org.openurp.platform.security.service.FuncPermissionManager
-import org.beangle.security.authz.Scopes
 
 class CachedDaoAuthorizer(permissionService: FuncPermissionManager, cacheManager: CacheManager) extends Authorizer {
   var unknownIsPublic = true
 
-  var cache: Cache[Authority, Set[Integer]] = cacheManager.getCache("dao-authorizer-cache")
+  var roleAuthorities: Cache[Integer, Set[Integer]] = cacheManager.getCache("dao-authorizer-cache")
 
-  override def isPermitted(principal: Any, request: Request): Boolean = {
+  override def isPermitted(session: Option[Session], request: Request): Boolean = {
     val resourceName = request.resource.toString
     val rscOption = permissionService.getResource(resourceName)
-    if (rscOption.isEmpty) return unknownIsPublic
-    rscOption.get.scope match {
-      case Scopes.Public => true
-      case Scopes.Protected => principal != SecurityContext.Anonymous
-      case _ => principal != SecurityContext.Anonymous && principal.asInstanceOf[Account].authorities.exists { role => isAuthorized(role, rscOption.get.id) }
+    rscOption match {
+      case None => unknownIsPublic
+      case Some(res) =>
+        res.scope match {
+          case Scopes.Public => true
+          case Scopes.Protected => None != session
+          case _ => None != session && isAuthorized(session.get.principal.asInstanceOf[Account], res.id)
+        }
     }
   }
 
-  private def isAuthorized(authority: Authority, resourceId: Integer): Boolean = {
-    cache.get(authority) match {
-      case Some(actions) => actions.contains(resourceId)
-      case None =>
-        val newActions = permissionService.getResourceNamesByRole(authority.authority.asInstanceOf[Integer])
-        cache.put(authority, newActions)
-        newActions.contains(resourceId)
+  private def isAuthorized(account: Account, resourceId: Integer): Boolean = {
+    account.authorities.asInstanceOf[Iterable[Integer]].exists { roleId =>
+      roleAuthorities.get(roleId) match {
+        case Some(actions) => actions.contains(resourceId)
+        case None =>
+          val newActions = permissionService.getResourceNamesByRole(roleId)
+          roleAuthorities.put(roleId, newActions)
+          newActions.contains(resourceId)
+      }
     }
   }
 
