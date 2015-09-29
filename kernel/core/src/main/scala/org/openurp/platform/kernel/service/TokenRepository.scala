@@ -1,4 +1,6 @@
-package org.openurp.platform.security.oauth
+package org.openurp.platform.kernel.service
+
+import org.openurp.platform.kernel.model.AccessToken
 
 trait TokenRepository {
 

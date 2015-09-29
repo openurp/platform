@@ -1,11 +1,11 @@
-package org.openurp.platform.security.oauth.impl
+package org.openurp.platform.kernel.service.impl
 
 import java.util.Calendar
 import org.beangle.commons.cache.CacheManager
 import org.beangle.data.model.dao.EntityDao
 import org.openurp.platform.kernel.model.App
-import org.openurp.platform.security.oauth.AccessToken
-import org.openurp.platform.security.oauth.TokenRepository
+import org.openurp.platform.kernel.model.AccessToken
+import org.openurp.platform.kernel.service.TokenRepository
 
 class MemTokenRepository(val cacheManager: CacheManager) extends TokenRepository {
 

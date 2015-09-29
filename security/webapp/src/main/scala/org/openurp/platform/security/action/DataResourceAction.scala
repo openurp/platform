@@ -1,11 +1,11 @@
-package org.openurp.platform.kernel.action
+package org.openurp.platform.security.action
 
 import org.beangle.data.jpa.dao.OqlBuilder
 import org.beangle.data.model.Entity
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
-import org.openurp.platform.kernel.model.{ App, AppDataPermission, DataResource }
 import org.openurp.platform.kernel.service.AppDataPermissionManager
+import org.openurp.platform.security.model.DataResource
 
 /**
  * 系统模块管理响应类
@@ -37,10 +37,10 @@ class DataResourceAction extends RestfulAction[DataResource] {
 
   override def info(id: String): String = {
     val entity = getModel[Entity[_]](entityName, id)
-    val roleQuery = OqlBuilder.from(classOf[AppDataPermission], "auth")
-    roleQuery.where("auth.resource=:resource", entity).select("auth.role")
+//    val roleQuery = OqlBuilder.from(classOf[AppDataPermission], "auth")
+//    roleQuery.where("auth.resource=:resource", entity).select("auth.role")
     put(shortName, entity)
-    put("roles", entityDao.search(roleQuery))
+//    put("roles", entityDao.search(roleQuery))
     return forward()
   }
 

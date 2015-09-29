@@ -68,9 +68,20 @@ object DefaultMapping extends Mapping {
       e.title is (notnull, length(200)),
       e.remark & e.actions are length(200)))
 
+    bind[DataResource].on(e => declare(
+      e.name & e.typeName are (notnull, length(200)),
+      e.scope is notnull,
+      e.title is (notnull, length(200)),
+      e.remark & e.actions are length(200)))
+
     bind[DataPermission].on(e => declare(
       e.resource & e.beginAt are notnull,
       e.filters is (notnull, length(600))))
+
+    bind[AppPermission].on(e => declare(
+      e.app & e.resource are notnull,
+      e.actions is length(500),
+      e.restrictions is length(500)))
 
     bind[SessionProfileBean].on(e => declare(
       e.app & e.category are notnull)).cacheable()

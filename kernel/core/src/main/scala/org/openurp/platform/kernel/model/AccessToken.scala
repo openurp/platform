@@ -1,4 +1,4 @@
-package org.openurp.platform.security.oauth
+package org.openurp.platform.kernel.model
 
 import java.{ util => ju }
 import org.beangle.data.model.IntId

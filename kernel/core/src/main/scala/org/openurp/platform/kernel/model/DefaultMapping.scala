@@ -15,7 +15,6 @@ object DefaultMapping extends Mapping {
       e.url is (notnull, length(200)),
       e.appType is (notnull, length(50)),
       e.remark is (length(200)),
-      e.dataPermissions is depends("app"),
       e.datasources is depends("app")))
 
     bind[DataSource].on(e => declare(
@@ -24,17 +23,6 @@ object DefaultMapping extends Mapping {
       e.password is length(200),
       e.name is length(100),
       e.remark is length(200)))
-
-    bind[AppDataPermission].on(e => declare(
-      e.app & e.resource are notnull,
-      e.actions is length(500),
-      e.restrictions is length(500)))
-
-    bind[DataResource].on(e => declare(
-      e.name & e.typeName are (notnull, length(200)),
-      e.scope is notnull,
-      e.title is (notnull, length(200)),
-      e.remark & e.actions are length(200)))
 
     bind[Db].on(e => declare(
       e.name is (notnull, length(100), unique),
