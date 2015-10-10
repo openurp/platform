@@ -1,8 +1,8 @@
 package org.openurp.platform.security.ws
 
 import org.beangle.commons.collection.Properties
-import org.beangle.data.jpa.dao.OqlBuilder
-import org.beangle.data.model.dao.EntityDao
+import org.beangle.data.dao.OqlBuilder
+import org.beangle.data.dao.EntityDao
 import org.beangle.webmvc.api.action.{ ActionSupport, EntitySupport }
 import org.beangle.webmvc.api.annotation.{ mapping, param, response }
 import org.beangle.security.authz.Scopes

@@ -13,11 +13,11 @@ object AppConfig extends Logging {
   val urphome = SystemInfo.properties.get("OPENURP_HOME").getOrElse(SystemInfo.user.home + "/.openurp")
 
   val properties: Map[String, String] = readProperties
-  val appName: String = properties("appName")
-  val appPath: String = properties("appPath")
+  val name: String = properties("name")
+  val path: String = properties("path")
 
   def secret: String = {
-    properties.get("secret").getOrElse(appName)
+    properties.getOrElse("secret", name)
   }
 
   private def readProperties(): Map[String, String] = {
@@ -27,12 +27,12 @@ object AppConfig extends Logging {
     } else {
       IOs.readJavaProperties(configs.head)
     }
-    val appName = appManifest.get("name") match {
-      case Some(name) => name
+    val name = appManifest.get("name") match {
+      case Some(n) => n
       case None => throw new RuntimeException("cannot find META-INF/openurp/app.properties")
     }
 
-    var appPath = Strings.replace(appName, "-", "/")
+    var appPath = Strings.replace(name, "-", "/")
     appPath = Strings.replace(appPath, ".", "/")
     if (appPath.startsWith("openurp/")) appPath = Strings.substringAfter(appPath, "openurp")
     else appPath = "/" + appPath
@@ -40,19 +40,27 @@ object AppConfig extends Logging {
     val result = new collection.mutable.HashMap[String, String]
     result ++= appManifest
     result ++= readProperties(new File(urphome + appPath + "/conf.properties"))
-    result.put("appName", appName)
-    result.put("appPath", appPath)
+    result.put("path", appPath)
+
+    val appFile = new File(urphome + appPath + ".xml")
+    if (appFile.exists()) {
+      val is = new FileInputStream(appFile)
+      scala.xml.XML.load(is) \\ "app" foreach { app =>
+        result ++= app.attributes.asAttrMap
+      }
+      IOs.close(is)
+    }
     result.toMap
   }
 
   def getAppConfigFile: Option[File] = {
-    val homefile = new File(urphome + appPath + ".xml")
+    val homefile = new File(urphome + path + ".xml")
     if (homefile.exists) Some(homefile)
     else None
   }
 
   def getFile(path: String): Option[File] = {
-    val homefile = new File(urphome + appPath + path)
+    val homefile = new File(urphome + path + path)
     if (homefile.exists) Some(homefile)
     else None
   }
@@ -66,6 +74,6 @@ object AppConfig extends Logging {
   }
 
   def getDatasourceUrl(resourceKey: String): String = {
-    ServiceConfig.dsBase + "/app/" + appName + "/resource/datasources/" + resourceKey + ".json?secret=" + secret
+    ServiceConfig.dsBase + "/app/" + name + "/resource/datasources/" + resourceKey + ".json?secret=" + secret
   }
 }

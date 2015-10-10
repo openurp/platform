@@ -1,12 +1,10 @@
 package org.openurp.platform.kernel.ws
 
 import org.beangle.commons.collection.Properties
-import org.beangle.data.jpa.dao.OqlBuilder
-import org.beangle.data.model.dao.EntityDao
-import org.beangle.webmvc.api.action.ActionSupport
-import org.beangle.webmvc.api.annotation.{ action, mapping, param, response }
+import org.beangle.data.dao.{ EntityDao, OqlBuilder }
+import org.beangle.webmvc.api.action.{ ActionSupport, EntitySupport }
+import org.beangle.webmvc.api.annotation.{ mapping, param, response }
 import org.openurp.platform.kernel.model.{ App, DataSource }
-import org.beangle.webmvc.api.action.EntitySupport
 
 class DatasourceWS(entityDao: EntityDao) extends ActionSupport with EntitySupport[DataSource] {
 

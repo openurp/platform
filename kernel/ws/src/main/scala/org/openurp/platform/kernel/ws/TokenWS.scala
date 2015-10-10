@@ -4,8 +4,7 @@ import java.{ util => ju }
 import java.util.UUID
 
 import org.beangle.commons.collection.Properties
-import org.beangle.data.jpa.dao.OqlBuilder
-import org.beangle.data.model.dao.EntityDao
+import org.beangle.data.dao.{ EntityDao, OqlBuilder }
 import org.beangle.webmvc.api.action.ActionSupport
 import org.beangle.webmvc.api.annotation.{ param, response }
 import org.openurp.platform.kernel.model.{ AccessToken, App }

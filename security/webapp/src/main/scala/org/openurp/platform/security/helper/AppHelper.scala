@@ -1,9 +1,9 @@
 package org.openurp.platform.security.helper
 import org.beangle.webmvc.api.context.Params
 import org.beangle.webmvc.api.context.ActionContextHolder
-import org.beangle.data.model.dao.EntityDao
+import org.beangle.data.dao.EntityDao
 import org.openurp.platform.kernel.model.App
-import org.beangle.data.jpa.dao.OqlBuilder
+import org.beangle.data.dao.OqlBuilder
 
 object AppHelper {
 

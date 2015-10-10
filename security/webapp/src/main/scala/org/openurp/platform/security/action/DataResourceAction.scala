@@ -1,6 +1,6 @@
 package org.openurp.platform.security.action
 
-import org.beangle.data.jpa.dao.OqlBuilder
+import org.beangle.data.dao.OqlBuilder
 import org.beangle.data.model.Entity
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction

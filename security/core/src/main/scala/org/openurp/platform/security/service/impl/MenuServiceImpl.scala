@@ -2,9 +2,9 @@ package org.openurp.platform.security.service.impl
 
 import org.openurp.platform.security.model.{ Menu, MenuProfile, Profile, Role, User }
 import org.openurp.platform.security.service.MenuService
-import org.beangle.data.model.dao.EntityDao
+import org.beangle.data.dao.EntityDao
 import org.beangle.data.model.util.Hierarchicals
-import org.beangle.data.jpa.dao.OqlBuilder
+import org.beangle.data.dao.OqlBuilder
 
 /**
  * @author chaostone

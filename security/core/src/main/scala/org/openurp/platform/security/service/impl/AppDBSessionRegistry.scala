@@ -3,7 +3,7 @@ import org.beangle.security.session.jdbc.DBSessionRegistry
 import org.beangle.security.session.jdbc.DBSessionRegistry
 import org.beangle.data.jdbc.query.JdbcExecutor
 import org.beangle.security.session.SessionBuilder
-import org.beangle.data.model.dao.EntityDao
+import org.beangle.data.dao.EntityDao
 import org.openurp.platform.kernel.model.App
 import org.openurp.platform.api.app.AppConfig
 /**
@@ -14,7 +14,7 @@ class AppDBSessionRegistry(builder: SessionBuilder, executor: JdbcExecutor) exte
   var entityDao: EntityDao = _
 
   override def init() {
-    val app = entityDao.findBy(classOf[App], "name", List(AppConfig.appName)).head
+    val app = entityDao.findBy(classOf[App], "name", List(AppConfig.name)).head
     this.sessionTable = "app_" + app.id + "_session_infoes"
     this.statTable = "app_" + app.id + "_session_stats"
     super.init()

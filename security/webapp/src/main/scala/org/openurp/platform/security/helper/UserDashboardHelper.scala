@@ -18,7 +18,7 @@
  */
 package org.openurp.platform.security.helper
 
-import org.beangle.data.model.dao.EntityDao
+import org.beangle.data.dao.EntityDao
 import org.beangle.security.session.SessionRegistry
 import org.beangle.webmvc.api.context.{ ActionContextHolder, Params }
 import org.openurp.platform.security.model.{ Menu, MenuProfile, Role, User }

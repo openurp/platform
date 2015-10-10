@@ -19,18 +19,14 @@
 package org.openurp.platform.security.action
 
 import org.beangle.commons.lang.Numbers
-import org.beangle.security.context.SecurityContext
-import org.beangle.webmvc.api.annotation.{ mapping, param }
+import org.beangle.data.dao.{ Operation, OqlBuilder }
+import org.beangle.webmvc.api.annotation.{ ignore, param }
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.platform.security.helper.ProfileHelper
-import org.openurp.platform.security.model.{ User, UserProfile }
-import org.openurp.platform.security.service.{ DataResolver, ProfileService }
+import org.openurp.platform.security.model.UserProfile
+import org.openurp.platform.security.service.{ DataResolver, ProfileService, UserService }
 import org.openurp.platform.security.service.impl.CsvDataResolver
-import org.openurp.platform.security.service.UserService
-import org.beangle.webmvc.api.annotation.ignore
-import org.beangle.data.jpa.dao.OqlBuilder
-import org.beangle.data.model.dao.Operation
 
 /**
  * @author chaostone
