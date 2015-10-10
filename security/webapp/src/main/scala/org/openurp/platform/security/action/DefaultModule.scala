@@ -13,6 +13,7 @@ class DefaultModule extends AbstractBindModule {
     bind(classOf[LoginAction])
     bind(classOf[SessionProfileAction])
     bind(classOf[DataPermissionAction])
+    bind(classOf[DataResourceAction])
   }
 
 }

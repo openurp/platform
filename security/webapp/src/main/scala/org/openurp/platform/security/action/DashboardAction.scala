@@ -1,7 +1,7 @@
 package org.openurp.platform.security.action
 
-import org.beangle.data.jpa.dao.OqlBuilder
-import org.beangle.data.model.dao.EntityDao
+import org.beangle.data.dao.OqlBuilder
+import org.beangle.data.dao.EntityDao
 import org.beangle.webmvc.api.action.ActionSupport
 import org.openurp.platform.security.model.{ DataPermission, Dimension, FuncResource, Member, Menu, MenuProfile }
 

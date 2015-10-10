@@ -4,7 +4,7 @@ import org.beangle.webmvc.entity.action.RestfulAction
 import org.beangle.security.session.profile.SessionProfile
 import org.openurp.platform.security.model.SessionProfileBean
 import org.openurp.platform.security.helper.AppHelper
-import org.beangle.data.jpa.dao.OqlBuilder
+import org.beangle.data.dao.OqlBuilder
 import org.beangle.data.model.Entity
 import org.beangle.webmvc.api.annotation.ignore
 import org.openurp.platform.security.model.UserCategory

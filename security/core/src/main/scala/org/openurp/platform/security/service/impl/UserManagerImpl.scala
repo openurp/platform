@@ -1,13 +1,13 @@
 package org.openurp.platform.security.service.impl
 
 import java.{ util => ju }
-import org.beangle.data.model.dao.EntityDao
+import org.beangle.data.dao.EntityDao
 import org.openurp.platform.security.model.{ User, UserProfile }
 import org.openurp.platform.security.model.Member
 import org.openurp.platform.security.model.MemberShip
 import org.openurp.platform.security.model.MemberShip.{ Granter, Manager, Member, Ship }
 import org.openurp.platform.security.service.UserManager
-import org.beangle.data.jpa.dao.OqlBuilder
+import org.beangle.data.dao.OqlBuilder
 import org.openurp.platform.security.model.Root
 import org.openurp.platform.kernel.model.App
 import org.openurp.platform.security.model.Role

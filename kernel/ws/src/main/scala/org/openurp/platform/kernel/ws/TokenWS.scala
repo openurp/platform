@@ -1,22 +1,21 @@
-package org.openurp.platform.security.oauth.action
+package org.openurp.platform.kernel.ws
 
+import java.{ util => ju }
 import java.util.UUID
+
 import org.beangle.commons.collection.Properties
-import org.beangle.data.jpa.dao.OqlBuilder
-import org.beangle.data.model.dao.EntityDao
+import org.beangle.data.dao.{ EntityDao, OqlBuilder }
 import org.beangle.webmvc.api.action.ActionSupport
 import org.beangle.webmvc.api.annotation.{ param, response }
-import org.openurp.platform.kernel.model.App
-import org.openurp.platform.security.oauth.TokenRepository
-import org.openurp.platform.security.oauth.AccessToken
-import java.{ util => ju }
+import org.openurp.platform.kernel.model.{ AccessToken, App }
+import org.openurp.platform.kernel.service.TokenRepository
 
-class UserTokenWS(val tokenRepository: TokenRepository) extends ActionSupport {
+class TokenWS(val tokenRepository: TokenRepository) extends ActionSupport {
 
   var entityDao: EntityDao = _
 
   @response
-  def index(@param("app") app: String, @param("secret") secret: String, responseCode: String): Properties = {
+  def login(@param("app") app: String, @param("secret") secret: String): Properties = {
     val query = OqlBuilder.from(classOf[App], "app").where("app.name=:name and app.secret=:secret", app, secret)
     val properties = new Properties
     val rs = entityDao.search(query)
@@ -27,24 +26,30 @@ class UserTokenWS(val tokenRepository: TokenRepository) extends ActionSupport {
       val token = new AccessToken
       token.id = generateAccessTokenId()
       token.appId = app.id
+      token.principal = app.name
       token.expiredAt = this.generateExpiredAt()
-      token.principal = getUser(app, responseCode)
+      tokenRepository.put(token)
       properties.put("token", token.id)
       properties.put("expiredAt", token.expiredAt)
     }
     properties
   }
 
-  private def generateAccessTokenId(): String = {
-    UUID.randomUUID().toString()
+  @response
+  def validate(@param("token") token: String): Any = {
+    val properties = new Properties
+    if (null == token) {
+      properties.put("error", "token needed")
+    } else {
+      tokenRepository.get(token) match {
+        case Some(app) => app
+        case None => properties.put("error", "cannot find app"); properties
+      }
+    }
   }
 
-  private def getUser(app: App, responseCode: String): String = {
-    //if (app.trusted) responseCode.toLong
-    //else {
-    // throw new RuntimeException("Not supported.")
-    // }
-    "anonymous"
+  private def generateAccessTokenId(): String = {
+    UUID.randomUUID().toString()
   }
 
   private def generateExpiredAt(): ju.Date = {

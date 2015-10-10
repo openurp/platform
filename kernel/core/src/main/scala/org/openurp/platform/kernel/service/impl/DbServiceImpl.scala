@@ -1,7 +1,6 @@
 package org.openurp.platform.kernel.service.impl
 
-import org.beangle.data.jpa.dao.OqlBuilder
-import org.beangle.data.model.dao.EntityDao
+import org.beangle.data.dao.{ EntityDao, OqlBuilder }
 import org.openurp.platform.kernel.model.Db
 import org.openurp.platform.kernel.service.DbService
 

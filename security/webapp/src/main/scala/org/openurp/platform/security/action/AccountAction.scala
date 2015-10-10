@@ -21,13 +21,12 @@ package org.openurp.platform.security.action
 import org.beangle.commons.codec.digest.Digests
 import org.beangle.commons.collection.Order
 import org.beangle.commons.lang.Strings
-import org.beangle.data.jpa.dao.OqlBuilder
-import org.beangle.data.model.dao.Condition
+import org.beangle.data.dao.{ Condition, OqlBuilder }
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
-import org.openurp.platform.security.model.{ MemberShip, User }
-import org.openurp.platform.security.service.UserManager
 import org.openurp.platform.api.security.Securities
+import org.openurp.platform.security.model.User
+import org.openurp.platform.security.service.UserManager
 /**
  * 用户管理响应处理类
  *

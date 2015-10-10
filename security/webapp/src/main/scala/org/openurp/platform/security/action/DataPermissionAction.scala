@@ -21,7 +21,7 @@ package org.openurp.platform.security.action
 import org.beangle.webmvc.api.annotation.ignore
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
-import org.openurp.platform.kernel.model.DataResource
+import org.openurp.platform.security.model.DataResource
 import org.openurp.platform.security.model.DataPermission
 import org.openurp.platform.security.model.FuncResource
 import org.openurp.platform.security.model.Role

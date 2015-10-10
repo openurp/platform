@@ -4,16 +4,16 @@
   <parent>
     <groupId>org.openurp</groupId>
     <artifactId>openurp-parent</artifactId>
-    <version>0.0.14</version>
+    <version>0.0.15</version>
   </parent>
   <groupId>org.openurp.platform</groupId>
   <artifactId>openurp-platform-parent</artifactId>
-  <version>0.0.2</version>
+  <version>0.0.3</version>
   <packaging>pom</packaging>
   <name>OpenURP Platform Parent</name>
 
   <properties>
-    <beangle.webui.version>0.0.1</beangle.webui.version>
+    <beangle.webui.version>0.0.2</beangle.webui.version>
   </properties>
 
   <modules>

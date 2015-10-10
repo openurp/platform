@@ -2,7 +2,7 @@
 <mvc>
   <profile name="openurp-platform-kernelws" package="org.openurp.platform.kernel.ws">
    <action suffix="WS" defaultMethod="index"/>
-   <url path="/kernel/{app}/" suffix="" style="plur-seo" />
+   <url path="/" suffix="" style="seo" />
    <interceptors>
       <interceptor name="web.Interceptor.hibernate"/>
       <interceptor name="web.Interceptor.cors"/>

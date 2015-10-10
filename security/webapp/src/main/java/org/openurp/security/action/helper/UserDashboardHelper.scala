@@ -21,7 +21,7 @@ package org.openurp.platform.security.action.helper
 import java.util.List
 import java.util.Map
 import java.util.Set
-import org.beangle.data.model.dao.EntityDao
+import org.beangle.data.dao.EntityDao
 import org.openurp.platform.security.FuncResource
 import org.openurp.platform.security.MenuProfile
 import org.openurp.platform.security.Role
