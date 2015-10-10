@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.openurp.platform.portal</groupId>
     <artifactId>openurp-platform-portal-parent</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.4-SNAPSHOT</version>
   </parent>
   <groupId>org.openurp.platform.portal</groupId>
   <artifactId>openurp-platform-portal-nav</artifactId>
