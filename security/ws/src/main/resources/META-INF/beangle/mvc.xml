@@ -2,7 +2,7 @@
 <mvc>
   <profile name="openurp-platform-securityws" package="org.openurp.platform.security.ws">
    <action suffix="WS" defaultMethod="index"/>
-   <url path="/security/{app}/" suffix="" style="plur-seo" />
+   <url path="/{app}/" suffix="" style="plur-seo" />
    <interceptors>
       <interceptor name="web.Interceptor.hibernate"/>
       <interceptor name="web.Interceptor.cors"/>

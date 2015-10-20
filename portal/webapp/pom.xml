@@ -1,0 +1,63 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.openurp.platform.portal</groupId>
+    <artifactId>openurp-platform-portal-parent</artifactId>
+    <version>0.0.4-SNAPSHOT</version>
+  </parent>
+  <groupId>org.openurp.platform.portal</groupId>
+  <artifactId>openurp-platform-portal-webapp</artifactId>
+  <packaging>war</packaging>
+  <name>OpenURP Platform Portal Webapp</name>
+
+
+  <dependencies>
+    <dependency>
+      <groupId>org.openurp.platform.api</groupId>
+      <artifactId>openurp-platform-api-datasource</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.openurp.platform.security</groupId>
+      <artifactId>openurp-platform-security-core</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.beangle.webmvc</groupId>
+      <artifactId>beangle-webmvc-core_2.11</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.beangle.security</groupId>
+      <artifactId>beangle-security-cas_2.11</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.beangle.data</groupId>
+      <artifactId>beangle-data-hibernate_2.11</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-ehcache</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.beangle.webmvc</groupId>
+      <artifactId>beangle-webmvc-spring-plugin_2.11</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.beangle.webui</groupId>
+      <artifactId>beangle-webui-bootstrap_2.11</artifactId>
+      <version>${beangle.webui.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.beangle.webmvc</groupId>
+      <artifactId>beangle-webmvc-entity-plugin_2.11</artifactId>
+    </dependency>
+  </dependencies>
+
+</project>

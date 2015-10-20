@@ -1,6 +1,6 @@
 package org.openurp.platform.security.app
 
-import org.beangle.security.web.PreauthToken
+import org.beangle.security.web.authc.PreauthToken
 
 object Token {
   val AppTokenName = "app_token"

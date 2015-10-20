@@ -12,7 +12,6 @@ class App extends IntId with Named with Principal {
   var appType: String = _
   var url: String = _
   var logoUrl: String = _
-//  var trusted:Boolean=_
   def getName = name
   
 }

@@ -1,7 +1,7 @@
 package org.openurp.platform.security.app
 
 import org.beangle.security.mgt.SecurityManager
-import org.beangle.security.web.{ AbstractPreauthFilter, PreauthToken }
+import org.beangle.security.web.authc.{ AbstractPreauthFilter, PreauthToken }
 
 import javax.servlet.http.{ HttpServletRequest, HttpServletResponse }
 /**

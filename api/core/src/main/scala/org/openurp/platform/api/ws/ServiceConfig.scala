@@ -12,7 +12,7 @@ object ServiceConfig {
 
   val wsBase = "http://" + readConfig(location, "service", "localhost:8080")
 
-  val dsBase = "http://" + readConfig(location, "data", "localhost:8080")
+  val platformBase = "http://" + readConfig(location, "platform", "localhost:8080")
 
   def readConfig(location: String, property: String, defaultValue: String): String = {
     val configs = ClassLoaders.getResources(location)

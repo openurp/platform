@@ -13,6 +13,7 @@
 
   <modules>
     <module>nav</module>
+    <module>webapp</module>
   </modules>
 
 </project>

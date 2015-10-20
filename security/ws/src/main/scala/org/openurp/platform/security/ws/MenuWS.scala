@@ -22,9 +22,7 @@ class MenuWS extends ActionSupport with EntitySupport[Menu] {
 
     get("indexno") foreach { indexno =>
       builder.where("menu.indexno like :indexno and length(menu.indexno) > :length ", indexno + ".%", indexno.length)
-
-      if (!getBoolean("flat", false))
-        builder.where("menu.indexno not like :indexno2", indexno + ".%.%")
+      if (!getBoolean("flat", false)) builder.where("menu.indexno not like :indexno2", indexno + ".%.%")
     }
     builder.orderBy("menu.indexno").limit(null)
   }
@@ -38,15 +36,12 @@ class MenuWS extends ActionSupport with EntitySupport[Menu] {
     val rs = entityDao.search(builder)
     val menus = new collection.mutable.ListBuffer[Properties]
     val flat = get("top").isDefined || getBoolean("flat", false)
-    for (one <- rs) {
-      menus += convert(one, flat)
-    }
-    menus
+    rs map (one => convert(one, flat))
   }
 
   private def convert(one: Menu, flat: Boolean): Properties = {
     val menu = new Properties(one, "id", "name", "indexno")
-    if (null != one.entry) menu.put("entry", one.entry.name)
+    if (null != one.entry) menu.put("entry", one.entry.name + (if (null != one.params) "?" + one.params else ""))
     if (!one.children.isEmpty && !flat) {
       val children = new collection.mutable.ListBuffer[Properties]
       for (child <- one.children) {

@@ -21,6 +21,6 @@ class DefaultModule extends AbstractBindModule {
 class DefaultSecurityModule extends AbstractBindModule with PropertySource {
   protected override def binding() {}
   def properties: collection.Map[String, String] = {
-    Map("security.login.url" -> "/security/login")
+    Map("security.login.url" -> "/login")
   }
 }

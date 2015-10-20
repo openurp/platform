@@ -18,7 +18,7 @@ class IndexAction extends ActionSupport {
     query.where("menu.profile.app.name=:app", AppConfig.name).where("menu.parent is null")
     query.orderBy("menu.indexno")
     put("menus", entityDao.search(query))
-    val apps = entityDao.getAll(classOf[App])
+    val apps = entityDao.search(OqlBuilder.from(classOf[App],"app").where("app.appType='web-app'"));
     put("appName",AppConfig.name)
     put("apps", apps)
     if (!apps.isEmpty) {

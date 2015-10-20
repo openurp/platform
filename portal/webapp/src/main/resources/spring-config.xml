@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+  
+  <bean id="security.EntryPoint.cas" class="org.beangle.security.web.EntryPoint"  primary="true"/>
+  
+    <bean id="web.Interceptor.security">
+      <constructor-arg >
+        <list>
+			<ref bean="security.Filter.cas"/>
+			<ref bean="security.Filter.authorization"/>
+        </list>
+      </constructor-arg>
+      <constructor-arg value="?"/>
+      <constructor-arg value="?"/>
+      <constructor-arg value="?"/>
+  </bean>
+
+  <bean id="security.Authenticator.realm">
+    <constructor-arg>
+     <list>
+       <ref bean="security.Realm.cas"/>
+     </list>
+    </constructor-arg>
+  </bean>
+</beans>

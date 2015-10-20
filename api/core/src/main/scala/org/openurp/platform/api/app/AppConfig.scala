@@ -59,8 +59,11 @@ object AppConfig extends Logging {
     else None
   }
 
-  def getFile(path: String): Option[File] = {
-    val homefile = new File(urphome + path + path)
+  def getFile(file: String): Option[File] = {
+    val homefile =
+      if (file.startsWith("/")) new File(urphome + path + file)
+      else new File(urphome + path + "/" + file)
+
     if (homefile.exists) Some(homefile)
     else None
   }
@@ -74,6 +77,6 @@ object AppConfig extends Logging {
   }
 
   def getDatasourceUrl(resourceKey: String): String = {
-    ServiceConfig.dsBase + "/app/" + name + "/resource/datasources/" + resourceKey + ".json?secret=" + secret
+    ServiceConfig.platformBase + "/service/kernel/datasource/" + name + "/" + resourceKey + ".json?secret=" + secret
   }
 }

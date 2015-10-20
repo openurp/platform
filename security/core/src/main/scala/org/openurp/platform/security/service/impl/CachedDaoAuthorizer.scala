@@ -27,7 +27,8 @@ class CachedDaoAuthorizer(permissionService: FuncPermissionManager, cacheManager
   }
 
   private def isAuthorized(account: Account, resourceId: Integer): Boolean = {
-    account.authorities.asInstanceOf[Iterable[Integer]].exists { roleId =>
+    if (account.details.contains("isRoot")) true
+    else account.authorities.asInstanceOf[Iterable[Integer]].exists { roleId =>
       roleAuthorities.get(roleId) match {
         case Some(actions) => actions.contains(resourceId)
         case None =>
