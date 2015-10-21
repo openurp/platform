@@ -74,7 +74,6 @@ class UserProfile extends LongId with Profile {
 }
 
 class Role extends IntId with Named with Updated with Enabled with Hierarchical[Role] with Profile with Principal {
-  var app: App = _
   var properties: collection.mutable.Map[Dimension, String] = new collection.mutable.HashMap[Dimension, String]
   var creator: User = _
   var members: collection.mutable.Seq[Member] = new collection.mutable.ListBuffer[Member]

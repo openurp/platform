@@ -83,7 +83,7 @@ class UserAction extends RestfulAction[User] {
     var queryRole = false
     val app = entityDao.get(classOf[App], intId("app"))
     if (!userManager.isRoot(manager, app.name)) {
-      val members = userManager.getMembers(manager, app, MemberShip.Manager)
+      val members = userManager.getMembers(manager, MemberShip.Manager)
       val mngRoles = members.map(m => m.role)
       if (mngRoles.isEmpty) {
         sb.append("1=0")
@@ -120,13 +120,13 @@ class UserAction extends RestfulAction[User] {
     val userMembers = user.members
     val app = entityDao.get(classOf[App], intId("app"))
     val memberMap = new collection.mutable.HashMap[Role, Member]
-    for (gm <- userMembers if gm.role.app == app) {
+    for (gm <- userMembers) {
       memberMap.put(gm.role, gm.asInstanceOf[Member])
     }
     val newMembers = new collection.mutable.HashSet[Member]
     val removedMembers = new collection.mutable.HashSet[Member]
     val manager = loginUser
-    val members = userManager.getMembers(manager, app, MemberShip.Granter)
+    val members = userManager.getMembers(manager, MemberShip.Granter)
     for (member <- members) {
       var myMember = memberMap(member.role)
       val isMember = getBoolean("member" + member.role.id, false)
@@ -153,10 +153,10 @@ class UserAction extends RestfulAction[User] {
   protected override def editSetting(user: User) {
     val app = entityDao.get(classOf[App], intId("app"))
     val manager = loginUser
-    val isAdmin= userManager.isRoot(user, app.name)
+    val isAdmin = userManager.isRoot(user, app.name)
     val roles = new collection.mutable.HashSet[Role]
     val managerMemberMap = new collection.mutable.HashMap[Role, Member]
-    val members = userManager.getMembers(manager, app, MemberShip.Granter)
+    val members = userManager.getMembers(manager, MemberShip.Granter)
     for (gm <- members) {
       roles.add(gm.role)
       managerMemberMap.put(gm.role, gm)
@@ -164,13 +164,13 @@ class UserAction extends RestfulAction[User] {
     put("roles", roles)
 
     val memberMap = new collection.mutable.HashMap[Role, Member]
-    for (gm <- user.members if gm.role.app == app) {
+    for (gm <- user.members) {
       memberMap.put(gm.role, gm)
     }
     put("memberMap", memberMap)
     put("curMemberMap", managerMemberMap)
     //FIXME
-    put("isadmin",isAdmin)
+    put("isadmin", isAdmin)
     put("isme", manager.id == user.id)
     put("app", app)
   }

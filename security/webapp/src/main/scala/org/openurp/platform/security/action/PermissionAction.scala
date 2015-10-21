@@ -71,7 +71,7 @@ class PermissionAction extends RestfulAction[FuncPermission] {
         val menuSet = new collection.mutable.HashSet[Menu]
         for (m <- user.members) {
           if (m.granter) {
-            menuSet ++= menuService.getMenus(menuProfile, m.role, Some(true))
+            menuSet ++= menuService.getMenus(menuProfile, m.role)
             params.put("roleId", m.role.id)
             resources ++= entityDao.search(OqlBuilder.oql[FuncResource](hql).params(params))
           }
@@ -86,7 +86,7 @@ class PermissionAction extends RestfulAction[FuncPermission] {
         menus --= freezed
       }
       val permissions = funcPermissionManager.getPermissions(role)
-      val roleMenus = menuService.getMenus(menuProfile, role, None)
+      val roleMenus = menuService.getMenus(menuProfile, role)
       val roleResources = permissions.map(p => p.resource).toSet
       put("roleMenus", roleMenus.toSet)
       put("roleResources", roleResources)
@@ -97,7 +97,7 @@ class PermissionAction extends RestfulAction[FuncPermission] {
       var parent = role.parent
       while (null != parent && !parents.contains(parent)) {
         val parentPermissions = funcPermissionManager.getPermissions(parent)
-        parentMenus ++= menuService.getMenus(menuProfile, parent, null)
+        parentMenus ++= menuService.getMenus(menuProfile, parent)
         for (permission <- parentPermissions) {
           parentResources += permission.resource
         }
@@ -140,7 +140,7 @@ class PermissionAction extends RestfulAction[FuncPermission] {
     if (isAdmin(manager)) {
       mngMenus = menuProfile.menus.toSet
     } else {
-      mngMenus = menuService.getMenus(menuProfile, manager, manager.profiles).toSet
+      mngMenus = menuService.getMenus(menuProfile, manager).toSet
     }
     for (m <- mngMenus) {
       mngResources ++= m.resources

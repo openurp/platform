@@ -3,7 +3,7 @@
   
   <bean id="security.EntryPoint.cas" class="org.beangle.security.web.EntryPoint"  primary="true"/>
   
-    <bean id="web.Interceptor.security">
+  <bean id="web.Interceptor.security">
       <constructor-arg >
         <list>
 			<ref bean="security.Filter.cas"/>

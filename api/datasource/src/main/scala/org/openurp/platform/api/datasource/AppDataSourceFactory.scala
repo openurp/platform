@@ -15,9 +15,7 @@ class AppDataSourceFactory extends DataSourceFactory {
   }
 
   protected override def postInit(): Unit = {
-    if (this.password != null) {
-      this.password = new AesEncryptor(AppConfig.secret).decrypt(password)
-    }
+    if (this.password != null) this.password = new AesEncryptor(AppConfig.secret).decrypt(password)
   }
 
 }

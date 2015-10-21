@@ -4,7 +4,6 @@
     <module class="org.openurp.platform.portal.web.DefaultModule"/>
   </container>
   <container>
-    <module class="org.beangle.security.realm.cas.DefaultModule"/>
     <module class="org.openurp.platform.portal.web.DefaultServiceModule"/>
   </container>
 </cdi>

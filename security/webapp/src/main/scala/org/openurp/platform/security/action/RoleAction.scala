@@ -30,6 +30,7 @@ import org.openurp.platform.security.service.{ DataResolver, ProfileService, Rol
 import org.openurp.platform.security.helper.AppHelper
 import org.openurp.platform.api.security.Securities
 import org.openurp.platform.security.service.impl.CsvDataResolver
+import org.openurp.platform.api.app.AppConfig
 /**
  * 角色信息维护响应类
  *
@@ -58,7 +59,7 @@ class RoleAction(val roleManager: RoleManager, val userService: UserService) ext
     put("role", role)
     val query = OqlBuilder.from(classOf[Role], "role")
     val me = entityDao.findBy(classOf[User], "code", List(Securities.user)).head
-    if (!userService.isRoot(me, role.app.name)) {
+    if (!userService.isRoot(me, AppConfig.name)) {
       query.join("role.members", "gm")
       query.where("gm.user=:me and gm.manager=true", me)
     }
@@ -129,7 +130,8 @@ class RoleAction(val roleManager: RoleManager, val userService: UserService) ext
     val role = entityDao.get(classOf[Role], intId("role"))
     val me = entityDao.findBy(classOf[User], "code", List(Securities.user)).head
     val helper = new ProfileHelper(entityDao, profileService)
-    helper.fillEditInfo(role, userService.isRoot(me, role.app.name), role.app)
+    val app = entityDao.get(classOf[App], intId("app"))
+    helper.fillEditInfo(role, userService.isRoot(me, app.name), app)
     put("role", role)
     forward()
   }
@@ -146,7 +148,8 @@ class RoleAction(val roleManager: RoleManager, val userService: UserService) ext
     val helper = new ProfileHelper(entityDao, profileService)
     helper.dataResolver = dataResolver
     val role = entityDao.get(classOf[Role], intId("role"))
-    helper.populateSaveInfo(role, userService.isRoot(me, role.app.name), role.app)
+    val app = entityDao.get(classOf[App], intId("app"))
+    helper.populateSaveInfo(role, userService.isRoot(me, app.name), app)
     entityDao.saveOrUpdate(role)
     redirect("profile", "info.save.success")
   }

@@ -4,13 +4,12 @@ import java.net.URL
 import org.beangle.commons.io.IOs
 import org.beangle.commons.lang.{ ClassLoaders, SystemInfo }
 import org.beangle.commons.logging.Logging
-import org.openurp.platform.api.ws.ServiceConfig
-import java.io.FileInputStream
 import org.beangle.commons.lang.Strings
+import org.openurp.platform.api.Urp
+import java.io.FileInputStream
 import java.io.File
 
 object AppConfig extends Logging {
-  val urphome = SystemInfo.properties.get("OPENURP_HOME").getOrElse(SystemInfo.user.home + "/.openurp")
 
   val properties: Map[String, String] = readProperties
   val name: String = properties("name")
@@ -39,10 +38,10 @@ object AppConfig extends Logging {
 
     val result = new collection.mutable.HashMap[String, String]
     result ++= appManifest
-    result ++= readProperties(new File(urphome + appPath + "/conf.properties"))
+    result ++= IOs.readJavaProperties(new File(Urp.home + appPath + "/conf.properties").toURI.toURL)
     result.put("path", appPath)
 
-    val appFile = new File(urphome + appPath + ".xml")
+    val appFile = new File(Urp.home + appPath + ".xml")
     if (appFile.exists()) {
       val is = new FileInputStream(appFile)
       scala.xml.XML.load(is) \\ "app" foreach { app =>
@@ -54,29 +53,21 @@ object AppConfig extends Logging {
   }
 
   def getAppConfigFile: Option[File] = {
-    val homefile = new File(urphome + path + ".xml")
+    val homefile = new File(Urp.home + path + ".xml")
     if (homefile.exists) Some(homefile)
     else None
   }
 
   def getFile(file: String): Option[File] = {
     val homefile =
-      if (file.startsWith("/")) new File(urphome + path + file)
-      else new File(urphome + path + "/" + file)
+      if (file.startsWith("/")) new File(Urp.home + path + file)
+      else new File(Urp.home + path + "/" + file)
 
     if (homefile.exists) Some(homefile)
     else None
   }
 
-  private def readProperties(files: File*): Map[String, String] = {
-    val result = new collection.mutable.HashMap[String, String]
-    files foreach { file =>
-      if (file.exists) result ++= IOs.readJavaProperties(file.toURL())
-    }
-    result.toMap
-  }
-
   def getDatasourceUrl(resourceKey: String): String = {
-    ServiceConfig.platformBase + "/service/kernel/datasource/" + name + "/" + resourceKey + ".json?secret=" + secret
+    Urp.platformBase + "/kernel/datasource/" + name + "/" + resourceKey + ".json?secret=" + secret
   }
 }

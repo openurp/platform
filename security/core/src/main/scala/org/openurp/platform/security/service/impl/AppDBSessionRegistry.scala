@@ -14,10 +14,15 @@ class AppDBSessionRegistry(builder: SessionBuilder, executor: JdbcExecutor) exte
   var entityDao: EntityDao = _
 
   override def init() {
-    val app = entityDao.findBy(classOf[App], "name", List(AppConfig.name)).head
-    this.sessionTable = "app_" + app.id + "_session_infoes"
-    this.statTable = "app_" + app.id + "_session_stats"
-    super.init()
+    val apps = entityDao.findBy(classOf[App], "name", List(AppConfig.name))
+    if (apps.size == 1) {
+      val app = apps.head
+      this.sessionTable = "app_" + app.id + "_session_infoes"
+      this.statTable = "app_" + app.id + "_session_stats"
+      super.init()
+    } else {
+      throw new RuntimeException(s"Cannot find app [${AppConfig.name}]in registry")
+    }
   }
 
 }

@@ -10,8 +10,6 @@ import org.openurp.platform.security.service.FuncPermissionManager
 class CachedDaoAuthorizer(permissionService: FuncPermissionManager, cacheManager: CacheManager) extends Authorizer {
   var unknownIsPublic = true
 
-  var roleAuthorities: Cache[Integer, Set[Integer]] = cacheManager.getCache("dao-authorizer-cache")
-
   override def isPermitted(session: Option[Session], request: Request): Boolean = {
     val resourceName = request.resource.toString
     val rscOption = permissionService.getResource(resourceName)
@@ -28,15 +26,7 @@ class CachedDaoAuthorizer(permissionService: FuncPermissionManager, cacheManager
 
   private def isAuthorized(account: Account, resourceId: Integer): Boolean = {
     if (account.details.contains("isRoot")) true
-    else account.authorities.asInstanceOf[Iterable[Integer]].exists { roleId =>
-      roleAuthorities.get(roleId) match {
-        case Some(actions) => actions.contains(resourceId)
-        case None =>
-          val newActions = permissionService.getResourceNamesByRole(roleId)
-          roleAuthorities.put(roleId, newActions)
-          newActions.contains(resourceId)
-      }
-    }
+    else account.authorities.asInstanceOf[Set[Integer]].contains(resourceId)
   }
 
 }

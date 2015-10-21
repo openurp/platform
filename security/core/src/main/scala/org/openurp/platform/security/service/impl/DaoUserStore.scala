@@ -5,6 +5,8 @@ import org.beangle.data.dao.EntityDao
 import org.beangle.security.authc.{ Account, AccountStore, DefaultAccount }
 import org.openurp.platform.api.app.AppConfig
 import org.openurp.platform.security.service.UserService
+import org.beangle.data.dao.OqlBuilder
+import org.openurp.platform.security.model.FuncPermission
 
 class DaoUserStore(userService: UserService, entityDao: EntityDao) extends AccountStore {
 
@@ -17,7 +19,9 @@ class DaoUserStore(userService: UserService, entityDao: EntityDao) extends Accou
         account.accountLocked = user.locked
         account.credentialExpired = user.credentialExpired
         account.disabled = !user.enabled
-        account.authorities = user.roles.filter(role => role.app.name == AppConfig.name).map(role => role.id)
+        val query = OqlBuilder.from(classOf[FuncPermission], "fp").join("fp.role.members", "m").where("m.member=true and m.user=:user", user)
+          .where("fp.resource.app.name=:appName", AppConfig.name).where("fp.endOn is null or fp.endOn < :now)", new java.util.Date).select("fp.id")
+        account.authorities = entityDao.search(query).toSet
         account.details += "credential" -> user.credential
         account.details += "isRoot" -> userService.isRoot(user, AppConfig.name)
         Some(account)
