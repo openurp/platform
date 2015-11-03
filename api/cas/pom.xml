@@ -31,7 +31,7 @@
     </dependency>
     <dependency>
       <groupId>org.openurp.platform.api</groupId>
-      <artifactId>openurp-platform-api-core</artifactId>
+      <artifactId>openurp-platform-api-datasource</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>

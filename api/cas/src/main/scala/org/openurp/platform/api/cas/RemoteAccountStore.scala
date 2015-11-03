@@ -17,7 +17,7 @@ class RemoteAccountStore extends AccountStore {
     val url = Urp.platformBase + "/security/" + UrpApp.name + "/accounts/" + principal.toString + ".json"
     val data = JSON.parse(HttpUtils.getResponseText(url)).asInstanceOf[collection.Map[String, _]]
     val account = new DefaultAccount(principal, data("description").toString)
-    account.authorities = data("authorities").asInstanceOf[collection.Seq[Integer]].toSet
+    account.authorities = data("authorities").asInstanceOf[collection.Iterable[Number]].map { x => x.intValue }.toSet
     account.details ++= data("details").asInstanceOf[collection.Map[String, _]]
     account.accountLocked = data("accountLocked").asInstanceOf[Boolean]
     account.accountExpired = data("accountExpired").asInstanceOf[Boolean]

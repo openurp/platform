@@ -53,7 +53,7 @@ class RemoteAuthorizer extends Authorizer {
     val script = IOs.readString(new URL(url).openStream())
     val r = JSON.parse(script).asInstanceOf[Properties]
     if (r.contains("id")) {
-      Some(Resource(Integer.parseInt(r("id").toString), r("scope").toString))
+      Some(Resource(r("id").asInstanceOf[Number].intValue, r("scope").toString))
     } else {
       None
     }
