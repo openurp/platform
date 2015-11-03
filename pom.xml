@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.openurp</groupId>
     <artifactId>openurp-parent</artifactId>
-    <version>0.0.16-SNAPSHOT</version>
+    <version>0.0.16</version>
   </parent>
   <groupId>org.openurp.platform</groupId>
   <artifactId>openurp-platform-parent</artifactId>
@@ -13,7 +13,7 @@
   <name>OpenURP Platform Parent</name>
 
   <properties>
-    <beangle.webui.version>0.0.3-SNAPSHOT</beangle.webui.version>
+    <beangle.webui.version>0.0.3</beangle.webui.version>
     <hibernate.version>4.3.1.Final</hibernate.version>
   </properties>
 

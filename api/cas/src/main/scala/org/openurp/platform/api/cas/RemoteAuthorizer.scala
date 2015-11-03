@@ -58,8 +58,8 @@ class RemoteAuthorizer extends Authorizer {
       None
     }
   }
-
 }
+
 object Resource {
   def apply(id: Int, scope: String): Resource = {
     val scopes = Map("Private" -> 2, "Protected" -> 1, "Public" -> 0)
