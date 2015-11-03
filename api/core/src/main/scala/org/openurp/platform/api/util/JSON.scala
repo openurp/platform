@@ -23,7 +23,7 @@ object JSON {
           val result = new Properties
           while (iter.hasNext) {
             val one = iter.next
-            result.put(one.getKey.toString, one.getValue)
+            result.put(one.getKey.toString, convert(one.getValue.asInstanceOf[Object]))
           }
           result
         }
@@ -31,6 +31,32 @@ object JSON {
     }
   }
 
+  def convert(value: Object): Object = {
+    value match {
+      case d: String => d
+      case n: Number => n
+      case b: ju.Map[_, _] =>
+        val iter = b.entrySet().iterator()
+        val signature = b.toString
+        if (signature.contains("Array")) {
+          val result = new collection.mutable.ArrayBuffer[Any]
+          while (iter.hasNext) {
+            val one = iter.next
+            result += convert(one.getValue.asInstanceOf[Object])
+          }
+          result
+        } else {
+          val result = new Properties
+          while (iter.hasNext) {
+            val one = iter.next
+            result.put(one.getKey.toString, convert(one.getValue.asInstanceOf[Object]))
+          }
+          result
+        }
+      case l: ju.Collection[_] => collection.JavaConversions.collectionAsScalaIterable(l)
+      case _ => value
+    }
+  }
   def isArray(str: String): Boolean = {
     var i = 0;
     while (i < str.length) {

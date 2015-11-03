@@ -19,6 +19,11 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
+      <groupId>org.openurp.platform.api</groupId>
+      <artifactId>openurp-platform-api-cas</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
       <groupId>org.openurp.platform.security</groupId>
       <artifactId>openurp-platform-security-core</artifactId>
       <version>${project.version}</version>
@@ -32,11 +37,6 @@
       <artifactId>beangle-webmvc-core_2.11</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.beangle.security</groupId>
-      <artifactId>beangle-security-cas_2.11</artifactId>
-    </dependency>
-
-    <dependency>
       <groupId>org.beangle.data</groupId>
       <artifactId>beangle-data-hibernate_2.11</artifactId>
     </dependency>
@@ -44,7 +44,6 @@
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-ehcache</artifactId>
     </dependency>
-
     <dependency>
       <groupId>org.beangle.webmvc</groupId>
       <artifactId>beangle-webmvc-spring-plugin_2.11</artifactId>

@@ -7,5 +7,6 @@ class DefaultModule extends AbstractBindModule {
   protected override def binding() {
     bind(classOf[MenuWS], classOf[MenuProfileWS])
     bind(classOf[FuncResourceWS], classOf[DataResourceWS])
+    bind(classOf[AccountWS])
   }
 }

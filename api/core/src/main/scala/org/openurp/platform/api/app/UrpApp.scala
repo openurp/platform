@@ -8,18 +8,38 @@ import org.beangle.commons.lang.Strings
 import org.openurp.platform.api.Urp
 import java.io.FileInputStream
 import java.io.File
+import org.openurp.platform.api.util.JSON
+import org.beangle.commons.collection.Properties
+import org.beangle.commons.web.util.HttpUtils
+import org.beangle.commons.conversion.converter.String2DateConverter
 
-object AppConfig extends Logging {
+object UrpApp extends Logging {
 
-  val properties: Map[String, String] = readProperties
-  val name: String = properties("name")
-  val path: String = properties("path")
+  val properties: Map[String, Any] = readProperties
+  val name: String = properties("name").asInstanceOf[String]
+  val path: String = properties("path").asInstanceOf[String]
+
+  private var _token: Token = _
 
   def secret: String = {
-    properties.getOrElse("secret", name)
+    properties.getOrElse("secret", name).asInstanceOf[String]
   }
 
-  private def readProperties(): Map[String, String] = {
+  def token: String = {
+    if (null != _token) {
+      _token.expiredAt < System.currentTimeMillis()
+      _token = null
+    }
+
+    if (null == _token) {
+      val tokenUrl = Urp.platformBase + "/kernel/token/login?app=" + name + "&secret=" + secret
+      val token = JSON.parse(HttpUtils.getResponseText(tokenUrl)).asInstanceOf[Properties]
+      _token = Token(token("token").asInstanceOf[String], (new String2DateConverter).convert(token("expiredAt"), classOf[java.util.Date]).asInstanceOf[java.util.Date].getTime)
+    }
+    _token.token
+  }
+
+  private def readProperties(): Map[String, Any] = {
     val configs = ClassLoaders.getResources("META-INF/openurp/app.properties")
     val appManifest = if (configs.isEmpty) {
       Map.empty[String, String]
@@ -36,9 +56,10 @@ object AppConfig extends Logging {
     if (appPath.startsWith("openurp/")) appPath = Strings.substringAfter(appPath, "openurp")
     else appPath = "/" + appPath
 
-    val result = new collection.mutable.HashMap[String, String]
+    val result = new collection.mutable.HashMap[String, Any]
     result ++= appManifest
-    result ++= IOs.readJavaProperties(new File(Urp.home + appPath + "/conf.properties").toURI.toURL)
+    val appconf = new File(Urp.home + appPath + "/conf.properties")
+    if (appconf.exists) result ++= IOs.readJavaProperties(appconf.toURI.toURL)
     result.put("path", appPath)
 
     val appFile = new File(Urp.home + appPath + ".xml")
@@ -52,7 +73,7 @@ object AppConfig extends Logging {
     result.toMap
   }
 
-  def getAppConfigFile: Option[File] = {
+  def getUrpAppFile: Option[File] = {
     val homefile = new File(Urp.home + path + ".xml")
     if (homefile.exists) Some(homefile)
     else None
@@ -67,7 +88,6 @@ object AppConfig extends Logging {
     else None
   }
 
-  def getDatasourceUrl(resourceKey: String): String = {
-    Urp.platformBase + "/kernel/datasource/" + name + "/" + resourceKey + ".json?secret=" + secret
-  }
 }
+
+case class Token(token: String, expiredAt: Long)

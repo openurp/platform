@@ -2,7 +2,7 @@ package org.openurp.platform.portal.web.action
 
 import org.beangle.data.dao.EntityDao
 import org.beangle.webmvc.api.action.ActionSupport
-import org.openurp.platform.api.app.AppConfig
+import org.openurp.platform.api.app.UrpApp
 import org.openurp.platform.kernel.model.App
 import org.beangle.security.context.SecurityContext
 import org.beangle.webmvc.api.view.View
@@ -16,7 +16,7 @@ class IndexAction(entityDao: EntityDao, securityManager: SecurityManager) extend
   var config: CasConfig = _
 
   def index(): String = {
-    val app = entityDao.findBy(classOf[App], "name", List(AppConfig.name)).head
+    val app = entityDao.findBy(classOf[App], "name", List(UrpApp.name)).head
     put("app", app)
     forward()
   }

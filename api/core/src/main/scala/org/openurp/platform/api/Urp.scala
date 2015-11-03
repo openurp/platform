@@ -32,8 +32,8 @@ object Urp {
         case Some(v) => v
         case None =>
           properties.get("openurp.base") match {
-            case Some(base) => Strings.replace(property, ".openurp", "") + "." + base
-            case None => defaultValue
+            case Some(base) => Strings.replace(property, "openurp.", "") + "." + base
+            case None => Strings.replace(defaultValue, "openurp.", "")
           }
       }
     }

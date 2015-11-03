@@ -11,16 +11,4 @@ class DefaultModule extends AbstractBindModule {
   override def binding() {
     bind(classOf[AppAction], classOf[IndexAction])
   }
-
-}
-
-class DefaultServiceModule extends AbstractBindModule with PropertySource {
-
-  override def binding() {
-  }
-
-  override def properties: collection.Map[String, String] = {
-    val casUrl = Urp.properties.get("security.cas.server").getOrElse(Urp.platformBase + "/cas")
-    Map("security.cas.server" -> casUrl)
-  }
 }

@@ -30,7 +30,7 @@ import org.openurp.platform.security.service.{ DataResolver, ProfileService, Rol
 import org.openurp.platform.security.helper.AppHelper
 import org.openurp.platform.api.security.Securities
 import org.openurp.platform.security.service.impl.CsvDataResolver
-import org.openurp.platform.api.app.AppConfig
+import org.openurp.platform.api.app.UrpApp
 /**
  * 角色信息维护响应类
  *
@@ -59,7 +59,7 @@ class RoleAction(val roleManager: RoleManager, val userService: UserService) ext
     put("role", role)
     val query = OqlBuilder.from(classOf[Role], "role")
     val me = entityDao.findBy(classOf[User], "code", List(Securities.user)).head
-    if (!userService.isRoot(me, AppConfig.name)) {
+    if (!userService.isRoot(me, UrpApp.name)) {
       query.join("role.members", "gm")
       query.where("gm.user=:me and gm.manager=true", me)
     }

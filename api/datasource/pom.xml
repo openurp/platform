@@ -20,15 +20,7 @@
   <dependencies>
     <dependency>
       <groupId>org.beangle.data</groupId>
-      <artifactId>beangle-data-model_2.11</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.beangle.data</groupId>
       <artifactId>beangle-data-jdbc_2.11</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.beangle.security</groupId>
-      <artifactId>beangle-security-core_2.11</artifactId>
     </dependency>
     <dependency>
       <groupId>org.openurp.platform.api</groupId>

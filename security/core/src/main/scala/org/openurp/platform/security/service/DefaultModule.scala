@@ -1,16 +1,14 @@
 package org.openurp.platform.security.service
 
 import org.beangle.commons.inject.bind.AbstractBindModule
-import org.openurp.platform.security.service.impl.{ FuncPermissionManagerImpl, ProfileServiceImpl, RoleManagerImpl, UserManagerImpl }
-import org.openurp.platform.security.service.impl.DaoUserRealm
-import org.openurp.platform.security.service.impl.DaoUserStore
-import org.openurp.platform.security.service.impl.CachedDaoAuthorizer
-import org.beangle.security.session.jdbc.DBSessionRegistry
 import org.beangle.data.jdbc.query.JdbcExecutor
-import org.beangle.security.session.DefaultSessionBuilder
-import org.openurp.platform.security.service.impl.MenuServiceImpl
-import org.openurp.platform.security.service.impl.SessionProfileProvider
-import org.openurp.platform.security.service.impl.AppDBSessionRegistry
+import org.beangle.security.authc.RealmAuthenticator
+import org.beangle.security.mgt.DefaultSecurityManager
+import org.beangle.security.realm.cas.{ CasConfig, CasEntryPoint, CasPreauthFilter, DefaultCasRealm, DefaultTicketValidator }
+import org.beangle.security.session.{ DefaultSessionBuilder, SessionCleaner }
+import org.beangle.security.web.access.{ AuthorizationFilter, DefaultAccessDeniedHandler, SecurityInterceptor }
+import org.beangle.security.web.session.DefaultSessionIdPolicy
+import org.openurp.platform.security.service.impl.{ CachedDaoAuthorizer, DaoUserStore, FuncPermissionManagerImpl, MenuServiceImpl, ProfileServiceImpl, RoleManagerImpl, SessionProfileProvider, UserManagerImpl }
 
 class DefaultModule extends AbstractBindModule {
 
@@ -18,12 +16,5 @@ class DefaultModule extends AbstractBindModule {
     bind(classOf[UserManagerImpl], classOf[RoleManagerImpl])
     bind(classOf[MenuServiceImpl])
     bind(classOf[ProfileServiceImpl], classOf[FuncPermissionManagerImpl])
-    //登录和权限检查
-    bind("security.Realm.dao", classOf[DaoUserRealm])
-    bind(classOf[DaoUserStore])
-    bind("security.Authorizer.dao", classOf[CachedDaoAuthorizer])
-    bind(classOf[AppDBSessionRegistry]).primary()
-    bind(classOf[JdbcExecutor])
-    bind(classOf[SessionProfileProvider])
   }
 }

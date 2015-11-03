@@ -29,5 +29,9 @@
       <groupId>org.beangle.security</groupId>
       <artifactId>beangle-security-session_2.11</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.beangle.security</groupId>
+      <artifactId>beangle-security-cas_2.11</artifactId>
+    </dependency>
   </dependencies>
 </project>

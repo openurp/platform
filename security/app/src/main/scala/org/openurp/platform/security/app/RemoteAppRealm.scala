@@ -3,7 +3,7 @@ package org.openurp.platform.security.app
 import java.net.URL
 import org.beangle.commons.io.IOs
 import org.beangle.security.authc.{ DefaultAccount, AbstractAccountRealm, Account, AccountStore, AuthenticationToken, BadCredentialsException }
-import org.openurp.platform.api.app.AppConfig
+import org.openurp.platform.api.app.UrpApp
 import org.openurp.platform.security.app.Token.AppTokenName
 import org.openurp.platform.api.util.JSON
 

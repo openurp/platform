@@ -22,6 +22,10 @@
       <artifactId>openurp-platform-api-datasource</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.openurp.platform.api</groupId>
+      <artifactId>openurp-platform-api-cas</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.openurp.platform.security</groupId>
       <artifactId>openurp-platform-security-core</artifactId>
     </dependency>

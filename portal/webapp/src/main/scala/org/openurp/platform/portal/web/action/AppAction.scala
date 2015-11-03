@@ -2,7 +2,7 @@ package org.openurp.platform.portal.web.action
 
 import org.beangle.data.dao.{ EntityDao, OqlBuilder }
 import org.beangle.webmvc.api.action.ActionSupport
-import org.openurp.platform.api.app.AppConfig
+import org.openurp.platform.api.app.UrpApp
 import org.openurp.platform.api.security.Securities
 import org.openurp.platform.kernel.model.App
 import org.openurp.platform.security.model.User
@@ -27,7 +27,7 @@ class AppAction(entityDao: EntityDao) extends ActionSupport {
     val rootsQuery = OqlBuilder.from(classOf[Root], "root").where("root.user=:user", user)
     apps ++= entityDao.search(rootsQuery).map(a => a.app)
 
-    val app = entityDao.findBy(classOf[App], "name", List(AppConfig.name)).head
+    val app = entityDao.findBy(classOf[App], "name", List(UrpApp.name)).head
     val finalApps = apps.toSet.toBuffer
     put("apps", finalApps -= app)
     forward()

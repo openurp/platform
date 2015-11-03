@@ -2,35 +2,33 @@ package org.openurp.platform.kernel.ws
 
 import java.{ util => ju }
 import java.util.UUID
-
 import org.beangle.commons.collection.Properties
 import org.beangle.data.dao.{ EntityDao, OqlBuilder }
 import org.beangle.webmvc.api.action.ActionSupport
 import org.beangle.webmvc.api.annotation.{ param, response }
 import org.openurp.platform.kernel.model.{ AccessToken, App }
 import org.openurp.platform.kernel.service.TokenRepository
+import org.openurp.platform.kernel.service.AppService
 
-class TokenWS(val tokenRepository: TokenRepository) extends ActionSupport {
+class TokenWS(tokenRepository: TokenRepository, appService: AppService) extends ActionSupport {
 
   var entityDao: EntityDao = _
 
   @response
-  def login(@param("app") app: String, @param("secret") secret: String): Properties = {
-    val query = OqlBuilder.from(classOf[App], "app").where("app.name=:name and app.secret=:secret", app, secret)
+  def login(@param("app") name: String, @param("secret") secret: String): Properties = {
     val properties = new Properties
-    val rs = entityDao.search(query)
-    if (rs.isEmpty) {
-      properties.put("error", "Incorrect app name or secret!")
-    } else {
-      val app = rs.head
-      val token = new AccessToken
-      token.id = generateAccessTokenId()
-      token.appId = app.id
-      token.principal = app.name
-      token.expiredAt = this.generateExpiredAt()
-      tokenRepository.put(token)
-      properties.put("token", token.id)
-      properties.put("expiredAt", token.expiredAt)
+    appService.getApp(name, secret) match {
+      case None => properties.put("error", "Incorrect app name or secret!")
+      case Some(app) =>
+        val token = new AccessToken
+        token.id = generateAccessTokenId()
+        token.appId = app.id
+        token.principal = app.name
+        token.expiredAt = this.generateExpiredAt()
+        tokenRepository.put(token)
+        properties.put("token", token.id)
+        properties.put("appId", app.id)
+        properties.put("expiredAt", token.expiredAt)
     }
     properties
   }

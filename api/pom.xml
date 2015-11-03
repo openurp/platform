@@ -21,5 +21,6 @@
     <module>core</module>
     <module>datasource</module>
     <module>web</module>
+    <module>cas</module>
   </modules>
 </project>
