@@ -15,19 +15,4 @@
 </tr>
 </table>
 </div>
-<script>
-$.get("http://www.duantihua.com:9090/security/showcase/status/json", function(data) {
-  alert(data);
-})
-/*var jqxhr = $.get("http://www.duantihua.com:8080/code/kernel/code/nation", function(data) {
-alert(data);
-})
-.success(function() { alert("second success"); })
-.error(function(e) {
- alert(e);
- })
-.complete(function(jxhr) {
- alert("complete"); 
- });*/
-</script>
 [@b.foot/]

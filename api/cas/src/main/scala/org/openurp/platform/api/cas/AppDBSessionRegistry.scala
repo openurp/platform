@@ -6,10 +6,11 @@ import org.beangle.security.session.SessionBuilder
 import org.beangle.data.dao.EntityDao
 import org.openurp.platform.api.app.UrpApp
 import org.beangle.commons.lang.Strings
+import javax.sql.DataSource
 /**
  * @author chaostone
  */
-class AppDBSessionRegistry(builder: SessionBuilder, executor: JdbcExecutor) extends DBSessionRegistry(builder, executor) {
+class AppDBSessionRegistry(dataSource: DataSource) extends DBSessionRegistry(dataSource) {
 
   var entityDao: EntityDao = _
 

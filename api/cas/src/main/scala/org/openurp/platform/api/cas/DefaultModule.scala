@@ -11,6 +11,7 @@ import org.beangle.security.session.mem.MemSessionRegistry
 import org.beangle.security.web.access.{ AuthorizationFilter, DefaultAccessDeniedHandler, SecurityInterceptor }
 import org.beangle.security.web.session.DefaultSessionIdPolicy
 import org.openurp.platform.api.Urp
+import org.openurp.platform.api.datasource.AppDataSourceFactory
 
 class DefaultModule extends AbstractBindModule with PropertySource {
 
@@ -33,12 +34,11 @@ class DefaultModule extends AbstractBindModule with PropertySource {
     //session
     bind("security.SessionRegistry.mem", classOf[MemSessionRegistry])
     bind("security.SessionIdPolicy.default", classOf[DefaultSessionIdPolicy])
-    bind("security.SessionRegistry.app", classOf[AppDBSessionRegistry]).primary()
-    bind(classOf[JdbcExecutor])
+    bind("DataSource#security", classOf[AppDataSourceFactory]).property("name", "security")
+    bind("security.SessionRegistry.app", classOf[AppDBSessionRegistry])
+      .constructor(ref("DataSource#security")).primary()
     bind(classOf[SessionCleaner])
     bind("security.ProfileProvider.remote", classOf[RemoteProfileProvider])
-    //    bind("security.ProfileProvider.default", classOf[DefaultProfileProvider])
-    bind("security.SessionBuilder.default", classOf[DefaultSessionBuilder])
 
     //cas
     bind(classOf[CasConfig]).constructor($("security.cas.server"))
@@ -47,7 +47,6 @@ class DefaultModule extends AbstractBindModule with PropertySource {
     //authorizer and manager
     bind("security.SecurityManager.default", classOf[DefaultSecurityManager])
     bind("security.Authorizer.remote", classOf[RemoteAuthorizer])
-    //    bind("security.Authorizer.dao", classOf[CachedDaoAuthorizer])
   }
 
   override def properties: collection.Map[String, String] = {
