@@ -10,17 +10,8 @@ class DefaultModule extends AbstractBindModule {
     bind(classOf[DimensionAction], classOf[PermissionAction], classOf[UserAction], classOf[RoleAction], classOf[ProfileAction])
     bind(classOf[FuncResourceAction], classOf[MenuAction])
     bind(classOf[IndexAction])
-    bind(classOf[LoginAction])
     bind(classOf[SessionProfileAction])
     bind(classOf[DataPermissionAction])
     bind(classOf[DataResourceAction])
-  }
-
-}
-
-class DefaultSecurityModule extends AbstractBindModule with PropertySource {
-  protected override def binding() {}
-  def properties: collection.Map[String, String] = {
-    Map("security.login.url" -> "/login")
   }
 }
