@@ -50,7 +50,7 @@
     $('[data-toggle="popover"]').popover({content:moreApp,html:true});   
   });
   function moreApp(){
-    return "<ul>[#list apps as app][#if app.appType=='web-app' && app.url?? & app.name != appName]<li><a href='${app.url!}' target='_new'>[#if app.logoUrl??]<img class='app_logo' src='${app.logoUrl}'/>[/#if]${app.title}</a></li>[/#if][/#list]</ul>"
+    return "<ul>[#list apps as app][#if app.url?? & app.name != appName]<li><a href='${app.url!}' target='_new'>[#if app.logoUrl??]<img class='app_logo' src='${app.logoUrl}'/>[/#if]${app.title}</a></li>[/#if][/#list]</ul>"
   }
 </script>
 [#if fixed][#assign navbarclass="navbar-fixed-top"][#else][#assign navbarclass=""][/#if]

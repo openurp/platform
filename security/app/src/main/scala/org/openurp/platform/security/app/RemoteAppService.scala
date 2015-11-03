@@ -1,8 +1,8 @@
 package org.openurp.platform.security.app
 
-import org.openurp.platform.api.ws.ServiceConfig
+import org.openurp.platform.api.Urp
 import org.beangle.commons.io.IOs
-import org.openurp.platform.api.app.AppConfig
+import org.openurp.platform.api.app.UrpApp
 import java.net.URL
 import org.openurp.platform.api.util.JSON
 import org.beangle.commons.collection.Properties
@@ -12,7 +12,7 @@ import org.beangle.security.authc.AuthenticationToken
 object RemoteAppService {
 
   def validate(ticket: String, token: AuthenticationToken): SimpleUser = {
-    val url = ServiceConfig.wsBase + "/kernel/" + AppConfig.name + "/validate.json?token=" + ticket
+    val url = Urp.platformBase + "/kernel/" + UrpApp.name + "/validate.json?token=" + ticket
     val result = IOs.readString(new URL(url).openStream())
     val prefix = "principal\":\""
     val descPrefix = "description\":\""
@@ -30,21 +30,21 @@ object RemoteAppService {
   }
 
   def getAppPermissions(app: String): Set[Int] = {
-    val url = ServiceConfig.wsBase + "/security/" + AppConfig.name + "/func-resources/permission.json?client=" + app
+    val url = Urp.platformBase + "/security/" + UrpApp.name + "/func-resources/permission.json?client=" + app
     val resources = new collection.mutable.HashSet[Int]
     resources ++= JSON.parse(IOs.readString(new URL(url).openStream())).asInstanceOf[Iterable[Number]].map { n => n.intValue }
     resources.toSet
   }
 
   def getRoles(principal: String): Set[Int] = {
-    val url = ServiceConfig.wsBase + "/security/" + AppConfig.name + "/func-resources/permission.json?user=" + principal
+    val url = Urp.platformBase + "/security/" + UrpApp.name + "/func-resources/permission.json?user=" + principal
     val resources = new collection.mutable.HashSet[Int]
     resources ++= JSON.parse(IOs.readString(new URL(url).openStream())).asInstanceOf[Iterable[Number]].map(n => n.intValue)
     resources.toSet
   }
 
   def getResource(resourceName: String): Option[Resource] = {
-    val url = ServiceConfig.wsBase + "/security/" + AppConfig.name + "/func-resources/info.json?name=" + resourceName
+    val url = Urp.platformBase + "/security/" + UrpApp.name + "/func-resources/info.json?name=" + resourceName
     val script = IOs.readString(new URL(url).openStream())
     val r = JSON.parse(script).asInstanceOf[Properties]
     if (!r.isEmpty) {
@@ -55,14 +55,7 @@ object RemoteAppService {
   }
 
   def getRolePermissions(roleId: Int): Set[Int] = {
-    val url = ServiceConfig.wsBase + "/security/" + AppConfig.name + "/func-resources/permission.json?role.id=" + roleId
-    val resources = new collection.mutable.HashSet[Int]
-    resources ++= JSON.parse(IOs.readString(new URL(url).openStream())).asInstanceOf[Iterable[Number]].map(n => n.intValue)
-    resources.toSet
-  }
-
-  def getUser(roleId: Int): Set[Int] = {
-    val url = ServiceConfig.wsBase + "/security/" + AppConfig.name + "/func-resources/permission.json?role.id=" + roleId
+    val url = Urp.platformBase + "/security/" + UrpApp.name + "/func-resources/permission.json?role.id=" + roleId
     val resources = new collection.mutable.HashSet[Int]
     resources ++= JSON.parse(IOs.readString(new URL(url).openStream())).asInstanceOf[Iterable[Number]].map(n => n.intValue)
     resources.toSet

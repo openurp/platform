@@ -28,20 +28,20 @@ class UserManagerImpl(val entityDao: EntityDao) extends UserManager {
   }
 
   import MemberShip._
-  def getMembers(user: User, app: App, ship: Ship): Seq[Member] = {
-    if (isRoot(user, app.name)) {
-      val members = entityDao.search(OqlBuilder.from(classOf[Role], "r").where("r.app=:app", app)).map(r => new Member(user, r))
-      members.foreach { m =>
-        m.is(Manager)
-        m.is(Granter)
-      }
-      members
-    } else {
-      ship match {
-        case Manager => user.members.filter(m => m.manager && m.role.app == app)
-        case Granter => user.members.filter(m => m.granter && m.role.app == app)
-        case Member => user.members.filter(m => m.member && m.role.app == app)
-      }
+  def getMembers(user: User, ship: Ship): Seq[Member] = {
+    //    if (isRoot(user, app.name)) {
+    //      val members = entityDao.search(OqlBuilder.from(classOf[Role], "r").map(r => new Member(user, r))
+    //      members.foreach { m =>
+    //        m.is(Manager)
+    //        m.is(Granter)
+    //      }
+    //      members
+    //    } else {
+    ship match {
+      case Manager => user.members.filter(m => m.manager)
+      case Granter => user.members.filter(m => m.granter)
+      case Member => user.members.filter(m => m.member)
+      //      }
     }
   }
 

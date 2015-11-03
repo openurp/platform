@@ -28,7 +28,6 @@ class FuncPermission extends LongId with TemporalAt with Permission {
   def principal: Principal = role
 }
 
-
 class AppPermission extends IntId with Permission with TemporalAt {
   var app: App = _
   var resource: FuncResource = _

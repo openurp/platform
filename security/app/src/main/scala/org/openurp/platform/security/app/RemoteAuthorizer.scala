@@ -1,21 +1,10 @@
 package org.openurp.platform.security.app
 
-import org.beangle.security.authz.Authorizer
+import org.beangle.commons.cache.{ Cache, CacheManager }
 import org.beangle.commons.security.Request
-import org.openurp.platform.api.app.AppConfig
-import org.beangle.security.context.SecurityContext
-import org.openurp.platform.api.ws.ServiceConfig
 import org.beangle.security.authc.Account
-import org.beangle.commons.cache.CacheManager
-import org.beangle.commons.io.IOs
-import org.beangle.commons.cache.Cache
-import java.net.URL
-import org.openurp.platform.api.util.JSON
-import java.{ util => ju }
-import org.beangle.commons.collection.Properties
-import org.beangle.commons.lang.JDouble
+import org.beangle.security.authz.Authorizer
 import org.beangle.security.session.Session
-import org.beangle.security.authz.Scopes
 
 class RemoteAuthorizer(val cacheManager: CacheManager) extends Authorizer {
   var unknownIsPublic = true

@@ -20,7 +20,7 @@
   //bar.addItem("菜单配置","redirectTo('${b.url('profile!search')}')");
 [/@]
   [@b.row]
-    <tr [#if menu??] title="入口及备注:${menu.entry!} ${(menu.remark?html)!}" id="${menu.indexno}"[/#if]>
+    <tr [#if menu??] title="入口及备注:${(menu.entry.name)!} ${(menu.remark?html)!}" id="${menu.indexno}"[/#if]>
     [@b.boxcol/]
     [@b.treecol title="common.title" width="30%"][@b.a href="!info?id=${menu.id}"]${menu.indexno} ${menu.title}[/@][/@]
     [@b.col property="name" title="common.name" width="15%"/]

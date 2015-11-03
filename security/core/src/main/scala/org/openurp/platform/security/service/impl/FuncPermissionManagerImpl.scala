@@ -4,13 +4,13 @@ import org.beangle.data.dao.OqlBuilder
 import org.beangle.data.dao.EntityDao
 import org.openurp.platform.security.model.{ FuncPermission, FuncResource, Role, User }
 import org.openurp.platform.security.service.FuncPermissionManager
-import org.openurp.platform.api.app.AppConfig
+import org.openurp.platform.api.app.UrpApp
 
 class FuncPermissionManagerImpl(val entityDao: EntityDao) extends FuncPermissionManager {
 
   def getResource(name: String): Option[FuncResource] = {
     val query = OqlBuilder.from(classOf[FuncResource], "r")
-    query.where("r.name=:name and r.app.name=:appName", name, AppConfig.name).cacheable()
+    query.where("r.name=:name and r.app.name=:appName", name, UrpApp.name).cacheable()
     val rs = entityDao.search(query)
     if (rs.isEmpty) None else Some(rs.head)
   }

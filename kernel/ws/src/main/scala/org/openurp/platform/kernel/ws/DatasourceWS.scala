@@ -8,7 +8,7 @@ import org.openurp.platform.kernel.model.{ App, DataSource }
 
 class DatasourceWS(entityDao: EntityDao) extends ActionSupport with EntitySupport[DataSource] {
 
-  @mapping(value = "{name}")
+  @mapping(value = "{app}/{name}")
   @response
   def index(@param("app") app: String, @param("name") name: String): AnyRef = {
     val secret = get("secret", "")

@@ -5,7 +5,7 @@ import org.openurp.platform.kernel.model.App
 
 trait UserManager extends UserService {
 
-  def getMembers(user: User, app:App,ship: MemberShip.Ship): Seq[Member]
+  def getMembers(user: User, ship: MemberShip.Ship): Seq[Member]
 
   def isManagedBy(manager: User, user: User): Boolean
 

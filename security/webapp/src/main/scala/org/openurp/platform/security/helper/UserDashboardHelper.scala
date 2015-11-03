@@ -67,15 +67,15 @@ class UserDashboardHelper {
     if (None == menuProfileId && !menuProfiles.isEmpty) {
       menuProfileId = Some(menuProfiles(0).id)
     }
-    
+
     if (None != menuProfileId) {
       val menuProfile = entityDao.get(classOf[MenuProfile], menuProfileId.get)
-      val menus = menuService.getMenus(menuProfile, user, user.profiles)
+      val menus = menuService.getMenus(menuProfile, user)
       val resources = permissionService.getResources(user).toSet
       val roleMenusMap = new collection.mutable.HashMap[Role, Seq[Menu]]
 
       for (m <- user.members) {
-        if (m.member) roleMenusMap.put(m.role, menuService.getMenus(menuProfile, m.role, Some(true)))
+        if (m.member) roleMenusMap.put(m.role, menuService.getMenus(menuProfile, m.role))
       }
       ActionContextHolder.context.attribute("menus", menus)
       ActionContextHolder.context.attribute("roleMenusMap", roleMenusMap)

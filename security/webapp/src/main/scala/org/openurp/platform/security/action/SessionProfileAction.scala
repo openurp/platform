@@ -8,7 +8,7 @@ import org.beangle.data.dao.OqlBuilder
 import org.beangle.data.model.Entity
 import org.beangle.webmvc.api.annotation.ignore
 import org.openurp.platform.security.model.UserCategory
-import org.openurp.platform.api.app.AppConfig
+import org.openurp.platform.api.app.UrpApp
 import org.beangle.webmvc.api.view.View
 import org.openurp.platform.security.model.SessionProfileBean
 import org.openurp.platform.security.model.SessionProfileBean

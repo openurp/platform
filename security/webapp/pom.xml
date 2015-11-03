@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.openurp.platform.security</groupId>
     <artifactId>openurp-platform-security-parent</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.4</version>
   </parent>
   <groupId>org.openurp.platform.security</groupId>
   <artifactId>openurp-platform-security-webapp</artifactId>
@@ -20,6 +20,10 @@
     <dependency>
       <groupId>org.openurp.platform.api</groupId>
       <artifactId>openurp-platform-api-datasource</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.openurp.platform.api</groupId>
+      <artifactId>openurp-platform-api-cas</artifactId>
     </dependency>
     <dependency>
       <groupId>org.openurp.platform.security</groupId>

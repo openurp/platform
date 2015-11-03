@@ -26,7 +26,7 @@ object DefaultMapping extends Mapping {
       e.role & e.user & e.updatedAt are notnull)).table("members")
 
     bind[Role].on(e => declare(
-      e.app & e.indexno are notnull,
+      e.indexno is notnull,
       e.name is (notnull, length(100)),
       e.children is depends("parent"),
       e.members is depends("role"),
@@ -54,7 +54,7 @@ object DefaultMapping extends Mapping {
       e.profile & e.indexno & e.name & e.title are notnull,
       e.name & e.title & e.remark are length(100),
       e.indexno is length(50),
-      e.children is depends("parent"),
+      e.children is (depends("parent"), orderby("indexno")),
       e.params is length(200)))
 
     bind[MenuProfile].on(e => declare(

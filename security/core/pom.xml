@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.openurp.platform.security</groupId>
     <artifactId>openurp-platform-security-parent</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.4</version>
   </parent>
   <groupId>org.openurp.platform.security</groupId>
   <artifactId>openurp-platform-security-core</artifactId>
@@ -28,6 +28,10 @@
     <dependency>
       <groupId>org.beangle.security</groupId>
       <artifactId>beangle-security-session_2.11</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.beangle.security</groupId>
+      <artifactId>beangle-security-cas_2.11</artifactId>
     </dependency>
   </dependencies>
 </project>
