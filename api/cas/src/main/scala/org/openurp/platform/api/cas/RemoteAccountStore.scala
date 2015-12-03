@@ -14,11 +14,13 @@ import org.beangle.commons.collection.Properties
 class RemoteAccountStore extends AccountStore {
 
   def load(principal: Any): Option[Account] = {
-    val url = Urp.platformBase + "/security/" + UrpApp.name + "/accounts/" + principal.toString + ".json"
+    val url = Urp.platformBase + "/user/accounts/" + principal.toString + ".json"
     val data = JSON.parse(HttpUtils.getResponseText(url)).asInstanceOf[collection.Map[String, _]]
     val account = new DefaultAccount(principal, data("description").toString)
     account.authorities = data("authorities").asInstanceOf[collection.Iterable[Number]].map { x => x.intValue }.toSet
-    account.details ++= data("details").asInstanceOf[collection.Map[String, _]]
+    data.get("details") foreach { details =>
+      account.details ++= details.asInstanceOf[collection.Map[String, _]]
+    }
     account.accountLocked = data("accountLocked").asInstanceOf[Boolean]
     account.accountExpired = data("accountExpired").asInstanceOf[Boolean]
     account.credentialExpired = data("credentialExpired").asInstanceOf[Boolean]

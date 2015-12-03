@@ -2,16 +2,13 @@ package org.openurp.platform.api.cas
 
 import org.beangle.commons.inject.PropertySource
 import org.beangle.commons.inject.bind.AbstractBindModule
-import org.beangle.data.jdbc.query.JdbcExecutor
-import org.beangle.security.authc.RealmAuthenticator
+import org.beangle.security.authc.{ DefaultAccountRealm, RealmAuthenticator }
 import org.beangle.security.mgt.DefaultSecurityManager
-import org.beangle.security.realm.cas.{ CasConfig, CasEntryPoint, CasPreauthFilter, DefaultCasRealm, DefaultTicketValidator }
-import org.beangle.security.session.{ DefaultSessionBuilder, SessionCleaner }
+import org.beangle.security.realm.cas.{ CasConfig, CasEntryPoint, CasPreauthFilter, DefaultTicketValidator }
 import org.beangle.security.session.mem.MemSessionRegistry
 import org.beangle.security.web.access.{ AuthorizationFilter, DefaultAccessDeniedHandler, SecurityInterceptor }
 import org.beangle.security.web.session.DefaultSessionIdPolicy
 import org.openurp.platform.api.Urp
-import org.openurp.platform.api.datasource.AppDataSourceFactory
 
 class DefaultModule extends AbstractBindModule with PropertySource {
 
@@ -27,18 +24,12 @@ class DefaultModule extends AbstractBindModule with PropertySource {
       List(ref("security.Filter.cas"), ref("security.Filter.authorization")), ?, ?, ?)
 
     //realms
-    bind("security.AccountStore.remote", classOf[RemoteAccountStore])
-    bind("security.Realm.cas", classOf[DefaultCasRealm])
-    bind("security.Authenticator.realm", classOf[RealmAuthenticator]).constructor(List(ref("security.Realm.cas")))
+    bind("security.Realm.default", classOf[DefaultAccountRealm]).constructor(bean(classOf[RemoteAccountStore]))
+    bind("security.Authenticator.realm", classOf[RealmAuthenticator]).constructor(List(ref("security.Realm.default")))
 
     //session
     bind("security.SessionRegistry.mem", classOf[MemSessionRegistry])
     bind("security.SessionIdPolicy.default", classOf[DefaultSessionIdPolicy])
-    bind("DataSource#security", classOf[AppDataSourceFactory]).property("name", "security")
-    bind("security.SessionRegistry.app", classOf[AppDBSessionRegistry])
-      .constructor(ref("DataSource#security")).primary()
-    bind(classOf[SessionCleaner])
-    bind("security.ProfileProvider.remote", classOf[RemoteProfileProvider])
 
     //cas
     bind(classOf[CasConfig]).constructor($("security.cas.server"))

@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<cdi>
+  <container name="web">
+    <module class="org.openurp.platform.web.ConfigModule"/>
+    <module class="org.openurp.platform.web.SecurityModule"/>
+  </container>
+  <container>
+    <module class="org.openurp.platform.web.DaoModule"/>
+    <module class="org.openurp.platform.web.ServiceModule"/>
+  </container>
+</cdi>

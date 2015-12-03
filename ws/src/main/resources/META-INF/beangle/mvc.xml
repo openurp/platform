@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<mvc>
+  <profile name="openurp-platform-ws" package="org.openurp.platform.ws">
+   <action suffix="WS" defaultMethod="index"/>
+   <url path="/" suffix="" style="plur-seo" />
+   <interceptors>
+      <interceptor name="web.Interceptor.hibernate"/>
+      <interceptor name="web.Interceptor.cors"/>
+    </interceptors>
+  </profile>
+  
+  <profile name="openurp-platform-ws-security" package="org.openurp.platform.ws.security">
+   <action suffix="WS" defaultMethod="index"/>
+   <url path="/security/{app}/" suffix="" style="plur-seo" />
+   <interceptors>
+      <interceptor name="web.Interceptor.hibernate"/>
+      <interceptor name="web.Interceptor.cors"/>
+    </interceptors>
+  </profile>
+
+</mvc>
