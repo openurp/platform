@@ -21,5 +21,6 @@
     <module>config</module>
     <module>user</module>
     <module>security</module>
+    <module>ids</module>
   </modules>
 </project>

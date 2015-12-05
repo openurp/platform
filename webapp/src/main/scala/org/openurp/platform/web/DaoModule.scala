@@ -29,6 +29,7 @@ import org.beangle.data.hibernate.spring.LocalSessionFactoryBean
 import org.beangle.data.hibernate.spring.HibernateTransactionManager
 import org.beangle.data.hibernate.HibernateMetadataFactory
 import org.beangle.data.hibernate.HibernateEntityDao
+import org.beangle.commons.cache.concurrent.ConcurrentMapCacheManager
 
 object DaoModule extends AbstractBindModule {
 
@@ -65,6 +66,8 @@ object DaoModule extends AbstractBindModule {
       .parent("TransactionProxy.template").primary().description("基于Hibernate提供的通用DAO")
 
     bind("web.Interceptor.hibernate", classOf[OpenSessionInViewInterceptor])
+
+    bind("CacheManager.concurrent", classOf[ConcurrentMapCacheManager])
   }
 
 }

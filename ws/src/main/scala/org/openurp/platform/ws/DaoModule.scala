@@ -44,7 +44,7 @@ object DaoModule extends AbstractBindModule {
         "hibernate.cache.region.factory_class=org.hibernate.cache.EhCacheRegionFactory",
         "hibernate.cache.use_second_level_cache=true", "hibernate.cache.use_query_cache=true",
         "hibernate.query.substitutions=true 1, false 0, yes 'Y', no 'N'", "hibernate.show_sql=false"))
-      .description("Hibernate配置信息")
+      .description("Hibernate配置信息").nowire("propertiesArray")
 
     bind("SessionFactory.default", classOf[LocalSessionFactoryBean])
       .property("configurationClass", classOf[OverrideConfiguration].getName)
