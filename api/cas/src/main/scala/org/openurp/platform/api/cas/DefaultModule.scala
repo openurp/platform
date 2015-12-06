@@ -40,7 +40,7 @@ class DefaultModule extends AbstractBindModule with PropertySource {
 
     bind("DataSource.session#", classOf[DataSourceFactory]).property("name", "session").property("url", Urp.home + "/platform/session.xml")
 
-    bind("cache.Ehcache", classOf[EhCacheManager]).constructor("security-ehcache")
+    bind("cache.Ehcache", classOf[EhCacheManager]).constructor("ehcache-security")
 
     bind("cache.Ehcache.session", classOf[EhCacheChainedManager])
       .constructor(ref("cache.Ehcache"), bean(classOf[RedisCacheManager]))

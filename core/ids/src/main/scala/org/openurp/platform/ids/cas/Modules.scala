@@ -102,7 +102,7 @@ class SessionModule extends AbstractBindModule {
     bind("jedis.Factory", classOf[JedisPoolFactory]).constructor(Map("host" -> $("redis.host"), "port" -> $("redis.port")))
     bind("serializer.fst", classOf[FSTSerializer])
 
-    bind("cache.Ehcache", classOf[EhCacheManager]).constructor("session-ehcache")
+    bind("cache.Ehcache", classOf[EhCacheManager]).constructor("ehcache-session")
 
     bind("cache.Ehcache.session", classOf[EhCacheChainedManager])
       .constructor(ref("cache.Ehcache"), bean(classOf[RedisCacheManager]))
