@@ -71,6 +71,7 @@ class TicketModule extends AbstractBindModule {
 class DbCredentialsModule extends AbstractBindModule {
   override def binding() {
     bind("security.CredentialsChecker.default", classOf[SimpleCredentialsChecker])
+      .constructor(ref("DataSource.security"))
   }
 }
 
