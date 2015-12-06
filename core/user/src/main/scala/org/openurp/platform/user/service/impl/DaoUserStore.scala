@@ -16,9 +16,8 @@ class DaoUserStore(userService: UserService, entityDao: EntityDao) extends Accou
         account.accountLocked = user.locked
         account.credentialExpired = user.credentialExpired
         account.disabled = !user.enabled
-        //        val query = OqlBuilder.from(classOf[FuncPermission], "fp").join("fp.role.members", "m").where("m.member=true and m.user=:user", user)
-        //          .where("fp.resource.app.name=:appName", UrpApp.name).where("fp.endAt is null or fp.endAt < :now)", new java.util.Date).select("fp.id")
         account.authorities = user.roles.map(r => r.id).toSet
+        account.details += "category" -> user.category.id
         Some(account)
       case None => None
     }
