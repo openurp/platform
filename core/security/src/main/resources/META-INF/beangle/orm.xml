@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<orm>
+  <mapping class="org.openurp.platform.security.model.DefaultMapping"/>
+  <naming>
+    <profile package = "org.openurp.platform.security" pluralize="true" schema="se"/>
+  </naming>
+</orm>

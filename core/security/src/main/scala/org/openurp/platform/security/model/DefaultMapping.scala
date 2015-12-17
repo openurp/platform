@@ -1,0 +1,57 @@
+package org.openurp.platform.security.model
+
+import scala.reflect.runtime.universe
+import org.beangle.data.model.bind.Mapping
+
+object DefaultMapping extends Mapping {
+
+  def binding(): Unit = {
+    defaultIdGenerator("auto_increment")
+    defaultCache("openurp.platform.security", "read-write")
+
+    bind[FuncPermission].on(e => declare(
+      e.role & e.resource & e.beginAt are notnull,
+      e.actions is length(100),
+      e.restrictions is length(100),
+      e.remark is length(100)))
+
+    bind[UserProfile].on(e => declare(
+      e.user & e.app are notnull,
+      e.properties is eleLength(2000)))
+
+    bind[Menu].on(e => declare(
+      e.profile & e.indexno & e.name & e.title are notnull,
+      e.name & e.title & e.remark are length(100),
+      e.indexno is length(50),
+      e.children is (depends("parent"), orderby("indexno")),
+      e.params is length(200)))
+
+    bind[MenuProfile].on(e => declare(
+      e.app is notnull,
+      e.name is (notnull, length(100)),
+      e.menus is depends("profile")))
+
+    bind[FuncResource].on(e => declare(
+      e.name is (notnull, length(200)),
+      e.app & e.scope are notnull,
+      e.title is (notnull, length(200)),
+      e.remark & e.actions are length(200)))
+
+    bind[DataResource].on(e => declare(
+      e.name & e.typeName are (notnull, length(200)),
+      e.scope is notnull,
+      e.title is (notnull, length(200)),
+      e.remark & e.actions are length(200)))
+
+    bind[DataPermission].on(e => declare(
+      e.resource & e.beginAt are notnull,
+      e.filters is (notnull, length(600))))
+
+    bind[AppPermission].on(e => declare(
+      e.app & e.resource are notnull,
+      e.actions is length(500),
+      e.restrictions is length(500)))
+
+  }
+
+}

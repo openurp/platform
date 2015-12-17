@@ -51,10 +51,10 @@ object UrpApp extends Logging {
       case None => throw new RuntimeException("cannot find META-INF/openurp/app.properties")
     }
 
+    //app path starts with /
     var appPath = Strings.replace(name, "-", "/")
     appPath = Strings.replace(appPath, ".", "/")
-    if (appPath.startsWith("openurp/")) appPath = Strings.substringAfter(appPath, "openurp")
-    else appPath = "/" + appPath
+    appPath = if (appPath.contains("/")) ("/" + Strings.substringAfter(appPath, "/")) else "/" + appPath
 
     val result = new collection.mutable.HashMap[String, Any]
     result ++= appManifest

@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.openurp.platform.api</groupId>
     <artifactId>openurp-platform-api-parent</artifactId>
-    <version>0.0.5</version>
+    <version>0.0.6</version>
   </parent>
   <groupId>org.openurp.platform.api</groupId>
   <artifactId>openurp-platform-api-cas</artifactId>
@@ -14,6 +14,11 @@
   <properties>
     <bundle.symbolicName>org.openurp.platform.api.cas</bundle.symbolicName>
     <bundle.namespace>org.openurp.platform</bundle.namespace>
+    <beangle.cache.version>0.0.1</beangle.cache.version>
+    <ehcache.version>3.0.0.m4</ehcache.version>
+    <jedis.version>2.7.3</jedis.version>
+    <fst.version>2.39</fst.version>
+    <HikariCP.version>2.4.1</HikariCP.version>
   </properties>
 
   <dependencies>
@@ -33,6 +38,31 @@
       <groupId>org.openurp.platform.api</groupId>
       <artifactId>openurp-platform-api-datasource</artifactId>
       <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.beangle.cache</groupId>
+      <artifactId>beangle-cache-core_2.11</artifactId>
+      <version>${beangle.cache.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.ehcache</groupId>
+      <artifactId>ehcache</artifactId>
+      <version>${ehcache.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>redis.clients</groupId>
+      <artifactId>jedis</artifactId>
+      <version>${jedis.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>de.ruedigermoeller</groupId>
+      <artifactId>fst</artifactId>
+      <version>${fst.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.zaxxer</groupId>
+      <artifactId>HikariCP</artifactId>
+      <version>${HikariCP.version}</version>
     </dependency>
   </dependencies>
 </project>

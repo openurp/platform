@@ -1,7 +1,0 @@
-[#ftl]
-[@b.navbar title="权限管理" style="margin-bottom: 0px;"]
-  [@b.navlist]
-    [@b.navitem href="/user"]用户管理[/@]
-    [@b.navitem href="/role"]角色管理[/@]
-  [/@]
-[/@]

@@ -4,24 +4,24 @@
   <parent>
     <groupId>org.openurp</groupId>
     <artifactId>openurp-parent</artifactId>
-    <version>0.0.17</version>
+    <version>0.0.18</version>
   </parent>
   <groupId>org.openurp.platform</groupId>
   <artifactId>openurp-platform-parent</artifactId>
-  <version>0.0.5</version>
+  <version>0.0.6</version>
   <packaging>pom</packaging>
   <name>OpenURP Platform Parent</name>
 
   <properties>
-    <beangle.webui.version>0.0.4</beangle.webui.version>
+    <beangle.webui.version>0.0.5</beangle.webui.version>
     <hibernate.version>4.3.1.Final</hibernate.version>
   </properties>
 
   <modules>
     <module>api</module>
-    <module>kernel</module>
-    <module>security</module>
-    <module>portal</module>
+    <module>core</module>
+    <module>ws</module>
+    <module>webapp</module>
   </modules>
 
   <dependencyManagement>
@@ -42,18 +42,18 @@
         <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.openurp.platform.kernel</groupId>
-        <artifactId>openurp-platform-kernel-core</artifactId>
+        <groupId>org.openurp.platform.core</groupId>
+        <artifactId>openurp-platform-core-config</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.openurp.platform.security</groupId>
-        <artifactId>openurp-platform-security-core</artifactId>
+        <groupId>org.openurp.platform.core</groupId>
+        <artifactId>openurp-platform-core-user</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.openurp.platform.security</groupId>
-        <artifactId>openurp-platform-security-app</artifactId>
+        <groupId>org.openurp.platform.core</groupId>
+        <artifactId>openurp-platform-core-security</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
