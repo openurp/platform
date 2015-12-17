@@ -31,6 +31,9 @@ class AccountWS(userService: UserService, entityDao: EntityDao) extends ActionSu
 
         val query = OqlBuilder.from(classOf[RoleMember], "m").where("m.member=true and m.user=:user", user).select("m.role.id")
         properties += ("authorities" -> entityDao.search(query).toSet)
+        val details = new Properties()
+        details += ("category" -> user.category.id)
+        properties += ("details" -> details)
         properties
       case None => null
     }
