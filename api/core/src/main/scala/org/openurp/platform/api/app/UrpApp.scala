@@ -32,7 +32,7 @@ object UrpApp extends Logging {
     }
 
     if (null == _token) {
-      val tokenUrl = Urp.platformBase + "/kernel/token/login?app=" + name + "&secret=" + secret
+      val tokenUrl = Urp.platformBase + "/oauth/token/login?app=" + name + "&secret=" + secret
       val token = JSON.parse(HttpUtils.getResponseText(tokenUrl)).asInstanceOf[Properties]
       _token = Token(token("token").asInstanceOf[String], (new String2DateConverter).convert(token("expiredAt"), classOf[java.util.Date]).asInstanceOf[java.util.Date].getTime)
     }
