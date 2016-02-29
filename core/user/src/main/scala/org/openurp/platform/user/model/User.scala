@@ -17,7 +17,7 @@ class User extends LongId with Coded with Named with Updated with TemporalOn wit
   var roles = Collections.newBuffer[RoleMember]
   var groups = Collections.newBuffer[GroupMember]
   var properties = Collections.newMap[Dimension, String]
-  var category: Category = _
+  var category: UserCategory = _
 
   def credential = password
 

@@ -63,7 +63,8 @@ class DefaultModule extends AbstractBindModule with PropertySource {
 
   override def properties: collection.Map[String, String] = {
     val datas = Collections.newMap[String, String]
-    val casUrl = Urp.properties.get("openurp.platform.cas.server").getOrElse(Urp.platformBase + "/cas")
+    var casUrl = Urp.properties.get("openurp.platform.cas.server").getOrElse(Urp.platformBase + "/cas")
+    if (!casUrl.startsWith("http")) casUrl = "http://" + casUrl
     datas += ("openurp.platform.cas.server" -> casUrl)
     val is = new FileInputStream(new File(Urp.home + "/platform/session.xml"))
     val app = scala.xml.XML.load(is)

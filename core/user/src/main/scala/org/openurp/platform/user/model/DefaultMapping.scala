@@ -36,7 +36,7 @@ object DefaultMapping extends Mapping {
       e.groups is depends("user"),
       e.properties is eleLength(2000)))
 
-    bind[Category].on(e => declare(
+    bind[UserCategory].on(e => declare(
       e.code is (notnull, length(30), unique),
       e.name is (notnull, length(100))))
 
