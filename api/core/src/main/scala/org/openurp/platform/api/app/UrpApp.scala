@@ -53,8 +53,7 @@ object UrpApp extends Logging {
 
     //app path starts with /
     var appPath = Strings.replace(name, "-", "/")
-    appPath = Strings.replace(appPath, ".", "/")
-    appPath = if (appPath.contains("/")) ("/" + Strings.substringAfter(appPath, "/")) else "/" + appPath
+    appPath = "/" + Strings.replace(appPath, ".", "/")
 
     val result = new collection.mutable.HashMap[String, Any]
     result ++= appManifest

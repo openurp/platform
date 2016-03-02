@@ -20,6 +20,6 @@ class AppDataSourceFactory extends DataSourceFactory {
   }
 
   private def getDatasourceUrl(resourceKey: String): String = {
-    Urp.platformBase + "/config/datasource/" + name + "/" + resourceKey + ".json?secret=" + UrpApp.secret
+    Urp.platformBase + "/config/datasources/" + UrpApp.name + "/" + resourceKey + ".json?secret=" + UrpApp.secret
   }
 }

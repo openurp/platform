@@ -5,13 +5,16 @@ import javax.script.ScriptEngineManager
 import org.beangle.commons.collection.Properties
 import javax.script.Bindings
 import org.beangle.commons.lang.Chars
+import org.beangle.commons.lang.Strings
 
 //FIXME generalize it.
 object JSON {
   def parse(string: String): Any = {
     val sem = new ScriptEngineManager
     val engine = sem.getEngineByName("javascript")
-
+    if (Strings.isBlank(string) || "{}".equals(string)) {
+      return new Properties()
+    }
     engine.eval("result =" + string) match {
       case d: String => d
       case n: Number => n

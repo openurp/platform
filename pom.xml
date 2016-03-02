@@ -22,7 +22,6 @@
     <module>core</module>
     <module>ws</module>
     <module>webapp</module>
-    <module>cas</module>
   </modules>
 
   <dependencyManagement>
