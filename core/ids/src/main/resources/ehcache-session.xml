@@ -9,6 +9,7 @@
       </ehcache:expiry>
       <ehcache:heap size="5000" unit="entries"/>
     </ehcache:cache-template>
+
     <ehcache:cache-template name="session_status.Template">
       <ehcache:expiry>
         <ehcache:tti unit="minutes">30</ehcache:tti>
