@@ -15,7 +15,7 @@
     <bundle.symbolicName>org.openurp.platform.api.cas</bundle.symbolicName>
     <bundle.namespace>org.openurp.platform</bundle.namespace>
     <beangle.cache.version>0.0.2-SNAPSHOT</beangle.cache.version>
-    <ehcache.version>3.0.0.m4</ehcache.version>
+    <ehcache.version>3.0.0.m5</ehcache.version>
     <jedis.version>2.7.3</jedis.version>
     <fst.version>2.39</fst.version>
     <HikariCP.version>2.4.1</HikariCP.version>

@@ -9,7 +9,7 @@
       <ehcache:expiry>
         <ehcache:tti unit="minutes">30</ehcache:tti>
       </ehcache:expiry>
-      <ehcache:heap size="8000" unit="entries"/>
+      <ehcache:heap unit="entries">8000</ehcache:heap>
     </ehcache:cache-template>
 
     <ehcache:cache alias="session_status">
@@ -18,7 +18,7 @@
       <ehcache:expiry>
         <ehcache:tti unit="minutes">30</ehcache:tti>
       </ehcache:expiry>
-      <ehcache:heap size="8000" unit="entries"/>
+      <ehcache:heap unit="entries">8000</ehcache:heap>
     </ehcache:cache>
 
     <ehcache:cache alias="security-resources">
@@ -27,6 +27,6 @@
       <ehcache:expiry>
         <ehcache:ttl unit="minutes">20</ehcache:ttl>
       </ehcache:expiry>
-      <ehcache:heap size="1000" unit="entries"/>
+      <ehcache:heap unit="entries">1000</ehcache:heap>
     </ehcache:cache>
 </ehcache:config>
