@@ -36,7 +36,7 @@ class AppAction(dbService: DbService) extends RestfulAction[App] {
           populate(ds, "ds" + ds.db.id)
           ds.password =
             if (null == ds.password) originPassword
-            else encrypt(ds.password)
+            else encrypt(ds.password, app.secret)
         } else {
           removed += ds
         }
@@ -45,7 +45,7 @@ class AppAction(dbService: DbService) extends RestfulAction[App] {
       for (id <- ids if !processed.contains(id)) {
         val set = populate(classOf[DataSource], "ds" + id)
         set.app = app
-        set.password = encrypt(set.password)
+        set.password = encrypt(set.password, app.secret)
         sets += set
       }
       saveOrUpdate(app)
@@ -58,8 +58,7 @@ class AppAction(dbService: DbService) extends RestfulAction[App] {
     }
   }
 
-  private def encrypt(plainText: String): String = {
-    val secretKey = "changeit"
+  private def encrypt(plainText: String, secretKey: String): String = {
     var key = secretKey.getBytes("UTF-8")
     val sha = MessageDigest.getInstance("SHA-1")
     key = sha.digest(key)

@@ -28,7 +28,7 @@ object DefaultMapping extends Mapping {
       e.name is (notnull, length(100), unique),
       e.driver is (notnull, length(100)),
       e.databaseName & e.serverName is length(100),
-      e.url is (notnull, length(200)),
+      e.url is ( length(200)),
       e.remark is (length(200))))
   }
 
