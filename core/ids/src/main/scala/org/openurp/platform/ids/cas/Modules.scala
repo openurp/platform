@@ -103,16 +103,16 @@ class SessionModule extends AbstractBindModule {
     bind("jedis.Factory", classOf[JedisPoolFactory]).constructor(Map("host" -> $("redis.host"), "port" -> $("redis.port")))
     bind("serializer.fst", classOf[FSTSerializer])
 
-    bind("cache.Ehcache", classOf[EhCacheManager]).constructor("ehcache-session")
+    bind("cache.Ehcache", classOf[EhCacheManager]).constructor("ehcache-session",false)
 
-    bind("cache.Ehcache.session", classOf[EhCacheChainedManager])
-      .constructor(ref("cache.Ehcache"), bean(classOf[RedisCacheManager]))
+    bind("cache.Chained.session", classOf[EhCacheChainedManager])
+      .constructor(ref("cache.Ehcache"), bean(classOf[RedisCacheManager]),true)
       .property("broadcasterBuilder", bean(classOf[RedisBroadcasterBuilder]))
 
     bind("DataSource.session", classOf[DataSourceFactory]).property("name", "session").property("url", UrpApp.getUrpAppFile.get.getAbsolutePath)
 
     bind("security.SessionRegistry.db", classOf[DBSessionRegistry])
-      .constructor(ref("DataSource.session"), ref("cache.Ehcache.session"), ref("cache.Ehcache"))
+      .constructor(ref("DataSource.session"), ref("cache.Chained.session"), ref("cache.Ehcache"))
       .property("sessionTable", "cas_session_infoes").property("statTable", "cas_session_stats")
 
     bind("security.SessionIdPolicy.cas", classOf[DefaultCasSessionIdPolicy])

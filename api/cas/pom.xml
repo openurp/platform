@@ -14,21 +14,16 @@
   <properties>
     <bundle.symbolicName>org.openurp.platform.api.cas</bundle.symbolicName>
     <bundle.namespace>org.openurp.platform</bundle.namespace>
-    <beangle.cache.version>0.0.2-SNAPSHOT</beangle.cache.version>
-    <ehcache.version>3.0.0.m5</ehcache.version>
-    <jedis.version>2.7.3</jedis.version>
-    <fst.version>2.39</fst.version>
-    <HikariCP.version>2.4.1</HikariCP.version>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>org.beangle.security</groupId>
-      <artifactId>beangle-security-core_2.11</artifactId>
+      <artifactId>beangle-security-core_2.12</artifactId>
     </dependency>
     <dependency>
       <groupId>org.beangle.security</groupId>
-      <artifactId>beangle-security-cas_2.11</artifactId>
+      <artifactId>beangle-security-cas_2.12</artifactId>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>
@@ -41,7 +36,7 @@
     </dependency>
     <dependency>
       <groupId>org.beangle.cache</groupId>
-      <artifactId>beangle-cache-core_2.11</artifactId>
+      <artifactId>beangle-cache-core_2.12</artifactId>
       <version>${beangle.cache.version}</version>
     </dependency>
     <dependency>
