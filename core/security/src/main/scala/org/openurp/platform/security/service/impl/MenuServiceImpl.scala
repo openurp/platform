@@ -18,8 +18,12 @@ class MenuServiceImpl(val entityDao: EntityDao) extends MenuService {
   def getTopMenus(app: App, user: User): collection.Map[MenuProfile, Seq[Menu]] = {
 
     val roles = user.roles.filter(m => m.member).map { m => m.role }
-    val query = OqlBuilder.from[Menu](classOf[Menu].getName + " menu," + classOf[FuncPermission].getName + " fp").where("menu.profile.app=:app", app)
-      .where("fp.role  in (:roles)", roles).where("fp.resource=menu.entry and fp.resource.app=:app", app).select("menu").cacheable(true)
+    val query = OqlBuilder.from[Menu](classOf[Menu].getName + " menu," + classOf[FuncPermission].getName + " fp")
+      .where("menu.profile.app=:app", app)
+      .where("menu.enabled=true")
+      .where("fp.role  in (:roles)", roles)
+      .where("fp.resource=menu.entry and fp.resource.app=:app", app)
+      .select("menu")
 
     val menuSet = Collections.newSet[Menu]
     entityDao.search(query).foreach { m =>
@@ -47,7 +51,8 @@ class MenuServiceImpl(val entityDao: EntityDao) extends MenuService {
         removeOther(m, menuSet)
       }
     }
-    profile2Menus
+    profile2Menus map { case (p, menus) => (p, menus.sorted) }
+
   }
 
   def getMenus(profile: MenuProfile, user: User): Seq[Menu] = {

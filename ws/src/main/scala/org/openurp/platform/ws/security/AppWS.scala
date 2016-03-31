@@ -10,6 +10,8 @@ import org.openurp.platform.user.model.User
 import org.openurp.platform.user.service.UserService
 import org.openurp.platform.security.model.FuncPermission
 import org.openurp.platform.user.model.Root
+import org.beangle.webmvc.api.annotation.mapping
+import org.beangle.commons.collection.Collections
 
 /**
  * @author chaostone
@@ -17,18 +19,25 @@ import org.openurp.platform.user.model.Root
 class AppWS(userService: UserService, entityDao: EntityDao) extends ActionSupport with EntitySupport[User] {
 
   @response
-  def index(@param("name") username: String): Seq[Properties] = {
+  @mapping("user/{user}")
+  def index(@param("user") username: String): Seq[Properties] = {
     val query = OqlBuilder.from(classOf[User], "user")
     query.where("user.code=:code", username)
-    val user = entityDao.search(query).head
-    val fpquery = entityDao.search(OqlBuilder.from(classOf[FuncPermission], "fp").join("fp.role.members", "m")
-      .where("m.user=:user", user).select("distinct fp.resource.app"))
+    val users = entityDao.search(query)
+    if (users.isEmpty) return Seq.empty
+    val user = users.head
+    val fpApps = entityDao.search(OqlBuilder.from[App](classOf[FuncPermission].getName, "fp").join("fp.role.members", "m")
+      .where("m.user=:user", user)
+      .where("fp.resource.app.enabled=true")
+      .select("distinct fp.resource.app"))
 
-    val apps = fpquery.toBuffer.asInstanceOf[Buffer[App]]
+    val apps = Collections.newSet[App]
+    apps ++= fpApps;
 
-    val rootsQuery = OqlBuilder.from(classOf[Root], "root").where("root.user=:user", user)
+    val rootsQuery = OqlBuilder.from(classOf[Root], "root").where("root.user=:user and root.app.enabled=true", user)
     val roots = entityDao.search(rootsQuery)
     apps ++= (roots.map(a => a.app))
-    apps.map(app => new Properties(app, "id", "name", "url", "logoUrl"))
+    val appBuffer = apps.toBuffer.sorted
+    appBuffer.map(app => new Properties(app, "id", "name", "title", "url", "logoUrl"))
   }
 }

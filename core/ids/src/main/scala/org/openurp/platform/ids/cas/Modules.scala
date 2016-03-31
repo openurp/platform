@@ -113,7 +113,7 @@ class SessionModule extends AbstractBindModule {
 
     bind("security.SessionRegistry.db", classOf[DBSessionRegistry])
       .constructor(ref("DataSource.session"), ref("cache.Chained.session"), ref("cache.Ehcache"))
-      .property("sessionTable", "cas_session_infoes").property("statTable", "cas_session_stats")
+      .property("sessionTable", "session.cas_session_infoes").property("statTable", "session.cas_session_stats")
 
     bind("security.SessionIdPolicy.cas", classOf[DefaultCasSessionIdPolicy])
 

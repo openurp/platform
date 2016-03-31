@@ -11,9 +11,11 @@ object Urp {
 
   val properties = readConfig(home + "/conf.properties")
 
-  val wsBase = "http://" + readBase("openurp.service", "localhost:8080")
+  val wsBase = readBase("openurp.service", "localhost:8080")
 
-  val platformBase = "http://" + readBase("openurp.platform", "localhost:8080")
+  val platformBase = readBase("openurp.platform", "localhost:8080")
+
+  val webappBase = readBase("openurp.webapp", "localhost:8080")
 
   private def readConfig(location: String): Map[String, String] = {
     val configFile = new File(location)
@@ -25,17 +27,19 @@ object Urp {
   }
 
   private def readBase(property: String, defaultValue: String): String = {
-    if (properties.isEmpty) {
-      defaultValue
-    } else {
-      properties.get(property) match {
-        case Some(v) => v
-        case None =>
-          properties.get("openurp.base") match {
-            case Some(base) => Strings.replace(property, "openurp.", "") + "." + base
-            case None => Strings.replace(defaultValue, "openurp.", "")
-          }
+    val result =
+      if (properties.isEmpty) {
+        defaultValue
+      } else {
+        properties.get(property) match {
+          case Some(v) => v
+          case None =>
+            properties.get("openurp.base") match {
+              case Some(base) => Strings.replace(property, "openurp.", "") + "." + base
+              case None => Strings.replace(defaultValue, "openurp.", "")
+            }
+        }
       }
-    }
+    if (result.startsWith("http")) result else "http://" + result
   }
 }

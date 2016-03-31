@@ -49,7 +49,7 @@ class DefaultModule extends AbstractBindModule with PropertySource {
 
     bind("security.SessionRegistry.db", classOf[DBSessionRegistry])
       .constructor(ref("DataSource.session#"), ref("cache.Chained.session"), ref("cache.Ehcache"))
-      .property("sessionTable", "app_session_infoes").property("statTable", "app_session_stats")
+      .property("sessionTable", "session.app_session_infoes").property("statTable", "session.app_session_stats")
 
     bind("security.SessionIdPolicy.cookie", classOf[DefaultUrpSessionIdPolicy]).property("path", "/")
 

@@ -1,10 +1,11 @@
 package org.openurp.platform.config.model
 
-import org.beangle.commons.collection.Collections
-import org.beangle.data.model.{ IntId, Named }
 import java.security.Principal
 
-class App extends IntId with Named with Principal {
+import org.beangle.commons.collection.Collections
+import org.beangle.data.model.{ Enabled, IntId, Named }
+
+class App extends IntId with Named with Enabled with Ordered[App] with Principal {
   var secret: String = _
   var title: String = _
   var datasources = Collections.newBuffer[DataSource]
@@ -12,6 +13,11 @@ class App extends IntId with Named with Principal {
   var appType: String = _
   var url: String = _
   var logoUrl: String = _
+  var indexno: String = _
   def getName = name
-  
+
+  override def compare(m: App): Int = {
+    indexno.compareTo(m.indexno)
+  }
+
 }
