@@ -40,6 +40,10 @@ object DefaultMapping extends Mapping {
       e.code is (notnull, length(30), unique),
       e.name is (notnull, length(100))))
 
+    bind[UserProfile].on(e => declare(
+      e.user & e.app are notnull,
+      e.properties is eleLength(2000)))
+
     bind[GroupMember].on(e => declare(
       e.group & e.user & e.updatedAt are notnull))
 

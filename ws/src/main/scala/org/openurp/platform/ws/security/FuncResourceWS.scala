@@ -11,12 +11,22 @@ import org.openurp.platform.security.model.FuncPermission
 import org.beangle.commons.collection.Collections
 import org.openurp.platform.security.model.FuncPermission
 import org.openurp.platform.security.model.FuncPermission
+import org.beangle.webmvc.entity.helper.QueryHelper
 
+/**
+ * 系统功能资源web服务
+ */
 class FuncResourceWS(entityDao: EntityDao) extends ActionSupport with EntitySupport[FuncResource] {
 
   @response
   def index(@param("app") app: String): Seq[Any] = {
     val query = OqlBuilder.from(classOf[FuncResource], "fr").where("fr.app.name=:name", app)
+    get("scope") match {
+      case Some("Private") => query.where("fr.scope = :scope", Scopes.Private)
+      case Some("Protected") => query.where("fr.scope = :scope", Scopes.Protected)
+      case Some("Public") => query.where("fr.scope = :scope", Scopes.Public)
+      case _ =>
+    }
     val resources = entityDao.search(query)
     val permissionQuery = OqlBuilder.from[Array[Object]](classOf[FuncPermission].getName, "fp")
       .where("fp.resource.app.name = :appName", app).
@@ -39,7 +49,7 @@ class FuncResourceWS(entityDao: EntityDao) extends ActionSupport with EntitySupp
     query.where("fr.name=:name", name)
     val resources = entityDao.search(query)
     if (!resources.isEmpty) {
-      val roleQuery = OqlBuilder.from(classOf[FuncPermission].getName, "fp")
+      val roleQuery = OqlBuilder.from[Integer](classOf[FuncPermission].getName, "fp")
         .where("fp.resource.app.name = :appName", app).where("fp.resource.name =:resourceName", name)
         .where("fp.endAt is null  or fp.endAt < :now)", new java.util.Date).select("fp.role.id")
       val p = new Properties(resources.head, "id", "name", "title", "scope")

@@ -16,7 +16,7 @@ class RemoteAuthorizer(cacheManager: CacheManager) extends Authorizer with Initi
   var unknownIsProtected = true
   val resources = cacheManager.getCache("security-resources", classOf[String], classOf[Resource])
   def init(): Unit = {
-    RemoteService.getFuncResources(UrpApp.name) foreach {
+    RemoteService.getFuncResources() foreach {
       case (name, resource) =>
         resources.put(name, resource)
     }
@@ -47,12 +47,10 @@ class RemoteAuthorizer(cacheManager: CacheManager) extends Authorizer with Initi
           val account = session.get.principal.asInstanceOf[Account]
           true
           //FIXME
-//          if (account.details("isRoot").asInstanceOf[Boolean]) true
-//          else res.matches(account.authorities.asInstanceOf[Set[Integer]])
+          //          if (account.details("isRoot").asInstanceOf[Boolean]) true
+          //          else res.matches(account.authorities.asInstanceOf[Set[Integer]])
         }
     }
   }
 
 }
-
-

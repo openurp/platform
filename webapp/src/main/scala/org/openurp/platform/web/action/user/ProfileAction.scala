@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Beangle.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.openurp.platform.web.action.security
+package org.openurp.platform.web.action.user
 
 import org.beangle.commons.lang.Numbers
 import org.beangle.data.dao.{ Operation, OqlBuilder }
@@ -24,7 +24,7 @@ import org.beangle.webmvc.api.annotation.{ ignore, param }
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.platform.web.helper.ProfileHelper
-import org.openurp.platform.security.model.UserProfile
+import org.openurp.platform.user.model.UserProfile
 import org.openurp.platform.user.service.impl.CsvDataResolver
 import org.openurp.platform.user.service.UserService
 import org.openurp.platform.user.service.DataResolver

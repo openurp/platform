@@ -10,7 +10,7 @@ import org.openurp.platform.user.service.UserService
 /**
  * @author chaostone
  */
-class AccountWS(userService: UserService, entityDao: EntityDao) extends ActionSupport with EntitySupport[User] {
+class AccountWS(userService: UserService, entityDao: EntityDao) extends ActionSupport {
 
   @mapping("{name}")
   @response
@@ -18,6 +18,7 @@ class AccountWS(userService: UserService, entityDao: EntityDao) extends ActionSu
     userService.get(username) match {
       case Some(user) =>
         val properties = new Properties()
+        properties += ("id" -> user.id)
         properties += ("principal" -> user.code)
         properties += ("description" -> user.name)
         properties += ("accountExpired" -> user.accountExpired)
@@ -25,17 +26,13 @@ class AccountWS(userService: UserService, entityDao: EntityDao) extends ActionSu
         properties += ("credentialExpired" -> user.credentialExpired)
         properties += ("disabled" -> !user.enabled)
 
-        //        val query = OqlBuilder.from(classOf[FuncPermission], "fp").join("fp.role.members", "m").where("m.member=true and m.user=:user", user)
-        //          .where("fp.resource.app.name=:appName", UrpApp.name).where("fp.endAt is null or fp.endAt < :now)", new java.util.Date).select("fp.id")
-        //        properties += ("authorities" -> entityDao.search(query).toSet)
-
         val query = OqlBuilder.from(classOf[RoleMember], "m").where("m.member=true and m.user=:user", user).select("m.role.id")
         properties += ("authorities" -> entityDao.search(query).toSet)
         val details = new Properties()
         details += ("category" -> user.category.id)
         properties += ("details" -> details)
         properties
-      case None => null
+      case None => new Properties()
     }
   }
 }

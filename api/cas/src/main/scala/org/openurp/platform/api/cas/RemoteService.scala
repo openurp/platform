@@ -23,8 +23,8 @@ object RemoteService {
     }
   }
 
-  def getFuncResources(app: String): collection.Map[String, Resource] = {
-    val url = Urp.platformBase + "/security/" + UrpApp.name + "/func-resources.json?app=" + app
+  def getFuncResources(): collection.Map[String, Resource] = {
+    val url = Urp.platformBase + "/security/" + UrpApp.name + "/func-resources.json"
     val resources = Collections.newMap[String, Resource]
     //FIXME
     //    resources ++= JSON.parse(IOs.readString(new URL(url).openStream())).asInstanceOf[Iterable[Number]].map { n => n.intValue }

@@ -32,7 +32,7 @@ import org.openurp.platform.user.service.DataResolver
 import org.openurp.platform.user.model.Dimension
 import org.openurp.platform.user.model.User
 import org.openurp.platform.user.model.Profile
-import org.openurp.platform.security.model.UserProfile
+import org.openurp.platform.user.model.UserProfile
 
 class ProfileHelper(entityDao: EntityDao, profileService: ProfileService) {
   var dataResolver: DataResolver = CsvDataResolver

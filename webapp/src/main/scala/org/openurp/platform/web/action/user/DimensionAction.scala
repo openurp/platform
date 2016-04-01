@@ -40,7 +40,7 @@ class DimensionAction extends RestfulAction[Dimension] {
       addError("名称重复")
       return forward(to(this, "edit"))
     }
-    field.apps.clear()
+    field.apps = new collection.mutable.ListBuffer[App]
     val appId2nd = getAll("appId2nd", classOf[Int])
     field.apps ++= entityDao.find(classOf[App], appId2nd)
     entityDao.saveOrUpdate(field)

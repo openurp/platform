@@ -4,7 +4,7 @@ import org.beangle.commons.collection.Properties
 import org.beangle.data.dao.OqlBuilder
 import org.beangle.data.dao.EntityDao
 import org.beangle.webmvc.api.action.{ ActionSupport, EntitySupport }
-import org.beangle.webmvc.api.annotation.{param, response}
+import org.beangle.webmvc.api.annotation.{ param, response }
 import org.openurp.platform.security.model.DataResource
 
 class DataResourceWS extends ActionSupport with EntitySupport[DataResource] {
@@ -19,12 +19,4 @@ class DataResourceWS extends ActionSupport with EntitySupport[DataResource] {
     else new Properties
   }
 
-//  @response
-//  def permission(@param("app") app: String, @param("client") client: String): Seq[Integer] = {
-//    val query = OqlBuilder.from(classOf[AppPermission], "adp").where("adp.app.name=:client", client)
-//    query.where("adp.resource.app.name=:app", app)
-//    query.select("adp.resource.id")
-//    val rs = entityDao.search(query)
-//    rs.asInstanceOf[Seq[Integer]]
-//  }
 }

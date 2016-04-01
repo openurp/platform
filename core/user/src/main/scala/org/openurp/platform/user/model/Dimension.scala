@@ -15,6 +15,7 @@ class Dimension extends IntId with Named {
   var typeName: String = _
   var keyName: String = _
   var properties: String = _
-  //FIXME 
-  var apps = Collections.newBuffer[App]
+  //FIXME
+  var apps: collection.mutable.Seq[App] = Collections.newBuffer[App]
+
 }

@@ -15,10 +15,6 @@ object DefaultMapping extends Mapping {
       e.restrictions is length(100),
       e.remark is length(100)))
 
-    bind[UserProfile].on(e => declare(
-      e.user & e.app are notnull,
-      e.properties is eleLength(2000)))
-
     bind[Menu].on(e => declare(
       e.profile & e.indexno & e.name & e.title are notnull,
       e.name & e.title & e.remark are length(100),
