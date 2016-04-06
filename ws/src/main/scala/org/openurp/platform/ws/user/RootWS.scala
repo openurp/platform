@@ -1,17 +1,12 @@
-package org.openurp.platform.ws.security
+package org.openurp.platform.ws.user
 
-import scala.collection.mutable.Buffer
-import org.beangle.commons.collection.Properties
 import org.beangle.data.dao.{ EntityDao, OqlBuilder }
 import org.beangle.webmvc.api.action.{ ActionSupport, EntitySupport }
 import org.beangle.webmvc.api.annotation.{ param, response }
-import org.openurp.platform.config.model.App
 import org.openurp.platform.user.model.User
 import org.openurp.platform.user.service.UserService
-import org.openurp.platform.security.model.FuncPermission
 import org.openurp.platform.user.model.Root
-import org.beangle.webmvc.api.annotation.mapping
-import org.beangle.commons.collection.Collections
+import org.openurp.platform.user.model.Root
 
 /**
  * @author chaostone

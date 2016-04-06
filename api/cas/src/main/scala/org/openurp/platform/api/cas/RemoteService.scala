@@ -24,7 +24,7 @@ object RemoteService {
   }
 
   def getRoots(): Set[String] = {
-    val url = Urp.platformBase + "/security/" + UrpApp.name + "/roots.json"
+    val url = Urp.platformBase + "/security/roots.json?app=" + UrpApp.name
     val resources = Collections.newSet[String]
     resources ++= JSON.parse(IOs.readString(new URL(url).openStream())).asInstanceOf[Iterable[String]]
     resources.toSet

@@ -5,7 +5,8 @@ import org.beangle.commons.inject.bind.AbstractBindModule
 import org.openurp.platform.oauth.service.impl.MemTokenRepository
 import org.openurp.platform.ws.config.DatasourceWS
 import org.openurp.platform.ws.oauth.TokenWS
-import org.openurp.platform.ws.security.{ AppWS, DataPermissionWS, DataResourceWS, FuncPermissionWS, FuncResourceWS, MenuProfileWS, MenuWS, RootWS }
+import org.openurp.platform.ws.security.{ AppWS, DataPermissionWS, DataResourceWS, FuncPermissionWS, FuncResourceWS, MenuProfileWS, MenuWS }
+import org.openurp.platform.ws.user.RootWS
 import org.openurp.platform.ws.user.{ AccountWS, DimensionWS, ProfileWS }
 
 class DefaultModule extends AbstractBindModule {
