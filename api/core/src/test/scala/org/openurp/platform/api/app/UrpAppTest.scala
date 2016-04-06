@@ -1,6 +1,5 @@
 package org.openurp.platform.api.app
 
-import org.beangle.commons.collection.Properties
 import org.junit.runner.RunWith
 import org.scalatest.{ FunSpec, Matchers }
 import org.scalatest.junit.JUnitRunner

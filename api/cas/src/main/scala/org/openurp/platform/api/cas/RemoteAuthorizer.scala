@@ -1,7 +1,6 @@
 package org.openurp.platform.api.cas
 
 import org.beangle.commons.cache.{ Cache, CacheManager }
-import org.beangle.commons.collection.Properties
 import org.beangle.commons.security.Request
 import org.beangle.security.authc.Account
 import org.beangle.security.authz.Authorizer

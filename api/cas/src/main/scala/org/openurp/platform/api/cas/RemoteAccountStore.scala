@@ -6,7 +6,6 @@ import org.openurp.platform.api.Urp
 import org.openurp.platform.api.util.JSON
 import org.beangle.commons.web.util.HttpUtils
 import java.net.URL
-import org.beangle.commons.collection.Properties
 
 /**
  * @author chaostone

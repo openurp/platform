@@ -1,12 +1,12 @@
 package org.openurp.platform.api.cas
 
+import java.net.URL
+
+import org.beangle.commons.collection.Collections
+import org.beangle.commons.io.IOs
+import org.openurp.platform.api.Urp
 import org.openurp.platform.api.app.UrpApp
 import org.openurp.platform.api.util.JSON
-import org.openurp.platform.api.Urp
-import org.beangle.commons.io.IOs
-import org.beangle.commons.collection.Properties
-import java.net.URL
-import org.beangle.commons.collection.Collections
 
 /**
  * @author chaostone
@@ -15,7 +15,7 @@ object RemoteService {
   def getResource(resourceName: String): Option[Resource] = {
     val url = Urp.platformBase + "/security/" + UrpApp.name + "/func-resources/info.json?name=" + resourceName
     val script = IOs.readString(new URL(url).openStream())
-    val r = JSON.parse(script).asInstanceOf[Properties]
+    val r = JSON.parse(script).asInstanceOf[Map[String, _]]
     if (r.contains("id")) {
       Some(Resource(r("id").asInstanceOf[Number].intValue, r("scope").toString, r("roles").asInstanceOf[Seq[Int]].toArray))
     } else {
@@ -24,7 +24,7 @@ object RemoteService {
   }
 
   def getRoots(): Set[String] = {
-    val url = Urp.platformBase + "/security/roots.json?app=" + UrpApp.name
+    val url = Urp.platformBase + "/user/roots.json?app=" + UrpApp.name
     val resources = Collections.newSet[String]
     resources ++= JSON.parse(IOs.readString(new URL(url).openStream())).asInstanceOf[Iterable[String]]
     resources.toSet
@@ -33,7 +33,7 @@ object RemoteService {
   def getFuncResources(): collection.Map[String, Resource] = {
     val url = Urp.platformBase + "/security/" + UrpApp.name + "/func-resources.json"
     val resources = Collections.newMap[String, Resource]
-    val resourceJsons = JSON.parse(IOs.readString(new URL(url).openStream())).asInstanceOf[Iterable[Properties]]
+    val resourceJsons = JSON.parse(IOs.readString(new URL(url).openStream())).asInstanceOf[Iterable[Map[String, _]]]
     resourceJsons.map { r =>
       resources += (r("name").toString -> Resource(r("id").asInstanceOf[Number].intValue, r("scope").toString, r("roles").asInstanceOf[Seq[Int]].toArray))
     }

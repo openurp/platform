@@ -20,7 +20,8 @@ object JSON {
       case n: Number => n
       case b: ju.Map[_, _] =>
         if (isArray(string)) {
-          collection.JavaConversions.collectionAsScalaIterable(b.values())
+          import collection.JavaConversions.collectionAsScalaIterable
+          b.values().map { x => convert(x.asInstanceOf[Object]) }
         } else {
           val iter = b.entrySet().iterator()
           val result = new Properties
@@ -28,7 +29,7 @@ object JSON {
             val one = iter.next
             result.put(one.getKey.toString, convert(one.getValue.asInstanceOf[Object]))
           }
-          result
+          result.toMap
         }
       case l: ju.Collection[_] => collection.JavaConversions.collectionAsScalaIterable(l)
     }
@@ -54,7 +55,7 @@ object JSON {
             val one = iter.next
             result.put(one.getKey.toString, convert(one.getValue.asInstanceOf[Object]))
           }
-          result
+          result.toMap
         }
       case l: ju.Collection[_] => collection.JavaConversions.collectionAsScalaIterable(l)
       case _ => value
