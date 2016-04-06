@@ -13,7 +13,7 @@ object JSON {
     val sem = new ScriptEngineManager
     val engine = sem.getEngineByName("javascript")
     if (Strings.isBlank(string) || "{}".equals(string)) {
-      return new Properties()
+      return Map.empty[String, Any]
     }
     engine.eval("result =" + string) match {
       case d: String => d

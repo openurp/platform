@@ -111,23 +111,6 @@ class MenuAction(val menuService: MenuService) extends RestfulAction[Menu] {
   //
   //    return redirect("search", "info.save.success")
   //  }
-  //
-  //  /**
-  //   * 打印预览功能列表
-  //   */
-  //   String preview() {
-  //    OqlBuilder<Menu> query = OqlBuilder.from(classOf[Menu], "menu")
-  //    populateConditions(query)
-  //    query.orderBy("menu.indexno asc")
-  //    put("menus", entityDao.search(query))
-  //
-  //    query.clearOrders()
-  //    query.select("max(length(menu.indexno)/2)")
-  //    List<?> rs = entityDao.search(query)
-  //    put("depth", rs.get(0))
-  //    return forward()
-  //  }
-  //
   override def info(@param("id") id: String): String = {
     val menu = this.entityDao.get(classOf[Menu], Integer.parseInt(id))
     put("menu", menu)
@@ -138,11 +121,5 @@ class MenuAction(val menuService: MenuService) extends RestfulAction[Menu] {
     }
     return forward()
   }
-  //
-  //   String xml() {
-  //    put("resources", entityDao.getAll(FuncResource.class))
-  //    put("menuProfiles", entityDao.getAll(MenuProfile.class))
-  //    return forward()
-  //  }
 
 }
