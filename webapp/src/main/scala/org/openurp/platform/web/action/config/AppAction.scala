@@ -2,16 +2,15 @@ package org.openurp.platform.web.action.config
 
 import java.security.MessageDigest
 import java.util.Arrays
-
 import org.beangle.commons.codec.binary.Hex
 import org.beangle.webmvc.api.annotation.ignore
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.platform.config.model.{ App, DataSource }
 import org.openurp.platform.config.service.DbService
-
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
+import org.openurp.platform.config.model.Domain
 
 class AppAction(dbService: DbService) extends RestfulAction[App] {
 
@@ -20,6 +19,10 @@ class AppAction(dbService: DbService) extends RestfulAction[App] {
   def datasource(): String = {
     put("dataSources", dbService.list())
     forward()
+  }
+
+  protected override def editSetting(entity: App): Unit = {
+    put("domains", entityDao.getAll(classOf[Domain]))
   }
 
   @ignore

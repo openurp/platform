@@ -26,7 +26,7 @@ class RemoteAccountStore extends AccountStore {
       account.accountLocked = data("accountLocked").asInstanceOf[Boolean]
       account.accountExpired = data("accountExpired").asInstanceOf[Boolean]
       account.credentialExpired = data("credentialExpired").asInstanceOf[Boolean]
-      account.disabled = data("disabled").asInstanceOf[Boolean]
+      account.disabled = !data("enabled").asInstanceOf[Boolean]
       Some(account)
     }
   }

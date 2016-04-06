@@ -18,7 +18,7 @@ class ProfileWS(entityDao: EntityDao) extends ActionSupport {
 
   @response
   @mapping("{userCode}")
-  def index(@param("app") app: String, @param("userCode") userCode: String): Any = {
+  def index(@param("domain") domain: String, @param("userCode") userCode: String): Any = {
 
     val userQuery = OqlBuilder.from(classOf[User], "u").where("u.code =:userCode", userCode);
     val users = entityDao.search(userQuery);
@@ -27,7 +27,7 @@ class ProfileWS(entityDao: EntityDao) extends ActionSupport {
       val u = users.head
       val userProfileQuery = OqlBuilder.from(classOf[UserProfile], "up")
         .where("up.user =:user", u)
-        .where("up.app.name=:appName", app)
+        .where("up.domain.name=:domainName", domain)
 
       val appProfiles = entityDao.search(userProfileQuery);
       val profiles = if (u.properties.isEmpty) appProfiles else List(u) ++ appProfiles

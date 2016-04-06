@@ -15,11 +15,13 @@ import org.openurp.platform.api.app.UrpApp
 class RemoteAuthorizer(cacheManager: CacheManager) extends Authorizer with Initializing {
   var unknownIsProtected = true
   val resources = cacheManager.getCache("security-resources", classOf[String], classOf[Resource])
+  var roots: Set[String] = _
   def init(): Unit = {
     RemoteService.getFuncResources() foreach {
       case (name, resource) =>
         resources.put(name, resource)
     }
+    roots = RemoteService.getRoots()
   }
 
   override def isPermitted(session: Option[Session], request: Request): Boolean = {
@@ -45,10 +47,7 @@ class RemoteAuthorizer(cacheManager: CacheManager) extends Authorizer with Initi
         if (None == session) false
         else {
           val account = session.get.principal.asInstanceOf[Account]
-          true
-          //FIXME
-          //          if (account.details("isRoot").asInstanceOf[Boolean]) true
-          //          else res.matches(account.authorities.asInstanceOf[Set[Integer]])
+          res.matches(account.authorities.asInstanceOf[Set[Integer]]) || roots.contains(account.getName)
         }
     }
   }

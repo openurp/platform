@@ -23,6 +23,7 @@ import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.platform.config.model.App
 import org.openurp.platform.user.model.Dimension
+import org.openurp.platform.config.model.Domain
 
 /**
  * 数据限制域元信息配置类
@@ -32,17 +33,17 @@ import org.openurp.platform.user.model.Dimension
 class DimensionAction extends RestfulAction[Dimension] {
 
   override def editSetting(dimension: Dimension): Unit = {
-    val apps = entityDao.getAll(classOf[App]).toBuffer -- dimension.apps
-    put("apps", apps)
+    val domains = entityDao.getAll(classOf[Domain]).toBuffer -- dimension.domains
+    put("domains", domains)
   }
   protected override def saveAndRedirect(field: Dimension): View = {
     if (entityDao.duplicate(classOf[Dimension], field.id, "name", field.name)) {
       addError("名称重复")
       return forward(to(this, "edit"))
     }
-    field.apps = new collection.mutable.ListBuffer[App]
+    field.domains = new collection.mutable.ListBuffer[Domain]
     val appId2nd = getAll("appId2nd", classOf[Int])
-    field.apps ++= entityDao.find(classOf[App], appId2nd)
+    field.domains ++= entityDao.find(classOf[Domain], appId2nd)
     entityDao.saveOrUpdate(field)
     redirect("search", "info.save.success")
   }

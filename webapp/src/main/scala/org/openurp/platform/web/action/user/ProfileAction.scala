@@ -48,7 +48,7 @@ class ProfileAction(profileService: ProfileService) extends RestfulAction[UserPr
   /**
    * 查看限制资源界面
    */
-  def appinfo(@param("profile.user.id") userId: String, @param("profile.app.id") appId: String): String = {
+  def appinfo(@param("profile.user.id") userId: String, @param("profile.domain.id") appId: String): String = {
     val helper = new ProfileHelper(entityDao, profileService)
     val builder = OqlBuilder.from(classOf[UserProfile], "up").where("up.user.id=:userId and up.app.id=:appId", Numbers.toLong(userId), Numbers.toInt(appId))
     val profiles = entityDao.search(builder)
@@ -60,15 +60,15 @@ class ProfileAction(profileService: ProfileService) extends RestfulAction[UserPr
     val helper = new ProfileHelper(entityDao, profileService)
     helper.dataResolver = dataResolver
     //FIXME
-    helper.populateSaveInfo(profile, true, profile.app)
+    helper.populateSaveInfo(profile, true, profile.domain)
     if (profile.properties.isEmpty) {
       if (profile.persisted) {
         entityDao.remove(profile)
       }
-      redirect("appinfo", s"&profile.app.id=${profile.app.id}&profile.user.id=${profile.user.id}", "info.save.success")
+      redirect("appinfo", s"&profile.domain.id=${profile.domain.id}&profile.user.id=${profile.user.id}", "info.save.success")
     } else {
       entityDao.saveOrUpdate(profile)
-      redirect("appinfo", s"&profile.app.id=${profile.app.id}&profile.user.id=${profile.user.id}", "info.save.success")
+      redirect("appinfo", s"&profile.domain.id=${profile.domain.id}&profile.user.id=${profile.user.id}", "info.save.success")
     }
   }
   @ignore
@@ -77,17 +77,17 @@ class ProfileAction(profileService: ProfileService) extends RestfulAction[UserPr
     try {
       entityDao.execute(Operation.saveOrUpdate(profile.user).remove(entities))
       //      remove(entities)
-      redirect("appinfo", s"&profile.app.id=${profile.app.id}&profile.user.id=${profile.user.id}", "info.remove.success")
+      redirect("appinfo", s"&profile.domain.id=${profile.domain.id}&profile.user.id=${profile.user.id}", "info.remove.success")
     } catch {
       case e: Exception => {
         logger.info("removeAndForwad failure", e)
-        redirect("appinfo", s"&profile.app.id=${profile.app.id}&profile.user.id=${profile.user.id}", "info.delete.failure")
+        redirect("appinfo", s"&profile.domain.id=${profile.domain.id}&profile.user.id=${profile.user.id}", "info.delete.failure")
       }
     }
   }
   protected override def editSetting(profile: UserProfile): Unit = {
     val helper = new ProfileHelper(entityDao, profileService)
-    helper.fillEditInfo(profile, true, profile.app)
+    helper.fillEditInfo(profile, true, profile.domain)
   }
 
 }

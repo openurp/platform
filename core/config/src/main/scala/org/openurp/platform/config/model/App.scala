@@ -14,6 +14,8 @@ class App extends IntId with Named with Enabled with Ordered[App] with Principal
   var url: String = _
   var logoUrl: String = _
   var indexno: String = _
+  var domain: Domain = _
+
   def getName = name
 
   override def compare(m: App): Int = {

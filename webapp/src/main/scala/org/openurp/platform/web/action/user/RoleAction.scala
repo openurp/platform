@@ -74,10 +74,10 @@ class RoleAction(val roleService: RoleService, val userService: UserService) ext
   protected override def getQueryBuilder(): OqlBuilder[Role] = {
     val entityQuery = OqlBuilder.from(classOf[Role], "role")
     val me = entityDao.findBy(classOf[User], "code", List(Securities.user)).head
-//    if (!userService.isRoot(me, app.name)) {
-//      entityQuery.join("role.members", "gm")
-//      entityQuery.where("gm.user=:me and gm.manager=true", me)
-//    }
+    //    if (!userService.isRoot(me, app.name)) {
+    //      entityQuery.join("role.members", "gm")
+    //      entityQuery.where("gm.user=:me and gm.manager=true", me)
+    //    }
     populateConditions(entityQuery)
     val orderBy = get("orderBy", "role.indexno")
     entityQuery.limit(getPageLimit).orderBy(orderBy)
@@ -146,7 +146,7 @@ class RoleAction(val roleService: RoleService, val userService: UserService) ext
     helper.dataResolver = dataResolver
     val role = entityDao.get(classOf[Role], intId("role"))
     val app = entityDao.get(classOf[App], intId("app"))
-    helper.populateSaveInfo(role, userService.isRoot(me, app.name), app)
+    helper.populateSaveInfo(role, userService.isRoot(me, app.name), app.domain)
     entityDao.saveOrUpdate(role)
     redirect("profile", "info.save.success")
   }
