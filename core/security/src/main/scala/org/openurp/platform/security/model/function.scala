@@ -25,6 +25,13 @@ class FuncPermission extends LongId with TemporalAt with Permission {
   var restrictions: String = _
   var remark: String = _
 
+  def this(role: Role, resource: FuncResource) {
+    this();
+    this.role = role
+    this.resource = resource
+    this.beginAt = new java.util.Date
+  }
+
   def principal: Principal = role
 }
 

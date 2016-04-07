@@ -8,6 +8,8 @@ import org.openurp.platform.security.model.FuncResource
 import org.openurp.platform.user.model.Role
 import org.openurp.platform.user.model.User
 import org.openurp.platform.security.service.FuncPermissionService
+import org.beangle.commons.collection.Collections
+import org.beangle.data.dao.Operation
 
 class FuncPermissionServiceImpl(val entityDao: EntityDao) extends FuncPermissionService {
 
@@ -30,7 +32,7 @@ class FuncPermissionServiceImpl(val entityDao: EntityDao) extends FuncPermission
   }
 
   def getPermissions(role: Role): Seq[FuncPermission] = {
-    null
+    entityDao.search(OqlBuilder.from(classOf[FuncPermission], "fp").where("fp.role=:role", role));
   }
 
   def activate(resourceId: Iterable[Int], active: Boolean): Unit = {
@@ -38,6 +40,18 @@ class FuncPermissionServiceImpl(val entityDao: EntityDao) extends FuncPermission
   }
 
   def authorize(role: Role, resources: Set[FuncResource]): Unit = {
+    val resourceSet = Collections.newSet[FuncResource] ++ resources
+    val permissions = getPermissions(role).toBuffer
+    val builder = new Operation.Builder()
+    for (au <- permissions) {
+      if (resources.contains(au.resource)) resourceSet.remove(au.resource)
+      else builder.remove(au)
+    }
 
+    for (resource <- resourceSet) {
+      val authority = new FuncPermission(role, resource);
+      builder.saveOrUpdate(authority)
+    }
+    entityDao.execute(builder)
   }
 }

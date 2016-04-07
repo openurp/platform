@@ -88,29 +88,23 @@ class MenuAction(val menuService: MenuService) extends RestfulAction[Menu] {
     return redirect("search", "info.save.success")
   }
 
-  //  /**
-  //   * 禁用或激活一个或多个模块
-  //   */
-  //   def  activate():View= {
-  //    Integer[] menuIds = getIds(getShortName(), Integer.class)
-  //    Boolean enabled = getBoolean("isActivate")
-  //    if (null == enabled) enabled = Boolean.TRUE
-  //
-  //    Set<Menu> updated = CollectUtils.newHashSet()
-  //    List<Menu> menus = entityDao.get(classOf[Menu], menuIds)
-  //    for (Menu menu : menus) {
-  //      if (enabled) {
-  //        updated.addAll(HierarchyEntityUtils.getPath(menu))
-  //      } else {
-  //        updated.addAll(HierarchyEntityUtils.getFamily(menu))
-  //      }
-  //    }
-  //    for (Menu menu : updated)
-  //      ((MenuBean) menu).setEnabled(enabled)
-  //    entityDao.saveOrUpdate(updated)
-  //
-  //    return redirect("search", "info.save.success")
-  //  }
+  /**
+   * 禁用或激活一个或多个模块
+   */
+  def activate(): View = {
+    val menuIds = intIds("menu")
+    val enabled = getBoolean("isActivate", true)
+
+    val updated = Collections.newSet[Menu]
+    val menus = entityDao.find(classOf[Menu], menuIds)
+    for (menu <- menus) {
+      updated ++= (if (enabled) Hierarchicals.getPath(menu) else Hierarchicals.getFamily(menu))
+    }
+    for (menu <- updated) menu.enabled = enabled
+    entityDao.saveOrUpdate(updated)
+    return redirect("search", "info.save.success")
+  }
+
   override def info(@param("id") id: String): String = {
     val menu = this.entityDao.get(classOf[Menu], Integer.parseInt(id))
     put("menu", menu)

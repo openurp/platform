@@ -48,9 +48,9 @@
     </select>
     </td>
     <td class="title">
-    菜单配置:<select name="menuProfileId" style="width:150px;" onchange="this.form.submit();">
+    菜单配置:<select name="menuProfileId" style="width:300px;" onchange="this.form.submit();">
       [#list menuProfiles as profile]
-      <option value="${profile.id}" [#if profile=menuProfile]selected="selected"[/#if]>${profile.name}</option>
+      <option value="${profile.id}" [#if profile=menuProfile]selected="selected"[/#if]>${profile.app.title} ${profile.name}</option>
       [/#list]
       </select>
     </td>
@@ -61,7 +61,7 @@
 <table width="100%" class="gridtable">
   <tbody>
   <tr class="gridhead">
-  <th width="6%"><input type="checkbox" onclick="treeToggleAll(this,checkResource)"/></th>
+  <th width="6%" class="gridselect"><input type="checkbox" onclick="treeToggleAll(this,checkResource)"/></th>
   <th width="28%">${b.text("common.name")}</th>
   <th width="10%">${b.text("common.id")}</th>
   <th width="50%">可用资源</th>
@@ -88,7 +88,7 @@
     <td>
       [#list menu.resources as resource]
         [#if resources?seq_contains(resource)]
-        <input type="checkbox" name="resourceId" id="checkbox_${menu_index}_${resource_index}" [#if parentResources?seq_contains(resource)]checked="checked" disabled="disabled"[#else][#if roleResources?seq_contains(resource)]checked="checked"[/#if][/#if] value="${resource.id}">[#rt]
+        <input type="checkbox" name="resource.id" id="checkbox_${menu_index}_${resource_index}" [#if parentResources?seq_contains(resource)]checked="checked" disabled="disabled"[#else][#if roleResources?seq_contains(resource)]checked="checked"[/#if][/#if] value="${resource.id}">[#rt]
         ${resource.title}
         [/#if]
         [#if resource_index%3==1]<br/>[/#if]

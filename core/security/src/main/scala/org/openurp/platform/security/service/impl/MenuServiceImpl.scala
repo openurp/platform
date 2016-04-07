@@ -58,18 +58,31 @@ class MenuServiceImpl(val entityDao: EntityDao) extends MenuService {
   def getMenus(profile: MenuProfile, user: User): Seq[Menu] = {
     null
   }
+
   def getMenus(profile: MenuProfile, role: Role): Seq[Menu] = {
-    null
+    val query = buildMenuQuery(profile, role);
+    query.where("menu.enabled= true")
+    val menus = Collections.newSet[Menu]
+    menus ++= entityDao.search(query)
+    addParentMenus(menus)
   }
-  def getProfile(role: Role, profileId: Integer): MenuProfile = {
-    null
+
+  private def buildMenuQuery(profile: MenuProfile, role: Role): OqlBuilder[Menu] = {
+    val builder = OqlBuilder.from(classOf[Menu]);
+    builder.join("menu.resources", "mr");
+    builder.where("exists(from " + classOf[FuncPermission].getName
+      + " a where a.role=:role and a.resource=mr)", role);
+    builder.where("mr=menu.entry");
+    if (null != profile) builder.where("menu.profile=:profile", profile);
+    builder
+  }
+
+  private def addParentMenus(menus: collection.mutable.Set[Menu]): Seq[Menu] = {
+    Hierarchicals.addParent(menus);
+    menus.toList.sorted
   }
 
   def getProfiles(user: User): Seq[MenuProfile] = {
-    null
-  }
-
-  def getProfiles(role: Role): Seq[MenuProfile] = {
     null
   }
 
