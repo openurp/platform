@@ -26,7 +26,7 @@ import org.openurp.platform.security.model.MenuProfile
 import org.openurp.platform.security.model.Menu
 import org.openurp.platform.user.model.Role
 import org.openurp.platform.user.model.User
-import org.openurp.platform.security.model.UserProfile
+import org.openurp.platform.user.model.UserProfile
 
 /**
  * @author chaostone

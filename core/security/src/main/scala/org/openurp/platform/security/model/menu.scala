@@ -14,7 +14,7 @@ class MenuProfile extends IntId with Named with Enabled {
   var role: Role = _
 }
 
-class Menu extends IntId with Named with Enabled with Hierarchical[Menu] {
+class Menu extends IntId with Named with Enabled with Hierarchical[Menu] with Ordered[Menu] {
   var profile: MenuProfile = _
   var title: String = _
   var entry: FuncResource = _
@@ -26,5 +26,7 @@ class Menu extends IntId with Named with Enabled with Hierarchical[Menu] {
     indexno + " " + title
   }
 
+  override def compare(m: Menu): Int = {
+    indexno.compareTo(m.indexno)
+  }
 }
-

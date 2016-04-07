@@ -1,8 +1,8 @@
 package org.openurp.platform.user.model
 
-import org.beangle.data.model.{ IntId, Named }
 import org.beangle.commons.collection.Collections
-import org.openurp.platform.config.model.App
+import org.beangle.data.model.{ IntId, Named }
+import org.openurp.platform.config.model.Domain
 
 /**
  * @author chaostone
@@ -15,6 +15,5 @@ class Dimension extends IntId with Named {
   var typeName: String = _
   var keyName: String = _
   var properties: String = _
-  //FIXME 
-  var apps = Collections.newBuffer[App]
+  var domains: collection.mutable.Seq[Domain] = Collections.newBuffer[Domain]
 }

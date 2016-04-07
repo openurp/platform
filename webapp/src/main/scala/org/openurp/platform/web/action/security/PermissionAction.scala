@@ -20,13 +20,15 @@ package org.openurp.platform.web.action.security
 
 import org.beangle.commons.lang.{ Numbers, Strings }
 import org.beangle.data.dao.OqlBuilder
-import org.beangle.webmvc.api.annotation.{ ignore, mapping, param }
+import org.beangle.webmvc.api.annotation.{ mapping, param }
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.platform.api.security.Securities
 import org.openurp.platform.security.model.{ FuncPermission, FuncResource, Menu, MenuProfile }
 import org.openurp.platform.security.service.{ FuncPermissionService, MenuService }
 import org.openurp.platform.user.model.{ Role, User }
+import org.openurp.platform.user.service.UserService
+import org.openurp.platform.api.app.UrpApp
 
 /**
  * 权限分配与管理响应类
@@ -37,7 +39,7 @@ class PermissionAction extends RestfulAction[FuncPermission] {
 
   var menuService: MenuService = _
   var funcPermissionService: FuncPermissionService = _
-
+  var userService: UserService = _
   /**
    * 根据菜单配置来分配权限
    */
@@ -52,17 +54,19 @@ class PermissionAction extends RestfulAction[FuncPermission] {
       if (m.granter) mngRoles += m.role
     }
     put("mngRoles", mngRoles)
-    val menuProfiles = menuService.getProfiles(role)
+    val menuProfiles = entityDao.getAll(classOf[MenuProfile])
     put("menuProfiles", menuProfiles)
 
-    var menuProfile = menuService.getProfile(role, intId("menuProfile"))
-    if (null == menuProfile && !menuProfiles.isEmpty) {
-      menuProfile = menuProfiles(0)
+    var menuProfile: MenuProfile = null
+    getId("menuProfile", classOf[Int]) foreach { id =>
+      menuProfile = entityDao.get(classOf[MenuProfile], id)
     }
+    if (null == menuProfile && !menuProfiles.isEmpty) menuProfile = menuProfiles(0)
+
     var menus = new collection.mutable.ListBuffer[Menu]
     if (null != menuProfile) {
       var resources: collection.Seq[Object] = null
-      if (isAdmin(user)) {
+      if (userService.isRoot(user, UrpApp.name)) {
         menus ++= menuProfile.menus
         resources = entityDao.getAll(classOf[FuncResource])
       } else {
@@ -132,13 +136,13 @@ class PermissionAction extends RestfulAction[FuncPermission] {
   override def save(): View = {
     val role = entityDao.get(classOf[Role], intId("role"))
     val menuProfile = entityDao.get(classOf[MenuProfile], intId("menuProfile"))
-    val newResources = entityDao.findBy(classOf[FuncResource], "id", Strings.split(get("resourceId", "")).map(a => Integer.valueOf(a))).toSet
+    val newResources = entityDao.findBy(classOf[FuncResource], "id", intIds("resource")).toSet
 
     // 管理员拥有的菜单权限和系统资源
     val manager = entityDao.findBy(classOf[User], "code", List(Securities.user)).head
     var mngMenus: collection.Set[Menu] = null
     val mngResources = new collection.mutable.HashSet[FuncResource]
-    if (isAdmin(manager)) {
+    if (userService.isRoot(manager, UrpApp.name)) {
       mngMenus = menuProfile.menus.toSet
     } else {
       mngMenus = menuService.getMenus(menuProfile, manager).toSet
@@ -147,7 +151,6 @@ class PermissionAction extends RestfulAction[FuncPermission] {
       mngResources ++= m.resources
     }
 
-    //newResources.retainAll(mngResources)
     newResources.dropWhile(p => !mngResources.contains(p))
     funcPermissionService.authorize(role, newResources)
 
@@ -159,7 +162,4 @@ class PermissionAction extends RestfulAction[FuncPermission] {
     redirect(where, "info.save.success")
   }
 
-  private def isAdmin(user: User): Boolean = {
-    user.id == 1L
-  }
 }

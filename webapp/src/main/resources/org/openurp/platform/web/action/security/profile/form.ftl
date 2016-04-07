@@ -10,8 +10,8 @@
 [@b.form name="profileForm" action="!save"]
   <input type="hidden" name="profile.id" value="${profile.id!}"/>
   <input type="hidden" name="profile.user.id" value="${profile.user.id}"/>
-  <input type="hidden" name="profile.app.id" value="${profile.app.id}"/>
-  <input type="hidden" name="_params" value="&profile.user.id=${profile.user.id}&profile.app.id=${profile.app.id}"/>
+  <input type="hidden" name="profile.domain.id" value="${profile.domain.id}"/>
+  <input type="hidden" name="_params" value="&profile.user.id=${profile.user.id}&profile.domain.id=${profile.domain.id}"/>
   [@b.tabs]
     [#list fields?sort_by("title") as field]
     [@b.tab label="${field.name}(${field.title})"]

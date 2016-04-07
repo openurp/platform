@@ -1,7 +1,6 @@
 package org.openurp.platform.api.cas
 
 import org.beangle.commons.cache.{ Cache, CacheManager }
-import org.beangle.commons.collection.Properties
 import org.beangle.commons.security.Request
 import org.beangle.security.authc.Account
 import org.beangle.security.authz.Authorizer
@@ -15,11 +14,13 @@ import org.openurp.platform.api.app.UrpApp
 class RemoteAuthorizer(cacheManager: CacheManager) extends Authorizer with Initializing {
   var unknownIsProtected = true
   val resources = cacheManager.getCache("security-resources", classOf[String], classOf[Resource])
+  var roots: Set[String] = _
   def init(): Unit = {
-    RemoteService.getFuncResources(UrpApp.name) foreach {
+    RemoteService.getFuncResources() foreach {
       case (name, resource) =>
         resources.put(name, resource)
     }
+    roots = RemoteService.getRoots()
   }
 
   override def isPermitted(session: Option[Session], request: Request): Boolean = {
@@ -45,14 +46,9 @@ class RemoteAuthorizer(cacheManager: CacheManager) extends Authorizer with Initi
         if (None == session) false
         else {
           val account = session.get.principal.asInstanceOf[Account]
-          true
-          //FIXME
-//          if (account.details("isRoot").asInstanceOf[Boolean]) true
-//          else res.matches(account.authorities.asInstanceOf[Set[Integer]])
+          res.matches(account.authorities.asInstanceOf[Set[Integer]]) || roots.contains(account.getName)
         }
     }
   }
 
 }
-
-

@@ -32,8 +32,8 @@ object UrpApp extends Logging {
     }
 
     if (null == _token) {
-      val tokenUrl = Urp.platformBase + "/kernel/token/login?app=" + name + "&secret=" + secret
-      val token = JSON.parse(HttpUtils.getResponseText(tokenUrl)).asInstanceOf[Properties]
+      val tokenUrl = Urp.platformBase + "/oauth/token/login?app=" + name + "&secret=" + secret
+      val token = JSON.parse(HttpUtils.getResponseText(tokenUrl)).asInstanceOf[Map[String, _]]
       _token = Token(token("token").asInstanceOf[String], (new String2DateConverter).convert(token("expiredAt"), classOf[java.util.Date]).asInstanceOf[java.util.Date].getTime)
     }
     _token.token
@@ -53,8 +53,7 @@ object UrpApp extends Logging {
 
     //app path starts with /
     var appPath = Strings.replace(name, "-", "/")
-    appPath = Strings.replace(appPath, ".", "/")
-    appPath = if (appPath.contains("/")) ("/" + Strings.substringAfter(appPath, "/")) else "/" + appPath
+    appPath = "/" + Strings.replace(appPath, ".", "/")
 
     val result = new collection.mutable.HashMap[String, Any]
     result ++= appManifest

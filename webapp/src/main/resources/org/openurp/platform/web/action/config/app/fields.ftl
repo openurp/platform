@@ -1,6 +1,8 @@
+[@b.textfield name="app.indexno" label="分类号" value="${app.indexno!}" required="true" maxlength="50"/]
 [@b.textfield name="app.name" label="名称" value="${app.name!}" required="true" maxlength="200"/]
 [@b.textfield name="app.title" label="标题" value="${app.title!}" required="true" maxlength="200"/]
-[@b.radios name="app.appType" label="类型" items={'web-data-service':'web数据服务 ','web-app-service':'web应用服务 ','web-app':'web应用'} value="${app.appType!}" required="true" /]
+[@b.radios name="app.appType" label="类型" items={'web-service':'web服务 ','web-app':'web应用'} value="${app.appType!}" required="true" /]
+[@b.select name="app.domain.id" label="领域" value="${app.domain.id!}" option="id,title" required="true" items=domains/]
 [@b.textfield name="app.url" label="URL" value="${app.url!}" required="true" maxlength="200" style="width:300px"/]
 [@b.field label="引用资源"]
   <div style="margin-left:120px;">
@@ -36,6 +38,7 @@
     <p><button class="addBtn">添加</button><p>
   </div>
 [/@]
+[@b.radios name="app.enabled" label="是否可用"  value=app.enabled required="true" /]
 [@b.textfield name="app.secret" label="密钥" value="${app.secret!}" maxlength="200" required="true"/]
 [@b.textarea name="app.remark" label="备注" value="${app.remark!}" maxlength="200"/]
 [@b.formfoot]

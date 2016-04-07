@@ -40,15 +40,16 @@ class DefaultModule extends AbstractBindModule with PropertySource {
 
     bind("DataSource.session#", classOf[DataSourceFactory]).property("name", "session").property("url", Urp.home + "/platform/session.xml")
 
-    bind("cache.Ehcache", classOf[EhCacheManager]).constructor("ehcache-security")
+    bind("cache.Ehcache", classOf[EhCacheManager]).constructor("ehcache-security", false)
 
-    bind("cache.Ehcache.session", classOf[EhCacheChainedManager])
-      .constructor(ref("cache.Ehcache"), bean(classOf[RedisCacheManager]))
+    bind("cache.Chained.session", classOf[EhCacheChainedManager])
+      .constructor(ref("cache.Ehcache"), bean(classOf[RedisCacheManager]), true)
       .property("broadcasterBuilder", bean(classOf[RedisBroadcasterBuilder]))
+      .property("propagateExpiration", false)
 
     bind("security.SessionRegistry.db", classOf[DBSessionRegistry])
-      .constructor(ref("DataSource.session#"), ref("cache.Ehcache.session"), ref("cache.Ehcache"))
-      .property("sessionTable", "app_session_infoes").property("statTable", "app_session_stats")
+      .constructor(ref("DataSource.session#"), ref("cache.Chained.session"), ref("cache.Ehcache"))
+      .property("sessionTable", "session.app_session_infoes").property("statTable", "session.app_session_stats")
 
     bind("security.SessionIdPolicy.cookie", classOf[DefaultUrpSessionIdPolicy]).property("path", "/")
 
@@ -63,7 +64,8 @@ class DefaultModule extends AbstractBindModule with PropertySource {
 
   override def properties: collection.Map[String, String] = {
     val datas = Collections.newMap[String, String]
-    val casUrl = Urp.properties.get("openurp.platform.cas.server").getOrElse(Urp.platformBase + "/cas")
+    var casUrl = Urp.properties.get("openurp.platform.cas.server").getOrElse(Urp.platformBase + "/cas")
+    if (!casUrl.startsWith("http")) casUrl = "http://" + casUrl
     datas += ("openurp.platform.cas.server" -> casUrl)
     val is = new FileInputStream(new File(Urp.home + "/platform/session.xml"))
     val app = scala.xml.XML.load(is)

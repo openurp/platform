@@ -32,7 +32,8 @@ import org.openurp.platform.user.service.DataResolver
 import org.openurp.platform.user.model.Dimension
 import org.openurp.platform.user.model.User
 import org.openurp.platform.user.model.Profile
-import org.openurp.platform.security.model.UserProfile
+import org.openurp.platform.user.model.UserProfile
+import org.openurp.platform.config.model.Domain
 
 class ProfileHelper(entityDao: EntityDao, profileService: ProfileService) {
   var dataResolver: DataResolver = CsvDataResolver
@@ -61,7 +62,7 @@ class ProfileHelper(entityDao: EntityDao, profileService: ProfileService) {
     ActionContext.current.attribute("fieldMaps", fieldMaps)
   }
 
-  def fillEditInfo(profile: Profile, isAdmin: Boolean, app: App): Unit = {
+  def fillEditInfo(profile: Profile, isAdmin: Boolean, domain: Domain): Unit = {
     val me = entityDao.findBy(classOf[User], "code", List(Securities.user)).head
     val mngDimensions = new collection.mutable.HashMap[String, Object]
     val aoDimensions = new collection.mutable.HashMap[String, Object]
@@ -71,7 +72,7 @@ class ProfileHelper(entityDao: EntityDao, profileService: ProfileService) {
     ActionContext.current.attribute("ignoreDimensions", ignores)
     val holderIgnoreDimensions = new collection.mutable.HashSet[Dimension]
     ActionContext.current.attribute("holderIgnoreDimensions", holderIgnoreDimensions)
-    val fields = getDimensions(app)
+    val fields = getDimensions(domain)
     ActionContext.current.attribute("fields", fields)
     for (field <- fields) {
       var mngDimensionValues = new collection.mutable.ListBuffer[Any]
@@ -129,15 +130,15 @@ class ProfileHelper(entityDao: EntityDao, profileService: ProfileService) {
       case None => null
     }
   }
-  private def getDimensions(app: App): Seq[Dimension] = {
-    entityDao.search(OqlBuilder.from(classOf[Dimension], "dim").where(":app in elements(dim.apps)", app))
+  private def getDimensions(domain: Domain): Seq[Dimension] = {
+    entityDao.search(OqlBuilder.from(classOf[Dimension], "dim").where(":app in elements(dim.domains)", domain))
   }
 
-  def populateSaveInfo(profile: Profile, isAdmin: Boolean, app: App) {
+  def populateSaveInfo(profile: Profile, isAdmin: Boolean, domain: Domain) {
     val me = entityDao.findBy(classOf[User], "code", List(Securities.user)).head
     val myProfiles = entityDao.findBy(classOf[UserProfile], "user.code", List(Securities.user))
     val ignoreDimensions = getIgnoreDimensions(myProfiles)
-    for (field <- getDimensions(app: App)) {
+    for (field <- getDimensions(domain)) {
       val values = Params.getAll(field.name).asInstanceOf[Iterable[String]]
       if ((ignoreDimensions.contains(field) || isAdmin) && Params.getBoolean("ignoreDimension" + field.id).getOrElse(false)) {
         profile.setProperty(field, "*")

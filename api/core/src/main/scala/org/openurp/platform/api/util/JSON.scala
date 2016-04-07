@@ -5,19 +5,23 @@ import javax.script.ScriptEngineManager
 import org.beangle.commons.collection.Properties
 import javax.script.Bindings
 import org.beangle.commons.lang.Chars
+import org.beangle.commons.lang.Strings
 
 //FIXME generalize it.
 object JSON {
   def parse(string: String): Any = {
     val sem = new ScriptEngineManager
     val engine = sem.getEngineByName("javascript")
-
+    if (Strings.isBlank(string) || "{}".equals(string)) {
+      return Map.empty[String, Any]
+    }
     engine.eval("result =" + string) match {
       case d: String => d
       case n: Number => n
       case b: ju.Map[_, _] =>
         if (isArray(string)) {
-          collection.JavaConversions.collectionAsScalaIterable(b.values())
+          import collection.JavaConversions.collectionAsScalaIterable
+          b.values().map { x => convert(x.asInstanceOf[Object]) }
         } else {
           val iter = b.entrySet().iterator()
           val result = new Properties
@@ -25,7 +29,7 @@ object JSON {
             val one = iter.next
             result.put(one.getKey.toString, convert(one.getValue.asInstanceOf[Object]))
           }
-          result
+          result.toMap
         }
       case l: ju.Collection[_] => collection.JavaConversions.collectionAsScalaIterable(l)
     }
@@ -51,7 +55,7 @@ object JSON {
             val one = iter.next
             result.put(one.getKey.toString, convert(one.getValue.asInstanceOf[Object]))
           }
-          result
+          result.toMap
         }
       case l: ju.Collection[_] => collection.JavaConversions.collectionAsScalaIterable(l)
       case _ => value

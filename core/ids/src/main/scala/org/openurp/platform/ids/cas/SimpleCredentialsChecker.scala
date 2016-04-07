@@ -11,6 +11,6 @@ import org.beangle.data.jdbc.query.JdbcExecutor
 class SimpleCredentialsChecker(dataSource: DataSource) extends CredentialsChecker {
   private val executor = new JdbcExecutor(dataSource)
   override def check(principal: Any, credential: Any): Boolean = {
-    !executor.query("select name from se.users where code = ? and password=?", principal, credential).isEmpty
+    !executor.query("select name from usr.users where code = ? and password=?", principal, credential).isEmpty
   }
 }

@@ -2,16 +2,15 @@ package org.openurp.platform.web.action.config
 
 import java.security.MessageDigest
 import java.util.Arrays
-
 import org.beangle.commons.codec.binary.Hex
 import org.beangle.webmvc.api.annotation.ignore
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.platform.config.model.{ App, DataSource }
 import org.openurp.platform.config.service.DbService
-
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
+import org.openurp.platform.config.model.Domain
 
 class AppAction(dbService: DbService) extends RestfulAction[App] {
 
@@ -20,6 +19,10 @@ class AppAction(dbService: DbService) extends RestfulAction[App] {
   def datasource(): String = {
     put("dataSources", dbService.list())
     forward()
+  }
+
+  protected override def editSetting(entity: App): Unit = {
+    put("domains", entityDao.getAll(classOf[Domain]))
   }
 
   @ignore
@@ -36,7 +39,7 @@ class AppAction(dbService: DbService) extends RestfulAction[App] {
           populate(ds, "ds" + ds.db.id)
           ds.password =
             if (null == ds.password) originPassword
-            else encrypt(ds.password)
+            else encrypt(ds.password, app.secret)
         } else {
           removed += ds
         }
@@ -45,7 +48,7 @@ class AppAction(dbService: DbService) extends RestfulAction[App] {
       for (id <- ids if !processed.contains(id)) {
         val set = populate(classOf[DataSource], "ds" + id)
         set.app = app
-        set.password = encrypt(set.password)
+        set.password = encrypt(set.password, app.secret)
         sets += set
       }
       saveOrUpdate(app)
@@ -58,8 +61,7 @@ class AppAction(dbService: DbService) extends RestfulAction[App] {
     }
   }
 
-  private def encrypt(plainText: String): String = {
-    val secretKey = "changeit"
+  private def encrypt(plainText: String, secretKey: String): String = {
     var key = secretKey.getBytes("UTF-8")
     val sha = MessageDigest.getInstance("SHA-1")
     key = sha.digest(key)

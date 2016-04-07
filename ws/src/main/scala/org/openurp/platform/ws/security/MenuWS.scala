@@ -66,7 +66,7 @@ class MenuWS extends ActionSupport with EntitySupport[Menu] {
   }
 
   private def convert(one: Menu): Properties = {
-    val menu = new Properties(one, "id", "name", "indexno")
+    val menu = new Properties(one, "id", "title", "indexno")
     if (null != one.entry) menu.put("entry", one.entry.name + (if (null != one.params) "?" + one.params else ""))
     if (!one.children.isEmpty) {
       val children = new collection.mutable.ListBuffer[Properties]
