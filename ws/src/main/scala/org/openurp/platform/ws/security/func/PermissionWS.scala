@@ -1,15 +1,16 @@
-package org.openurp.platform.ws.security
+package org.openurp.platform.ws.security.func
 
 import org.beangle.commons.collection.Properties
 import org.beangle.data.dao.{ EntityDao, OqlBuilder }
 import org.beangle.webmvc.api.action.ActionSupport
 import org.beangle.webmvc.api.annotation.{ mapping, param, response }
 import org.openurp.platform.security.model.{ FuncPermission, FuncResource }
+import org.openurp.platform.security.model.FuncPermission
 
 /**
  * @author chaostone
  */
-class FuncPermissionWS(entityDao: EntityDao) extends ActionSupport {
+class PermissionWS(entityDao: EntityDao) extends ActionSupport {
 
   @response
   @mapping("role/{roleId}")

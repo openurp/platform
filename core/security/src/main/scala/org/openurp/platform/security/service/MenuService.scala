@@ -8,11 +8,11 @@ trait MenuService {
 
   def getTopMenus(app: App, user: User): collection.Map[MenuProfile, Seq[Menu]]
 
-  def getMenus(profile: MenuProfile, user: User): Seq[Menu]
+  def getTopMenus(app: App, role: Role): collection.Map[MenuProfile, Seq[Menu]]
 
   def getMenus(profile: MenuProfile, role: Role): Seq[Menu]
 
-  def getProfiles(user: User): Seq[MenuProfile]
+  def getMenus(profile: MenuProfile, user: User): Seq[Menu]
 
   def move(menu: Menu, location: Menu, index: Int): Unit
 }

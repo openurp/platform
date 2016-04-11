@@ -13,7 +13,7 @@ import org.openurp.platform.api.util.JSON
  */
 object RemoteService {
   def getResource(resourceName: String): Option[Resource] = {
-    val url = Urp.platformBase + "/security/" + UrpApp.name + "/func-resources/info.json?name=" + resourceName
+    val url = Urp.platformBase + "/security/func/" + UrpApp.name + "/resources/info.json?name=" + resourceName
     val script = IOs.readString(new URL(url).openStream())
     val r = JSON.parse(script).asInstanceOf[Map[String, _]]
     if (r.contains("id")) {
@@ -31,7 +31,7 @@ object RemoteService {
   }
 
   def getFuncResources(): collection.Map[String, Resource] = {
-    val url = Urp.platformBase + "/security/" + UrpApp.name + "/func-resources.json"
+    val url = Urp.platformBase + "/security/func/" + UrpApp.name + "/resources.json"
     val resources = Collections.newMap[String, Resource]
     val resourceJsons = JSON.parse(IOs.readString(new URL(url).openStream())).asInstanceOf[Iterable[Map[String, _]]]
     resourceJsons.map { r =>
@@ -41,7 +41,7 @@ object RemoteService {
   }
 
   def getRolePermissions(roleId: Int): Set[Int] = {
-    val url = Urp.platformBase + "/security/" + UrpApp.name + "/permission/role.json?id=" + roleId
+    val url = Urp.platformBase + "/security/func/" + UrpApp.name + "/permissions/role.json?id=" + roleId
     val resources = new collection.mutable.HashSet[Int]
     resources ++= JSON.parse(IOs.readString(new URL(url).openStream())).asInstanceOf[Iterable[Number]].map(n => n.intValue)
     resources.toSet
@@ -60,7 +60,7 @@ class Resource(val id: Int, val scope: Int, roles: Array[Int]) extends Serializa
     var i = 0
     while (i < roles.length) {
       val role = roles(i)
-      if (authorities.contains(i)) return true
+      if (authorities.contains(role)) return true
       i += 1
     }
     false

@@ -16,8 +16,15 @@ import org.openurp.platform.security.service.MenuService
 class MenuServiceImpl(val entityDao: EntityDao) extends MenuService {
 
   def getTopMenus(app: App, user: User): collection.Map[MenuProfile, Seq[Menu]] = {
-
     val roles = user.roles.filter(m => m.member).map { m => m.role }
+    getTopMenus(app, roles)
+  }
+
+  def getTopMenus(app: App, role: Role): collection.Map[MenuProfile, Seq[Menu]] = {
+    getTopMenus(app, List(role))
+  }
+
+  private def getTopMenus(app: App, roles: Iterable[Role]): collection.Map[MenuProfile, Seq[Menu]] = {
     val query = OqlBuilder.from[Menu](classOf[Menu].getName + " menu," + classOf[FuncPermission].getName + " fp")
       .where("menu.profile.app=:app", app)
       .where("menu.enabled=true")
@@ -55,15 +62,23 @@ class MenuServiceImpl(val entityDao: EntityDao) extends MenuService {
 
   }
 
-  def getMenus(profile: MenuProfile, user: User): Seq[Menu] = {
-    null
-  }
-
   def getMenus(profile: MenuProfile, role: Role): Seq[Menu] = {
     val query = buildMenuQuery(profile, role);
     query.where("menu.enabled= true")
     val menus = Collections.newSet[Menu]
     menus ++= entityDao.search(query)
+    addParentMenus(menus)
+  }
+
+  def getMenus(profile: MenuProfile, user: User): Seq[Menu] = {
+    val menus = Collections.newSet[Menu]
+    for (rm <- user.roles) {
+      if (rm.member) {
+        val query = buildMenuQuery(profile, rm.role);
+        query.where("menu.enabled= true")
+        menus ++= entityDao.search(query)
+      }
+    }
     addParentMenus(menus)
   }
 
@@ -80,10 +95,6 @@ class MenuServiceImpl(val entityDao: EntityDao) extends MenuService {
   private def addParentMenus(menus: collection.mutable.Set[Menu]): Seq[Menu] = {
     Hierarchicals.addParent(menus);
     menus.toList.sorted
-  }
-
-  def getProfiles(user: User): Seq[MenuProfile] = {
-    null
   }
 
   def move(menu: Menu, location: Menu, index: Int): Unit = {

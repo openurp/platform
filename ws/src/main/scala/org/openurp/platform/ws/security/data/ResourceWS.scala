@@ -1,4 +1,4 @@
-package org.openurp.platform.ws.security
+package org.openurp.platform.ws.security.data
 
 import org.beangle.commons.collection.Properties
 import org.beangle.data.dao.OqlBuilder
@@ -7,7 +7,7 @@ import org.beangle.webmvc.api.action.{ ActionSupport, EntitySupport }
 import org.beangle.webmvc.api.annotation.{ param, response }
 import org.openurp.platform.security.model.DataResource
 
-class DataResourceWS extends ActionSupport with EntitySupport[DataResource] {
+class ResourceWS extends ActionSupport with EntitySupport[DataResource] {
 
   var entityDao: EntityDao = _
 

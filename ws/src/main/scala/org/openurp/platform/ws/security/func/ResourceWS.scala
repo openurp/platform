@@ -1,4 +1,4 @@
-package org.openurp.platform.ws.security
+package org.openurp.platform.ws.security.func
 
 import org.beangle.commons.collection.Properties
 import org.beangle.data.dao.OqlBuilder
@@ -11,12 +11,12 @@ import org.openurp.platform.security.model.FuncPermission
 import org.beangle.commons.collection.Collections
 import org.openurp.platform.security.model.FuncPermission
 import org.openurp.platform.security.model.FuncPermission
-import org.beangle.webmvc.entity.helper.QueryHelper
+import org.openurp.platform.security.model.FuncPermission
 
 /**
  * 系统功能资源web服务
  */
-class FuncResourceWS(entityDao: EntityDao) extends ActionSupport with EntitySupport[FuncResource] {
+class ResourceWS(entityDao: EntityDao) extends ActionSupport with EntitySupport[FuncResource] {
 
   @response
   def index(@param("app") app: String): Seq[Any] = {
