@@ -48,7 +48,7 @@ class UserDashboardHelper {
 
   def buildDashboard(user: User): Unit = {
     ActionContext.current.attribute("user", user)
-    populateMenus(user)
+    //populateMenus(user)
     //    populateSessioninfoLogs(user)
     //    populateOnlineActivities(user)
     val myProfiles = entityDao.findBy(classOf[UserProfile], "user", List(user))
@@ -64,28 +64,5 @@ class UserDashboardHelper {
   //    if (page instanceof Page) page = ((Page<SessioninfoLogBean>) page).getItems()
   //    ActionContext.current.attribute("sessioninfoLogs", page)
   //  }
-
-  private def populateMenus(user: User) {
-    val menuProfiles = menuService.getProfiles(user)
-    ActionContext.current.attribute("menuProfiles", menuProfiles)
-    var menuProfileId = Params.getInt("menuProfileId")
-    if (None == menuProfileId && !menuProfiles.isEmpty) {
-      menuProfileId = Some(menuProfiles(0).id)
-    }
-
-    if (None != menuProfileId) {
-      val menuProfile = entityDao.get(classOf[MenuProfile], menuProfileId.get)
-      val menus = menuService.getMenus(menuProfile, user)
-      val resources = permissionService.getResources(user).toSet
-      val roleMenusMap = new collection.mutable.HashMap[Role, Seq[Menu]]
-
-      for (m <- user.roles) {
-        if (m.member) roleMenusMap.put(m.role, menuService.getMenus(menuProfile, m.role))
-      }
-      ActionContext.current.attribute("menus", menus)
-      ActionContext.current.attribute("roleMenusMap", roleMenusMap)
-      ActionContext.current.attribute("resources", resources)
-    }
-  }
 
 }

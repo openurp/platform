@@ -18,7 +18,7 @@ class ProfileWS(entityDao: EntityDao) extends ActionSupport {
 
   @response
   @mapping("{userCode}")
-  def index(@param("domain") domain: String, @param("userCode") userCode: String): Any = {
+  def index(@param("userCode") userCode: String, @param("domain") domain: String): Any = {
 
     val userQuery = OqlBuilder.from(classOf[User], "u").where("u.code =:userCode", userCode);
     val users = entityDao.search(userQuery);
@@ -43,6 +43,8 @@ class ProfileWS(entityDao: EntityDao) extends ActionSupport {
             dimension.put("id", d.id)
             dimension.put("name", d.name)
             dimension.put("title", d.title)
+            dimension.put("typeName", d.typeName)
+            dimension.put("keyName", d.keyName)
             entry.put("dimension", dimension)
             entry.put("value", v)
             properties += entry

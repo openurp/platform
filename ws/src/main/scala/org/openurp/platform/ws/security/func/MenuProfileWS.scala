@@ -1,4 +1,4 @@
-package org.openurp.platform.ws.security
+package org.openurp.platform.ws.security.func
 
 import org.beangle.commons.collection.{ Order, Properties }
 import org.beangle.data.dao.OqlBuilder

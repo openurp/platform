@@ -5,9 +5,10 @@ import org.beangle.data.model.{ IntId, LongId, Named, TemporalAt }
 import org.beangle.security.authz.{ Permission, Resource, Scopes }
 import org.openurp.platform.config.model.App
 import org.openurp.platform.user.model.Role
-
+import org.openurp.platform.config.model.Domain
 
 class DataPermission extends LongId with TemporalAt with Permission {
+  var domain: Domain = _
   var app: App = _
   var resource: DataResource = _
   var funcResource: FuncResource = _
@@ -22,6 +23,7 @@ class DataPermission extends LongId with TemporalAt with Permission {
 }
 
 class DataResource extends IntId with Named with Resource {
+  var domain: Domain = _
   var scope = Scopes.Public
   var typeName: String = _
   var title: String = _
@@ -29,4 +31,3 @@ class DataResource extends IntId with Named with Resource {
   var remark: String = _
   def enabled = true
 }
-

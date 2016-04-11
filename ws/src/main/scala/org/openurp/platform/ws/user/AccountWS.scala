@@ -12,10 +12,10 @@ import org.openurp.platform.user.service.UserService
  */
 class AccountWS(userService: UserService, entityDao: EntityDao) extends ActionSupport {
 
-  @mapping("{name}")
   @response
-  def index(@param("name") username: String): Properties = {
-    userService.get(username) match {
+  @mapping("{userCode}")
+  def index(@param("userCode") userCode: String): Properties = {
+    userService.get(userCode) match {
       case Some(user) =>
         val properties = new Properties()
         properties += ("id" -> user.id)

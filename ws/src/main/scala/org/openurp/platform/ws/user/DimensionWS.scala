@@ -13,8 +13,8 @@ import org.openurp.platform.user.model.Dimension
  */
 class DimensionWS(entityDao: EntityDao) extends ActionSupport {
 
-  @mapping("{name}")
   @response
+  @mapping("{name}")
   def index(@param("name") name: String): Properties = {
     val dimensions = entityDao.findBy(classOf[Dimension], "name", List(name))
     if (dimensions.isEmpty) new Properties()

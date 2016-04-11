@@ -5,9 +5,10 @@ import org.beangle.commons.inject.bind.AbstractBindModule
 import org.openurp.platform.oauth.service.impl.MemTokenRepository
 import org.openurp.platform.ws.config.DatasourceWS
 import org.openurp.platform.ws.oauth.TokenWS
-import org.openurp.platform.ws.security.{ AppWS, DataPermissionWS, DataResourceWS, FuncPermissionWS, FuncResourceWS, MenuProfileWS, MenuWS }
+import org.openurp.platform.ws.user.AppWS
 import org.openurp.platform.ws.user.RootWS
 import org.openurp.platform.ws.user.{ AccountWS, DimensionWS, ProfileWS }
+import org.openurp.platform.ws.security.{ func, data }
 
 class DefaultModule extends AbstractBindModule {
 
@@ -15,12 +16,12 @@ class DefaultModule extends AbstractBindModule {
     bind(classOf[DatasourceWS])
     bind(classOf[TokenWS])
 
-    bind(classOf[MenuWS], classOf[MenuProfileWS])
-    bind(classOf[FuncResourceWS], classOf[DataResourceWS])
-    bind(classOf[AccountWS], classOf[AppWS])
-    bind(classOf[RootWS], classOf[FuncPermissionWS])
+    bind(classOf[func.MenuWS], classOf[func.MenuProfileWS])
+    bind(classOf[func.ResourceWS], classOf[func.PermissionWS])
+    bind(classOf[data.PermissionWS], classOf[data.ResourceWS])
 
-    bind(classOf[DimensionWS], classOf[DataPermissionWS], classOf[ProfileWS])
+    bind(classOf[AccountWS], classOf[AppWS], classOf[DimensionWS])
+    bind(classOf[RootWS], classOf[ProfileWS])
 
     bind(classOf[MemTokenRepository], classOf[ConcurrentMapCacheManager])
   }

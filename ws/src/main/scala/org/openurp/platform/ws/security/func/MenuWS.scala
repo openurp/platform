@@ -1,11 +1,11 @@
-package org.openurp.platform.ws.security
+package org.openurp.platform.ws.security.func
 
 import org.beangle.commons.collection.Properties
 import org.beangle.data.dao.{ EntityDao, OqlBuilder }
 import org.beangle.webmvc.api.action.{ ActionSupport, EntitySupport }
 import org.beangle.webmvc.api.annotation.{ mapping, param, response }
 import org.beangle.webmvc.entity.helper.QueryHelper
-import org.openurp.platform.security.model.{Menu, MenuProfile}
+import org.openurp.platform.security.model.{ Menu, MenuProfile }
 import org.openurp.platform.security.service.MenuService
 import org.openurp.platform.config.model.App
 import org.openurp.platform.security.model.MenuProfile
@@ -13,6 +13,10 @@ import org.openurp.platform.user.model.User
 import org.openurp.platform.config.model.App
 import org.openurp.platform.security.model.MenuProfile
 import org.openurp.platform.user.model.User
+import org.openurp.platform.config.model.App
+import org.openurp.platform.security.model.MenuProfile
+import org.openurp.platform.user.model.User
+import org.openurp.platform.user.model.Role
 
 class MenuWS extends ActionSupport with EntitySupport[Menu] {
 
@@ -49,6 +53,20 @@ class MenuWS extends ActionSupport with EntitySupport[Menu] {
     val users = entityDao.findBy(classOf[User], "code", List(username))
     val app = apps.head
     menuService.getTopMenus(app, users.head) map {
+      case (p, menus) =>
+        val pp = new Properties(p, "id", "name")
+        pp.put("menus", menus map (m => convert(m)))
+        pp
+    }
+  }
+
+  @response
+  @mapping("role/{roleId}")
+  def role(@param("app") appName: String, @param("roleId") roleId: Int): Iterable[Any] = {
+    val apps = entityDao.findBy(classOf[App], "name", List(appName))
+    val roles = entityDao.findBy(classOf[Role], "id", List(roleId))
+    val app = apps.head
+    menuService.getTopMenus(app, roles.head) map {
       case (p, menus) =>
         val pp = new Properties(p, "id", "name")
         pp.put("menus", menus map (m => convert(m)))
