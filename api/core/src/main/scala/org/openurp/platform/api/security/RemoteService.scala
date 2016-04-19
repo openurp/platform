@@ -1,4 +1,4 @@
-package org.openurp.platform.api.cas
+package org.openurp.platform.api.security
 
 import java.net.URL
 import org.beangle.commons.collection.Collections
@@ -23,10 +23,27 @@ object RemoteService {
     }
   }
 
-  def getRoots(): Set[String] = {
+  def roots: Set[String] = {
     val url = Urp.platformBase + "/user/roots.json?app=" + UrpApp.name
     val resources = Collections.newSet[String]
     resources ++= JSON.parse(readUrl(url)).asInstanceOf[Iterable[String]]
+    resources.toSet
+  }
+
+  def resources: collection.Map[String, Resource] = {
+    val url = Urp.platformBase + "/security/func/" + UrpApp.name + "/resources.json"
+    val resources = Collections.newMap[String, Resource]
+    val resourceJsons = JSON.parse(readUrl(url)).asInstanceOf[Iterable[Map[String, _]]]
+    resourceJsons.map { r =>
+      resources += (r("name").toString -> Resource(r("id").asInstanceOf[Number].intValue, r("scope").toString, r("roles").asInstanceOf[Seq[Int]].toArray))
+    }
+    resources
+  }
+
+  def getRolePermissions(roleId: Int): Set[Int] = {
+    val url = Urp.platformBase + "/security/func/" + UrpApp.name + "/permissions/role.json?id=" + roleId
+    val resources = new collection.mutable.HashSet[Int]
+    resources ++= JSON.parse(IOs.readString(new URL(url).openStream())).asInstanceOf[Iterable[Number]].map(n => n.intValue)
     resources.toSet
   }
 
@@ -42,23 +59,6 @@ object RemoteService {
         println("Cannot connect to " + url)
         ""
     }
-  }
-
-  def getFuncResources(): collection.Map[String, Resource] = {
-    val url = Urp.platformBase + "/security/func/" + UrpApp.name + "/resources.json"
-    val resources = Collections.newMap[String, Resource]
-    val resourceJsons = JSON.parse(readUrl(url)).asInstanceOf[Iterable[Map[String, _]]]
-    resourceJsons.map { r =>
-      resources += (r("name").toString -> Resource(r("id").asInstanceOf[Number].intValue, r("scope").toString, r("roles").asInstanceOf[Seq[Int]].toArray))
-    }
-    resources
-  }
-
-  def getRolePermissions(roleId: Int): Set[Int] = {
-    val url = Urp.platformBase + "/security/func/" + UrpApp.name + "/permissions/role.json?id=" + roleId
-    val resources = new collection.mutable.HashSet[Int]
-    resources ++= JSON.parse(IOs.readString(new URL(url).openStream())).asInstanceOf[Iterable[Number]].map(n => n.intValue)
-    resources.toSet
   }
 }
 
