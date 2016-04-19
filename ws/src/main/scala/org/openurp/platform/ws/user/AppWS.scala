@@ -28,7 +28,7 @@ class AppWS(userService: UserService, entityDao: EntityDao) extends ActionSuppor
     if (users.isEmpty) return Seq.empty
     val user = users.head
     val fpApps = entityDao.search(OqlBuilder.from[App](classOf[FuncPermission].getName, "fp").join("fp.role.members", "m")
-      .where("m.user=:user", user)
+      .where("m.user=:user and m.member=true", user)
       .where("fp.resource.app.enabled=true")
       .select("distinct fp.resource.app"))
 

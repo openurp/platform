@@ -10,11 +10,11 @@ import org.beangle.commons.lang.Strings
 //FIXME generalize it.
 object JSON {
   def parse(string: String): Any = {
-    val sem = new ScriptEngineManager
-    val engine = sem.getEngineByName("javascript")
     if (Strings.isBlank(string) || "{}".equals(string)) {
       return Map.empty[String, Any]
     }
+    val sem = new ScriptEngineManager
+    val engine = sem.getEngineByName("javascript")
     engine.eval("result =" + string) match {
       case d: String => d
       case n: Number => n

@@ -12,6 +12,7 @@ import org.beangle.security.context.SecurityContext
 import org.beangle.security.mgt.SecurityManager
 import org.beangle.webmvc.api.view.View
 import org.beangle.security.realm.cas.CasConfig
+import org.openurp.platform.api.security.Securities
 
 class IndexAction extends ActionSupport {
   var entityDao: EntityDao = _
@@ -30,6 +31,8 @@ class IndexAction extends ActionSupport {
       AppHelper.setAppId(get("app.id", classOf[Integer]).getOrElse(apps.head.id))
       put("appId", AppHelper.getAppId())
     }
+    put("username", Securities.user)
+    put("casConfig", casConfig)
     forward()
   }
 

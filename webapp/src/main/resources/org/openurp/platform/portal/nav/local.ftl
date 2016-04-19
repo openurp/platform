@@ -67,6 +67,13 @@
       [#else][@b.navitem  href="!menus?indexno=${m.indexno}" target="menu" ]${m.title}[/@][/#if]
     [/#list]
   [/@]
+  <ul class="nav navbar-nav navbar-right" style="height: 35px; padding-top: 15px;">
+     <li><span class="glyphicon glyphicon-user" aria-hidden="true">${username}&nbsp;</span></li>
+	 <li>
+	 [#assign logoutUrl]!logout?redirect=${casConfig.casServer}/logout[/#assign]
+	 <span class="glyphicon glyphicon-log-out" aria-hidden="true">[@b.a href=logoutUrl target="_top"]退出&nbsp;&nbsp;[/@]</span>
+    </li>
+  </ul>
   [#nested/]
 [/@]
 
