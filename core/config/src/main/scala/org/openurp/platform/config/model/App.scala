@@ -18,6 +18,8 @@ class App extends IntId with Named with Enabled with Ordered[App] with Principal
 
   def getName = name
 
+  def fullTitle = domain.title + " " + title
+
   override def compare(m: App): Int = {
     indexno.compareTo(m.indexno)
   }

@@ -65,13 +65,13 @@ class ProfileHelper(entityDao: EntityDao, profileService: ProfileService) {
   def fillEditInfo(profile: Profile, isAdmin: Boolean, domain: Domain): Unit = {
     val me = entityDao.findBy(classOf[User], "code", List(Securities.user)).head
     val mngDimensions = new collection.mutable.HashMap[String, Object]
-    val aoDimensions = new collection.mutable.HashMap[String, Object]
+    val userDimensions = new collection.mutable.HashMap[String, Object]
 
     val myProfiles = entityDao.findBy(classOf[UserProfile], "user.code", List(Securities.user))
     val ignores = getIgnoreDimensions(myProfiles)
     ActionContext.current.attribute("ignoreDimensions", ignores)
-    val holderIgnoreDimensions = new collection.mutable.HashSet[Dimension]
-    ActionContext.current.attribute("holderIgnoreDimensions", holderIgnoreDimensions)
+    val userIgnoreDimensions = new collection.mutable.HashSet[Dimension]
+    ActionContext.current.attribute("userIgnoreDimensions", userIgnoreDimensions)
     val fields = getDimensions(domain)
     ActionContext.current.attribute("fields", fields)
     for (field <- fields) {
@@ -83,18 +83,18 @@ class ProfileHelper(entityDao: EntityDao, profileService: ProfileService) {
 
       var fieldValue = ""
       val property = profile.getProperty(field) foreach { p => fieldValue = p }
-      if ("*".equals(fieldValue)) holderIgnoreDimensions.add(field)
+      if ("*".equals(fieldValue)) userIgnoreDimensions.add(field)
 
       mngDimensions.put(field.name, mngDimensionValues)
       if (null == field.source) {
-        aoDimensions.put(field.name, fieldValue)
+        userDimensions.put(field.name, fieldValue)
       } else {
         val p = getProperty(profile, field)
-        if (null != p) aoDimensions.put(field.name, p)
+        if (null != p) userDimensions.put(field.name, p)
       }
     }
     ActionContext.current.attribute("mngDimensions", mngDimensions)
-    ActionContext.current.attribute("aoDimensions", aoDimensions)
+    ActionContext.current.attribute("userDimensions", userDimensions)
     ActionContext.current.attribute("profile", profile)
   }
 

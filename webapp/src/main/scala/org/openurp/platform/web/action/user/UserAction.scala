@@ -34,6 +34,10 @@ import org.openurp.platform.user.model.RoleMember
 import org.openurp.platform.user.model.Role
 import org.openurp.platform.user.model.User
 import org.openurp.platform.user.model.MemberShip
+import org.openurp.platform.api.app.UrpApp
+import org.beangle.commons.collection.Collections
+import org.beangle.webmvc.api.context.ActionContext
+import java.net.URLEncoder
 /**
  * 用户管理响应处理类
  *
@@ -79,19 +83,6 @@ class UserAction extends RestfulAction[User] {
     val sb = new StringBuilder("exists(from user.roles m where ")
     val params = new collection.mutable.ListBuffer[Object]
     var queryRole = false
-    //val app = entityDao.get(classOf[App], intId("app"))
-    //    if (!userService.isRoot(manager, app.name)) {
-    //      val members = userService.getRoles(manager, MemberShip.Manager)
-    //      val mngRoles = members.map(m => m.role)
-    //      if (mngRoles.isEmpty) {
-    //        sb.append("1=0")
-    //      } else {
-    //        sb.append("m.role in(:roles) and m.member=true")
-    //        params += mngRoles
-    //      }
-    //      queryRole = true
-    //      userQuery.where("user.id != :meId", manager.id)
-    //    }
     val roleName = get("roleName", "")
     if (Strings.isNotEmpty(roleName)) {
       if (queryRole) sb.append(" and ")
@@ -113,27 +104,32 @@ class UserAction extends RestfulAction[User] {
   /**
    * 保存用户信息
    */
-  protected def saveAndForward(entity: User): View = {
+  protected override def saveAndRedirect(entity: User): View = {
     val user = entity.asInstanceOf[User]
     val userMembers = user.roles
-    //    val app = entityDao.get(classOf[App], intId("app"))
     val memberMap = new collection.mutable.HashMap[Role, RoleMember]
     for (gm <- userMembers) {
       memberMap.put(gm.role, gm.asInstanceOf[RoleMember])
     }
-    val newMembers = new collection.mutable.HashSet[RoleMember]
-    val removedMembers = new collection.mutable.HashSet[RoleMember]
+    val newMembers = Collections.newBuffer[RoleMember]
+    val removedMembers = Collections.newBuffer[RoleMember]
     val manager = loginUser
-    val members = userService.getRoles(manager, MemberShip.Granter)
+    val platformAdmin = userService.isRoot(manager, UrpApp.name)
+    val members =
+      if (platformAdmin) {
+        entityDao.search(OqlBuilder.from(classOf[Role], "r")).map(r => new RoleMember(manager, r, MemberShip.Granter))
+      } else {
+        userService.getRoles(manager, MemberShip.Granter)
+      }
     for (member <- members) {
-      var myMember = memberMap(member.role)
+      var myMember = memberMap.getOrElse(member.role, null)
       val isMember = getBoolean("member" + member.role.id, false)
       val isGranter = getBoolean("granter" + member.role.id, false)
       val isManager = getBoolean("manager" + member.role.id, false)
       if (!isMember && !isGranter && !isManager) {
         if (null != myMember) {
           user.roles -= myMember
-          removedMembers.add(myMember)
+          removedMembers += myMember
         }
       } else {
         if (null == myMember) myMember = new RoleMember(user, member.role)
@@ -141,23 +137,31 @@ class UserAction extends RestfulAction[User] {
         myMember.member = isMember
         myMember.granter = isGranter
         myMember.manager = isManager
-        newMembers.add(myMember)
+        newMembers += myMember
       }
     }
-    entityDao.execute(Operation.saveOrUpdate(newMembers).remove(removedMembers))
+    val ob = new Operation.Builder()
+    for (m <- newMembers) ob.saveOrUpdate(m)
+    for (m <- removedMembers) ob.remove(m)
+    entityDao.execute(ob)
     return redirect("search", "info.save.success")
   }
 
   protected override def editSetting(user: User) {
-    //    val app = entityDao.get(classOf[App], intId("app"))
     val manager = loginUser
-    //    val isAdmin = userService.isRoot(user, app.name)
     val roles = new collection.mutable.HashSet[Role]
-    val managerMemberMap = new collection.mutable.HashMap[Role, RoleMember]
-    val members = userService.getRoles(manager, MemberShip.Granter)
-    for (gm <- members) {
-      roles.add(gm.role)
-      managerMemberMap.put(gm.role, gm)
+    val mngMemberMap = new collection.mutable.HashMap[Role, RoleMember]
+    val platformAdmin = userService.isRoot(manager, UrpApp.name)
+    if (platformAdmin) {
+      roles ++= entityDao.search(OqlBuilder.from(classOf[Role], "r").orderBy("r.indexno"))
+      for (role <- roles)
+        mngMemberMap.put(role, new RoleMember(manager, role, MemberShip.Granter))
+    } else {
+      val members = userService.getRoles(manager, MemberShip.Granter)
+      for (gm <- members) {
+        roles.add(gm.role)
+        mngMemberMap.put(gm.role, gm)
+      }
     }
     put("roles", roles)
 
@@ -166,14 +170,7 @@ class UserAction extends RestfulAction[User] {
       memberMap.put(gm.role, gm)
     }
     put("memberMap", memberMap)
-    put("curMemberMap", managerMemberMap)
-    //FIXME
-    //    put("isadmin", isAdmin)
+    put("mngMemberMap", mngMemberMap)
     put("isme", manager.id == user.id)
-    //    put("app", app)
-  }
-
-  protected override def simpleEntityName: String = {
-    "user"
   }
 }

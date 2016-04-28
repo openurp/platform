@@ -23,7 +23,7 @@
 
     <ehcache:cache alias="security-resources">
       <ehcache:key-type>java.lang.String</ehcache:key-type>
-      <ehcache:value-type>org.openurp.platform.api.cas.Resource</ehcache:value-type>
+      <ehcache:value-type>org.openurp.platform.api.security.Resource</ehcache:value-type>
       <ehcache:expiry>
         <ehcache:ttl unit="minutes">20</ehcache:ttl>
       </ehcache:expiry>

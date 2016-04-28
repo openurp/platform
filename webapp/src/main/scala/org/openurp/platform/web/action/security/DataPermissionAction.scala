@@ -21,11 +21,9 @@ package org.openurp.platform.web.action.security
 import org.beangle.webmvc.api.annotation.ignore
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
-import org.openurp.platform.security.model.DataResource
-import org.openurp.platform.security.model.DataPermission
-import org.openurp.platform.security.model.FuncResource
+import org.openurp.platform.config.model.{ App, Domain }
+import org.openurp.platform.security.model.{ DataPermission, DataResource, FuncResource }
 import org.openurp.platform.user.model.Role
-
 /**
  * 数据限制模式元信息配置类
  *
@@ -39,6 +37,8 @@ class DataPermissionAction extends RestfulAction[DataPermission] {
 
   protected override def editSetting(dataPermission: DataPermission): Unit = {
     put("roles", entityDao.getAll(classOf[Role]))
+    put("domains", entityDao.getAll(classOf[Domain]))
+    put("apps", entityDao.getAll(classOf[App]))
     put("funcResources", entityDao.getAll(classOf[FuncResource]))
     put("dataResources", entityDao.getAll(classOf[DataResource]))
   }

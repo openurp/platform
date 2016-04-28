@@ -6,6 +6,7 @@ import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.platform.config.service.AppDataPermissionManager
 import org.openurp.platform.security.model.DataResource
+import org.openurp.platform.config.model.Domain
 
 /**
  * 系统模块管理响应类
@@ -23,6 +24,9 @@ class DataResourceAction extends RestfulAction[DataResource] {
     val enabled = getBoolean("enabled", false)
     appFuncPermissionManager.activate(resourceIds, enabled.booleanValue())
     return redirect("search", "info.save.success")
+  }
+  protected override def editSetting(dataPermission: DataResource): Unit = {
+    put("domains", entityDao.getAll(classOf[Domain]))
   }
 
   protected override def saveAndRedirect(resource: DataResource): View = {

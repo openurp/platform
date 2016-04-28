@@ -22,7 +22,7 @@ object AppHelper {
   }
 
   def getApps(entityDao: EntityDao): Seq[App] = {
-    val apps = entityDao.search(OqlBuilder.from(classOf[App], "app").orderBy("app.name")).toBuffer
+    val apps = entityDao.search(OqlBuilder.from(classOf[App], "app").where("app.enabled=true").orderBy("app.name")).toBuffer
     getAppId foreach { appId =>
       apps.find(p => p.id == appId) foreach { app =>
         apps -= app; apps.insert(0, app)

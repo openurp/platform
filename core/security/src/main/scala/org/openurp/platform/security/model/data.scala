@@ -10,6 +10,7 @@ import org.openurp.platform.config.model.Domain
 class DataPermission extends LongId with TemporalAt with Permission {
   var domain: Domain = _
   var app: App = _
+  var description: String = _
   var resource: DataResource = _
   var funcResource: FuncResource = _
   var attrs: String = _

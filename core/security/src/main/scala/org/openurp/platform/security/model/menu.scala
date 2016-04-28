@@ -8,14 +8,8 @@ import org.beangle.commons.lang.Numbers
 import org.beangle.commons.lang.Strings
 import org.openurp.platform.user.model.Role
 
-class MenuProfile extends IntId with Named with Enabled {
-  var app: App = _
-  var menus = Collections.newBuffer[Menu]
-  var role: Role = _
-}
-
 class Menu extends IntId with Named with Enabled with Hierarchical[Menu] with Ordered[Menu] {
-  var profile: MenuProfile = _
+  var app: App = _
   var title: String = _
   var entry: FuncResource = _
   var params: String = _
