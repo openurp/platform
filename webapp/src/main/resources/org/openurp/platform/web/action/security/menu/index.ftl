@@ -11,7 +11,7 @@
       [/@]
     </td>
     <td class="index_content">
-    [@b.div  href="!search?menu.profile.id=${(profiles?first.id)!}&orderBy=menu.indexno" id="menulist"/]
+    [@b.div  href="!search?menu.app.id=${(apps?first.id)!}&orderBy=menu.indexno" id="menulist"/]
     </td>
   </tr>
 </table>

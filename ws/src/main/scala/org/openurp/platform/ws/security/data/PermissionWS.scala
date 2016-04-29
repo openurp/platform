@@ -49,7 +49,7 @@ class PermissionWS(entityDao: EntityDao) extends ActionSupport {
       val props = new Properties()
       if (p != null) {
         props.put("filters", p.filters)
-        props.put("description", p.description)
+        //props.put("description", p.description)
       }
       props
     }
