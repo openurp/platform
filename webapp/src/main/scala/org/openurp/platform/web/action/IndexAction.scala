@@ -29,10 +29,6 @@ class IndexAction extends ActionSupport {
     val apps = appService.getWebapps()
     put("appName", UrpApp.name)
     put("apps", apps)
-    if (!apps.isEmpty) {
-      AppHelper.setAppId(get("app.id", classOf[Integer]).getOrElse(apps.head.id))
-      put("appId", AppHelper.getAppId())
-    }
     put("username", Securities.user)
     put("casConfig", casConfig)
     forward()

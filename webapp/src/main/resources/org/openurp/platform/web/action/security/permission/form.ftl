@@ -54,7 +54,7 @@
     <td class="title">
     应用:<select name="app.id" style="width:300px;" onchange="this.form.submit();">
       [#list apps as p]
-      <option value="${p.id}" [#if app=p]selected="selected"[/#if]>${p.fullTitle}</option>
+      <option value="${p.id}" [#if current_app=p]selected="selected"[/#if]>${p.fullTitle}</option>
       [/#list]
       </select>
     </td>

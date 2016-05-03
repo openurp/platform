@@ -15,19 +15,20 @@ import org.openurp.platform.security.model.Menu
 import org.beangle.webmvc.api.annotation.param
 import org.openurp.platform.security.model.FuncPermission
 import org.openurp.platform.web.helper.AppHelper
+import org.openurp.platform.config.service.AppService
 
 class MenuAction(val menuService: MenuService) extends RestfulAction[Menu] {
 
+  var appService: AppService = _
   protected override def indexSetting(): Unit = {
-    var apps = entityDao.search(OqlBuilder.from(classOf[App], "app").orderBy("app.name")).toBuffer
-    AppHelper.getAppId foreach { appId =>
-      val defaultApp = apps.filter(app => app.id == appId)
-      val newApps = Collections.newBuffer[App]
-      newApps ++= defaultApp
-      newApps ++= (apps -- defaultApp)
-      apps = newApps
-    }
-    put("apps", apps)
+    var apps = appService.getWebapps()
+    AppHelper.putApps(apps, "menu.app.id", entityDao)
+  }
+
+  override def search(): String = {
+    AppHelper.remember("menu.app.id")
+    super.search()
+    forward()
   }
 
   protected override def editSetting(menu: Menu): Unit = {

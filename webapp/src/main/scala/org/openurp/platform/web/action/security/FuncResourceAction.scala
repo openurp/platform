@@ -9,6 +9,7 @@ import org.openurp.platform.config.model.App
 import org.openurp.platform.security.model.{ FuncPermission, FuncResource, Menu }
 import org.openurp.platform.security.service.FuncPermissionService
 import org.openurp.platform.web.helper.AppHelper
+import org.openurp.platform.config.service.AppService
 
 /**
  * 系统模块管理响应类
@@ -18,6 +19,7 @@ import org.openurp.platform.web.helper.AppHelper
 class FuncResourceAction extends RestfulAction[FuncResource] {
 
   var funcPermissionService: FuncPermissionService = _
+  var appService: AppService = _
   /**
    * 禁用或激活一个或多个模块
    */
@@ -40,6 +42,12 @@ class FuncResourceAction extends RestfulAction[FuncResource] {
     redirect("search", "info.save.success")
   }
 
+  override def search(): String = {
+    AppHelper.remember("resource.app.id")
+    super.search()
+    forward()
+  }
+
   override def info(id: String): String = {
     val entity = getModel[Entity[_]](entityName, id)
     val query = OqlBuilder.from(classOf[Menu], "menu")
@@ -55,19 +63,15 @@ class FuncResourceAction extends RestfulAction[FuncResource] {
   }
 
   protected override def editSetting(entity: FuncResource): Unit = {
-    put("apps", AppHelper.getApps(entityDao))
+    put("apps", appService.getApps())
   }
-  //  protected PropertyExtractor getPropertyExtractor() {
-  //    return new ResourcePropertyExtractor(getTextResource())
-  //  }
 
   protected override def simpleEntityName: String = {
     "resource"
   }
 
   protected override def indexSetting(): Unit = {
-    val rs = populate(entityName, "resource")
-    put("apps", AppHelper.getApps(entityDao))
+    AppHelper.putApps(appService.getApps(), "resource.app.id", entityDao)
   }
 
 }

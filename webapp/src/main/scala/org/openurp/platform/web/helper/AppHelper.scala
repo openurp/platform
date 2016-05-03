@@ -4,30 +4,35 @@ import org.beangle.webmvc.api.context.ActionContext
 import org.beangle.data.dao.EntityDao
 import org.openurp.platform.config.model.App
 import org.beangle.data.dao.OqlBuilder
+import org.beangle.commons.lang.Numbers
+import org.beangle.commons.web.util.CookieUtils
 
 object AppHelper {
 
-  def setAppId(id: Integer): Unit = {
-    ActionContext.current.request.getSession.setAttribute("app.id", id)
-  }
-
-  def getAppId(): Option[Integer] = {
-    Params.getInt("app.id") match {
+  def putApps(apps: Iterable[App], appParamName: String, entityDao: EntityDao): Unit = {
+    Params.getInt(appParamName) match {
       case Some(id) =>
-        setAppId(id); Some(id)
+        ActionContext.current.attribute("current_app", findApp(apps, id))
       case None =>
-        val appId = ActionContext.current.request.getSession.getAttribute("app.id").asInstanceOf[Integer]
-        if (null == appId) None else Some(appId)
+        val c = ActionContext.current
+        val appId = CookieUtils.getCookieValue(c.request, "urp_app_id")
+        c.attribute("current_app", findApp(apps, Numbers.toInt(appId)))
+    }
+    ActionContext.current.attribute("apps", apps)
+  }
+
+  def remember(appParamName: String): Unit = {
+    Params.getInt(appParamName) foreach { id =>
+      val c = ActionContext.current
+      CookieUtils.addCookie(c.request, c.response, "urp_app_id", id.toString, -1)
     }
   }
 
-  def getApps(entityDao: EntityDao): Seq[App] = {
-    val apps = entityDao.search(OqlBuilder.from(classOf[App], "app").where("app.enabled=true").orderBy("app.name")).toBuffer
-    getAppId foreach { appId =>
-      apps.find(p => p.id == appId) foreach { app =>
-        apps -= app; apps.insert(0, app)
-      }
+  private def findApp(apps: Iterable[App], appId: Int): App = {
+    apps.find(a => a.id == appId) match {
+      case Some(app) => app
+      case None => apps.head
     }
-    apps
   }
+
 }

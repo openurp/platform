@@ -31,6 +31,8 @@ import org.openurp.platform.security.service.{ FuncPermissionService, MenuServic
 import org.openurp.platform.user.model.{ Role, User }
 import org.openurp.platform.user.service.UserService
 import org.openurp.platform.api.app.UrpApp
+import org.openurp.platform.web.helper.AppHelper
+import org.beangle.webmvc.api.context.ActionContext
 /**
  * 权限分配与管理响应类
  *
@@ -60,14 +62,9 @@ class PermissionAction extends RestfulAction[FuncPermission] {
     }
     put("mngRoles", mngRoles)
     val apps = appService.getWebapps()
-    put("apps", apps)
+    AppHelper.putApps(apps, "app.id", entityDao)
 
-    var app: App = null
-    getId("app", classOf[Int]) foreach { id =>
-      app = entityDao.get(classOf[App], id)
-    }
-    if (null == app && !apps.isEmpty) app = apps.head
-
+    val app: App = ActionContext.current.attribute("current_app")
     var mngMenus = new collection.mutable.ListBuffer[Menu]
     if (null != app) {
       var mngResources: collection.Seq[Object] = null
@@ -123,7 +120,6 @@ class PermissionAction extends RestfulAction[FuncPermission] {
       put("parentResources", Set.empty)
     }
     put("mngMenus", mngMenus)
-    put("app", app)
     put("role", role)
     return forward()
   }
