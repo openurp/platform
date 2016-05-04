@@ -2,7 +2,7 @@
 [@b.textfield name="app.name" label="名称" value="${app.name!}" required="true" maxlength="200"/]
 [@b.textfield name="app.title" label="标题" value="${app.title!}" required="true" maxlength="200"/]
 [@b.radios name="app.appType" label="类型" items={'web-service':'web服务 ','web-app':'web应用'} value="${app.appType!}" required="true" /]
-[@b.select name="app.domain.id" label="领域" value="${app.domain.id!}" option="id,title" required="true" items=domains/]
+[@b.select name="app.domain.id" label="领域" value="${(app.domain.id)!}" option="id,title" required="true" items=domains/]
 [@b.textfield name="app.url" label="URL" value="${app.url!}" required="true" maxlength="200" style="width:300px"/]
 [@b.field label="引用资源"]
   <div style="margin-left:120px;">

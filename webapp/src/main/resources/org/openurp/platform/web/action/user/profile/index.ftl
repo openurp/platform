@@ -23,9 +23,8 @@
 <br/>
 
 [@b.form name="profileForm" action="!save"]
-  <input type="hidden" name="_params" value="&profile.user.id=${Parameters['profile.user.id']}&profile.domain.id=${Parameters['profile.domain.id']}"/>
+  <input type="hidden" name="_params" value="&profile.user.id=${Parameters['profile.user.id']}"/>
   <input type="hidden" name="profile.user.id" value="${Parameters['profile.user.id']}"/>
-  <input type="hidden" name="profile.domain.id" value="${Parameters['profile.domain.id']}"/>
 [/@]
 <script type="text/javascript">
   function add(){

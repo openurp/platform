@@ -16,7 +16,7 @@ class DefaultModule extends AbstractBindModule {
     bind(classOf[DatasourceWS])
     bind(classOf[TokenWS])
 
-    bind(classOf[func.MenuWS], classOf[func.MenuProfileWS])
+    bind(classOf[func.MenuWS])
     bind(classOf[func.ResourceWS], classOf[func.PermissionWS])
     bind(classOf[data.PermissionWS], classOf[data.ResourceWS])
 

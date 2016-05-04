@@ -1,12 +1,13 @@
 package org.openurp.platform.api.cas
 
-import org.beangle.commons.cache.{ Cache, CacheManager }
+import org.beangle.commons.cache.CacheManager
 import org.beangle.commons.security.Request
 import org.beangle.security.authc.Account
 import org.beangle.security.authz.Authorizer
 import org.beangle.security.session.Session
 import org.beangle.commons.bean.Initializing
-import org.openurp.platform.api.app.UrpApp
+import org.openurp.platform.api.security.RemoteService
+import org.openurp.platform.api.security.Resource
 
 /**
  * @author chaostone
@@ -16,11 +17,11 @@ class RemoteAuthorizer(cacheManager: CacheManager) extends Authorizer with Initi
   val resources = cacheManager.getCache("security-resources", classOf[String], classOf[Resource])
   var roots: Set[String] = _
   def init(): Unit = {
-    RemoteService.getFuncResources() foreach {
+    RemoteService.resources foreach {
       case (name, resource) =>
         resources.put(name, resource)
     }
-    roots = RemoteService.getRoots()
+    roots = RemoteService.roots
   }
 
   override def isPermitted(session: Option[Session], request: Request): Boolean = {

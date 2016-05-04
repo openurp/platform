@@ -28,14 +28,15 @@ class AppWS(userService: UserService, entityDao: EntityDao) extends ActionSuppor
     if (users.isEmpty) return Seq.empty
     val user = users.head
     val fpApps = entityDao.search(OqlBuilder.from[App](classOf[FuncPermission].getName, "fp").join("fp.role.members", "m")
-      .where("m.user=:user", user)
+      .where("m.user=:user and m.member=true", user)
       .where("fp.resource.app.enabled=true")
+      .where("fp.resource.app.appType='web-app'")
       .select("distinct fp.resource.app"))
 
     val apps = Collections.newSet[App]
     apps ++= fpApps
 
-    val rootsQuery = OqlBuilder.from(classOf[Root], "root").where("root.user=:user and root.app.enabled=true", user)
+    val rootsQuery = OqlBuilder.from(classOf[Root], "root").where("root.user=:user and root.app.enabled=true and root.app.appType='web-app'", user)
     val roots = entityDao.search(rootsQuery)
     apps ++= (roots.map(a => a.app))
     val appBuffer = apps.toBuffer.sorted

@@ -21,7 +21,6 @@ package org.openurp.platform.web.action.user
 import org.beangle.webmvc.api.annotation.ignore
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
-import org.openurp.platform.config.model.App
 import org.openurp.platform.user.model.Dimension
 import org.openurp.platform.config.model.Domain
 
@@ -42,8 +41,8 @@ class DimensionAction extends RestfulAction[Dimension] {
       return forward(to(this, "edit"))
     }
     field.domains = new collection.mutable.ListBuffer[Domain]
-    val appId2nd = getAll("appId2nd", classOf[Int])
-    field.domains ++= entityDao.find(classOf[Domain], appId2nd)
+    val domainId2nd = getAll("domainId2nd", classOf[Int])
+    field.domains ++= entityDao.find(classOf[Domain], domainId2nd)
     entityDao.saveOrUpdate(field)
     redirect("search", "info.save.success")
   }

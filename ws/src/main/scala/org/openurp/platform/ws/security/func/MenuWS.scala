@@ -5,18 +5,10 @@ import org.beangle.data.dao.{ EntityDao, OqlBuilder }
 import org.beangle.webmvc.api.action.{ ActionSupport, EntitySupport }
 import org.beangle.webmvc.api.annotation.{ mapping, param, response }
 import org.beangle.webmvc.entity.helper.QueryHelper
-import org.openurp.platform.security.model.{ Menu, MenuProfile }
+import org.openurp.platform.config.model.App
+import org.openurp.platform.security.model.Menu
 import org.openurp.platform.security.service.MenuService
-import org.openurp.platform.config.model.App
-import org.openurp.platform.security.model.MenuProfile
-import org.openurp.platform.user.model.User
-import org.openurp.platform.config.model.App
-import org.openurp.platform.security.model.MenuProfile
-import org.openurp.platform.user.model.User
-import org.openurp.platform.config.model.App
-import org.openurp.platform.security.model.MenuProfile
-import org.openurp.platform.user.model.User
-import org.openurp.platform.user.model.Role
+import org.openurp.platform.user.model.{ Role, User }
 
 class MenuWS extends ActionSupport with EntitySupport[Menu] {
 
@@ -38,12 +30,8 @@ class MenuWS extends ActionSupport with EntitySupport[Menu] {
 
   @response
   def index(@param("app") app: String): Seq[Any] = {
-    val mps = entityDao.search(OqlBuilder.from(classOf[MenuProfile], "mp").where("mp.app.name=:app", app))
-    mps map { p =>
-      val pp = new Properties(p, "id", "name")
-      pp.put("menus", p.menus.filter(m => m.parent == null) map (m => convert(m)))
-      pp
-    }
+    val menus = entityDao.search(OqlBuilder.from(classOf[Menu], "menu").where("menu.app.name=:app and menu.parent = null", app))
+    menus map (m => convert(m))
   }
 
   @response
@@ -52,12 +40,7 @@ class MenuWS extends ActionSupport with EntitySupport[Menu] {
     val apps = entityDao.findBy(classOf[App], "name", List(appName))
     val users = entityDao.findBy(classOf[User], "code", List(username))
     val app = apps.head
-    menuService.getTopMenus(app, users.head) map {
-      case (p, menus) =>
-        val pp = new Properties(p, "id", "name")
-        pp.put("menus", menus map (m => convert(m)))
-        pp
-    }
+    menuService.getTopMenus(app, users.head) map (m => convert(m))
   }
 
   @response
@@ -66,21 +49,7 @@ class MenuWS extends ActionSupport with EntitySupport[Menu] {
     val apps = entityDao.findBy(classOf[App], "name", List(appName))
     val roles = entityDao.findBy(classOf[Role], "id", List(roleId))
     val app = apps.head
-    menuService.getTopMenus(app, roles.head) map {
-      case (p, menus) =>
-        val pp = new Properties(p, "id", "name")
-        pp.put("menus", menus map (m => convert(m)))
-        pp
-    }
-  }
-
-  @response
-  @mapping("profile/{profileId}")
-  def profile(@param("app") app: String, profileId: Int): Seq[Any] = {
-    val builder = getQueryBuilder()
-    builder.where("menu.profile.app.name=:app", app)
-    builder.where("menu.profile.id=:profileId", profileId)
-    entityDao.search(builder) map (one => convert(one))
+    menuService.getTopMenus(app, roles.head) map (m => convert(m))
   }
 
   private def convert(one: Menu): Properties = {

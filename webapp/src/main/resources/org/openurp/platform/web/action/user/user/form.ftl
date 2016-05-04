@@ -20,17 +20,17 @@
           </span>
         [/@]
         [@b.col title="member.member" width="10%"]
-          [#assign displayMember=role.enabled]
+          [#assign displayMember=(role.enabled && mngMemberMap.get(role).granter)/]
           <input type="checkbox" class="security_member" [#if !displayMember]style="display:none"[/#if] name="member${role.id}" onchange="changeMember(${role.id},this)" ${(memberMap.get(role).member)?default(false)?string('checked="checked"','')}/>
           [#if !displayMember && (memberMap.get(role).member)!false]&radic;[/#if]
         [/@]
         [@b.col title="member.granter" width="10%"]
-          [#assign displayGranter=(role.enabled && curMemberMap.get(role).manager)/]
+          [#assign displayGranter=(role.enabled && mngMemberMap.get(role).granter)/]
           <input type="checkbox" name="granter${role.id}" [#if !displayGranter]style="display:none"[/#if] ${(memberMap.get(role).granter)?default(false)?string('checked="checked"','')}/>
           [#if !displayGranter && (memberMap.get(role).granter)!false]&radic;[/#if]
         [/@]
         [@b.col title="member.manager" width="10%"]
-          [#assign displayManager=(role.enabled && curMemberMap.get(role).manager)/]
+          [#assign displayManager=(role.enabled && mngMemberMap.get(role).manager)/]
           <input type="checkbox" name="manager${role.id}" [#if !displayManager]style="display:none"[/#if] ${(memberMap.get(role).manager)?default(false)?string('checked="checked"','')}/>
           [#if !displayManager && (memberMap.get(role).manager)!false]&radic;[/#if]
         [/@]
@@ -46,7 +46,7 @@
 [/@]
   [#if user.id??]
   [@b.tab label="全局数据权限" ]
-  [@b.div href="/security/profile!appinfo?forEdit=1&profile.user.id=${user.id}" /]
+  [@b.div href="/user/profile?forEdit=1&profile.user.id=${user.id}" /]
   [/@]
   [/#if]
 [/@]

@@ -2,24 +2,28 @@ package org.openurp.platform.web.action.security
 
 import org.beangle.data.dao.{ EntityDao, OqlBuilder }
 import org.beangle.webmvc.api.action.ActionSupport
-import org.openurp.platform.security.model.{ DataPermission, FuncResource, Menu, MenuProfile }
+import org.openurp.platform.security.model.{ DataPermission, FuncResource, Menu }
 import org.openurp.platform.user.model.{ Dimension, RoleMember }
+import org.openurp.platform.config.model.App
+import org.openurp.platform.config.service.AppService
 
 class DashboardAction extends ActionSupport {
 
   var entityDao: EntityDao = _
 
+  var appService: AppService = _
+
   def stat(): String = {
     populateUserStat()
     // state menus
-    val menuProfiles = entityDao.getAll(classOf[MenuProfile])
+    val apps = appService.getWebapps
     val menuStats = new collection.mutable.HashMap[Integer, Seq[_]]
-    for (profile <- menuProfiles) {
+    for (app <- apps) {
       val menuQuery = OqlBuilder.from(classOf[Menu], "menu")
-      menuQuery.where("menu.profile=:profile", profile).select("menu.enabled,count(*)").groupBy("enabled")
-      menuStats.put(profile.id, entityDao.search(menuQuery))
+      menuQuery.where("menu.app=:app", app).select("menu.enabled,count(*)").groupBy("enabled")
+      menuStats.put(app.id, entityDao.search(menuQuery))
     }
-    put("menuProfiles", menuProfiles)
+    put("apps", apps)
     put("menuStats", menuStats)
 
     // stat resource

@@ -1,12 +1,12 @@
-package org.openurp.platform.api.cas
+package org.openurp.platform.api.security
 
 import java.net.URL
-
 import org.beangle.commons.collection.Collections
 import org.beangle.commons.io.IOs
 import org.openurp.platform.api.Urp
 import org.openurp.platform.api.app.UrpApp
 import org.openurp.platform.api.util.JSON
+import java.net.HttpURLConnection
 
 /**
  * @author chaostone
@@ -23,17 +23,17 @@ object RemoteService {
     }
   }
 
-  def getRoots(): Set[String] = {
+  def roots: Set[String] = {
     val url = Urp.platformBase + "/user/roots.json?app=" + UrpApp.name
     val resources = Collections.newSet[String]
-    resources ++= JSON.parse(IOs.readString(new URL(url).openStream())).asInstanceOf[Iterable[String]]
+    resources ++= JSON.parse(readUrl(url)).asInstanceOf[Iterable[String]]
     resources.toSet
   }
 
-  def getFuncResources(): collection.Map[String, Resource] = {
+  def resources: collection.Map[String, Resource] = {
     val url = Urp.platformBase + "/security/func/" + UrpApp.name + "/resources.json"
     val resources = Collections.newMap[String, Resource]
-    val resourceJsons = JSON.parse(IOs.readString(new URL(url).openStream())).asInstanceOf[Iterable[Map[String, _]]]
+    val resourceJsons = JSON.parse(readUrl(url)).asInstanceOf[Iterable[Map[String, _]]]
     resourceJsons.map { r =>
       resources += (r("name").toString -> Resource(r("id").asInstanceOf[Number].intValue, r("scope").toString, r("roles").asInstanceOf[Seq[Int]].toArray))
     }
@@ -45,6 +45,20 @@ object RemoteService {
     val resources = new collection.mutable.HashSet[Int]
     resources ++= JSON.parse(IOs.readString(new URL(url).openStream())).asInstanceOf[Iterable[Number]].map(n => n.intValue)
     resources.toSet
+  }
+
+  private def readUrl(url: String): String = {
+    val conn = new URL(url).openConnection().asInstanceOf[HttpURLConnection]
+    conn.setConnectTimeout(5 * 1000)
+    conn.setReadTimeout(5 * 1000)
+    conn.setRequestMethod("GET")
+    try {
+      IOs.readString(conn.getInputStream)
+    } catch {
+      case e: Exception =>
+        println("Cannot connect to " + url)
+        ""
+    }
   }
 }
 

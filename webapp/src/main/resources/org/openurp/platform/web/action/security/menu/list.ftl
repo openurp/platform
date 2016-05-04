@@ -6,7 +6,7 @@
 [#include "../status.ftl"/]
 [@b.grid  items=menus var="menu" sortable="false"]
 [@b.gridbar title="菜单列表"]
-  action.addParam('menu.profile.id',"${Parameters['menu.profile.id']!}");
+  action.addParam('menu.app.id',"${Parameters['menu.app.id']!}");
   function activate(isActivate){
     return action.multi("activate","确定操作?","isActivate="+isActivate);
   }

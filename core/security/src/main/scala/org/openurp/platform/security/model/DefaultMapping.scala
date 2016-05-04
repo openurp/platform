@@ -16,16 +16,11 @@ object DefaultMapping extends Mapping {
       e.remark is length(100)))
 
     bind[Menu].on(e => declare(
-      e.profile & e.indexno & e.name & e.title are notnull,
+      e.app & e.indexno & e.name & e.title are notnull,
       e.name & e.title & e.remark are length(100),
       e.indexno is length(50),
       e.children is (depends("parent"), orderby("indexno")),
       e.params is length(200)))
-
-    bind[MenuProfile].on(e => declare(
-      e.app is notnull,
-      e.name is (notnull, length(100)),
-      e.menus is depends("profile")))
 
     bind[FuncResource].on(e => declare(
       e.name is (notnull, length(200)),
@@ -41,6 +36,7 @@ object DefaultMapping extends Mapping {
 
     bind[DataPermission].on(e => declare(
       e.resource & e.beginAt are notnull,
+      e.description is (notnull, length(100)),
       e.filters is (notnull, length(600))))
 
     bind[AppPermission].on(e => declare(

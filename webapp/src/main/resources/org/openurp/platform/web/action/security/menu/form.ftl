@@ -10,13 +10,6 @@
 [/#if]
 
 [@b.form action=action title=labelInfo theme="list"]
-  [@b.field label="菜单配置" required="true"]
-    <select  name="menu.profile.id" style="width:150px;" >
-    [#list profiles as profile]
-    <option value="${profile.id}" [#if ((menu.profile.id)!0) ==profile.id]selected="selected"[/#if]>${profile.name}</option>
-    [/#list]
-    </select>
-  [/@]
   [@b.textfield label="common.name" name="menu.name" value="${menu.name!}" style="width:200px;"  required="true" maxlength="100" /]
   [@b.textfield label="标题" name="menu.title" value="${menu.title!}" style="width:200px;" required="true" maxlength="50"/]
   [@b.select label="上级菜单" name="parent.id" value=(menu.parent)! style="width:200px;"  items=parents option="id,description" empty="..."/]
@@ -27,6 +20,7 @@
   [@b.textarea label="common.remark"  name="menu.remark" maxlength="50" value=menu.remark! rows="2" cols="40"/]
   [@b.formfoot]
     [@b.reset/]&nbsp;&nbsp;
+    <input type="hidden" name="menu.app.id" value="${menu.app.id}"/>
     [@b.submit value="action.submit" /]
   [/@]
 [/@]

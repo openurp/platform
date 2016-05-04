@@ -36,28 +36,31 @@
   bar.addItem("${b.text("action.spread")}","displayAllRowsFor(1);",'tree-folder');
   bar.addItem("${b.text("action.collapse")}","collapseAllRowsFor(1);",'tree-folder-open');
   bar.addItem("${b.text("action.save")}",save,'save.png');
+  function switchRole(form,roleId){
+    form.action="${base}/security/permission/{roleId}/edit".replace("{roleId}",roleId)
+    form.submit();
+  }
 [/@]
 [@b.form name="permissionForm" action="!edit"]
 <table width="100%" class="searchTable" id="meunAuthorityTable">
   <tr>
     <td>
-    角色:<select name="role.id" onchange="this.form.submit()" style="width:250px">
+    角色:<select name="role.id" onchange="switchRole(this.form,this.value)" style="width:250px">
        [#list mngRoles?sort_by("indexno")! as r]
         <option value="${r.id}" [#if r.id=role.id]selected="selected"[/#if]>${r.indexno} ${r.name}</option>
        [/#list]
     </select>
     </td>
     <td class="title">
-    菜单配置:<select name="menuProfileId" style="width:300px;" onchange="this.form.submit();">
-      [#list menuProfiles as profile]
-      <option value="${profile.id}" [#if profile=menuProfile]selected="selected"[/#if]>${profile.app.title} ${profile.name}</option>
+    应用:<select name="app.id" style="width:300px;" onchange="this.form.submit();">
+      [#list apps as p]
+      <option value="${p.id}" [#if current_app=p]selected="selected"[/#if]>${p.fullTitle}</option>
       [/#list]
       </select>
     </td>
     <td><input name="displayFreezen" [#if Parameters['displayFreezen']??]checked="checked"[/#if] onclick="this.form.submit();" id="displayFreezen" type="checkbox"><label for="displayFreezen">显示冻结菜单</label></td>
   </tr>
 </table>
-
 <table width="100%" class="gridtable">
   <tbody>
   <tr class="gridhead">
@@ -68,7 +71,7 @@
   <th width="6%">${b.text("common.status")}</th>
   </tr>
   [#macro i18nTitle(entity)][#if locale.language?index_of("en")!=-1][#if entity.engTitle!?trim==""]${entity.title!}[#else]${entity.engTitle!}[/#if][#else][#if entity.title!?trim!=""]${entity.title!}[#else]${entity.engTitle!}[/#if][/#if][/#macro]
-  [#list menus?sort_by("indexno") as menu]
+  [#list mngMenus?sort_by("indexno") as menu]
 
   <tr class="grayStyle [#if !menu.enabled]ui-disabled[/#if]" id="${menu.indexno}">
     <td  class="gridselect">
@@ -87,8 +90,8 @@
     <td >&nbsp;${menu.indexno}</td>
     <td>
       [#list menu.resources as resource]
-        [#if resources?seq_contains(resource)]
-        <input type="checkbox" name="resource.id" id="checkbox_${menu_index}_${resource_index}" [#if parentResources?seq_contains(resource)]checked="checked" disabled="disabled"[#else][#if roleResources?seq_contains(resource)]checked="checked"[/#if][/#if] value="${resource.id}">[#rt]
+        [#if mngResources?seq_contains(resource)]
+        <input type="checkbox" name="resource.id" id="checkbox_${menu_index}_${resource_index}"[#if roleResources?seq_contains(resource)]checked="checked"[/#if] value="${resource.id}">[#rt]
         ${resource.title}
         [/#if]
         [#if resource_index%3==1]<br/>[/#if]

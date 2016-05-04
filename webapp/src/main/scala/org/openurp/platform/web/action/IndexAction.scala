@@ -12,24 +12,25 @@ import org.beangle.security.context.SecurityContext
 import org.beangle.security.mgt.SecurityManager
 import org.beangle.webmvc.api.view.View
 import org.beangle.security.realm.cas.CasConfig
+import org.openurp.platform.api.security.Securities
+import org.openurp.platform.config.service.AppService
 
 class IndexAction extends ActionSupport {
   var entityDao: EntityDao = _
   var casConfig: CasConfig = _
   var securityManager: SecurityManager = _
+  var appService: AppService = _
 
   def index(): String = {
     val query = OqlBuilder.from(classOf[Menu], "menu")
-    query.where("menu.profile.app.name=:app", UrpApp.name).where("menu.parent is null")
+    query.where("menu.app.name=:app", UrpApp.name).where("menu.parent is null")
     query.orderBy("menu.indexno")
     put("menus", entityDao.search(query))
-    val apps = entityDao.search(OqlBuilder.from(classOf[App], "app").where("app.appType='web-app'"));
+    val apps = appService.getWebapps()
     put("appName", UrpApp.name)
     put("apps", apps)
-    if (!apps.isEmpty) {
-      AppHelper.setAppId(get("app.id", classOf[Integer]).getOrElse(apps.head.id))
-      put("appId", AppHelper.getAppId())
-    }
+    put("username", Securities.user)
+    put("casConfig", casConfig)
     forward()
   }
 
@@ -40,7 +41,7 @@ class IndexAction extends ActionSupport {
 
   def menus(@param("indexno") indexno: String): String = {
     val query = OqlBuilder.from(classOf[Menu], "menu")
-    query.where("menu.profile.app.name=:app", UrpApp.name)
+    query.where("menu.app.name=:app", UrpApp.name)
     query.where("menu.indexno = :indexno ", indexno)
     val menus = entityDao.search(query)
     put("menus", menus)

@@ -1,11 +1,9 @@
 package org.openurp.platform.api.cas
 
 import org.beangle.security.authc.{ Account, AccountStore, DefaultAccount }
-import org.openurp.platform.api.app.UrpApp
 import org.openurp.platform.api.Urp
 import org.openurp.platform.api.util.JSON
 import org.beangle.commons.web.util.HttpUtils
-import java.net.URL
 
 /**
  * @author chaostone

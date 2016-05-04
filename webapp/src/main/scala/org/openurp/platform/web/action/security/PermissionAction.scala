@@ -18,18 +18,21 @@
  */
 package org.openurp.platform.web.action.security
 
-import org.beangle.commons.lang.{ Numbers, Strings }
+import org.beangle.commons.lang.Numbers
 import org.beangle.data.dao.OqlBuilder
 import org.beangle.webmvc.api.annotation.{ mapping, param }
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.platform.api.security.Securities
-import org.openurp.platform.security.model.{ FuncPermission, FuncResource, Menu, MenuProfile }
+import org.openurp.platform.config.model.App
+import org.openurp.platform.config.service.AppService
+import org.openurp.platform.security.model.{ FuncPermission, FuncResource, Menu }
 import org.openurp.platform.security.service.{ FuncPermissionService, MenuService }
 import org.openurp.platform.user.model.{ Role, User }
 import org.openurp.platform.user.service.UserService
 import org.openurp.platform.api.app.UrpApp
-
+import org.openurp.platform.web.helper.AppHelper
+import org.beangle.webmvc.api.context.ActionContext
 /**
  * 权限分配与管理响应类
  *
@@ -40,6 +43,7 @@ class PermissionAction extends RestfulAction[FuncPermission] {
   var menuService: MenuService = _
   var funcPermissionService: FuncPermissionService = _
   var userService: UserService = _
+  var appService: AppService = _
   /**
    * 根据菜单配置来分配权限
    */
@@ -49,49 +53,47 @@ class PermissionAction extends RestfulAction[FuncPermission] {
     val role = entityDao.get(classOf[Role], roleId)
     val user = entityDao.findBy(classOf[User], "code", List(Securities.user)).head
     put("manager", user)
+    val isPlatformRoot = userService.isRoot(user, UrpApp.name)
     val mngRoles = new collection.mutable.ListBuffer[Role]
-    for (m <- user.roles) {
-      if (m.granter) mngRoles += m.role
+    val roles = entityDao.search(OqlBuilder.from(classOf[Role], "r").orderBy("r.indexno"))
+    val granterRoles = user.roles filter (m => m.granter) map (m => m.role)
+    for (r <- roles) {
+      if (granterRoles.contains(r) || isPlatformRoot) mngRoles += r
     }
     put("mngRoles", mngRoles)
-    val menuProfiles = entityDao.getAll(classOf[MenuProfile])
-    put("menuProfiles", menuProfiles)
+    val apps = appService.getWebapps()
+    AppHelper.putApps(apps, "app.id", entityDao)
 
-    var menuProfile: MenuProfile = null
-    getId("menuProfile", classOf[Int]) foreach { id =>
-      menuProfile = entityDao.get(classOf[MenuProfile], id)
-    }
-    if (null == menuProfile && !menuProfiles.isEmpty) menuProfile = menuProfiles(0)
-
-    var menus = new collection.mutable.ListBuffer[Menu]
-    if (null != menuProfile) {
-      var resources: collection.Seq[Object] = null
-      if (userService.isRoot(user, UrpApp.name)) {
-        menus ++= menuProfile.menus
-        resources = entityDao.getAll(classOf[FuncResource])
+    val app: App = ActionContext.current.attribute("current_app")
+    var mngMenus = new collection.mutable.ListBuffer[Menu]
+    if (null != app) {
+      var mngResources: collection.Seq[Object] = null
+      if (userService.isRoot(user, app.name) || isPlatformRoot) {
+        mngMenus ++= menuService.getMenus(app)
+        mngResources = funcPermissionService.getResources(app)
       } else {
-        resources = new collection.mutable.ListBuffer[FuncResource]
+        mngResources = new collection.mutable.ListBuffer[FuncResource]
         val params = new collection.mutable.HashMap[String, Any]
         val hql = "select distinct fp.resource from " + classOf[FuncPermission].getName + " fp where fp.role.id = :roleId"
         val menuSet = new collection.mutable.HashSet[Menu]
         for (m <- user.roles) {
           if (m.granter) {
-            menuSet ++= menuService.getMenus(menuProfile, m.role)
+            menuSet ++= menuService.getMenus(app, m.role)
             params.put("roleId", m.role.id)
-            resources ++= entityDao.search(OqlBuilder.oql[FuncResource](hql).params(params))
+            mngResources ++= entityDao.search(OqlBuilder.oql[FuncResource](hql).params(params))
           }
         }
-        menus ++= menuSet.toList.sorted
+        mngMenus ++= menuSet.toList.sorted
       }
-      put("resources", resources.toSet)
+      put("mngResources", mngResources.toSet)
       val displayFreezen = getBoolean("displayFreezen", false)
       if (!displayFreezen) {
         val freezed = new collection.mutable.ListBuffer[Menu]
-        for (menu <- menus) if (!menu.enabled) freezed += menu
-        menus --= freezed
+        for (menu <- mngMenus) if (!menu.enabled) freezed += menu
+        mngMenus --= freezed
       }
-      val permissions = funcPermissionService.getPermissions(role)
-      val roleMenus = menuService.getMenus(menuProfile, role)
+      val permissions = funcPermissionService.getPermissions(app, role)
+      val roleMenus = menuService.getMenus(app, role)
       val roleResources = permissions.map(p => p.resource).toSet
       put("roleMenus", roleMenus.toSet)
       put("roleResources", roleResources)
@@ -101,8 +103,8 @@ class PermissionAction extends RestfulAction[FuncPermission] {
       val parentMenus = new collection.mutable.HashSet[Menu]
       var parent = role.parent
       while (null != parent && !parents.contains(parent)) {
-        val parentPermissions = funcPermissionService.getPermissions(parent)
-        parentMenus ++= menuService.getMenus(menuProfile, parent)
+        val parentPermissions = funcPermissionService.getPermissions(app, parent)
+        parentMenus ++= menuService.getMenus(app, parent)
         for (permission <- parentPermissions) {
           parentResources += permission.resource
         }
@@ -117,8 +119,7 @@ class PermissionAction extends RestfulAction[FuncPermission] {
       put("parentMenus", Set.empty)
       put("parentResources", Set.empty)
     }
-    put("menus", menus)
-    put("menuProfile", menuProfile)
+    put("mngMenus", mngMenus)
     put("role", role)
     return forward()
   }
@@ -135,27 +136,27 @@ class PermissionAction extends RestfulAction[FuncPermission] {
    */
   override def save(): View = {
     val role = entityDao.get(classOf[Role], intId("role"))
-    val menuProfile = entityDao.get(classOf[MenuProfile], intId("menuProfile"))
+    val app = entityDao.get(classOf[App], intId("app"))
     val newResources = entityDao.findBy(classOf[FuncResource], "id", intIds("resource")).toSet
 
     // 管理员拥有的菜单权限和系统资源
     val manager = entityDao.findBy(classOf[User], "code", List(Securities.user)).head
     var mngMenus: collection.Set[Menu] = null
     val mngResources = new collection.mutable.HashSet[FuncResource]
-    if (userService.isRoot(manager, UrpApp.name)) {
-      mngMenus = menuProfile.menus.toSet
+    if (userService.isRoot(manager, app.name)) {
+      mngMenus = menuService.getMenus(app).toSet
     } else {
-      mngMenus = menuService.getMenus(menuProfile, manager).toSet
+      mngMenus = menuService.getMenus(app, manager).toSet
     }
     for (m <- mngMenus) {
       mngResources ++= m.resources
     }
 
     newResources.dropWhile(p => !mngResources.contains(p))
-    funcPermissionService.authorize(role, newResources)
+    funcPermissionService.authorize(app, role, newResources)
 
     val where = to(this, "edit")
-    where.param("role.id", role.id).param("menuProfileId", menuProfile.id)
+    where.param("role.id", role.id).param("app.id", app.id)
     val displayFreezen = get("displayFreezen")
     if (null != displayFreezen) where.param("displayFreezen", displayFreezen)
 
