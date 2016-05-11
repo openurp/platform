@@ -5,6 +5,7 @@
     <input type="hidden" name="user.id" value="${user.id}" />
     [@b.textfield name="user.code" value="${user.code}" style="width:200px;" required="true" maxlength="30"/]
     [@b.textfield name="user.name" value="${user.name!}" style="width:200px;" required="true" maxlength="30"/]
+    [@b.select name="user.category.id" label="user.category.name" value=user.category! items=categories /]
     [@b.radios name="user.enabled" value=user.enabled items="1:action.activate,0:action.freeze"/]
     [@b.radios name="user.locked" value=user.locked items="1:锁定,0:解锁"/]
     [@b.password label="user.password" name="password" value="" maxlength="20" showStrength="true"/]

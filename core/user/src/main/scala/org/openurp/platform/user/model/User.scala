@@ -29,6 +29,7 @@ class User extends LongId with Coded with Named with Updated with TemporalOn wit
     if (null == passwordExpiredOn) false
     else (new ju.Date).after(passwordExpiredOn)
   }
+
   override def getName: String = {
     name
   }
