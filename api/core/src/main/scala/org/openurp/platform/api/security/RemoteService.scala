@@ -47,6 +47,14 @@ object RemoteService {
     resources.toSet
   }
 
+  def getMenusJson(): String = {
+    IOs.readString(new URL(Urp.platformBase + "/security/func/" + UrpApp.name + "/menus/user/" + Securities.user + ".json").openStream())
+  }
+
+  def getAppsJson(): String = {
+    IOs.readString(new URL(Urp.platformBase + "/user/apps/" + Securities.user + ".json").openStream())
+  }
+
   private def readUrl(url: String): String = {
     val conn = new URL(url).openConnection().asInstanceOf[HttpURLConnection]
     conn.setConnectTimeout(5 * 1000)
