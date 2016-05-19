@@ -12,28 +12,29 @@
 
 <table class="infoTable">
   <tr>
+   [@info 'code' /]
    [@info 'name' /]
-   [@info 'fullname' /]
   </tr>
   <tr>
-  [@info 'mail' /]
-  [@info 'createdAt','common.createdAt' /]
+    <td class="title">状态:</td>
+    <td class="content">[#if user.enabled] ${b.text("action.activate")}[#else]${b.text("action.freeze")}[/#if]</td>
+    <td class="title">是否锁定:</td>
+    <td class="content">[#if user.locked]锁定[#else]正常[/#if]</td>
   </tr>
   <tr>
-  [@info 'enabled'][#if user.enabled] ${b.text("action.activate")}[#else]${b.text("action.freeze")}[/#if][/@]
-  [@info 'updatedAt','common.updatedAt' /]
+    <td class="title">身份:</td>
+    <td class="content">${user.category.name}</td>
+    <td class="title" >${b.text("user.members")}:</td>
+    <td  class="content">[#list user.roles! as m]${m.role.name}([#if m.member]${b.text('member.member')}[/#if][#if m.manager] ${b.text('member.manager')}[/#if][#if m.granter] ${b.text('member.granter')}[/#if])[/#list]</td>
   </tr>
   <tr>
-  <td class="title" >${b.text("common.creator")}:</td>
-  <td class="content">${(user.creator.name)!}  </td>
-  <td class="title" >${b.text("user.members")}:</td>
-  <td  class="content">[#list user.members! as m]${m.role.name}([#if m.member]${b.text('member.member')}[/#if][#if m.manager] ${b.text('member.manager')}[/#if][#if m.granter] ${b.text('member.granter')}[/#if])[/#list]</td>
+    <td class="title" >密码过期时间:</td>
+    <td class="content">${(user.passwordExpiredOn)!}  </td>
+    [@info 'updatedAt','common.updatedAt' /]
   </tr>
   <tr>
   <td class="title" >${b.text("common.remark")}:</td>
   <td class="content">${user.remark!}</td>
-  <td class="title" >权限控制台:</td>
-  <td class="content">[@b.a target="_blank" href="user!dashboard?user.id=${user.id}"]查看权限用户控制台[/@]</td>
   </tr>
 </table>
 [@b.foot/]
