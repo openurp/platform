@@ -75,7 +75,10 @@ class ProfileAction(profileService: ProfileService) extends RestfulAction[UserPr
   protected override def removeAndRedirect(entities: Seq[UserProfile]): View = {
     val profile = entities.head
     try {
-      entityDao.execute(Operation.saveOrUpdate(profile.user).remove(entities))
+      entities foreach { e =>
+        entityDao.remove(e)
+      }
+      entityDao.saveOrUpdate(profile.user)
       redirect("index", s"&profile.user.id=${profile.user.id}", "info.remove.success")
     } catch {
       case e: Exception => {
