@@ -19,7 +19,7 @@
       [/@]
     [/@]
   [/@]
-  [#if role.id??]
+  [#if role.persisted]
   [@b.tab label="角色属性"]
     [@b.div href="/security/role!profile?role.id=${role.id}"/]
   [/@]
