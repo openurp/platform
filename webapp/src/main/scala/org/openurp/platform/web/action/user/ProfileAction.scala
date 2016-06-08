@@ -56,6 +56,7 @@ class ProfileAction(profileService: ProfileService) extends RestfulAction[UserPr
     "profile"
   }
 
+  @ignore
   protected override def saveAndRedirect(profile: UserProfile): View = {
     val helper = new ProfileHelper(entityDao, profileService)
     helper.dataResolver = dataResolver
@@ -71,6 +72,7 @@ class ProfileAction(profileService: ProfileService) extends RestfulAction[UserPr
       redirect("index", s"&profile.user.id=${profile.user.id}", "info.save.success")
     }
   }
+
   @ignore
   protected override def removeAndRedirect(entities: Seq[UserProfile]): View = {
     val profile = entities.head
@@ -87,6 +89,7 @@ class ProfileAction(profileService: ProfileService) extends RestfulAction[UserPr
       }
     }
   }
+
   protected override def editSetting(profile: UserProfile): Unit = {
     val helper = new ProfileHelper(entityDao, profileService)
     val domains = entityDao.getAll(classOf[Domain])
