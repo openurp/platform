@@ -3,7 +3,7 @@
 [@b.toolbar title="新建/修改数据源"]bar.addBack();[/@]
 <style>form.listform label.title{width:120px;}</style>
 [@b.tabs]
-  [#assign save_action][#if db.id??]!update?id=${db.id}[#else]!save[/#if][/#assign]
+  [#assign save_action][#if db.persisted]!update?id=${db.id}[#else]!save[/#if][/#assign]
   [@b.form action=save_action theme="list"]
     [@b.textfield name="db.name" label="名称" value="${db.name!}" required="true" maxlength="200"/]
     [@b.select items=drivers name="db.driver" label="驱动" value="${db.driver!}" required="true" maxlength="200"/]

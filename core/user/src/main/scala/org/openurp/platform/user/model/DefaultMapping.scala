@@ -11,7 +11,7 @@ object DefaultMapping extends Mapping {
 
     bind[Dimension].on(e => declare(
       e.name & e.title are (notnull, length(40)),
-      e.source is length(1000),
+      e.source is length(6000),
       e.typeName is notnull,
       e.keyName is length(20),
       e.properties is length(100)))

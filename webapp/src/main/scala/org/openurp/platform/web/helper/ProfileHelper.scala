@@ -125,8 +125,20 @@ class ProfileHelper(entityDao: EntityDao, profileService: ProfileService) {
   private def getProperty(profile: Profile, field: Dimension): AnyRef = {
     profile.getProperty(field) match {
       case Some(p) =>
-        if ("*" == p) profileService.getDimensionValues(field)
-        else dataResolver.unmarshal(field, p)
+        if ("*" == p) {
+          profileService.getDimensionValues(field)
+        } else {
+          if (field.keyName == null) {
+            Strings.split(p, ",").toList
+          } else {
+            var values = profileService.getDimensionValues(field)
+            val myValues = Strings.split(p, ",").toSet
+            values = values.filter { v =>
+              myValues.contains(Properties.get(v, field.keyName))
+            }
+            values
+          }
+        }
       case None => null
     }
   }
@@ -146,22 +158,7 @@ class ProfileHelper(entityDao: EntityDao, profileService: ProfileService) {
         if (null == values || values.size == 0) {
           profile.setProperty(field, null)
         } else {
-          var storedValue: String = null
-          if (null != field.keyName) {
-            val keys = new collection.mutable.HashSet[String]
-            keys ++= values
-            val allValues: Seq[_] = profileService.getDimensionValues(field) match {
-              case originValues: Seq[_] => originValues
-              case singleValue => List(singleValue)
-            }
-            val filtered = allValues.filter { v =>
-              keys.contains(String.valueOf(Properties.get[Any](v, field.keyName)))
-            }
-            storedValue = dataResolver.marshal(field, filtered)
-          } else {
-            storedValue = Strings.join(values.toSeq: _*)
-          }
-          profile.setProperty(field, storedValue)
+          profile.setProperty(field, Strings.join(values.toSeq: _*))
         }
       }
     }

@@ -23,7 +23,7 @@ class MenuWS extends ActionSupport with EntitySupport[Menu] {
 
     get("indexno") match {
       case Some(indexno) => builder.where("menu.indexno = :indexno", indexno)
-      case None => builder.where("menu.parent is null")
+      case None          => builder.where("menu.parent is null")
     }
     builder.orderBy("menu.indexno").limit(null)
   }
@@ -39,8 +39,11 @@ class MenuWS extends ActionSupport with EntitySupport[Menu] {
   def user(@param("app") appName: String, @param("user") username: String): Iterable[Any] = {
     val apps = entityDao.findBy(classOf[App], "name", List(appName))
     val users = entityDao.findBy(classOf[User], "code", List(username))
-    val app = apps.head
-    menuService.getTopMenus(app, users.head) map (m => convert(m))
+    if (apps.isEmpty) {
+      List.empty[Menu]
+    } else {
+      menuService.getTopMenus(apps.head, users.head) map (m => convert(m))
+    }
   }
 
   @response

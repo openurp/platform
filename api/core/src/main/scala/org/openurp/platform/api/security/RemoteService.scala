@@ -1,12 +1,13 @@
 package org.openurp.platform.api.security
 
-import java.net.URL
+import java.net.{ HttpURLConnection, URL }
+
 import org.beangle.commons.collection.Collections
 import org.beangle.commons.io.IOs
+import org.beangle.commons.lang.Strings
 import org.openurp.platform.api.Urp
 import org.openurp.platform.api.app.UrpApp
 import org.openurp.platform.api.util.JSON
-import java.net.HttpURLConnection
 
 /**
  * @author chaostone
@@ -45,6 +46,15 @@ object RemoteService {
     val resources = new collection.mutable.HashSet[Int]
     resources ++= JSON.parse(IOs.readString(new URL(url).openStream())).asInstanceOf[Iterable[Number]].map(n => n.intValue)
     resources.toSet
+  }
+
+  def getMenusJson(): String = {
+    IOs.readString(new URL(Urp.platformBase + "/security/func/" + UrpApp.name + "/menus/user/" + Securities.user + ".json").openStream())
+  }
+
+  def getAppsJson(): String = {
+    val domain = Strings.substringBefore(UrpApp.name, "-")
+    IOs.readString(new URL(Urp.platformBase + "/user/apps/" + Securities.user + ".json?domain=" + domain).openStream())
   }
 
   private def readUrl(url: String): String = {

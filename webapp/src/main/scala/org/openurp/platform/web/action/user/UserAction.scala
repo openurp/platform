@@ -46,7 +46,7 @@ import java.net.URLEncoder
 class UserAction extends RestfulAction[User] {
 
   var userService: UserService = _
-  private var userDashboardHelper: UserDashboardHelper = _
+  var userDashboardHelper: UserDashboardHelper = _
 
   override def info(id: String): String = {
     val userId = Params.converter.convert(id, classOf[Long])

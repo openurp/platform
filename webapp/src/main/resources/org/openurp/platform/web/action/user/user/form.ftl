@@ -3,7 +3,7 @@
 <script type="text/javascript">
   bg.ui.load("tabletree");
 </script>
-[#assign labInfo][#if user.id??]${b.text("action.modify")}[#else]${b.text("action.new")}[/#if] ${b.text("entity.user")}[/#assign]
+[#assign labInfo][#if user.persisted]${b.text("action.modify")}[#else]${b.text("action.new")}[/#if] ${b.text("entity.user")}[/#assign]
 [@b.toolbar title="修改用户角色"]bar.addBack("${b.text("action.back")}");[/@]
 [@b.messages/]
 [@b.tabs id="userinfotabs"]
@@ -44,7 +44,7 @@
       [/@]
   [/@]
 [/@]
-  [#if user.id??]
+  [#if user.persisted]
   [@b.tab label="全局数据权限" ]
   [@b.div href="/user/profile?forEdit=1&profile.user.id=${user.id}" /]
   [/@]

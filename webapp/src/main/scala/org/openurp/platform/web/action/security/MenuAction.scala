@@ -4,22 +4,19 @@ package org.openurp.platform.web.action.security
 import org.beangle.commons.collection.Collections
 import org.beangle.data.dao.OqlBuilder
 import org.beangle.data.model.util.Hierarchicals
-import org.beangle.webmvc.api.annotation.ignore
+import org.beangle.webmvc.api.annotation.{ ignore, param }
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.platform.config.model.App
-import org.openurp.platform.security.model.{ FuncResource, Menu }
-import org.openurp.platform.security.service.MenuService
-import org.openurp.platform.security.model.FuncPermission
-import org.openurp.platform.security.model.Menu
-import org.beangle.webmvc.api.annotation.param
-import org.openurp.platform.security.model.FuncPermission
-import org.openurp.platform.web.helper.AppHelper
 import org.openurp.platform.config.service.AppService
+import org.openurp.platform.security.model.{ FuncPermission, FuncResource, Menu }
+import org.openurp.platform.security.service.MenuService
+import org.openurp.platform.web.helper.AppHelper
 
-class MenuAction(val menuService: MenuService) extends RestfulAction[Menu] {
-
+class MenuAction extends RestfulAction[Menu] {
+  var menuService: MenuService = _
   var appService: AppService = _
+
   protected override def indexSetting(): Unit = {
     var apps = appService.getWebapps()
     AppHelper.putApps(apps, "menu.app.id", entityDao)
@@ -57,18 +54,20 @@ class MenuAction(val menuService: MenuService) extends RestfulAction[Menu] {
     put("resources", resources)
   }
 
-  protected override def removeAndRedirect(menus: Seq[Menu]): View = {
+  @ignore
+  protected override def removeAndRedirect(entities: Seq[Menu]): View = {
     val parents = Collections.newBuffer[Menu]
-    for (menu <- menus) {
+    for (menu <- entities) {
       if (null != menu.parent) {
         menu.parent.children -= menu
         parents += menu.parent
       }
     }
     entityDao.saveOrUpdate(parents)
-    return super.removeAndRedirect(menus)
+    super.removeAndRedirect(entities)
   }
 
+  @ignore
   protected override def saveAndRedirect(menu: Menu): View = {
     val resources = entityDao.find(classOf[FuncResource], intIds("resource"))
     menu.resources.clear()

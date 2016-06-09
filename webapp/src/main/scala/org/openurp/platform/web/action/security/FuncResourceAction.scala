@@ -32,9 +32,9 @@ class FuncResourceAction extends RestfulAction[FuncResource] {
 
   protected override def saveAndRedirect(resource: FuncResource): View = {
     if (null != resource) {
-      val builder = OqlBuilder.from[Int](classOf[FuncResource].getName, "fr").where("fr.name=:name and fr.app= :app", resource.name, resource.app).select("fr.id")
+      val builder = OqlBuilder.from[Int](classOf[FuncResource].getName, "fr").where("fr.name=:name and fr.app = :app", resource.name, resource.app).select("fr.id")
       val ids = entityDao.search(builder)
-      if (!ids.isEmpty && ids.contains(resource.id)) {
+      if (!resource.persisted && !ids.isEmpty || resource.persisted && !ids.isEmpty && !ids.contains(resource.id)) {
         return redirect("edit", "error.notUnique");
       }
     }

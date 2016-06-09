@@ -3,13 +3,7 @@
 [#include "scope.ftl"/]
 [@b.toolbar title="新建/修改资源"]bar.addBack();[/@]
 <div style="width:850px">
-[#if resource.id>0]
-  [#assign action = '!update?id='+resource.id/]
-[#else]
-  [#assign action = '!save'/]
-[/#if]
-
-[@b.form action=action title="app.funcresource.info" theme="list"]
+[@b.form action=b.rest.save(resource) title="app.funcresource.info" theme="list"]
   [@b.textfield name="resource.name" required="true" label="common.name" value="${resource.name!}" maxlength="50" style="width:250px" comment="资源名称唯一"/]
   [@b.textfield name="resource.title" required="true" label="标题" value="${resource.title!}" maxlength="50"/]
   [@b.select label="应用" name="resource.app.id" option=r"${item.name} ${item.title}" value="${(resource.app.id)!}" items=apps required="true" style="width:400px" /]

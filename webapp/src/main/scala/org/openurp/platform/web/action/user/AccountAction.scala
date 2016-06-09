@@ -28,6 +28,7 @@ import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.platform.api.security.Securities
 import org.openurp.platform.user.model.User
 import org.openurp.platform.user.service.UserService
+import org.openurp.platform.user.model.UserCategory
 /**
  * 用户管理响应处理类
  *
@@ -89,26 +90,7 @@ class AccountAction extends RestfulAction[User] {
   }
 
   protected override def editSetting(user: User) {
-    //    val manager = entityDao.get(classOf[User], getUserId())
-    //    val roles = new collection.mutable.HashSet[Role]
-    //    val curMemberMap = new collection.mutable.HashMap[Role, Member]
-    //    val members = userService.getMembers(manager, Member.Ship.IsGranter)
-    //    for (gm <- members) {
-    //      roles.add(gm.role)
-    //      curMemberMap.put(gm.role, gm)
-    //    }
-    //    put("roles", roles)
-    //
-    //    val userMembers = user.members
-    //    val memberMap = new collection.mutable.HashMap[Role, Member]
-    //    for (gm <- userMembers) {
-    //      memberMap.put(gm.role, gm)
-    //    }
-    //    put("memberMap", memberMap)
-    //    put("curMemberMap", curMemberMap)
-    //    put("isadmin", userService.isRoot(user))
-    //    put("isme", getUserId() == user.id)
-    //    put("settings", new Settings(getConfig()))
+    put("categories", entityDao.getAll(classOf[UserCategory]))
   }
 
   private def loginUser: User = {

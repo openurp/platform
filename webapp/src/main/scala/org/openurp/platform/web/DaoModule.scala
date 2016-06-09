@@ -18,26 +18,15 @@
  */
 package org.openurp.platform.web
 
-import org.beangle.commons.inject.bind.{ AbstractBindModule, profile }
-import org.beangle.data.hibernate.cfg.OverrideConfiguration
+import org.beangle.commons.cache.concurrent.ConcurrentMapCacheManager
+import org.beangle.commons.inject.bind.AbstractBindModule
+import org.beangle.data.hibernate.{ HibernateEntityDao, HibernateMetadataFactory }
+import org.beangle.data.hibernate.spring.{ HibernateTransactionManager, LocalSessionFactoryBean }
 import org.beangle.data.hibernate.spring.web.OpenSessionInViewInterceptor
 import org.springframework.beans.factory.config.PropertiesFactoryBean
-import org.springframework.jdbc.datasource.DriverManagerDataSource
-import org.springframework.jdbc.support.lob.DefaultLobHandler
 import org.springframework.transaction.interceptor.TransactionProxyFactoryBean
-import org.beangle.data.hibernate.spring.LocalSessionFactoryBean
-import org.beangle.data.hibernate.spring.HibernateTransactionManager
-import org.beangle.data.hibernate.HibernateMetadataFactory
-import org.beangle.data.hibernate.HibernateEntityDao
-import org.beangle.commons.cache.concurrent.ConcurrentMapCacheManager
-import org.beangle.commons.lang.Strings
 
 object DaoModule extends AbstractBindModule {
-
-  private def isDevEnabled: Boolean = {
-    val profiles = System.getProperty("cdi.profiles.active")
-    null != profiles && Strings.split(profiles, ",").toSet.contains("dev")
-  }
 
   protected override def binding(): Unit = {
     bind("HibernateConfig.default", classOf[PropertiesFactoryBean]).property(
@@ -50,7 +39,7 @@ object DaoModule extends AbstractBindModule {
         //net.sf.ehcache.configurationResourceName
         "hibernate.cache.region.factory_class=org.hibernate.cache.EhCacheRegionFactory",
         "hibernate.cache.use_second_level_cache=true", "hibernate.cache.use_query_cache=true",
-        "hibernate.query.substitutions=true 1, false 0, yes 'Y', no 'N'", "hibernate.show_sql=" + (if (isDevEnabled) "true" else "false")))
+        "hibernate.query.substitutions=true 1, false 0, yes 'Y', no 'N'", "hibernate.show_sql=" + (if (devEnabled) "true" else "false")))
       .description("Hibernate配置信息").nowire("propertiesArray")
 
     bind("SessionFactory.default", classOf[LocalSessionFactoryBean])
