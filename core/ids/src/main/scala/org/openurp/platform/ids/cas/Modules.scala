@@ -1,6 +1,8 @@
 package org.openurp.platform.ids.cas
 
 import java.io.FileInputStream
+
+import org.beangle.cache.ehcache.{ EhCacheChainedManager, EhCacheManager }
 import org.beangle.cache.redis.{ JedisPoolFactory, RedisBroadcasterBuilder, RedisCacheManager }
 import org.beangle.cache.serializer.FSTSerializer
 import org.beangle.commons.collection.Collections
@@ -9,20 +11,16 @@ import org.beangle.commons.inject.bind.AbstractBindModule
 import org.beangle.data.jdbc.ds.DataSourceFactory
 import org.beangle.ids.cas.id.impl.DefaultServiceTicketIdGenerator
 import org.beangle.ids.cas.ticket.impl.CachedTicketRegistry
+import org.beangle.ids.cas.web.action.{ LoginAction, LogoutAction, ServiceValidateAction }
 import org.beangle.ids.cas.web.helper.DefaultCasSessionIdPolicy
 import org.beangle.security.authc.{ DefaultAccountRealm, RealmAuthenticator }
 import org.beangle.security.authz.PublicAuthorizer
 import org.beangle.security.mgt.DefaultSecurityManager
-import org.beangle.security.session.jdbc.DBSessionRegistry
+import org.beangle.security.realm.ldap.{ DefaultCredentialsChecker, DefaultLdapUserService, PoolingContextSource }
+import org.beangle.security.session.jdbc.{ DBSessionRegistry, SessionCleaner }
 import org.beangle.security.web.UrlEntryPoint
 import org.beangle.security.web.access.{ DefaultAccessDeniedHandler, SecurityInterceptor }
-import org.beangle.cache.ehcache.EhCacheChainedManager
-import org.beangle.cache.ehcache.EhCacheManager
 import org.openurp.platform.api.app.UrpApp
-import org.beangle.security.realm.ldap.DefaultLdapUserService
-import org.beangle.security.realm.ldap.PoolingContextSource
-import org.beangle.security.realm.ldap.DefaultCredentialsChecker
-import org.beangle.security.session.jdbc.SessionCleaner
 
 /**
  * @author chaostone
@@ -103,10 +101,10 @@ class SessionModule extends AbstractBindModule {
     bind("jedis.Factory", classOf[JedisPoolFactory]).constructor(Map("host" -> $("redis.host"), "port" -> $("redis.port")))
     bind("serializer.fst", classOf[FSTSerializer])
 
-    bind("cache.Ehcache", classOf[EhCacheManager]).constructor("ehcache-session",false)
+    bind("cache.Ehcache", classOf[EhCacheManager]).constructor("ehcache-session", false)
 
     bind("cache.Chained.session", classOf[EhCacheChainedManager])
-      .constructor(ref("cache.Ehcache"), bean(classOf[RedisCacheManager]),true)
+      .constructor(ref("cache.Ehcache"), bean(classOf[RedisCacheManager]), true)
       .property("broadcasterBuilder", bean(classOf[RedisBroadcasterBuilder]))
 
     bind("DataSource.session", classOf[DataSourceFactory]).property("name", "session").property("url", UrpApp.getUrpAppFile.get.getAbsolutePath)
@@ -121,3 +119,10 @@ class SessionModule extends AbstractBindModule {
   }
 }
 
+class WebModule extends AbstractBindModule {
+  override def binding() {
+    bind(classOf[LoginAction]).constructor(?, ?, ref("cache.Ehcache"))
+    bind(classOf[ServiceValidateAction])
+    bind(classOf[LogoutAction]).constructor(ref("cache.Ehcache"))
+  }
+}
