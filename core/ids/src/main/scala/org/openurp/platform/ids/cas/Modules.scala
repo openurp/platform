@@ -36,10 +36,6 @@ class DefaultModule extends AbstractBindModule with PropertySource {
     //authorizer and manager
     bind("security.SecurityManager.default", classOf[DefaultSecurityManager])
     bind("security.Authorizer.public", PublicAuthorizer)
-
-    bind(classOf[LoginAction])
-    bind(classOf[ServiceValidateAction])
-    bind(classOf[LogoutAction])
   }
 
   override def properties: collection.Map[String, String] = {
@@ -123,3 +119,10 @@ class SessionModule extends AbstractBindModule {
   }
 }
 
+class WebModule extends AbstractBindModule {
+  override def binding() {
+    bind(classOf[LoginAction]).constructor(?, ?, ref("cache.Ehcache"))
+    bind(classOf[ServiceValidateAction])
+    bind(classOf[LogoutAction]).constructor(ref("cache.Ehcache"))
+  }
+}
