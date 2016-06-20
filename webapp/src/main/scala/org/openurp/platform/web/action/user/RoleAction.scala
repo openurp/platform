@@ -95,7 +95,6 @@ class RoleAction(val roleService: RoleService, val userService: UserService) ext
       "error.notUnique")
     if (!role.persisted) {
       role.indexno = "tmp"
-      role.creator = me
       roleService.create(me, role)
     } else {
       role.updatedAt = new Date(System.currentTimeMillis)
@@ -105,7 +104,7 @@ class RoleAction(val roleService: RoleService, val userService: UserService) ext
     val indexno = getInt("indexno", 1)
     getInt("parent.id") match {
       case Some(parentId) => parent = entityDao.get(classOf[Role], parentId)
-      case None =>
+      case None           =>
     }
     roleService.move(role, parent, indexno)
     if (!role.enabled) {
