@@ -19,7 +19,7 @@ class DbAction extends RestfulAction[Db] {
     val result = new ListBuffer[Tuple2[Db, Boolean]]
     for (cfg <- entities) {
       try {
-        val conn = DriverManager.getConnection(cfg.url, username, password)
+        val conn = DriverManager.getConnection(cfg.url.orNull, username, password)
         conn.close()
         result += cfg -> true
       } catch {

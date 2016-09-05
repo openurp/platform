@@ -7,13 +7,13 @@ import org.openurp.platform.config.model.App
 import org.beangle.commons.lang.Numbers
 import org.beangle.commons.lang.Strings
 import org.openurp.platform.user.model.Role
+import org.beangle.data.model.Remark
 
-class Menu extends IntId with Named with Enabled with Hierarchical[Menu] with Ordered[Menu] {
+class Menu extends IntId with Named with Enabled with Hierarchical[Menu] with Remark {
   var app: App = _
   var title: String = _
-  var entry: FuncResource = _
-  var params: String = _
-  var remark: String = _
+  var entry: Option[FuncResource] = None
+  var params: Option[String] = None
   var resources: mutable.Set[FuncResource] = new mutable.HashSet[FuncResource]
 
   def description: String = {

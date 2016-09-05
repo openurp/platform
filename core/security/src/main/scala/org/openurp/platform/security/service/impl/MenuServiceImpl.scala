@@ -35,11 +35,11 @@ class MenuServiceImpl(val entityDao: EntityDao) extends MenuService {
     val menuSet = Collections.newSet[Menu]
     entityDao.search(query).foreach { m =>
       menuSet += m
-      var p = m.parent
+      var p = m.parent.orNull
       while (null != p) {
         if (!menuSet.contains(p)) {
           menuSet += p
-          p = p.parent
+          p = p.parent.orNull
         } else {
           p = null
         }
@@ -107,6 +107,7 @@ class MenuServiceImpl(val entityDao: EntityDao) extends MenuService {
         val builder = OqlBuilder.from(classOf[Menu], "m")
           .where("m.app = :app and m.parent is null", menu.app)
           .orderBy("m.indexno")
+          if(None != menu.parent) entityDao.evict(menu.parent.get)
         Hierarchicals.move(menu, entityDao.search(builder).toBuffer, index)
       }
     entityDao.saveOrUpdate(nodes)
