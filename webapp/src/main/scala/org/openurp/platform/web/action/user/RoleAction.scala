@@ -88,14 +88,13 @@ class RoleAction(val roleService: RoleService, val userService: UserService) ext
     val role = entity.asInstanceOf[Role]
     if (entity.persisted) {
       if (!roleService.isManagedBy(me, role)) {
-        return redirect("search", "不能修改该组,你没有" + role.parent.name + "的管理权限");
+        return redirect("search", "不能修改该组,你没有" + role.parent.map(p => p.name).orNull + "的管理权限");
       }
     }
     if (entityDao.duplicate(classOf[Role], role.id, "name", role.getName())) return redirect("edit",
       "error.notUnique")
     if (!role.persisted) {
       role.indexno = "tmp"
-      role.creator = me
       roleService.create(me, role)
     } else {
       role.updatedAt = new Date(System.currentTimeMillis)
@@ -105,7 +104,7 @@ class RoleAction(val roleService: RoleService, val userService: UserService) ext
     val indexno = getInt("indexno", 1)
     getInt("parent.id") match {
       case Some(parentId) => parent = entityDao.get(classOf[Role], parentId)
-      case None =>
+      case None           =>
     }
     roleService.move(role, parent, indexno)
     if (!role.enabled) {

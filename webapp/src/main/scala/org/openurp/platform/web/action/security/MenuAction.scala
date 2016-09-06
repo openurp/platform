@@ -40,7 +40,9 @@ class MenuAction extends RestfulAction[Menu] {
     folderBuilder.orderBy("m.indexno")
     val rs = entityDao.search(folderBuilder)
     folders ++= rs
-    if (null != menu.parent && !folders.contains(menu.parent)) folders += menu.parent
+    menu.parent foreach { p =>
+      if (!folders.contains(p)) folders += p
+    }
     folders --= Hierarchicals.getFamily(menu)
     put("parents", folders)
 
@@ -58,9 +60,9 @@ class MenuAction extends RestfulAction[Menu] {
   protected override def removeAndRedirect(entities: Seq[Menu]): View = {
     val parents = Collections.newBuffer[Menu]
     for (menu <- entities) {
-      if (null != menu.parent) {
-        menu.parent.children -= menu
-        parents += menu.parent
+      menu.parent foreach { p =>
+        p.children -= menu
+        parents += p
       }
     }
     entityDao.saveOrUpdate(parents)
@@ -78,7 +80,6 @@ class MenuAction extends RestfulAction[Menu] {
     if (None != newParentId) parent = entityDao.get(classOf[Menu], newParentId.get)
 
     menuService.move(menu, parent, indexno)
-    entityDao.saveOrUpdate(menu)
     if (!menu.enabled) {
       val family = Hierarchicals.getFamily(menu)
       for (one <- family) one.enabled = false

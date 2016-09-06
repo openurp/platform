@@ -7,6 +7,7 @@ import org.openurp.platform.user.model.MemberShip.{ Granter, Manager, Member, Sh
 import org.openurp.platform.user.model.User
 import org.openurp.platform.user.service.UserService
 import org.openurp.platform.user.model.Root
+import org.openurp.platform.user.model.UserProfile
 
 class UserServiceImpl(val entityDao: EntityDao) extends UserService {
 
@@ -27,7 +28,7 @@ class UserServiceImpl(val entityDao: EntityDao) extends UserService {
     ship match {
       case Manager => user.roles.filter(m => m.manager)
       case Granter => user.roles.filter(m => m.granter)
-      case Member => user.roles.filter(m => m.member)
+      case Member  => user.roles.filter(m => m.member)
     }
   }
 
@@ -48,14 +49,16 @@ class UserServiceImpl(val entityDao: EntityDao) extends UserService {
   }
 
   def updateState(manager: User, userIds: Iterable[Long], active: Boolean): Int = {
-    0
+    val users = entityDao.find(classOf[User], userIds)
+    val updated = users.filter(u => isManagedBy(manager, u))
+    updated.foreach { u => u.enabled = active }
+    entityDao.saveOrUpdate(updated)
+    updated.size
   }
 
   def remove(manager: User, user: User): Unit = {
-    val removed = new collection.mutable.ListBuffer[User]
     if (isManagedBy(manager, user)) {
-      //entityDao.remove(entityDao.findBy(classOf[UserProfile], "user", List(user)), user);
-      removed += user
+      entityDao.remove(entityDao.findBy(classOf[UserProfile], "user", List(user)), user);
     }
   }
 }

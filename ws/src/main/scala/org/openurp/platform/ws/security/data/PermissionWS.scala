@@ -30,27 +30,24 @@ class PermissionWS(entityDao: EntityDao) extends ActionSupport {
         .cacheable(true)
       val permissions = entityDao.search(permissionQuery)
       val favorates = Collections.newBuffer[DataPermission]
-      val mostFavorates = permissions find (p => null != p.app && null != p.role && roleSet.contains(p.role))
+      val mostFavorates = permissions find (p => None != p.app && None != p.role && roleSet.contains(p.role.get))
       val p = mostFavorates match {
         case Some(p) => p
         case None =>
-          permissions find (x => null != x.app && null == x.role) match {
+          permissions find (x => None != x.app && None == x.role) match {
             case Some(p) => p
             case None =>
-              permissions find (x => null == x.app && null != x.role) match {
+              permissions find (x => None == x.app && None != x.role) match {
                 case Some(p) => p
                 case None => {
-                  val pp = permissions find (x => null == x.app && null == x.role)
+                  val pp = permissions find (x => None == x.app && None == x.role)
                   pp.orNull
                 }
               }
           }
       }
       val props = new Properties()
-      if (p != null) {
-        props.put("filters", p.filters)
-        //props.put("description", p.description)
-      }
+      if (p != null) props.put("filters", p.filters)
       props
     }
   }

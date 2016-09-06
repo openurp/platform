@@ -29,15 +29,13 @@ object DefaultMapping extends Mapping {
       e.remark & e.actions are length(200)))
 
     bind[DataResource].on(e => declare(
-      e.name & e.typeName are (notnull, length(200)),
-      e.scope is notnull,
-      e.title is (notnull, length(200)),
+      e.name & e.typeName are  length(200),
+      e.title is   length(200),
       e.remark & e.actions are length(200)))
 
     bind[DataPermission].on(e => declare(
-      e.resource & e.beginAt are notnull,
-      e.description is (notnull, length(100)),
-      e.filters is (notnull, length(600))))
+      e.description is length(100),
+      e.filters is length(600)))
 
     bind[AppPermission].on(e => declare(
       e.app & e.resource are notnull,

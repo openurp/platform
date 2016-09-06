@@ -101,7 +101,7 @@ class PermissionAction extends RestfulAction[FuncPermission] {
       val parents = new collection.mutable.HashSet[Role]
       val parentResources = new collection.mutable.HashSet[FuncResource]
       val parentMenus = new collection.mutable.HashSet[Menu]
-      var parent = role.parent
+      var parent = role.parent.orNull
       while (null != parent && !parents.contains(parent)) {
         val parentPermissions = funcPermissionService.getPermissions(app, parent)
         parentMenus ++= menuService.getMenus(app, parent)
@@ -109,7 +109,7 @@ class PermissionAction extends RestfulAction[FuncPermission] {
           parentResources += permission.resource
         }
         parents += parent
-        parent = parent.parent
+        parent = parent.parent.orNull
       }
       put("parentMenus", parentMenus)
       put("parentResources", parentResources)
