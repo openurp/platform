@@ -12,6 +12,10 @@
   <packaging>pom</packaging>
   <name>OpenURP Platform Parent</name>
 
+  <properties>
+    <beangle.commons.version>4.5.4</beangle.commons.version>
+  </properties>
+
   <modules>
     <module>api</module>
     <module>core</module>
