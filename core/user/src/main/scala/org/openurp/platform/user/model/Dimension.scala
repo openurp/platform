@@ -1,7 +1,7 @@
 package org.openurp.platform.user.model
 
 import org.beangle.commons.collection.Collections
-import org.beangle.data.model.{ IntId, Named }
+import org.beangle.commons.model.{ IntId, Named }
 import org.openurp.platform.config.model.Domain
 
 /**

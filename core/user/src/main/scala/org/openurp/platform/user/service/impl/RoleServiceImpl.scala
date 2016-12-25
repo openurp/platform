@@ -2,8 +2,8 @@ package org.openurp.platform.user.service.impl
 
 import java.util.Date
 
-import org.beangle.data.dao.{ EntityDao, OqlBuilder }
-import org.beangle.data.model.util.Hierarchicals
+import org.beangle.commons.dao.{ EntityDao, OqlBuilder }
+import org.beangle.commons.model.util.Hierarchicals
 import org.openurp.platform.user.model.{ Role, User }
 import org.openurp.platform.user.service.RoleService
 

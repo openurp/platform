@@ -19,8 +19,8 @@
 package org.openurp.platform.web.action.user
 
 import java.sql.Date
-import org.beangle.data.dao.OqlBuilder
-import org.beangle.data.model.util.Hierarchicals
+import org.beangle.commons.dao.OqlBuilder
+import org.beangle.commons.model.util.Hierarchicals
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.platform.config.model.App

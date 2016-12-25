@@ -2,12 +2,12 @@ package org.openurp.platform.api.cas
 
 import java.io.{ File, FileInputStream }
 
-import org.beangle.cache.ehcache.{ EhCacheChainedManager, EhCacheManager }
-import org.beangle.cache.redis.{ JedisPoolFactory, RedisBroadcasterBuilder, RedisCacheManager }
-import org.beangle.cache.serializer.FSTSerializer
+import org.beangle.commons.cache.ehcache.{ EhCacheChainedManager, EhCacheManager }
+import org.beangle.commons.cache.redis.{ JedisPoolFactory, RedisBroadcasterBuilder, RedisCacheManager }
+import org.beangle.commons.cache.serializer.FSTSerializer
 import org.beangle.commons.collection.Collections
-import org.beangle.commons.inject.PropertySource
-import org.beangle.commons.inject.bind.AbstractBindModule
+import org.beangle.commons.cdi.PropertySource
+import org.beangle.commons.cdi.bind.AbstractBindModule
 import org.beangle.data.jdbc.ds.DataSourceFactory
 import org.beangle.security.authc.{ DefaultAccountRealm, RealmAuthenticator }
 import org.beangle.security.mgt.DefaultSecurityManager

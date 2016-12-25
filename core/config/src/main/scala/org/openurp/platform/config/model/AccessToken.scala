@@ -1,8 +1,8 @@
 package org.openurp.platform.config.model
 
 import java.{ util => ju }
-import org.beangle.data.model.IntId
-import org.beangle.data.model.StringId
+import org.beangle.commons.model.IntId
+import org.beangle.commons.model.StringId
 
 class AccessToken extends StringId {
 

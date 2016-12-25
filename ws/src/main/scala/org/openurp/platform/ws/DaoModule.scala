@@ -18,7 +18,7 @@
  */
 package org.openurp.platform.ws
 
-import org.beangle.commons.inject.bind.{ AbstractBindModule, profile }
+import org.beangle.commons.cdi.bind.{ AbstractBindModule, profile }
 import org.beangle.data.hibernate.cfg.OverrideConfiguration
 import org.beangle.data.hibernate.spring.web.OpenSessionInViewInterceptor
 import org.springframework.beans.factory.config.PropertiesFactoryBean

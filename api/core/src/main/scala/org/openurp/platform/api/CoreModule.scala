@@ -1,6 +1,6 @@
 package org.openurp.platform.api
 
-import org.beangle.commons.inject.bind.AbstractBindModule
+import org.beangle.commons.cdi.bind.AbstractBindModule
 
 class CoreModule extends AbstractBindModule {
 
