@@ -2,7 +2,7 @@ package org.openurp.platform.security.model
 
 import java.security.Principal
 
-import org.beangle.data.model.{ Enabled, IntId, LongId, Named, Remark, TemporalAt }
+import org.beangle.commons.model.{ Enabled, IntId, LongId, Named, Remark, TemporalAt }
 import org.beangle.security.authz.{ Permission, Resource, Scopes }
 import org.openurp.platform.config.model.App
 import org.openurp.platform.user.model.Role

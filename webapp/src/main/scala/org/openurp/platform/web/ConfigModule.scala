@@ -1,6 +1,6 @@
 package org.openurp.platform.web
 
-import org.beangle.commons.inject.bind.AbstractBindModule
+import org.beangle.commons.cdi.bind.AbstractBindModule
 import org.openurp.platform.web.action.config.{ AppAction, DbAction }
 import org.openurp.platform.web.action.config.AppAction
 import org.openurp.platform.web.action.config.DbAction

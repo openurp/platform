@@ -2,12 +2,12 @@ package org.openurp.platform.security.model
 
 import scala.collection.mutable
 import org.beangle.commons.collection.Collections
-import org.beangle.data.model.{ Enabled, Hierarchical, IntId, Named }
+import org.beangle.commons.model.{ Enabled, Hierarchical, IntId, Named }
 import org.openurp.platform.config.model.App
 import org.beangle.commons.lang.Numbers
 import org.beangle.commons.lang.Strings
 import org.openurp.platform.user.model.Role
-import org.beangle.data.model.Remark
+import org.beangle.commons.model.Remark
 
 class Menu extends IntId with Named with Enabled with Hierarchical[Menu] with Remark {
   var app: App = _

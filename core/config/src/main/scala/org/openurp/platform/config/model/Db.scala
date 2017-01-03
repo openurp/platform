@@ -1,6 +1,6 @@
 package org.openurp.platform.config.model
 
-import org.beangle.data.model.{ IntId, Named, Remark }
+import org.beangle.commons.model.{ IntId, Named, Remark }
 
 class Db extends IntId with Named with Remark{
   var url: Option[String] = None

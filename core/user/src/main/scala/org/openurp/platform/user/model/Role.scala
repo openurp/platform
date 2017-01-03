@@ -3,8 +3,8 @@ package org.openurp.platform.user.model
 import java.security.Principal
 
 import org.beangle.commons.lang.{ Numbers, Strings }
-import org.beangle.data.model.{ Enabled, Hierarchical, IntId, Named, Updated }
-import org.beangle.data.model.Remark
+import org.beangle.commons.model.{ Enabled, Hierarchical, IntId, Named, Updated }
+import org.beangle.commons.model.Remark
 
 /**
  * @author chaostone

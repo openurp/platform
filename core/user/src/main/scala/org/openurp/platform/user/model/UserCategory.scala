@@ -1,7 +1,7 @@
 package org.openurp.platform.user.model
 
-import org.beangle.data.model.{ Coded, IntId, Named, TemporalOn, Updated }
-import org.beangle.data.model.Remark
+import org.beangle.commons.model.{ Coded, IntId, Named, TemporalOn, Updated }
+import org.beangle.commons.model.Remark
 
 /**
  * 用户分类

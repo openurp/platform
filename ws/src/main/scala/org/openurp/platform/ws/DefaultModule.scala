@@ -1,7 +1,7 @@
 package org.openurp.platform.ws
 
 import org.beangle.commons.cache.concurrent.ConcurrentMapCacheManager
-import org.beangle.commons.inject.bind.AbstractBindModule
+import org.beangle.commons.cdi.bind.AbstractBindModule
 import org.openurp.platform.oauth.service.impl.MemTokenRepository
 import org.openurp.platform.ws.config.DatasourceWS
 import org.openurp.platform.ws.oauth.TokenWS

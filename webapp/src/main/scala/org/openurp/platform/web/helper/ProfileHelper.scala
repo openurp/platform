@@ -20,12 +20,12 @@ package org.openurp.platform.web.helper
 
 import org.beangle.commons.bean.Properties
 import org.beangle.commons.lang.Strings
-import org.beangle.data.dao.EntityDao
+import org.beangle.commons.dao.EntityDao
 import org.beangle.security.context.SecurityContext
 import org.beangle.webmvc.api.context.{ ActionContext, Params }
 import org.openurp.platform.api.security.Securities
 import org.openurp.platform.config.model.App
-import org.beangle.data.dao.OqlBuilder
+import org.beangle.commons.dao.OqlBuilder
 import org.openurp.platform.user.service.impl.CsvDataResolver
 import org.openurp.platform.security.service.ProfileService
 import org.openurp.platform.user.service.DataResolver

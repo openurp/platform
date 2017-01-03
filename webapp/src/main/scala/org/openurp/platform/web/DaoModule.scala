@@ -19,7 +19,7 @@
 package org.openurp.platform.web
 
 import org.beangle.commons.cache.concurrent.ConcurrentMapCacheManager
-import org.beangle.commons.inject.bind.AbstractBindModule
+import org.beangle.commons.cdi.bind.AbstractBindModule
 import org.beangle.data.hibernate.{ HibernateEntityDao, HibernateMetadataFactory }
 import org.beangle.data.hibernate.spring.{ HibernateTransactionManager, LocalSessionFactoryBean }
 import org.beangle.data.hibernate.spring.web.OpenSessionInViewInterceptor

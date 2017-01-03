@@ -2,7 +2,7 @@ package org.openurp.platform.config.model
 
 import scala.reflect.runtime.universe
 
-import org.beangle.data.model.bind.Mapping
+import org.beangle.commons.model.bind.Mapping
 
 object DefaultMapping extends Mapping {
 

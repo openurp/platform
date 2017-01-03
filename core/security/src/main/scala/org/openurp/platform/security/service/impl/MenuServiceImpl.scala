@@ -3,8 +3,8 @@ package org.openurp.platform.security.service.impl
 import scala.collection.mutable.Buffer
 
 import org.beangle.commons.collection.Collections
-import org.beangle.data.dao.{ EntityDao, OqlBuilder }
-import org.beangle.data.model.util.Hierarchicals
+import org.beangle.commons.dao.{ EntityDao, OqlBuilder }
+import org.beangle.commons.model.util.Hierarchicals
 import org.openurp.platform.config.model.App
 import org.openurp.platform.user.model.{ Role, User }
 import org.openurp.platform.security.model.{ FuncPermission, Menu }
