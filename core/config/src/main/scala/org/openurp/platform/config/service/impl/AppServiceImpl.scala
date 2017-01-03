@@ -1,8 +1,8 @@
 package org.openurp.platform.config.service.impl
 
 import org.openurp.platform.config.service.AppService
-import org.beangle.data.dao.EntityDao
-import org.beangle.data.dao.OqlBuilder
+import org.beangle.commons.dao.EntityDao
+import org.beangle.commons.dao.OqlBuilder
 import org.openurp.platform.config.model.App
 
 /**

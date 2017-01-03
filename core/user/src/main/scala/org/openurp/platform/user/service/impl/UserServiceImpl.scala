@@ -1,7 +1,7 @@
 package org.openurp.platform.user.service.impl
 
 import java.{ util => ju }
-import org.beangle.data.dao.{ EntityDao, OqlBuilder }
+import org.beangle.commons.dao.{ EntityDao, OqlBuilder }
 import org.openurp.platform.user.model.RoleMember
 import org.openurp.platform.user.model.MemberShip.{ Granter, Manager, Member, Ship }
 import org.openurp.platform.user.model.User

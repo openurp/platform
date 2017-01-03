@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.openurp.platform.core</groupId>
     <artifactId>openurp-platform-core-parent</artifactId>
-    <version>0.0.12</version>
+    <version>0.0.13</version>
   </parent>
   <groupId>org.openurp.platform.core</groupId>
   <artifactId>openurp-platform-core-config</artifactId>
@@ -17,6 +17,10 @@
   </properties>
 
   <dependencies>
+    <dependency>
+      <groupId>org.beangle.commons</groupId>
+      <artifactId>beangle-commons-cache_2.12</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.beangle.data</groupId>
       <artifactId>beangle-data-hibernate_2.12</artifactId>

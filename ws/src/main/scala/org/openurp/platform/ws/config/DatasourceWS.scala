@@ -1,7 +1,7 @@
 package org.openurp.platform.ws.config
 
 import org.beangle.commons.collection.Properties
-import org.beangle.data.dao.{ EntityDao, OqlBuilder }
+import org.beangle.commons.dao.{ EntityDao, OqlBuilder }
 import org.beangle.webmvc.api.action.{ ActionSupport, EntitySupport }
 import org.beangle.webmvc.api.annotation.{ mapping, param, response }
 import org.openurp.platform.config.model.{ App, DataSource }

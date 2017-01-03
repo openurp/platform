@@ -21,8 +21,8 @@ package org.openurp.platform.web.action.user
 import java.util.Date
 import org.beangle.commons.collection.Order
 import org.beangle.commons.lang.Strings
-import org.beangle.data.dao.OqlBuilder
-import org.beangle.data.dao.{ Condition, Operation }
+import org.beangle.commons.dao.OqlBuilder
+import org.beangle.commons.dao.{ Condition, Operation }
 import org.beangle.webmvc.api.context.Params
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction

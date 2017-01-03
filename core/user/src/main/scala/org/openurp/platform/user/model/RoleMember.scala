@@ -1,6 +1,6 @@
 package org.openurp.platform.user.model
 
-import org.beangle.data.model.{ LongId, Updated }
+import org.beangle.commons.model.{ LongId, Updated }
 
 import MemberShip.{ Granter, Manager, Member, Ship }
 

@@ -1,7 +1,7 @@
 package org.openurp.platform.user.model
 
-import org.beangle.data.model.IntId
-import org.beangle.data.model.Updated
+import org.beangle.commons.model.IntId
+import org.beangle.commons.model.Updated
 import org.openurp.platform.config.model.App
 
 /**

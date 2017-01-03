@@ -4,8 +4,8 @@ import java.security.Principal
 import java.{ util => ju }
 
 import org.beangle.commons.collection.Collections
-import org.beangle.data.model.{ Coded, Enabled, LongId, Named, TemporalOn, Updated }
-import org.beangle.data.model.Remark
+import org.beangle.commons.model.{ Coded, Enabled, LongId, Named, TemporalOn, Updated }
+import org.beangle.commons.model.Remark
 
 /**
  * @author chaostone
