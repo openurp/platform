@@ -52,7 +52,7 @@ class MenuServiceImpl(val entityDao: EntityDao) extends MenuService {
 
     val menus = Collections.newBuffer[Menu]
     menuSet foreach { m =>
-      if (m.parent == null) {
+      if (m.parent.isEmpty) {
         menus += m
         removeOther(m, menuSet)
       }
