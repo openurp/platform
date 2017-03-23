@@ -1,4 +1,4 @@
-package org.openurp.platform.api.cas.id
+package org.openurp.platform.api.security.id
 
 import java.util.concurrent.atomic.AtomicLong
 

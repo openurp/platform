@@ -19,14 +19,14 @@ object DefaultMapping extends Mapping {
     bind[RoleMember]
 
     bind[Role].on(e => declare(
-      e.name is length(100),
+      e.getName is length(100),
       e.children is depends("parent"),
       e.members is depends("role"),
       e.properties is eleLength(2000)))
 
     bind[User].on(e => declare(
       e.code is (length(30), unique),
-      e.name is length(100),
+      e.getName is length(100),
       e.password is length(200),
       e.remark is length(100),
       e.roles is depends("user"),
@@ -43,7 +43,7 @@ object DefaultMapping extends Mapping {
     bind[GroupMember]
 
     bind[Group].on(e => declare(
-      e.name is length(100),
+      e.getName is length(100),
       e.children is depends("parent"),
       e.members is depends("group"),
       e.properties is eleLength(2000)))

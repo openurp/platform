@@ -5,22 +5,22 @@ import java.io.FileInputStream
 import org.beangle.commons.cache.ehcache.{ EhCacheChainedManager, EhCacheManager }
 import org.beangle.commons.cache.redis.{ JedisPoolFactory, RedisBroadcasterBuilder, RedisCacheManager }
 import org.beangle.commons.cache.serializer.FSTSerializer
-import org.beangle.commons.collection.Collections
 import org.beangle.commons.cdi.PropertySource
 import org.beangle.commons.cdi.bind.AbstractBindModule
+import org.beangle.commons.collection.Collections
 import org.beangle.data.jdbc.ds.DataSourceFactory
 import org.beangle.ids.cas.id.impl.DefaultServiceTicketIdGenerator
 import org.beangle.ids.cas.ticket.impl.CachedTicketRegistry
 import org.beangle.ids.cas.web.action.{ LoginAction, LogoutAction, ServiceValidateAction }
-import org.beangle.ids.cas.web.helper.DefaultCasSessionIdPolicy
 import org.beangle.security.authc.{ DefaultAccountRealm, RealmAuthenticator }
 import org.beangle.security.authz.PublicAuthorizer
-import org.beangle.security.mgt.DefaultSecurityManager
 import org.beangle.security.realm.ldap.{ DefaultCredentialsChecker, DefaultLdapUserService, PoolingContextSource }
-import org.beangle.security.session.jdbc.{ DBSessionRegistry, SessionCleaner }
-import org.beangle.security.web.UrlEntryPoint
+import org.beangle.security.session.jdbc.DBSessionRegistry
+import org.beangle.security.web.{ UrlEntryPoint, WebSecurityManager }
 import org.beangle.security.web.access.{ DefaultAccessDeniedHandler, SecurityInterceptor }
+import org.openurp.platform.api.Urp
 import org.openurp.platform.api.app.UrpApp
+import org.openurp.platform.api.security.{ DefaultUrpSessionIdPolicy, RemoteAccountStore }
 
 /**
  * @author chaostone
@@ -34,7 +34,7 @@ class DefaultModule extends AbstractBindModule with PropertySource {
     bind("security.AccessDeniedHandler.default", classOf[DefaultAccessDeniedHandler]).constructor($("security.access.errorPage", "/403.html"))
     bind("web.Interceptor.security", classOf[SecurityInterceptor])
     //authorizer and manager
-    bind("security.SecurityManager.default", classOf[DefaultSecurityManager])
+    bind("security.SecurityManager.default", classOf[WebSecurityManager])
     bind("security.Authorizer.public", PublicAuthorizer)
   }
 
@@ -68,7 +68,7 @@ class TicketModule extends AbstractBindModule {
 
 class DbCredentialsModule extends AbstractBindModule {
   override def binding() {
-    bind("security.CredentialsChecker.default", classOf[SimpleCredentialsChecker])
+    bind("security.CredentialsChecker.default", classOf[DaoCredentialsChecker])
       .constructor(ref("DataSource.security"))
   }
 }
@@ -87,10 +87,9 @@ class RealmModule extends AbstractBindModule {
     bind("DataSource.security", classOf[DataSourceFactory]).property("name", "security")
       .property("url", UrpApp.getUrpAppFile.get.getAbsolutePath)
 
-    bind("security.AccountStore.dao", classOf[DaoUserStore]).constructor(ref("DataSource.security"))
     bind("security.Realm.default", classOf[DefaultAccountRealm])
-      .constructor(ref("security.AccountStore.dao"), ref("security.CredentialsChecker.default"))
-    bind("security.Authenticator.realm", classOf[RealmAuthenticator])
+      .constructor(bean(classOf[RemoteAccountStore]), ref("security.CredentialsChecker.default"))
+    bind("security.Authenticator", classOf[RealmAuthenticator])
       .constructor(List(ref("security.Realm.default")))
   }
 }
@@ -111,11 +110,12 @@ class SessionModule extends AbstractBindModule {
 
     bind("security.SessionRegistry.db", classOf[DBSessionRegistry])
       .constructor(ref("DataSource.session"), ref("cache.Chained.session"), ref("cache.Ehcache"))
-      .property("sessionTable", "session.cas_session_infoes").property("statTable", "session.cas_session_stats")
+      .property("sessionTable", "session.session_infoes").property("statTable", "session.session_stats")
+      .property("enableCleanup", true)
 
-    bind("security.SessionIdPolicy.cas", classOf[DefaultCasSessionIdPolicy])
+    bind("security.SessionIdPolicy.urp", classOf[DefaultUrpSessionIdPolicy])
+      .property("path", "/").property("domain", Urp.base)
 
-    bind(classOf[SessionCleaner])
   }
 }
 
