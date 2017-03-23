@@ -16,6 +16,7 @@ import org.beangle.security.web.WebSecurityManager
 import org.beangle.security.web.access.{ AuthorizationFilter, DefaultAccessDeniedHandler, SecurityInterceptor }
 import org.openurp.platform.api.Urp
 import org.openurp.platform.api.security.{ DefaultUrpSessionIdPolicy, RemoteAccountStore, RemoteAuthorizer }
+import org.beangle.commons.lang.Strings
 
 class DefaultModule extends AbstractBindModule with PropertySource {
 
@@ -52,7 +53,7 @@ class DefaultModule extends AbstractBindModule with PropertySource {
       .property("sessionTable", "session.session_infoes").property("statTable", "session.session_stats")
 
     bind("security.SessionIdPolicy.cookie", classOf[DefaultUrpSessionIdPolicy])
-      .property("path", "/").property("domain", Urp.base)
+      .property("path", "/").property("domain", Strings.substringAfter(Urp.base, "//"))
 
     //cas
     bind(classOf[CasConfig]).constructor($("openurp.platform.cas.server"))

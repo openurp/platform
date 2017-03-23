@@ -2,6 +2,7 @@ package org.openurp.platform.ids.cas
 
 import java.io.FileInputStream
 
+import org.beangle.commons.lang.Strings
 import org.beangle.commons.cache.ehcache.{ EhCacheChainedManager, EhCacheManager }
 import org.beangle.commons.cache.redis.{ JedisPoolFactory, RedisBroadcasterBuilder, RedisCacheManager }
 import org.beangle.commons.cache.serializer.FSTSerializer
@@ -21,6 +22,7 @@ import org.beangle.security.web.access.{ DefaultAccessDeniedHandler, SecurityInt
 import org.openurp.platform.api.Urp
 import org.openurp.platform.api.app.UrpApp
 import org.openurp.platform.api.security.{ DefaultUrpSessionIdPolicy, RemoteAccountStore }
+
 
 /**
  * @author chaostone
@@ -114,7 +116,7 @@ class SessionModule extends AbstractBindModule {
       .property("enableCleanup", true)
 
     bind("security.SessionIdPolicy.urp", classOf[DefaultUrpSessionIdPolicy])
-      .property("path", "/").property("domain", Urp.base)
+      .property("path", "/").property("domain", Strings.substringAfter(Urp.base, "//"))
 
   }
 }
@@ -123,6 +125,6 @@ class WebModule extends AbstractBindModule {
   override def binding() {
     bind(classOf[LoginAction]).constructor(?, ?, ref("cache.Ehcache"))
     bind(classOf[ServiceValidateAction])
-    bind(classOf[LogoutAction]).constructor(ref("cache.Ehcache"))
+    bind(classOf[LogoutAction]).constructor(?, ref("cache.Ehcache"))
   }
 }
