@@ -9,7 +9,7 @@ object DefaultMapping extends Mapping {
   def binding(): Unit = {
     defaultIdGenerator("auto_increment")
     bind[App].on(e => declare(
-      e.name is (length(100), unique),
+      e.getName is (length(100), unique),
       e.title is length(100),
       e.secret is length(200),
       e.url is length(200),

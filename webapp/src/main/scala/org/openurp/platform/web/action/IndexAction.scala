@@ -1,24 +1,21 @@
 package org.openurp.platform.web.action
 
-import org.beangle.commons.dao.OqlBuilder
-import org.beangle.commons.dao.EntityDao
-import org.beangle.webmvc.api.action.ActionSupport
-import org.beangle.webmvc.api.annotation.param
-import org.openurp.platform.security.model.Menu
-import org.openurp.platform.config.model.App
-import org.openurp.platform.api.app.UrpApp
-import org.openurp.platform.web.helper.AppHelper
+import org.beangle.commons.dao.{ EntityDao, OqlBuilder }
 import org.beangle.security.context.SecurityContext
-import org.beangle.security.mgt.SecurityManager
-import org.beangle.webmvc.api.view.View
 import org.beangle.security.realm.cas.CasConfig
+import org.beangle.security.web.WebSecurityManager
+import org.beangle.webmvc.api.action.{ ActionSupport, ServletSupport }
+import org.beangle.webmvc.api.annotation.param
+import org.beangle.webmvc.api.view.View
+import org.openurp.platform.api.app.UrpApp
 import org.openurp.platform.api.security.Securities
 import org.openurp.platform.config.service.AppService
+import org.openurp.platform.security.model.Menu
 
-class IndexAction extends ActionSupport {
+class IndexAction extends ActionSupport with ServletSupport {
   var entityDao: EntityDao = _
   var casConfig: CasConfig = _
-  var securityManager: SecurityManager = _
+  var securityManager : WebSecurityManager = _
   var appService: AppService = _
 
   def index(): String = {
@@ -35,7 +32,7 @@ class IndexAction extends ActionSupport {
   }
 
   def logout(): View = {
-    securityManager.logout(SecurityContext.session)
+    securityManager.logout(request, response, SecurityContext.session)
     redirect(to(casConfig.casServer + "/logout"), null)
   }
 

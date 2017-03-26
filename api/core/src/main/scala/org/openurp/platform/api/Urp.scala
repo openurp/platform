@@ -11,6 +11,8 @@ object Urp {
 
   val properties = readConfig(home + "/conf.properties")
 
+  val base = readBase("openurp.base", "localhost:8080")
+
   val wsBase = readBase("openurp.service", "localhost:8080")
 
   val platformBase = readBase("openurp.platform", "localhost:8080")
@@ -36,7 +38,7 @@ object Urp {
           case None =>
             properties.get("openurp.base") match {
               case Some(base) => Strings.replace(property, "openurp.", "") + "." + base
-              case None => Strings.replace(defaultValue, "openurp.", "")
+              case None       => Strings.replace(defaultValue, "openurp.", "")
             }
         }
       }
