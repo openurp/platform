@@ -1,4 +1,9 @@
-package org.openurp.platform.api.cas
+package org.openurp.platform.api.security
+
+import org.beangle.security.authc.{ Account, AccountStore, DefaultAccount }
+import org.openurp.platform.api.Urp
+import org.openurp.platform.api.util.JSON
+import org.beangle.commons.web.util.HttpUtils
 
 import org.beangle.security.authc.{ Account, AccountStore, DefaultAccount }
 import org.openurp.platform.api.Urp
@@ -7,6 +12,7 @@ import org.beangle.commons.web.util.HttpUtils
 
 /**
  * @author chaostone
+ * FIXME missing school
  */
 class RemoteAccountStore extends AccountStore {
 

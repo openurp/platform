@@ -5,17 +5,18 @@ import java.io.{ File, FileInputStream }
 import org.beangle.commons.cache.ehcache.{ EhCacheChainedManager, EhCacheManager }
 import org.beangle.commons.cache.redis.{ JedisPoolFactory, RedisBroadcasterBuilder, RedisCacheManager }
 import org.beangle.commons.cache.serializer.FSTSerializer
-import org.beangle.commons.collection.Collections
 import org.beangle.commons.cdi.PropertySource
 import org.beangle.commons.cdi.bind.AbstractBindModule
+import org.beangle.commons.collection.Collections
 import org.beangle.data.jdbc.ds.DataSourceFactory
 import org.beangle.security.authc.{ DefaultAccountRealm, RealmAuthenticator }
-import org.beangle.security.mgt.DefaultSecurityManager
 import org.beangle.security.realm.cas.{ CasConfig, CasEntryPoint, CasPreauthFilter, DefaultTicketValidator }
 import org.beangle.security.session.jdbc.DBSessionRegistry
+import org.beangle.security.web.WebSecurityManager
 import org.beangle.security.web.access.{ AuthorizationFilter, DefaultAccessDeniedHandler, SecurityInterceptor }
-import org.beangle.security.web.session.CookieSessionIdPolicy
 import org.openurp.platform.api.Urp
+import org.openurp.platform.api.security.{ DefaultUrpSessionIdPolicy, RemoteAccountStore, RemoteAuthorizer }
+import org.beangle.commons.lang.Strings
 
 class DefaultModule extends AbstractBindModule with PropertySource {
 
@@ -32,7 +33,7 @@ class DefaultModule extends AbstractBindModule with PropertySource {
       List(ref("security.Filter.cas"), ref("security.Filter.authorization")), ?, ?, ?)
 
     bind("security.Realm.default", classOf[DefaultAccountRealm]).constructor(bean(classOf[RemoteAccountStore]))
-    bind("security.Authenticator.realm", classOf[RealmAuthenticator]).constructor(List(ref("security.Realm.default")))
+    bind("security.Authenticator", classOf[RealmAuthenticator]).constructor(List(ref("security.Realm.default")))
 
     //session
     bind("jedis.Factory", classOf[JedisPoolFactory]).constructor(Map("host" -> $("redis.host"), "port" -> $("redis.port"), "database" -> "1"))
@@ -49,16 +50,17 @@ class DefaultModule extends AbstractBindModule with PropertySource {
 
     bind("security.SessionRegistry.db", classOf[DBSessionRegistry])
       .constructor(ref("DataSource.session#"), ref("cache.Chained.session"), ref("cache.Ehcache"))
-      .property("sessionTable", "session.app_session_infoes").property("statTable", "session.app_session_stats")
+      .property("sessionTable", "session.session_infoes").property("statTable", "session.session_stats")
 
-    bind("security.SessionIdPolicy.cookie", classOf[DefaultUrpSessionIdPolicy]).property("path", "/")
+    bind("security.SessionIdPolicy.cookie", classOf[DefaultUrpSessionIdPolicy])
+      .property("path", "/").property("domain", Strings.substringAfter(Urp.base, "//"))
 
     //cas
     bind(classOf[CasConfig]).constructor($("openurp.platform.cas.server"))
     bind("security.TicketValidator.default", classOf[DefaultTicketValidator])
 
     //authorizer and manager
-    bind("security.SecurityManager.default", classOf[DefaultSecurityManager])
+    bind("security.SecurityManager.default", classOf[WebSecurityManager])
     bind("security.Authorizer.remote", classOf[RemoteAuthorizer]).constructor(ref("cache.Ehcache"))
   }
 

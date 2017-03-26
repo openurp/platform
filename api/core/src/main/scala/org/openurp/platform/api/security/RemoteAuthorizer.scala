@@ -1,4 +1,4 @@
-package org.openurp.platform.api.cas
+package org.openurp.platform.api.security
 
 import org.beangle.commons.cache.CacheManager
 import org.beangle.commons.security.Request
@@ -6,8 +6,6 @@ import org.beangle.security.authc.Account
 import org.beangle.security.authz.Authorizer
 import org.beangle.security.session.Session
 import org.beangle.commons.bean.Initializing
-import org.openurp.platform.api.security.RemoteService
-import org.openurp.platform.api.security.Resource
 
 /**
  * @author chaostone
