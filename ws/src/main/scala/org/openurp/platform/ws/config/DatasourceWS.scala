@@ -26,8 +26,8 @@ class DatasourceWS(entityDao: EntityDao) extends ActionSupport with EntitySuppor
       ds.put("user", rs.username)
       ds.put("password", rs.password)
       ds.put("driver", rs.db.driver)
-      if (rs.db.url != null) {
-        ds.put("url", rs.db.url)
+      if (rs.db.url != None) {
+        ds.put("url", rs.db.url.get)
       } else {
         ds.put("serverName", rs.db.serverName)
         ds.put("databaseName", rs.db.databaseName)
