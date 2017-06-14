@@ -1,17 +1,12 @@
 package org.openurp.platform.user.model
 
 import java.security.Principal
+import java.time.LocalDate
 import java.{ util => ju }
 
 import org.beangle.commons.collection.Collections
-import org.beangle.data.model.pojo.TemporalOn
 import org.beangle.data.model.LongId
-import org.beangle.data.model.pojo.Named
-import org.beangle.data.model.pojo.Coded
-import org.beangle.data.model.pojo.Remark
-import org.beangle.data.model.pojo.Updated
-import org.beangle.data.model.pojo.Enabled
-import java.time.LocalDate
+import org.beangle.data.model.pojo.{ Coded, Enabled, Named, Remark, TemporalOn, Updated }
 
 /**
  * @author chaostone
