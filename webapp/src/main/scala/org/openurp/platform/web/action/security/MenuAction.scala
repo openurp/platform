@@ -2,8 +2,8 @@
 package org.openurp.platform.web.action.security
 
 import org.beangle.commons.collection.Collections
-import org.beangle.commons.dao.OqlBuilder
-import org.beangle.commons.model.util.Hierarchicals
+import org.beangle.data.dao.OqlBuilder
+import org.beangle.data.model.util.Hierarchicals
 import org.beangle.webmvc.api.annotation.{ ignore, param }
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction

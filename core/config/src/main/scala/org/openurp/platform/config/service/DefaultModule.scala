@@ -1,11 +1,11 @@
 package org.openurp.platform.config.service
 
-import org.beangle.commons.cdi.bind.AbstractBindModule
+import org.beangle.cdi.bind.BindModule
 import org.openurp.platform.config.service.impl.AppDataPermissionManagerImpl
 import org.openurp.platform.config.service.impl.DbServiceImpl
 import org.openurp.platform.config.service.impl.AppServiceImpl
 
-class DefaultModule extends AbstractBindModule {
+class DefaultModule extends BindModule {
 
   protected override def binding() {
     bind(classOf[AppDataPermissionManagerImpl])

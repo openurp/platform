@@ -1,12 +1,12 @@
 package org.openurp.platform.web
 
-import org.beangle.commons.cdi.bind.AbstractBindModule
+import org.beangle.cdi.bind.BindModule
 import org.openurp.platform.web.action.IndexAction
 import org.openurp.platform.web.action.security.{ DashboardAction, DataPermissionAction, DataResourceAction, FuncResourceAction, MenuAction, PermissionAction }
 import org.openurp.platform.web.action.user.{ AccountAction, DimensionAction, RoleAction, UserAction, ProfileAction }
-import org.beangle.commons.cache.concurrent.ConcurrentMapCacheManager
+import org.beangle.cache.concurrent.ConcurrentMapCacheManager
 
-class SecurityModule extends AbstractBindModule {
+class SecurityModule extends BindModule {
 
   protected override def binding() {
     bind(classOf[AccountAction], classOf[DashboardAction])

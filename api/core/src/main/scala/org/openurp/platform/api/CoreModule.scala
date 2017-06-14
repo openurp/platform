@@ -1,8 +1,8 @@
 package org.openurp.platform.api
 
-import org.beangle.commons.cdi.bind.AbstractBindModule
+import org.beangle.cdi.bind.BindModule
 
-class CoreModule extends AbstractBindModule {
+class CoreModule extends BindModule {
 
   protected override def binding(): Unit = {
 //    bind(classOf[RemoteAppServiceImpl])

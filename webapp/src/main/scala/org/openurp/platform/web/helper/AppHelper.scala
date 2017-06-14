@@ -1,9 +1,9 @@
 package org.openurp.platform.web.helper
 import org.beangle.webmvc.api.context.Params
 import org.beangle.webmvc.api.context.ActionContext
-import org.beangle.commons.dao.EntityDao
+import org.beangle.data.dao.EntityDao
 import org.openurp.platform.config.model.App
-import org.beangle.commons.dao.OqlBuilder
+import org.beangle.data.dao.OqlBuilder
 import org.beangle.commons.lang.Numbers
 import org.beangle.commons.web.util.CookieUtils
 

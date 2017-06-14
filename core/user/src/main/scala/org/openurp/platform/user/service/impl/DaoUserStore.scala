@@ -1,7 +1,7 @@
 
 package org.openurp.platform.user.service.impl
 
-import org.beangle.commons.dao.EntityDao
+import org.beangle.data.dao.EntityDao
 import org.beangle.security.authc.{ Account, AccountStore, DefaultAccount }
 import org.openurp.platform.user.service.UserService
 

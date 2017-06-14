@@ -21,8 +21,8 @@ package org.openurp.platform.web.action.user
 import java.util.Date
 import org.beangle.commons.collection.Order
 import org.beangle.commons.lang.Strings
-import org.beangle.commons.dao.OqlBuilder
-import org.beangle.commons.dao.{ Condition, Operation }
+import org.beangle.data.dao.OqlBuilder
+import org.beangle.data.dao.{ Condition, Operation }
 import org.beangle.webmvc.api.context.Params
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
@@ -38,6 +38,8 @@ import org.openurp.platform.api.app.UrpApp
 import org.beangle.commons.collection.Collections
 import org.beangle.webmvc.api.context.ActionContext
 import java.net.URLEncoder
+import java.time.Instant
+
 /**
  * 用户管理响应处理类
  *
@@ -133,7 +135,7 @@ class UserAction extends RestfulAction[User] {
         }
       } else {
         if (null == myMember) myMember = new RoleMember(user, member.role)
-        myMember.updatedAt = new Date()
+        myMember.updatedAt = Instant.now
         myMember.member = isMember
         myMember.granter = isGranter
         myMember.manager = isManager

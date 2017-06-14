@@ -2,10 +2,11 @@ package org.openurp.platform.user.service.impl
 
 import java.util.Date
 
-import org.beangle.commons.dao.{ EntityDao, OqlBuilder }
-import org.beangle.commons.model.util.Hierarchicals
+import org.beangle.data.dao.{ EntityDao, OqlBuilder }
 import org.openurp.platform.user.model.{ Role, User }
 import org.openurp.platform.user.service.RoleService
+import org.beangle.data.model.util.Hierarchicals
+import java.time.ZonedDateTime
 
 class RoleServiceImpl extends RoleService {
 
@@ -16,7 +17,7 @@ class RoleServiceImpl extends RoleService {
 
   override def create(creator: User, role: Role): Unit = {
     role.creator = creator
-    role.updatedAt = new Date()
+    role.updatedAt = ZonedDateTime.now.toInstant
     entityDao.saveOrUpdate(role)
   }
 

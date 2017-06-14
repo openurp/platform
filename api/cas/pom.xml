@@ -35,12 +35,16 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.beangle.commons</groupId>
-      <artifactId>beangle-commons-cache_2.12</artifactId>
+      <groupId>org.beangle.cache</groupId>
+      <artifactId>beangle-cache-redis_2.12</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.beangle.commons</groupId>
-      <artifactId>beangle-commons-cdi_2.12</artifactId>
+      <groupId>org.beangle.cache</groupId>
+      <artifactId>beangle-cache-ehcache_2.12</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.beangle.cdi</groupId>
+      <artifactId>beangle-cdi-spring_2.12</artifactId>
     </dependency>
     <dependency>
       <groupId>org.ehcache</groupId>

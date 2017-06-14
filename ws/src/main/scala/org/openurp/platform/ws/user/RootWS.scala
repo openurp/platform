@@ -1,6 +1,6 @@
 package org.openurp.platform.ws.user
 
-import org.beangle.commons.dao.{ EntityDao, OqlBuilder }
+import org.beangle.data.dao.{ EntityDao, OqlBuilder }
 import org.beangle.webmvc.api.action.{ ActionSupport, EntitySupport }
 import org.beangle.webmvc.api.annotation.{ param, response }
 import org.openurp.platform.user.model.User

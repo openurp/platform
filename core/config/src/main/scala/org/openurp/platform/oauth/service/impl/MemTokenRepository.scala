@@ -1,6 +1,6 @@
 package org.openurp.platform.oauth.service.impl
 
-import org.beangle.commons.cache.CacheManager
+import org.beangle.cache.CacheManager
 import org.openurp.platform.config.model.AccessToken
 import org.openurp.platform.oauth.service.TokenRepository
 import org.openurp.platform.config.model.AccessToken

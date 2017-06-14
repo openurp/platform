@@ -2,12 +2,13 @@ package org.openurp.platform.api.cas
 
 import java.io.{ File, FileInputStream }
 
-import org.beangle.commons.cache.ehcache.{ EhCacheChainedManager, EhCacheManager }
-import org.beangle.commons.cache.redis.{ JedisPoolFactory, RedisBroadcasterBuilder, RedisCacheManager }
-import org.beangle.commons.cache.serializer.FSTSerializer
-import org.beangle.commons.cdi.PropertySource
-import org.beangle.commons.cdi.bind.AbstractBindModule
+import org.beangle.cache.ehcache.{ EhCacheChainedManager, EhCacheManager }
+import org.beangle.cache.redis.{ JedisPoolFactory, RedisBroadcasterBuilder, RedisCacheManager }
+import org.beangle.cache.redis.FSTSerializer
+import org.beangle.cdi.PropertySource
+import org.beangle.cdi.bind.BindModule
 import org.beangle.commons.collection.Collections
+import org.beangle.commons.lang.Strings
 import org.beangle.data.jdbc.ds.DataSourceFactory
 import org.beangle.security.authc.{ DefaultAccountRealm, RealmAuthenticator }
 import org.beangle.security.realm.cas.{ CasConfig, CasEntryPoint, CasPreauthFilter, DefaultTicketValidator }
@@ -16,9 +17,8 @@ import org.beangle.security.web.WebSecurityManager
 import org.beangle.security.web.access.{ AuthorizationFilter, DefaultAccessDeniedHandler, SecurityInterceptor }
 import org.openurp.platform.api.Urp
 import org.openurp.platform.api.security.{ DefaultUrpSessionIdPolicy, RemoteAccountStore, RemoteAuthorizer }
-import org.beangle.commons.lang.Strings
 
-class DefaultModule extends AbstractBindModule with PropertySource {
+class DefaultModule extends BindModule with PropertySource {
 
   override def binding() {
     // entry point

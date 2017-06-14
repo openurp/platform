@@ -18,19 +18,14 @@
  */
 package org.openurp.platform.ws
 
-import org.beangle.commons.cdi.bind.{ AbstractBindModule, profile }
-import org.beangle.data.hibernate.cfg.OverrideConfiguration
+import org.beangle.cdi.bind.BindModule
+import org.beangle.data.hibernate.HibernateEntityDao
+import org.beangle.data.hibernate.spring.{ HibernateTransactionManager, LocalSessionFactoryBean }
 import org.beangle.data.hibernate.spring.web.OpenSessionInViewInterceptor
 import org.springframework.beans.factory.config.PropertiesFactoryBean
-import org.springframework.jdbc.datasource.DriverManagerDataSource
-import org.springframework.jdbc.support.lob.DefaultLobHandler
 import org.springframework.transaction.interceptor.TransactionProxyFactoryBean
-import org.beangle.data.hibernate.spring.LocalSessionFactoryBean
-import org.beangle.data.hibernate.spring.HibernateTransactionManager
-import org.beangle.data.hibernate.HibernateMetadataFactory
-import org.beangle.data.hibernate.HibernateEntityDao
 
-object DaoModule extends AbstractBindModule {
+object DaoModule extends BindModule {
 
   protected override def binding(): Unit = {
     bind("HibernateConfig.default", classOf[PropertiesFactoryBean]).property(
@@ -47,7 +42,6 @@ object DaoModule extends AbstractBindModule {
       .description("Hibernate配置信息").nowire("propertiesArray")
 
     bind("SessionFactory.default", classOf[LocalSessionFactoryBean])
-      .property("configurationClass", classOf[OverrideConfiguration].getName)
       .property("hibernateProperties", ref("HibernateConfig.default"))
       .property("configLocations", "classpath*:META-INF/hibernate.cfg.xml")
       .property("ormLocations", "classpath*:META-INF/beangle/orm.xml").primary
@@ -57,8 +51,6 @@ object DaoModule extends AbstractBindModule {
     bind("TransactionProxy.template", classOf[TransactionProxyFactoryBean]).setAbstract().property(
       "transactionAttributes",
       props("*=PROPAGATION_REQUIRED,readOnly")).primary
-
-    bind("EntityMetadata.hibernate", classOf[HibernateMetadataFactory])
 
     bind("EntityDao.hibernate", classOf[TransactionProxyFactoryBean]).proxy("target", classOf[HibernateEntityDao])
       .parent("TransactionProxy.template").primary().description("基于Hibernate提供的通用DAO")

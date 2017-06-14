@@ -1,6 +1,6 @@
 package org.openurp.platform.api.security
 
-import org.beangle.commons.cache.CacheManager
+import org.beangle.cache.CacheManager
 import org.beangle.commons.security.Request
 import org.beangle.security.authc.Account
 import org.beangle.security.authz.Authorizer

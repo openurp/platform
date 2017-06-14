@@ -4,8 +4,14 @@ import java.security.Principal
 import java.{ util => ju }
 
 import org.beangle.commons.collection.Collections
-import org.beangle.commons.model.{ Coded, Enabled, LongId, Named, TemporalOn, Updated }
-import org.beangle.commons.model.Remark
+import org.beangle.data.model.pojo.TemporalOn
+import org.beangle.data.model.LongId
+import org.beangle.data.model.pojo.Named
+import org.beangle.data.model.pojo.Coded
+import org.beangle.data.model.pojo.Remark
+import org.beangle.data.model.pojo.Updated
+import org.beangle.data.model.pojo.Enabled
+import java.time.LocalDate
 
 /**
  * @author chaostone
@@ -24,7 +30,7 @@ class User extends LongId with Coded with Named with Updated with TemporalOn wit
 
   def accountExpired: Boolean = {
     endOn match {
-      case Some(e) => (new ju.Date).after(e)
+      case Some(e) => LocalDate.now.isAfter(e)
       case None    => false
     }
   }
