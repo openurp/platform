@@ -21,7 +21,7 @@ package org.openurp.platform.web.action.user
 import org.beangle.commons.codec.digest.Digests
 import org.beangle.commons.collection.Order
 import org.beangle.commons.lang.Strings
-import org.beangle.commons.dao.{ Condition, OqlBuilder }
+import org.beangle.data.dao.{ Condition, OqlBuilder }
 import org.beangle.webmvc.api.annotation.ignore
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction

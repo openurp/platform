@@ -1,7 +1,7 @@
 package org.openurp.platform.security.service.impl
 
 import org.beangle.commons.collection.Collections
-import org.beangle.commons.dao.{ EntityDao, Operation, OqlBuilder }
+import org.beangle.data.dao.{ EntityDao, Operation, OqlBuilder }
 import org.openurp.platform.api.app.UrpApp
 import org.openurp.platform.config.model.App
 import org.openurp.platform.security.model.{ FuncPermission, FuncResource }

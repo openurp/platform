@@ -1,7 +1,7 @@
 package org.openurp.platform.ws
 
-import org.beangle.commons.cache.concurrent.ConcurrentMapCacheManager
-import org.beangle.commons.cdi.bind.AbstractBindModule
+import org.beangle.cache.concurrent.ConcurrentMapCacheManager
+import org.beangle.cdi.bind.BindModule
 import org.openurp.platform.oauth.service.impl.MemTokenRepository
 import org.openurp.platform.ws.config.DatasourceWS
 import org.openurp.platform.ws.oauth.TokenWS
@@ -10,7 +10,7 @@ import org.openurp.platform.ws.user.RootWS
 import org.openurp.platform.ws.user.{ AccountWS, DimensionWS, ProfileWS }
 import org.openurp.platform.ws.security.{ func, data }
 
-class DefaultModule extends AbstractBindModule {
+class DefaultModule extends BindModule {
 
   protected override def binding() {
     bind(classOf[DatasourceWS])

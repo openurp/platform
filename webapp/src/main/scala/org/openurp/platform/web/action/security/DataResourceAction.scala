@@ -1,7 +1,7 @@
 package org.openurp.platform.web.action.security
 
-import org.beangle.commons.dao.OqlBuilder
-import org.beangle.commons.model.Entity
+import org.beangle.data.dao.OqlBuilder
+import org.beangle.data.model.Entity
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.platform.config.service.AppDataPermissionManager

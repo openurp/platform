@@ -19,7 +19,7 @@
 package org.openurp.platform.web.action.user
 
 import org.beangle.commons.lang.Numbers
-import org.beangle.commons.dao.{ Operation, OqlBuilder }
+import org.beangle.data.dao.{ Operation, OqlBuilder }
 import org.beangle.webmvc.api.annotation.{ ignore, param }
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction

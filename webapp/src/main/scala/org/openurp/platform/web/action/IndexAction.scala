@@ -1,6 +1,6 @@
 package org.openurp.platform.web.action
 
-import org.beangle.commons.dao.{ EntityDao, OqlBuilder }
+import org.beangle.data.dao.{ EntityDao, OqlBuilder }
 import org.beangle.security.context.SecurityContext
 import org.beangle.security.realm.cas.CasConfig
 import org.beangle.security.web.WebSecurityManager

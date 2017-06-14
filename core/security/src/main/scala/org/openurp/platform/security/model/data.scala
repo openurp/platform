@@ -1,13 +1,15 @@
 package org.openurp.platform.security.model
 
 import java.security.Principal
+import java.time.Instant
 
-import org.beangle.commons.model.{ IntId, LongId, Named, Remark, TemporalAt }
+import org.beangle.data.model.{ IntId, LongId }
+import org.beangle.data.model.pojo.{ Named, Remark }
 import org.beangle.security.authz.{ Permission, Resource, Scopes }
 import org.openurp.platform.config.model.{ App, Domain }
 import org.openurp.platform.user.model.Role
 
-class DataPermission extends LongId with TemporalAt with Permission with Remark {
+class DataPermission extends LongId  with Permission with Remark {
   var domain: Domain = _
   var app: Option[App] = None
   var resource: DataResource = _
@@ -19,6 +21,8 @@ class DataPermission extends LongId with TemporalAt with Permission with Remark 
   var restrictions: Option[String] = None
   var role: Option[Role] = None
 
+  var beginAt:Instant=_
+  var endAt:Option[Instant]=None
   def principal: Principal = role.orNull
 }
 

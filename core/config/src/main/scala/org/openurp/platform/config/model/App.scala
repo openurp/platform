@@ -3,7 +3,8 @@ package org.openurp.platform.config.model
 import java.security.Principal
 
 import org.beangle.commons.collection.Collections
-import org.beangle.commons.model.{ Enabled, IntId, Named, Remark }
+import org.beangle.data.model.IntId
+import org.beangle.data.model.pojo.{ Enabled, Named, Remark }
 
 class App extends IntId with Named with Enabled with Ordered[App] with Principal with Remark {
   var secret: String = _

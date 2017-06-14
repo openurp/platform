@@ -19,8 +19,8 @@
 package org.openurp.platform.web.action.user
 
 import java.sql.Date
-import org.beangle.commons.dao.OqlBuilder
-import org.beangle.commons.model.util.Hierarchicals
+import org.beangle.data.dao.OqlBuilder
+import org.beangle.data.model.util.Hierarchicals
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.platform.config.model.App
@@ -35,6 +35,8 @@ import org.openurp.platform.user.service.DataResolver
 import org.openurp.platform.user.model.Role
 import org.openurp.platform.user.model.User
 import org.openurp.platform.security.service.ProfileService
+import java.time.Instant
+
 /**
  * 角色信息维护响应类
  *
@@ -97,7 +99,7 @@ class RoleAction(val roleService: RoleService, val userService: UserService) ext
       role.indexno = "tmp"
       roleService.create(me, role)
     } else {
-      role.updatedAt = new Date(System.currentTimeMillis)
+      role.updatedAt = Instant.now
       entityDao.saveOrUpdate(role)
     }
     var parent: Role = null

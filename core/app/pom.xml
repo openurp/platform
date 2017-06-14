@@ -10,7 +10,7 @@
   <artifactId>openurp-platform-security-app</artifactId>
   <packaging>jar</packaging>
   <name>OpenURP Platform Security App API</name>
-  
+
   <properties>
     <bundle.symbolicName>org.openurp.platform.security.app</bundle.symbolicName>
     <bundle.namespace>org.openurp</bundle.namespace>

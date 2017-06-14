@@ -1,9 +1,9 @@
 package org.openurp.platform.security.model
 
 import scala.reflect.runtime.universe
-import org.beangle.commons.model.bind.Mapping
+import org.beangle.data.orm.MappingModule
 
-object DefaultMapping extends Mapping {
+object DefaultMapping extends MappingModule {
 
   def binding(): Unit = {
     defaultIdGenerator("auto_increment")

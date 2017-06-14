@@ -3,8 +3,8 @@ package org.openurp.platform.security.service.impl
 import scala.collection.mutable.Buffer
 
 import org.beangle.commons.collection.Collections
-import org.beangle.commons.dao.{ EntityDao, OqlBuilder }
-import org.beangle.commons.model.util.Hierarchicals
+import org.beangle.data.dao.{ EntityDao, OqlBuilder }
+import org.beangle.data.model.util.Hierarchicals
 import org.openurp.platform.config.model.App
 import org.openurp.platform.user.model.{ Role, User }
 import org.openurp.platform.security.model.{ FuncPermission, Menu }
@@ -45,6 +45,7 @@ class MenuServiceImpl(val entityDao: EntityDao) extends MenuService {
         }
       }
     }
+
     def removeOther(menu: Menu, menus: collection.Set[Menu]): Unit = {
       menu.children --= menu.children.filter(f => !menus.contains(f))
       menu.children.foreach { c => removeOther(c, menus) }
@@ -107,7 +108,7 @@ class MenuServiceImpl(val entityDao: EntityDao) extends MenuService {
         val builder = OqlBuilder.from(classOf[Menu], "m")
           .where("m.app = :app and m.parent is null", menu.app)
           .orderBy("m.indexno")
-          if(None != menu.parent) entityDao.evict(menu.parent.get)
+        if (None != menu.parent) entityDao.evict(menu.parent.get)
         Hierarchicals.move(menu, entityDao.search(builder).toBuffer, index)
       }
     entityDao.saveOrUpdate(nodes)

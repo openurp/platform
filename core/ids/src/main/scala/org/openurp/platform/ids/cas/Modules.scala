@@ -3,11 +3,11 @@ package org.openurp.platform.ids.cas
 import java.io.FileInputStream
 
 import org.beangle.commons.lang.Strings
-import org.beangle.commons.cache.ehcache.{ EhCacheChainedManager, EhCacheManager }
-import org.beangle.commons.cache.redis.{ JedisPoolFactory, RedisBroadcasterBuilder, RedisCacheManager }
-import org.beangle.commons.cache.serializer.FSTSerializer
-import org.beangle.commons.cdi.PropertySource
-import org.beangle.commons.cdi.bind.AbstractBindModule
+import org.beangle.cache.ehcache.{ EhCacheChainedManager, EhCacheManager }
+import org.beangle.cache.redis.{ JedisPoolFactory, RedisBroadcasterBuilder, RedisCacheManager }
+import org.beangle.cache.redis.FSTSerializer
+import org.beangle.cdi.PropertySource
+import org.beangle.cdi.bind.BindModule
 import org.beangle.commons.collection.Collections
 import org.beangle.data.jdbc.ds.DataSourceFactory
 import org.beangle.ids.cas.id.impl.DefaultServiceTicketIdGenerator
@@ -27,7 +27,7 @@ import org.openurp.platform.api.security.{ DefaultUrpSessionIdPolicy, RemoteAcco
 /**
  * @author chaostone
  */
-class DefaultModule extends AbstractBindModule with PropertySource {
+class DefaultModule extends BindModule with PropertySource {
 
   override def binding() {
     // entry point
@@ -61,21 +61,21 @@ class DefaultModule extends AbstractBindModule with PropertySource {
   }
 }
 
-class TicketModule extends AbstractBindModule {
+class TicketModule extends BindModule {
   override def binding() {
     bind(classOf[CachedTicketRegistry]).constructor(bean(classOf[RedisCacheManager]).property("ttl", "60"))
     bind(classOf[DefaultServiceTicketIdGenerator])
   }
 }
 
-class DbCredentialsModule extends AbstractBindModule {
+class DbCredentialsModule extends BindModule {
   override def binding() {
     bind("security.CredentialsChecker.default", classOf[DaoCredentialsChecker])
       .constructor(ref("DataSource.security"))
   }
 }
 
-class LdapCredentialsModule extends AbstractBindModule {
+class LdapCredentialsModule extends BindModule {
   override def binding() {
     bind("security.ldap.source", classOf[PoolingContextSource])
       .constructor($("ldap.url"), $("ldap.user"), $("ldap.password"))
@@ -84,7 +84,7 @@ class LdapCredentialsModule extends AbstractBindModule {
   }
 }
 
-class RealmModule extends AbstractBindModule {
+class RealmModule extends BindModule {
   override def binding() {
     bind("DataSource.security", classOf[DataSourceFactory]).property("name", "security")
       .property("url", UrpApp.getUrpAppFile.get.getAbsolutePath)
@@ -96,7 +96,7 @@ class RealmModule extends AbstractBindModule {
   }
 }
 
-class SessionModule extends AbstractBindModule {
+class SessionModule extends BindModule {
   override def binding() {
     //session registry
     bind("jedis.Factory", classOf[JedisPoolFactory]).constructor(Map("host" -> $("redis.host"), "port" -> $("redis.port")))
@@ -121,7 +121,7 @@ class SessionModule extends AbstractBindModule {
   }
 }
 
-class WebModule extends AbstractBindModule {
+class WebModule extends BindModule {
   override def binding() {
     bind(classOf[LoginAction]).constructor(?, ?, ref("cache.Ehcache"))
     bind(classOf[ServiceValidateAction])

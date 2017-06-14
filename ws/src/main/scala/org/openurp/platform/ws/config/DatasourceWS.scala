@@ -1,7 +1,7 @@
 package org.openurp.platform.ws.config
 
 import org.beangle.commons.collection.Properties
-import org.beangle.commons.dao.{ EntityDao, OqlBuilder }
+import org.beangle.data.dao.{ EntityDao, OqlBuilder }
 import org.beangle.webmvc.api.action.{ ActionSupport, EntitySupport }
 import org.beangle.webmvc.api.annotation.{ mapping, param, response }
 import org.openurp.platform.config.model.{ App, DataSource }
@@ -26,8 +26,8 @@ class DatasourceWS(entityDao: EntityDao) extends ActionSupport with EntitySuppor
       ds.put("user", rs.username)
       ds.put("password", rs.password)
       ds.put("driver", rs.db.driver)
-      if (rs.db.url != null) {
-        ds.put("url", rs.db.url)
+      if (rs.db.url != None) {
+        ds.put("url", rs.db.url.get)
       } else {
         ds.put("serverName", rs.db.serverName)
         ds.put("databaseName", rs.db.databaseName)

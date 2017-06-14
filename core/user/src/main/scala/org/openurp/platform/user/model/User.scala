@@ -1,11 +1,12 @@
 package org.openurp.platform.user.model
 
 import java.security.Principal
+import java.time.LocalDate
 import java.{ util => ju }
 
 import org.beangle.commons.collection.Collections
-import org.beangle.commons.model.{ Coded, Enabled, LongId, Named, TemporalOn, Updated }
-import org.beangle.commons.model.Remark
+import org.beangle.data.model.LongId
+import org.beangle.data.model.pojo.{ Coded, Enabled, Named, Remark, TemporalOn, Updated }
 
 /**
  * @author chaostone
@@ -24,7 +25,7 @@ class User extends LongId with Coded with Named with Updated with TemporalOn wit
 
   def accountExpired: Boolean = {
     endOn match {
-      case Some(e) => (new ju.Date).after(e)
+      case Some(e) => LocalDate.now.isAfter(e)
       case None    => false
     }
   }
