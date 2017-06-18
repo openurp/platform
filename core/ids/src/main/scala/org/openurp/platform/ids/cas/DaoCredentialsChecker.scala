@@ -13,7 +13,7 @@ class DaoCredentialsChecker(dataSource: DataSource) extends CredentialsChecker {
   private val executor = new JdbcExecutor(dataSource)
   override def check(principal: Any, credential: Any): Boolean = {
     //FIXME school
-    val rs = executor.query("select name from usr.users where code = ?", principal)
+    val rs = executor.query("select password from usr.users where code = ?", principal)
     if (rs.isEmpty) {
       false
     } else {

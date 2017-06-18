@@ -16,7 +16,7 @@ class DaoUserStore(userService: UserService, entityDao: EntityDao) extends Accou
         account.accountLocked = user.locked
         account.credentialExpired = user.credentialExpired
         account.disabled = !user.enabled
-        account.authorities = user.roles.map(r => r.id).toSet
+        account.authorities = user.roles.map(r => r.role.id).toSet
         account.details += "category" -> user.category.id
         Some(account)
       case None => None

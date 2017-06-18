@@ -17,7 +17,8 @@ class PermissionWS(entityDao: EntityDao) extends ActionSupport {
   def role(@param("app") app: String, @param("roleId") roleId: Int): Any = {
     val roleQuery = OqlBuilder.from[FuncResource](classOf[FuncPermission].getName, "fp")
       .where("fp.resource.app.name = :appName", app).where("fp.role.id = :roleId", roleId)
-      .where("fp.endAt is null  or fp.endAt < :now)", new java.util.Date).select("fp.resource")
+      .cacheable()
+      .select("fp.resource")
     val resources = entityDao.search(roleQuery)
     resources.map { r => new Properties(r, "id", "name", "title", "scope") }
   }
