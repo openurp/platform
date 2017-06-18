@@ -5,16 +5,21 @@ import org.beangle.data.dao.{ EntityDao, OqlBuilder }
 import org.beangle.webmvc.api.action.{ ActionSupport, EntitySupport }
 import org.beangle.webmvc.api.annotation.{ mapping, param, response }
 import org.beangle.webmvc.entity.helper.QueryHelper
-import org.openurp.platform.config.model.App
+import org.openurp.platform.config.service.AppService
 import org.openurp.platform.security.model.Menu
 import org.openurp.platform.security.service.MenuService
-import org.openurp.platform.user.model.{ Role, User }
+import org.openurp.platform.user.model.Role
+import org.openurp.platform.user.service.UserService
 
 class MenuWS extends ActionSupport with EntitySupport[Menu] {
 
   var entityDao: EntityDao = _
 
   var menuService: MenuService = _
+
+  var appService: AppService = _
+
+  var userService: UserService = _
 
   private def getQueryBuilder(): OqlBuilder[Menu] = {
     val builder = OqlBuilder.from(classOf[Menu], "menu")
@@ -29,30 +34,36 @@ class MenuWS extends ActionSupport with EntitySupport[Menu] {
   }
 
   @response
-  def index(@param("app") app: String): Seq[Any] = {
-    val menus = entityDao.search(OqlBuilder.from(classOf[Menu], "menu").where("menu.app.name=:app and menu.parent = null", app))
+  def index(@param("app") appName: String): Seq[Any] = {
+    val menus = appService.getApp(appName) match {
+      case Some(app) =>menuService.getTopMenus(app)
+      case None =>  List.empty[Menu]
+    }
     menus map (m => convert(m))
   }
 
   @response
   @mapping("user/{user}")
   def user(@param("app") appName: String, @param("user") username: String): Iterable[Any] = {
-    val apps = entityDao.findBy(classOf[App], "name", List(appName))
-    val users = entityDao.findBy(classOf[User], "code", List(username))
-    if (apps.isEmpty) {
-      List.empty[Menu]
-    } else {
-      menuService.getTopMenus(apps.head, users.head) map (m => convert(m))
+    appService.getApp(appName) match {
+      case Some(app) =>
+        userService.get(username) match {
+          case Some(u) => menuService.getTopMenus(app, u) map (m => convert(m))
+          case None    => List.empty[Menu]
+        }
+      case None => List.empty[Menu]
     }
   }
 
   @response
   @mapping("role/{roleId}")
   def role(@param("app") appName: String, @param("roleId") roleId: Int): Iterable[Any] = {
-    val apps = entityDao.findBy(classOf[App], "name", List(appName))
-    val roles = entityDao.findBy(classOf[Role], "id", List(roleId))
-    val app = apps.head
-    menuService.getTopMenus(app, roles.head) map (m => convert(m))
+    appService.getApp(appName) match {
+      case Some(app) =>
+        val roles = entityDao.findBy(classOf[Role], "id", List(roleId))
+        menuService.getTopMenus(app, roles.head) map (m => convert(m))
+      case None => List.empty[Menu]
+    }
   }
 
   private def convert(one: Menu): Properties = {

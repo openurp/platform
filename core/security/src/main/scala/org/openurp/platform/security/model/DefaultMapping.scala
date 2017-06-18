@@ -19,7 +19,7 @@ object DefaultMapping extends MappingModule {
       e.app & e.indexno & e.name & e.title are notnull,
       e.name & e.title & e.remark are length(100),
       e.indexno is length(50),
-      e.children is (depends("parent"), orderby("indexno")),
+      e.children is (depends("parent"), orderby("indexno"), cacheable),
       e.params is length(200)))
 
     bind[FuncResource].on(e => declare(
@@ -29,8 +29,8 @@ object DefaultMapping extends MappingModule {
       e.remark & e.actions are length(200)))
 
     bind[DataResource].on(e => declare(
-      e.name & e.typeName are  length(200),
-      e.title is   length(200),
+      e.name & e.typeName are length(200),
+      e.title is length(200),
       e.remark & e.actions are length(200)))
 
     bind[DataPermission].on(e => declare(
@@ -42,6 +42,7 @@ object DefaultMapping extends MappingModule {
       e.actions is length(500),
       e.restrictions is length(500)))
 
+    all.cacheable()
   }
 
 }

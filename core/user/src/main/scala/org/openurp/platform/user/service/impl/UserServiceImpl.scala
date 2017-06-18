@@ -1,19 +1,17 @@
 package org.openurp.platform.user.service.impl
 
-import java.{ util => ju }
+import java.time.Instant
+
 import org.beangle.data.dao.{ EntityDao, OqlBuilder }
-import org.openurp.platform.user.model.RoleMember
+import org.openurp.platform.user.model.{ RoleMember, Root, User, UserProfile }
 import org.openurp.platform.user.model.MemberShip.{ Granter, Manager, Member, Ship }
-import org.openurp.platform.user.model.User
 import org.openurp.platform.user.service.UserService
-import org.openurp.platform.user.model.Root
-import org.openurp.platform.user.model.UserProfile
-import java.time.ZonedDateTime
 
 class UserServiceImpl(val entityDao: EntityDao) extends UserService {
 
   def get(code: String): Option[User] = {
-    val rs = entityDao.findBy(classOf[User], "code", List(code))
+    val cache = OqlBuilder.from(classOf[User], "u").where("u.code=:code", code).cacheable()
+    val rs = entityDao.search(cache)
     if (rs.isEmpty) None else Some(rs.head)
   }
 
@@ -44,7 +42,7 @@ class UserServiceImpl(val entityDao: EntityDao) extends UserService {
 
   def create(creator: User, user: User): Unit = {
     //    user.creator = creator
-    user.updatedAt = ZonedDateTime.now.toInstant
+    user.updatedAt =  Instant.now
     entityDao.saveOrUpdate(user)
     //    publish(new UserCreationEvent(Collections.singletonList(newUser)));
   }

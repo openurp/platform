@@ -21,24 +21,24 @@ object DefaultMapping extends MappingModule {
     bind[Role].on(e => declare(
       e.getName is length(100),
       e.children is depends("parent"),
-      e.members is depends("role"),
-      e.properties is eleLength(2000)))
+      e.members is depends("role"), //donot cache
+      e.properties is (eleLength(2000), cacheable)))
 
     bind[User].on(e => declare(
       e.code is (length(30), unique),
       e.getName is length(100),
       e.password is length(200),
       e.remark is length(100),
-      e.roles is depends("user"),
-      e.groups is depends("user"),
-      e.properties is eleLength(2000)))
+      e.roles is (depends("user"), cacheable),
+      e.groups is (depends("user"), cacheable),
+      e.properties is (eleLength(2000), cacheable)))
 
     bind[UserCategory].on(e => declare(
       e.code is (length(30), unique),
       e.name is length(100)))
 
     bind[UserProfile].on(e => declare(
-      e.properties is eleLength(2000)))
+      e.properties is (eleLength(2000), cacheable)))
 
     bind[GroupMember]
 
@@ -46,9 +46,11 @@ object DefaultMapping extends MappingModule {
       e.getName is length(100),
       e.children is depends("parent"),
       e.members is depends("group"),
-      e.properties is eleLength(2000)))
+      e.properties is (eleLength(2000), cacheable)))
 
     bind[Root]
+
+    all.cacheable()
   }
 
 }

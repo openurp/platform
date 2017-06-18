@@ -17,6 +17,7 @@ class RootWS(userService: UserService, entityDao: EntityDao) extends ActionSuppo
   def index(@param("app") app: String): Seq[String] = {
     val query = OqlBuilder.from[String](classOf[Root].getName, "r")
     query.where("r.app.name = :appName", app).select("r.user.code")
+    .cacheable()
     entityDao.search(query)
   }
 }

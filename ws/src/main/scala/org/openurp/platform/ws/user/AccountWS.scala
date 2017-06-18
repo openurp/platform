@@ -25,9 +25,7 @@ class AccountWS(userService: UserService, entityDao: EntityDao) extends ActionSu
         properties += ("accountLocked" -> user.locked)
         properties += ("credentialExpired" -> user.credentialExpired)
         properties += ("enabled" -> user.enabled)
-
-        val query = OqlBuilder.from(classOf[RoleMember], "m").where("m.member=true and m.user=:user", user).select("m.role.id")
-        properties += ("authorities" -> entityDao.search(query).toSet)
+        properties += ("authorities" -> user.roles.filter(_.member==true).map(_.id).toSet)
         val details = new Properties()
         details += ("category" -> user.category.id)
         properties += ("details" -> details)

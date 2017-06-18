@@ -16,6 +16,12 @@ class AppServiceImpl(entityDao: EntityDao) extends AppService {
     if (apps.isEmpty) None else Some(apps.head)
   }
 
+  override def getApp(name: String): Option[App] = {
+    val query = OqlBuilder.from(classOf[App], "app").where("app.name=:name ", name).cacheable()
+    val apps = entityDao.search(query)
+    if (apps.isEmpty) None else Some(apps.head)
+  }
+
   override def getWebapps(): Seq[App] = {
     entityDao.search(OqlBuilder.from(classOf[App], "app").where("app.appType=:typ and app.enabled=true", "web-app").orderBy("app.indexno"))
   }

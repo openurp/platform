@@ -7,6 +7,8 @@ object DefaultMapping extends MappingModule {
 
   def binding(): Unit = {
     defaultIdGenerator("auto_increment")
+    defaultCache("openurp.platform.security", "read-write")
+
     bind[App].on(e => declare(
       e.getName is (length(100), unique),
       e.title is length(100),
@@ -34,6 +36,8 @@ object DefaultMapping extends MappingModule {
       e.name is (length(100), unique),
       e.title is length(200),
       e.children is depends("parent")))
+
+    all.cacheable()
   }
 
 }

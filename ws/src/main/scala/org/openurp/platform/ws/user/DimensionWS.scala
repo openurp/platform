@@ -16,7 +16,8 @@ class DimensionWS(entityDao: EntityDao) extends ActionSupport {
   @response
   @mapping("{name}")
   def index(@param("name") name: String): Properties = {
-    val dimensions = entityDao.findBy(classOf[Dimension], "name", List(name))
+    val query = OqlBuilder.from(classOf[Dimension], "d").where("d.name=:name", name).cacheable()
+    val dimensions = entityDao.search(query)
     if (dimensions.isEmpty) new Properties()
     else {
       val dimension = dimensions(0)
