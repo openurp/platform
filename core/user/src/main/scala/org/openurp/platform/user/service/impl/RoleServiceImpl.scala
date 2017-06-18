@@ -36,4 +36,9 @@ class RoleServiceImpl extends RoleService {
   override def remove(manager: User, roles: Seq[Role]): Unit = {
     entityDao.remove(roles)
   }
+
+  def get(id: Int): Role = {
+    entityDao.get(classOf[Role], id)
+  }
+
 }

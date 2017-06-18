@@ -2,7 +2,7 @@ package org.openurp.platform.user.service
 
 import org.openurp.platform.user.model.{ Role, User }
 
-trait RoleService   {
+trait RoleService {
 
   def isManagedBy(manager: User, role: Role): Boolean
 
@@ -12,9 +12,6 @@ trait RoleService   {
 
   def remove(manager: User, roles: Seq[Role]): Unit
 
-  
-  def get(id: Integer): Role = {
-    null
-  }
+  def get(id: Int): Role
 
 }
