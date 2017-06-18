@@ -22,6 +22,7 @@ import org.beangle.security.web.access.{ DefaultAccessDeniedHandler, SecurityInt
 import org.openurp.platform.api.Urp
 import org.openurp.platform.api.app.UrpApp
 import org.openurp.platform.api.security.{ DefaultUrpSessionIdPolicy, RemoteAccountStore }
+import org.openurp.platform.user.service.impl.DaoUserStore
 
 
 /**
@@ -84,13 +85,13 @@ class LdapCredentialsModule extends BindModule {
   }
 }
 
-class RealmModule extends BindModule {
+class DaoRealmModule extends BindModule {
   override def binding() {
     bind("DataSource.security", classOf[DataSourceFactory]).property("name", "security")
       .property("url", UrpApp.getUrpAppFile.get.getAbsolutePath)
 
     bind("security.Realm.default", classOf[DefaultAccountRealm])
-      .constructor(bean(classOf[RemoteAccountStore]), ref("security.CredentialsChecker.default"))
+      .constructor(bean(classOf[DaoUserStore]), ref("security.CredentialsChecker.default"))
     bind("security.Authenticator", classOf[RealmAuthenticator])
       .constructor(List(ref("security.Realm.default")))
   }
