@@ -18,7 +18,7 @@
     [/@]
     [@b.col width="18%" property="creator.name" title="common.creator"]${(role.creator.fullname)!}[/@]
     [@b.col width="13%" property="enabled" title="common.status"][@enableInfo role.enabled/][/@]
-    [@b.col width="14%" property="updatedAt" title="common.updatedAt"]${(role.updatedAt?string("yy-MM-dd"))!}[/@]
+    [@b.col width="14%" property="updatedAt" title="common.updatedAt"]${(role.updatedAt)!}[/@]
     [@b.col title="权限" width="12%"][@b.a target="_blank" href="/security/permission/${role.id}/edit"]<span class="icon-action action-config"></span>功能权限[/@][/@]
     </tr>
   [/@]

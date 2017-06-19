@@ -12,7 +12,7 @@
     [@b.col property="code" width="15%"]&nbsp;[@b.a href="!info?id=${user.id}" target="_blank"]${user.code}[/@][/@]
     [@b.col property="name" width="35%"/]
     [@b.col property="category.name" width="10%" /]
-    [@b.col property="beginOn" title="user.beginOn-endOn" width="27%"]${user.beginOn?string("yyyy-MM")}~${(user.endOn?string("yyyy-MM"))!}[/@]
+    [@b.col property="beginOn" title="user.beginOn-endOn" width="27%"]${user.beginOn}~${(user.endOn)!}[/@]
     [@b.col property="enabled" width="8%"][@enableInfo user.enabled/][/@]
   [/@]
 [/@]

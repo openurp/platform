@@ -6,6 +6,7 @@
   </container>
   <container>
     <module class="org.openurp.platform.web.DaoModule"/>
-    <module class="org.openurp.platform.web.ServiceModule"/>
+    <module class="org.openurp.platform.security.service.DefaultModule"/>
+    <module class="org.openurp.platform.user.service.DefaultModule"/>
   </container>
 </cdi>

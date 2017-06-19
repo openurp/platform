@@ -44,6 +44,9 @@
 .app_logo{
     height:30px;
 }
+.popover-content ul{
+  padding-left:10px;
+}
 </style>
 <script>
   $(document).ready(function(){

@@ -12,7 +12,15 @@ class UserServiceImpl(val entityDao: EntityDao) extends UserService {
   def get(code: String): Option[User] = {
     val cache = OqlBuilder.from(classOf[User], "u").where("u.code=:code", code).cacheable()
     val rs = entityDao.search(cache)
-    if (rs.isEmpty) None else Some(rs.head)
+    if (rs.isEmpty) {
+      None
+    } else {
+      val u = rs.head
+      //init roles for cache.
+      u.roles foreach { r => r.role.id }
+      u.groups foreach { g => g.group.id }
+      Some(u)
+    }
   }
 
   def get(id: Long): User = {
@@ -42,7 +50,7 @@ class UserServiceImpl(val entityDao: EntityDao) extends UserService {
 
   def create(creator: User, user: User): Unit = {
     //    user.creator = creator
-    user.updatedAt =  Instant.now
+    user.updatedAt = Instant.now
     entityDao.saveOrUpdate(user)
     //    publish(new UserCreationEvent(Collections.singletonList(newUser)));
   }

@@ -25,6 +25,7 @@ import org.beangle.data.hibernate.spring.web.OpenSessionInViewInterceptor
 import org.springframework.beans.factory.config.PropertiesFactoryBean
 import org.springframework.transaction.interceptor.TransactionProxyFactoryBean
 import org.beangle.data.hibernate.HibernateEntityDao
+import org.beangle.data.hibernate.DomainFactory
 
 object DaoModule extends BindModule {
 
@@ -42,7 +43,7 @@ object DaoModule extends BindModule {
       .description("Hibernate配置信息").nowire("propertiesArray")
 
     bind("SessionFactory.default", classOf[LocalSessionFactoryBean])
-      .property("hibernateProperties", ref("HibernateConfig.default"))
+      .property("properties", ref("HibernateConfig.default"))
       .property("configLocations", "classpath*:META-INF/hibernate.cfg.xml")
       .property("ormLocations", "classpath*:META-INF/beangle/orm.xml").primary
 
@@ -63,6 +64,8 @@ object DaoModule extends BindModule {
     bind("CacheManager.concurrent", classOf[ConcurrentMapCacheManager])
 
     bind("web.Interceptor.hibernate", classOf[OpenSessionInViewInterceptor])
+
+    bind(classOf[DomainFactory])
   }
 
 }

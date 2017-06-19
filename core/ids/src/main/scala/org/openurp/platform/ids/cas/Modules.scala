@@ -88,7 +88,7 @@ class LdapCredentialsModule extends BindModule {
 class DaoRealmModule extends BindModule {
   override def binding() {
     bind("DataSource.security", classOf[DataSourceFactory]).property("name", "security")
-      .property("url", UrpApp.getUrpAppFile.get.getAbsolutePath)
+      .property("url", UrpApp.getUrpAppFile.get.getAbsolutePath).primary()
 
     bind("security.Realm.default", classOf[DefaultAccountRealm])
       .constructor(bean(classOf[DaoUserStore]), ref("security.CredentialsChecker.default"))
