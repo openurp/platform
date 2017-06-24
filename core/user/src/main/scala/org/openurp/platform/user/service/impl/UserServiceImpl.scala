@@ -15,11 +15,7 @@ class UserServiceImpl(val entityDao: EntityDao) extends UserService {
     if (rs.isEmpty) {
       None
     } else {
-      val u = rs.head
-      //init roles for cache.
-      u.roles foreach { r => r.role.id }
-      u.groups foreach { g => g.group.id }
-      Some(u)
+      Some(rs.head)
     }
   }
 

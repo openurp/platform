@@ -29,9 +29,9 @@ object DefaultMapping extends MappingModule {
       e.getName is length(100),
       e.password is length(200),
       e.remark is length(100),
-      e.roles is (depends("user"), cacheable),
-      e.groups is (depends("user"), cacheable),
-      e.properties is (eleLength(2000), cacheable)))
+      e.roles is (depends("user")),
+      e.groups is (depends("user")),
+      e.properties is (eleLength(2000))))
 
     bind[UserCategory].on(e => declare(
       e.code is (length(30), unique),
@@ -50,7 +50,7 @@ object DefaultMapping extends MappingModule {
 
     bind[Root]
 
-    all.cacheable()
+    all.except(classOf[User]).cacheable()
   }
 
 }
