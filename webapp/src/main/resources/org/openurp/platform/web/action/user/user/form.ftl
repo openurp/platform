@@ -34,7 +34,7 @@
           <input type="checkbox" name="manager${role.id}" [#if !displayManager]style="display:none"[/#if] ${(memberMap.get(role).manager)?default(false)?string('checked="checked"','')}/>
           [#if !displayManager && (memberMap.get(role).manager)!false]&radic;[/#if]
         [/@]
-        [@b.col title="common.updatedAt" width="20%"]${(memberMap.get(role).updatedAt?string("yyyy-MM-dd HH:mm"))!}[/@]
+        [@b.col title="common.updatedAt" width="20%"]${(memberMap.get(role).updatedAt)!}[/@]
         </tr>
       [/@]
     [/@]
