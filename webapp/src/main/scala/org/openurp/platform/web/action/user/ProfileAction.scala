@@ -47,7 +47,8 @@ class ProfileAction(profileService: ProfileService) extends RestfulAction[UserPr
     val profiles = entityDao.search(builder)
     helper.populateInfo(profiles)
   }
-  def tip(): String = {
+
+  def tip(): View = {
     forward()
   }
 

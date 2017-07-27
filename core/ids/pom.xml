@@ -31,11 +31,6 @@
       <artifactId>beangle-cache-redis_2.12</artifactId>
     </dependency>
     <dependency>
-      <groupId>redis.clients</groupId>
-      <artifactId>jedis</artifactId>
-      <version>2.9.0</version>
-    </dependency>
-    <dependency>
       <groupId>org.openurp.platform.api</groupId>
       <artifactId>openurp-platform-api-core</artifactId>
       <version>${project.version}</version>
@@ -46,9 +41,8 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>de.ruedigermoeller</groupId>
-      <artifactId>fst</artifactId>
-      <version>${fst.version}</version>
+      <groupId>org.beangle.serializer</groupId>
+      <artifactId>beangle-serializer-fst_2.12</artifactId>
     </dependency>
     <dependency>
       <groupId>com.zaxxer</groupId>

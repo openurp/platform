@@ -4,7 +4,6 @@ import java.io.{ File, FileInputStream }
 
 import org.beangle.cache.ehcache.{ EhCacheChainedManager, EhCacheManager }
 import org.beangle.cache.redis.{ JedisPoolFactory, RedisBroadcasterBuilder, RedisCacheManager }
-import org.beangle.cache.redis.FSTSerializer
 import org.beangle.cdi.PropertySource
 import org.beangle.cdi.bind.BindModule
 import org.beangle.commons.collection.Collections
@@ -15,6 +14,7 @@ import org.beangle.security.realm.cas.{ CasConfig, CasEntryPoint, CasPreauthFilt
 import org.beangle.security.session.jdbc.DBSessionRegistry
 import org.beangle.security.web.WebSecurityManager
 import org.beangle.security.web.access.{ AuthorizationFilter, DefaultAccessDeniedHandler, SecurityInterceptor }
+import org.beangle.serializer.fst.FSTSerializer
 import org.openurp.platform.api.Urp
 import org.openurp.platform.api.security.{ DefaultUrpSessionIdPolicy, RemoteAccountStore, RemoteAuthorizer }
 

@@ -6,6 +6,7 @@ import org.openurp.platform.security.model.{ DataPermission, FuncResource, Menu 
 import org.openurp.platform.user.model.{ Dimension, RoleMember }
 import org.openurp.platform.config.model.App
 import org.openurp.platform.config.service.AppService
+import org.beangle.webmvc.api.view.View
 
 class DashboardAction extends ActionSupport {
 
@@ -13,7 +14,7 @@ class DashboardAction extends ActionSupport {
 
   var appService: AppService = _
 
-  def stat(): String = {
+  def stat(): View = {
     populateUserStat()
     // state menus
     val apps = appService.getWebapps

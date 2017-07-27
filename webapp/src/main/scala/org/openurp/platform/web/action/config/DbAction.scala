@@ -7,12 +7,13 @@ import collection.mutable.ListBuffer
 import org.beangle.webmvc.api.annotation.ignore
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.platform.config.model.Db
+import org.beangle.webmvc.api.view.View
 
 class DbAction extends RestfulAction[Db] {
 
   override def simpleEntityName = "db"
 
-  def test(): String = {
+  def test(): View = {
     val username = get("user", "")
     val password = get("password", "")
     val entities = getModels[Db](entityName, ids(simpleEntityName, entityDao.domain.getEntity(entityName).get.id.clazz))
@@ -24,7 +25,7 @@ class DbAction extends RestfulAction[Db] {
         result += cfg -> true
       } catch {
         case t: Throwable =>
-          t.printStackTrace();
+          t.printStackTrace()
           result += cfg -> false
       }
     }

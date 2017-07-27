@@ -50,7 +50,7 @@ class UserAction extends RestfulAction[User] {
   var userService: UserService = _
   var userDashboardHelper: UserDashboardHelper = _
 
-  override def info(id: String): String = {
+  override def info(id: String): View = {
     val userId = Params.converter.convert(id, classOf[Long])
     var managed: User = null
     if (None != userId) {

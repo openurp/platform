@@ -18,7 +18,7 @@ class IndexAction extends ActionSupport with ServletSupport {
   var securityManager : WebSecurityManager = _
   var appService: AppService = _
 
-  def index(): String = {
+  def index(): View = {
     val query = OqlBuilder.from(classOf[Menu], "menu")
     query.where("menu.app.name=:app", UrpApp.name).where("menu.parent is null")
     query.orderBy("menu.indexno")
@@ -36,7 +36,7 @@ class IndexAction extends ActionSupport with ServletSupport {
     redirect(to(casConfig.casServer + "/logout"), null)
   }
 
-  def menus(@param("indexno") indexno: String): String = {
+  def menus(@param("indexno") indexno: String): View = {
     val query = OqlBuilder.from(classOf[Menu], "menu")
     query.where("menu.app.name=:app", UrpApp.name)
     query.where("menu.indexno = :indexno ", indexno)

@@ -117,7 +117,7 @@ class RoleAction(val roleService: RoleService, val userService: UserService) ext
     return redirect("search", "info.save.success")
   }
 
-  def profile(): String = {
+  def profile(): View = {
     val role = entityDao.get(classOf[Role], intId("role"))
     val helper = new ProfileHelper(entityDao, profileService)
     helper.populateInfo(List(role))
@@ -125,7 +125,7 @@ class RoleAction(val roleService: RoleService, val userService: UserService) ext
     return forward()
   }
 
-  def editProfile(): String = {
+  def editProfile(): View = {
     val role = entityDao.get(classOf[Role], intId("role"))
     val me = entityDao.findBy(classOf[User], "code", List(Securities.user)).head
     val helper = new ProfileHelper(entityDao, profileService)
