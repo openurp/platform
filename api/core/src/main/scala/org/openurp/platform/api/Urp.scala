@@ -29,7 +29,7 @@ object Urp {
   }
 
   private def readBase(property: String, defaultValue: String): String = {
-    val result =
+    var result =
       if (properties.isEmpty) {
         defaultValue
       } else {
@@ -42,6 +42,7 @@ object Urp {
             }
         }
       }
+    if (result.endsWith("/")) result = result.substring(0, result.length - 1)
     if (result.startsWith("http")) result else "http://" + result
   }
 }
