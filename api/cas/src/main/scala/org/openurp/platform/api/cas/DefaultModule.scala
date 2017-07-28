@@ -49,7 +49,8 @@ class DefaultModule extends BindModule with PropertySource {
       .property("propagateExpiration", false)
 
     bind("security.SessionRegistry.db", classOf[DBSessionRegistry])
-      .constructor(ref("DataSource.session#"), ref("cache.Chained.session"), ref("cache.Ehcache"))
+      .constructor(ref("DataSource.session#"), ref("serializer.fst"),
+        ref("cache.Chained.session"), ref("cache.Ehcache"))
       .property("sessionTable", "session.session_infoes").property("statTable", "session.session_stats")
 
     bind("security.SessionIdPolicy.cookie", classOf[DefaultUrpSessionIdPolicy])

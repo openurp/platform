@@ -7,7 +7,7 @@ import java.io.File
 
 object Urp {
 
-  val home = SystemInfo.properties.get("OPENURP_HOME").getOrElse(SystemInfo.user.home + "/.openurp")
+  val home = SystemInfo.properties.get("openurp.home").getOrElse(SystemInfo.user.home + "/.openurp")
 
   val properties = readConfig(home + "/conf.properties")
 
