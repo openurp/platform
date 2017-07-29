@@ -113,7 +113,8 @@ class SessionModule extends BindModule {
     bind("DataSource.session", classOf[DataSourceFactory]).property("name", "session").property("url", UrpApp.getUrpAppFile.get.getAbsolutePath)
 
     bind("security.SessionRegistry.db", classOf[DBSessionRegistry])
-      .constructor(ref("DataSource.session"), ref("cache.Chained.session"), ref("cache.Ehcache"))
+      .constructor(ref("DataSource.session"), ref("serializer.fst"),
+        ref("cache.Chained.session"), ref("cache.Ehcache"))
       .property("sessionTable", "session.session_infoes").property("statTable", "session.session_stats")
       .property("enableCleanup", true)
 
