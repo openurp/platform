@@ -11,10 +11,8 @@ bar.addBack("${b.text("action.back")}");
    <td class="content" width="40%">${(role.creator.name)!}  </td>
   </tr>
   <tr>
-   <td class="title" >创建时间:</td>
-   <td class="content">${(role.createdAt?string("yyyy-MM-dd"))!}</td>
    <td class="title" >修改时间:</td>
-   <td class="content">${role.updatedAt?string("yyyy-MM-dd")}</td>
+   <td class="content">${role.updatedAt}</td>
   </tr>
   <tr>
   <td class="title" >&nbsp;${b.text("common.status")}:</td>

@@ -4,7 +4,6 @@ import java.io.{ File, FileInputStream }
 
 import org.beangle.cache.ehcache.{ EhCacheChainedManager, EhCacheManager }
 import org.beangle.cache.redis.{ JedisPoolFactory, RedisBroadcasterBuilder, RedisCacheManager }
-import org.beangle.cache.redis.FSTSerializer
 import org.beangle.cdi.PropertySource
 import org.beangle.cdi.bind.BindModule
 import org.beangle.commons.collection.Collections
@@ -15,6 +14,7 @@ import org.beangle.security.realm.cas.{ CasConfig, CasEntryPoint, CasPreauthFilt
 import org.beangle.security.session.jdbc.DBSessionRegistry
 import org.beangle.security.web.WebSecurityManager
 import org.beangle.security.web.access.{ AuthorizationFilter, DefaultAccessDeniedHandler, SecurityInterceptor }
+import org.beangle.serializer.fst.FSTSerializer
 import org.openurp.platform.api.Urp
 import org.openurp.platform.api.security.{ DefaultUrpSessionIdPolicy, RemoteAccountStore, RemoteAuthorizer }
 
@@ -49,7 +49,8 @@ class DefaultModule extends BindModule with PropertySource {
       .property("propagateExpiration", false)
 
     bind("security.SessionRegistry.db", classOf[DBSessionRegistry])
-      .constructor(ref("DataSource.session#"), ref("cache.Chained.session"), ref("cache.Ehcache"))
+      .constructor(ref("DataSource.session#"), ref("serializer.fst"),
+        ref("cache.Chained.session"), ref("cache.Ehcache"))
       .property("sessionTable", "session.session_infoes").property("statTable", "session.session_stats")
 
     bind("security.SessionIdPolicy.cookie", classOf[DefaultUrpSessionIdPolicy])

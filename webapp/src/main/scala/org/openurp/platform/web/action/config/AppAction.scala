@@ -16,7 +16,7 @@ class AppAction(dbService: DbService) extends RestfulAction[App] {
 
   override def simpleEntityName = "app"
 
-  def datasource(): String = {
+  def datasource(): View = {
     put("dataSources", dbService.list())
     forward()
   }

@@ -49,7 +49,7 @@ class ResourceWS(entityDao: EntityDao) extends ActionSupport with EntitySupport[
   @response
   def info(@param("app") app: String, @param("name") name: String): Properties = {
     val query = OqlBuilder.from(classOf[FuncResource], "fr").where("fr.app.name=:app", app)
-    query.where("fr.name=:name", name)
+    query.where("fr.name=:name", name).cacheable()
     val resources = entityDao.search(query)
     if (!resources.isEmpty) {
       val roleQuery = OqlBuilder.from[Integer](classOf[FuncPermission].getName, "fp")

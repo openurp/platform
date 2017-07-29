@@ -25,6 +25,7 @@ import org.beangle.data.hibernate.spring.web.OpenSessionInViewInterceptor
 import org.springframework.beans.factory.config.PropertiesFactoryBean
 import org.springframework.transaction.interceptor.TransactionProxyFactoryBean
 import org.beangle.data.hibernate.HibernateEntityDao
+import org.beangle.data.hibernate.DomainFactory
 
 object DaoModule extends BindModule {
 
@@ -38,11 +39,11 @@ object DaoModule extends BindModule {
         "hibernate.jdbc.use_get_generated_keys=true",
         "hibernate.cache.region.factory_class=org.hibernate.cache.ehcache.EhCacheRegionFactory",
         "hibernate.cache.use_second_level_cache=true", "hibernate.cache.use_query_cache=true",
-        "hibernate.query.substitutions=true 1, false 0, yes 'Y', no 'N'", "hibernate.show_sql=true"))
+        "hibernate.query.substitutions=true 1, false 0, yes 'Y', no 'N'", "hibernate.show_sql=" + devEnabled))
       .description("Hibernate配置信息").nowire("propertiesArray")
 
     bind("SessionFactory.default", classOf[LocalSessionFactoryBean])
-      .property("hibernateProperties", ref("HibernateConfig.default"))
+      .property("properties", ref("HibernateConfig.default"))
       .property("configLocations", "classpath*:META-INF/hibernate.cfg.xml")
       .property("ormLocations", "classpath*:META-INF/beangle/orm.xml").primary
 
@@ -63,6 +64,8 @@ object DaoModule extends BindModule {
     bind("CacheManager.concurrent", classOf[ConcurrentMapCacheManager])
 
     bind("web.Interceptor.hibernate", classOf[OpenSessionInViewInterceptor])
+
+    bind(classOf[DomainFactory])
   }
 
 }

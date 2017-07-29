@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.openurp.platform</groupId>
     <artifactId>openurp-platform-parent</artifactId>
-    <version>0.0.19</version>
+    <version>0.0.20</version>
   </parent>
 
   <groupId>org.openurp.platform</groupId>
@@ -60,7 +60,7 @@
     </dependency>
     <dependency>
       <groupId>org.beangle.webmvc</groupId>
-      <artifactId>beangle-webmvc-serializer-plugin_2.12</artifactId>
+      <artifactId>beangle-webmvc-stream-plugin_2.12</artifactId>
     </dependency>
     <dependency>
       <groupId>org.beangle.webui</groupId>
@@ -74,7 +74,6 @@
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-ehcache</artifactId>
     </dependency>
-
   </dependencies>
 
 </project>

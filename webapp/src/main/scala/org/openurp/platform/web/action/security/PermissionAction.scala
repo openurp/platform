@@ -48,7 +48,7 @@ class PermissionAction extends RestfulAction[FuncPermission] {
    * 根据菜单配置来分配权限
    */
   @mapping(value = "{role.id}/edit")
-  override def edit(@param("role.id") id: String): String = {
+  override def edit(@param("role.id") id: String): View = {
     val roleId = Numbers.toInt(id)
     val role = entityDao.get(classOf[Role], roleId)
     val user = entityDao.findBy(classOf[User], "code", List(Securities.user)).head
@@ -127,7 +127,7 @@ class PermissionAction extends RestfulAction[FuncPermission] {
   /**
    * 显示权限操作提示界面
    */
-  def prompt(): String = {
+  def prompt(): View = {
     forward()
   }
 

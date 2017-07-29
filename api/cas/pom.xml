@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.openurp.platform.api</groupId>
     <artifactId>openurp-platform-api-parent</artifactId>
-    <version>0.0.19</version>
+    <version>0.0.20</version>
   </parent>
   <groupId>org.openurp.platform.api</groupId>
   <artifactId>openurp-platform-api-cas</artifactId>
@@ -47,29 +47,8 @@
       <artifactId>beangle-cdi-spring_2.12</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.ehcache</groupId>
-      <artifactId>ehcache</artifactId>
-      <version>${ehcache.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>redis.clients</groupId>
-      <artifactId>jedis</artifactId>
-      <version>${jedis.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>de.ruedigermoeller</groupId>
-      <artifactId>fst</artifactId>
-      <version>${fst.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>com.fasterxml.jackson.core</groupId>
-          <artifactId>jackson-core</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.javassist</groupId>
-          <artifactId>javassist</artifactId>
-        </exclusion>
-      </exclusions>
+      <groupId>org.beangle.serializer</groupId>
+      <artifactId>beangle-serializer-fst_2.12</artifactId>
     </dependency>
     <dependency>
       <groupId>com.zaxxer</groupId>

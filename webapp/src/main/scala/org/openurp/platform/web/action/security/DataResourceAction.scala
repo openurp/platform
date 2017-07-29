@@ -39,7 +39,7 @@ class DataResourceAction extends RestfulAction[DataResource] {
     redirect("search", "info.save.success")
   }
 
-  override def info(id: String): String = {
+  override def info(id: String): View = {
     val entity = getModel[Entity[_]](entityName, id)
     //    val roleQuery = OqlBuilder.from(classOf[AppDataPermission], "auth")
     //    roleQuery.where("auth.resource=:resource", entity).select("auth.role")

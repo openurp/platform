@@ -5,7 +5,6 @@ import java.io.FileInputStream
 import org.beangle.commons.lang.Strings
 import org.beangle.cache.ehcache.{ EhCacheChainedManager, EhCacheManager }
 import org.beangle.cache.redis.{ JedisPoolFactory, RedisBroadcasterBuilder, RedisCacheManager }
-import org.beangle.cache.redis.FSTSerializer
 import org.beangle.cdi.PropertySource
 import org.beangle.cdi.bind.BindModule
 import org.beangle.commons.collection.Collections
@@ -15,7 +14,7 @@ import org.beangle.ids.cas.ticket.impl.CachedTicketRegistry
 import org.beangle.ids.cas.web.action.{ LoginAction, LogoutAction, ServiceValidateAction }
 import org.beangle.security.authc.{ DefaultAccountRealm, RealmAuthenticator }
 import org.beangle.security.authz.PublicAuthorizer
-import org.beangle.security.realm.ldap.{ DefaultCredentialsChecker, DefaultLdapUserService, PoolingContextSource }
+import org.beangle.security.realm.ldap.{ DefaultCredentialsChecker, PoolingContextSource }
 import org.beangle.security.session.jdbc.DBSessionRegistry
 import org.beangle.security.web.{ UrlEntryPoint, WebSecurityManager }
 import org.beangle.security.web.access.{ DefaultAccessDeniedHandler, SecurityInterceptor }
@@ -23,7 +22,8 @@ import org.openurp.platform.api.Urp
 import org.openurp.platform.api.app.UrpApp
 import org.openurp.platform.api.security.{ DefaultUrpSessionIdPolicy, RemoteAccountStore }
 import org.openurp.platform.user.service.impl.DaoUserStore
-
+import org.beangle.serializer.fst.FSTSerializer
+import org.beangle.security.realm.ldap.SimpleLdapUserStore
 
 /**
  * @author chaostone
@@ -80,7 +80,8 @@ class LdapCredentialsModule extends BindModule {
   override def binding() {
     bind("security.ldap.source", classOf[PoolingContextSource])
       .constructor($("ldap.url"), $("ldap.user"), $("ldap.password"))
-    bind("security.LdapUserService.default", classOf[DefaultLdapUserService]).constructor(ref("security.ldap.source"), $("ldap.base"))
+    bind("security.LdapUserStore.default", classOf[SimpleLdapUserStore])
+      .constructor(ref("security.ldap.source"), $("ldap.base"))
     bind("security.CredentialsChecker.default", classOf[DefaultCredentialsChecker])
   }
 }
@@ -88,7 +89,7 @@ class LdapCredentialsModule extends BindModule {
 class DaoRealmModule extends BindModule {
   override def binding() {
     bind("DataSource.security", classOf[DataSourceFactory]).property("name", "security")
-      .property("url", UrpApp.getUrpAppFile.get.getAbsolutePath)
+      .property("url", UrpApp.getUrpAppFile.get.getAbsolutePath).primary()
 
     bind("security.Realm.default", classOf[DefaultAccountRealm])
       .constructor(bean(classOf[DaoUserStore]), ref("security.CredentialsChecker.default"))
@@ -112,7 +113,8 @@ class SessionModule extends BindModule {
     bind("DataSource.session", classOf[DataSourceFactory]).property("name", "session").property("url", UrpApp.getUrpAppFile.get.getAbsolutePath)
 
     bind("security.SessionRegistry.db", classOf[DBSessionRegistry])
-      .constructor(ref("DataSource.session"), ref("cache.Chained.session"), ref("cache.Ehcache"))
+      .constructor(ref("DataSource.session"), ref("serializer.fst"),
+        ref("cache.Chained.session"), ref("cache.Ehcache"))
       .property("sessionTable", "session.session_infoes").property("statTable", "session.session_stats")
       .property("enableCleanup", true)
 

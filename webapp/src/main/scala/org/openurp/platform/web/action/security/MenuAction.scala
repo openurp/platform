@@ -22,7 +22,7 @@ class MenuAction extends RestfulAction[Menu] {
     AppHelper.putApps(apps, "menu.app.id", entityDao)
   }
 
-  override def search(): String = {
+  override def search(): View = {
     AppHelper.remember("menu.app.id")
     super.search()
     forward()
@@ -105,7 +105,7 @@ class MenuAction extends RestfulAction[Menu] {
     return redirect("search", "info.save.success")
   }
 
-  override def info(@param("id") id: String): String = {
+  override def info(@param("id") id: String): View = {
     val menu = this.entityDao.get(classOf[Menu], Integer.parseInt(id))
     put("menu", menu)
     if (!menu.resources.isEmpty) {

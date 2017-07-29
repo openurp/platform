@@ -11,15 +11,24 @@ import org.openurp.platform.config.model.App
 class AppServiceImpl(entityDao: EntityDao) extends AppService {
 
   override def getApp(name: String, secret: String): Option[App] = {
-    val query = OqlBuilder.from(classOf[App], "app").where("app.name=:name and app.secret=:secret", name, secret).cacheable()
+    val query = OqlBuilder.from(classOf[App], "app")
+      .where("app.name=:name and app.secret=:secret", name, secret).cacheable()
     val apps = entityDao.search(query)
+    initialize(apps)
     if (apps.isEmpty) None else Some(apps.head)
   }
 
   override def getApp(name: String): Option[App] = {
     val query = OqlBuilder.from(classOf[App], "app").where("app.name=:name ", name).cacheable()
     val apps = entityDao.search(query)
+    initialize(apps)
     if (apps.isEmpty) None else Some(apps.head)
+  }
+
+  private def initialize(apps: Iterable[App]): Unit = {
+    apps foreach { app =>
+      app.domain.title
+    }
   }
 
   override def getWebapps(): Seq[App] = {

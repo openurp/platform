@@ -8,13 +8,16 @@ import org.beangle.commons.lang.Strings
 import org.openurp.platform.api.Urp
 import org.openurp.platform.api.app.UrpApp
 import org.openurp.platform.api.util.JSON
+import java.net.URLEncoder
 
 /**
  * @author chaostone
  */
 object RemoteService {
   def getResource(resourceName: String): Option[Resource] = {
-    val url = Urp.platformBase + "/security/func/" + UrpApp.name + "/resources/info.json?name=" + resourceName
+    val url = Urp.platformBase + "/security/func/" + UrpApp.name +
+      "/resources/info.json?name=" +
+      URLEncoder.encode(resourceName, "utf-8")
     val script = IOs.readString(new URL(url).openStream())
     val r = JSON.parse(script).asInstanceOf[Map[String, _]]
     if (r.contains("id")) {
