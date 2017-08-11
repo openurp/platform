@@ -1,6 +1,6 @@
 package org.openurp.platform.api.security
 
-import java.net.{ HttpURLConnection, URL }
+import java.net.{ HttpURLConnection, URL, URLEncoder }
 
 import org.beangle.commons.collection.Collections
 import org.beangle.commons.io.IOs
@@ -8,7 +8,7 @@ import org.beangle.commons.lang.Strings
 import org.openurp.platform.api.Urp
 import org.openurp.platform.api.app.UrpApp
 import org.openurp.platform.api.util.JSON
-import java.net.URLEncoder
+import org.beangle.commons.net.http.HttpUtils
 
 /**
  * @author chaostone
@@ -21,7 +21,7 @@ object RemoteService {
     val script = IOs.readString(new URL(url).openStream())
     val r = JSON.parse(script).asInstanceOf[Map[String, _]]
     if (r.contains("id")) {
-      Some(Resource(r("id").asInstanceOf[Number].intValue, r("scope").toString, r("roles").asInstanceOf[Seq[Int]].toArray))
+      Some(Resource(r("id").asInstanceOf[Number].intValue, r("scope").toString, r("roles").asInstanceOf[Seq[Number]].map(_.intValue).toSet))
     } else {
       None
     }
@@ -29,9 +29,13 @@ object RemoteService {
 
   def roots: Set[String] = {
     val url = Urp.platformBase + "/user/roots.json?app=" + UrpApp.name
-    val resources = Collections.newSet[String]
-    resources ++= JSON.parse(readUrl(url)).asInstanceOf[Iterable[String]]
-    resources.toSet
+    HttpUtils.getResponseText(url) match {
+      case Some(s) =>
+        val resources = Collections.newSet[String]
+        resources ++= JSON.parse(s).asInstanceOf[Iterable[String]]
+        resources.toSet
+      case None => Set.empty
+    }
   }
 
   def resources: collection.Map[String, Resource] = {
@@ -39,7 +43,8 @@ object RemoteService {
     val resources = Collections.newMap[String, Resource]
     val resourceJsons = JSON.parse(readUrl(url)).asInstanceOf[Iterable[Map[String, _]]]
     resourceJsons.map { r =>
-      resources += (r("name").toString -> Resource(r("id").asInstanceOf[Number].intValue, r("scope").toString, r("roles").asInstanceOf[Seq[Int]].toArray))
+      resources += (r("name").toString ->
+        Resource(r("id").asInstanceOf[Number].intValue, r("scope").toString, r("roles").asInstanceOf[Iterable[Number]].map(_.intValue).toSet))
     }
     resources
   }
@@ -76,20 +81,15 @@ object RemoteService {
 }
 
 object Resource {
-  def apply(id: Int, scope: String, roles: Array[Int]): Resource = {
+  def apply(id: Int, scope: String, roles: Set[Int]): Resource = {
     val scopes = Map("Private" -> 2, "Protected" -> 1, "Public" -> 0)
     new Resource(id, scopes(scope), roles)
   }
 }
-class Resource(val id: Int, val scope: Int, roles: Array[Int]) extends Serializable {
 
-  def matches(authorities: collection.Set[Integer]): Boolean = {
-    var i = 0
-    while (i < roles.length) {
-      val role = roles(i)
-      if (authorities.contains(role)) return true
-      i += 1
-    }
-    false
+class Resource(val id: Int, val scope: Int, roles: Set[Int]) extends Serializable {
+
+  def matches(authorities: collection.Set[Int]): Boolean = {
+    roles.exists(authorities.contains(_))
   }
 }

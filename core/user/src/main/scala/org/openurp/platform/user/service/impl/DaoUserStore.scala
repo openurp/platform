@@ -18,13 +18,13 @@ class DaoUserStore(userService: UserService, entityDao: EntityDao) extends Accou
         account.accountLocked = user.locked
         account.credentialExpired = user.credentialExpired
         account.disabled = !user.enabled
-        account.details += "category" -> user.category.id
+        account.details += "category" -> user.category.id.toString
 
         val query = OqlBuilder.from[Int](classOf[RoleMember].getName, "rm")
           .where("rm.user=:user and rm.member=true", user)
           .select("rm.role.id")
         val rs = entityDao.search(query)
-        account.authorities = rs.toSet
+        account.authorities = rs.mkString(",")
         Some(account)
       case None => None
     }

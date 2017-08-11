@@ -10,7 +10,7 @@ import java.io.FileInputStream
 import java.io.File
 import org.openurp.platform.api.util.JSON
 import org.beangle.commons.collection.Properties
-import org.beangle.commons.web.util.HttpUtils
+import org.beangle.commons.net.http.HttpUtils
 import org.beangle.commons.conversion.converter.String2DateConverter
 
 object UrpApp extends Logging {
@@ -33,8 +33,12 @@ object UrpApp extends Logging {
 
     if (null == _token) {
       val tokenUrl = Urp.platformBase + "/oauth/token/login?app=" + name + "&secret=" + secret
-      val token = JSON.parse(HttpUtils.getResponseText(tokenUrl)).asInstanceOf[Map[String, _]]
-      _token = Token(token("token").asInstanceOf[String], (new String2DateConverter).convert(token("expiredAt"), classOf[java.util.Date]).asInstanceOf[java.util.Date].getTime)
+      HttpUtils.getResponseText(tokenUrl) match {
+        case Some(t) =>
+          val token = JSON.parse(t).asInstanceOf[Map[String, _]]
+          _token = Token(token("token").asInstanceOf[String], (new String2DateConverter).convert(token("expiredAt"), classOf[java.util.Date]).asInstanceOf[java.util.Date].getTime)
+        case None => throw new RuntimeException("cannot find token")
+      }
     }
     _token.token
   }
@@ -48,7 +52,7 @@ object UrpApp extends Logging {
     }
     val name = appManifest.get("name") match {
       case Some(n) => n
-      case None => throw new RuntimeException("cannot find META-INF/openurp/app.properties")
+      case None    => throw new RuntimeException("cannot find META-INF/openurp/app.properties")
     }
 
     //app path starts with /
