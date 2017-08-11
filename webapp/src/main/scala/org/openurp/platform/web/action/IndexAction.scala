@@ -3,7 +3,6 @@ package org.openurp.platform.web.action
 import org.beangle.data.dao.{ EntityDao, OqlBuilder }
 import org.beangle.security.context.SecurityContext
 import org.beangle.security.realm.cas.CasConfig
-import org.beangle.security.web.WebSecurityManager
 import org.beangle.webmvc.api.action.{ ActionSupport, ServletSupport }
 import org.beangle.webmvc.api.annotation.param
 import org.beangle.webmvc.api.view.View
@@ -15,7 +14,6 @@ import org.openurp.platform.security.model.Menu
 class IndexAction extends ActionSupport with ServletSupport {
   var entityDao: EntityDao = _
   var casConfig: CasConfig = _
-  var securityManager : WebSecurityManager = _
   var appService: AppService = _
 
   def index(): View = {
@@ -32,7 +30,6 @@ class IndexAction extends ActionSupport with ServletSupport {
   }
 
   def logout(): View = {
-    securityManager.logout(request, response, SecurityContext.session)
     redirect(to(casConfig.casServer + "/logout"), null)
   }
 

@@ -48,5 +48,10 @@
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.zaxxer</groupId>
+      <artifactId>HikariCP</artifactId>
+      <version>${HikariCP.version}</version>
+    </dependency>
   </dependencies>
 </project>

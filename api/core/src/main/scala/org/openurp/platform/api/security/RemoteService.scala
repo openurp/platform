@@ -27,21 +27,19 @@ object RemoteService {
     }
   }
 
-  def roots: Set[String] = {
+  def roots: Option[Set[String]] = {
     val url = Urp.platformBase + "/user/roots.json?app=" + UrpApp.name
-    HttpUtils.getResponseText(url) match {
-      case Some(s) =>
-        val resources = Collections.newSet[String]
-        resources ++= JSON.parse(s).asInstanceOf[Iterable[String]]
-        resources.toSet
-      case None => Set.empty
+    HttpUtils.getText(url) map { s =>
+      val resources = Collections.newSet[String]
+      resources ++= JSON.parse(s).asInstanceOf[Iterable[String]]
+      resources.toSet
     }
   }
 
   def resources: collection.Map[String, Resource] = {
     val url = Urp.platformBase + "/security/func/" + UrpApp.name + "/resources.json"
     val resources = Collections.newMap[String, Resource]
-    val resourceJsons = JSON.parse(readUrl(url)).asInstanceOf[Iterable[Map[String, _]]]
+    val resourceJsons = JSON.parse(HttpUtils.getText(url).orNull).asInstanceOf[Iterable[Map[String, _]]]
     resourceJsons.map { r =>
       resources += (r("name").toString ->
         Resource(r("id").asInstanceOf[Number].intValue, r("scope").toString, r("roles").asInstanceOf[Iterable[Number]].map(_.intValue).toSet))
@@ -63,20 +61,6 @@ object RemoteService {
   def getAppsJson(): String = {
     val domain = Strings.substringBefore(UrpApp.name, "-")
     IOs.readString(new URL(Urp.platformBase + "/user/apps/" + Securities.user + ".json?domain=" + domain).openStream())
-  }
-
-  private def readUrl(url: String): String = {
-    val conn = new URL(url).openConnection().asInstanceOf[HttpURLConnection]
-    conn.setConnectTimeout(5 * 1000)
-    conn.setReadTimeout(5 * 1000)
-    conn.setRequestMethod("GET")
-    try {
-      IOs.readString(conn.getInputStream)
-    } catch {
-      case e: Exception =>
-        println("Cannot connect to " + url)
-        ""
-    }
   }
 }
 

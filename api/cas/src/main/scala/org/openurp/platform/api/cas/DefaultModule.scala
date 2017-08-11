@@ -1,21 +1,15 @@
 package org.openurp.platform.api.cas
 
-import java.io.{ File, FileInputStream }
-
+import org.beangle.cache.caffeine.CaffeineCacheManager
 import org.beangle.cdi.PropertySource
 import org.beangle.cdi.bind.BindModule
 import org.beangle.commons.collection.Collections
 import org.beangle.commons.lang.Strings
-import org.beangle.data.jdbc.ds.DataSourceFactory
 import org.beangle.security.authc.{ DefaultAccountRealm, RealmAuthenticator }
-import org.beangle.security.realm.cas.{ CasConfig, CasEntryPoint, CasPreauthFilter, DefaultTicketValidator }
-import org.beangle.security.session.jdbc.DBSessionRegistry
-import org.beangle.security.web.WebSecurityManager
+import org.beangle.security.realm.cas.{ CasConfig, CasEntryPoint }
 import org.beangle.security.web.access.{ AuthorizationFilter, DefaultAccessDeniedHandler, SecurityInterceptor }
 import org.openurp.platform.api.Urp
 import org.openurp.platform.api.security.{ DefaultUrpSessionIdPolicy, RemoteAccountStore, RemoteAuthorizer }
-import org.beangle.cache.caffeine.CaffeineCacheManager
-import org.beangle.security.session.http.HttpSessionRepo
 
 class DefaultModule extends BindModule with PropertySource {
 
@@ -27,9 +21,8 @@ class DefaultModule extends BindModule with PropertySource {
     bind("security.AccessDeniedHandler.default", classOf[DefaultAccessDeniedHandler])
       .constructor($("security.access.errorPage", "/403.html"))
     bind("security.Filter.authorization", classOf[AuthorizationFilter])
-    bind("security.Filter.cas", classOf[CasPreauthFilter])
     bind("web.Interceptor.security", classOf[SecurityInterceptor]).constructor(
-      List(ref("security.Filter.cas"), ref("security.Filter.authorization")), ?, ?, ?)
+      List(ref("security.Filter.authorization")), ?, ?, ?)
 
     bind("security.Realm.default", classOf[DefaultAccountRealm]).constructor(bean(classOf[RemoteAccountStore]))
     bind("security.Authenticator", classOf[RealmAuthenticator]).constructor(List(ref("security.Realm.default")))
@@ -44,10 +37,8 @@ class DefaultModule extends BindModule with PropertySource {
 
     //cas
     bind("casConfig", classOf[CasConfig]).constructor($("openurp.platform.cas.server"))
-    bind("security.TicketValidator.default", classOf[DefaultTicketValidator])
 
     //authorizer and manager
-    bind("security.SecurityManager.default", classOf[WebSecurityManager])
     bind("security.Authorizer.remote", classOf[RemoteAuthorizer]).constructor(ref("cache.Caffeine"))
   }
 

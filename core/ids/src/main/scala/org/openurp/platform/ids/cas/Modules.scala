@@ -66,7 +66,9 @@ class TicketModule extends BindModule {
   override def binding() {
     bind("jedis.Factory", classOf[JedisPoolFactory]).constructor(Map("host" -> $("redis.host"), "port" -> $("redis.port")))
     bind("serializer.default", DefaultBinarySerializer)
-    bind(classOf[CachedTicketRegistry]).constructor(bean(classOf[RedisCacheManager]).property("ttl", "60"))
+    bind("cache.Redis", classOf[RedisCacheManager]).property("ttl", "3600")//one hour
+    bind(classOf[CasCacheService]).constructor(ref("cache.Redis"))
+    bind(classOf[CachedTicketRegistry])
     bind(classOf[DefaultServiceTicketIdGenerator])
   }
 }
@@ -119,7 +121,6 @@ class SessionModule extends BindModule {
 
 class WebModule extends BindModule {
   override def binding() {
-    bind(classOf[CasCacheService]).constructor(ref("cache.Caffeine"))
     bind(classOf[LoginAction])
     bind(classOf[ServiceValidateAction])
     bind(classOf[LogoutAction])
