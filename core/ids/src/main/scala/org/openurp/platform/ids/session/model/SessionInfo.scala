@@ -11,6 +11,5 @@ class SessionInfo extends StringId {
   var agent: Option[String] = _
   var os: Option[String] = _
   var loginAt: Instant = _
-  var timeout: Duration = _
   var lastAccessAt: Instant = _
 }
