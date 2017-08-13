@@ -3,7 +3,7 @@ package org.openurp.platform.ids.cas
 import java.io.FileInputStream
 
 import org.beangle.cache.caffeine.CaffeineCacheManager
-import org.beangle.cache.redis.{ JedisPoolFactory, RedisCacheManager }
+import org.beangle.cache.redis.JedisPoolFactory
 import org.beangle.cdi.PropertySource
 import org.beangle.cdi.bind.BindModule
 import org.beangle.commons.collection.Collections
@@ -11,7 +11,7 @@ import org.beangle.commons.io.DefaultBinarySerializer
 import org.beangle.commons.lang.Strings
 import org.beangle.data.jdbc.ds.DataSourceFactory
 import org.beangle.ids.cas.id.impl.DefaultServiceTicketIdGenerator
-import org.beangle.ids.cas.ticket.impl.CachedTicketRegistry
+import org.beangle.ids.cas.ticket.{ DefaultTicketCacheService, DefaultTicketRegistry }
 import org.beangle.ids.cas.web.action.{ LoginAction, LogoutAction, ServiceValidateAction }
 import org.beangle.security.authc.{ DefaultAccountRealm, RealmAuthenticator }
 import org.beangle.security.authz.PublicAuthorizer
@@ -23,7 +23,6 @@ import org.openurp.platform.api.Urp
 import org.openurp.platform.api.app.UrpApp
 import org.openurp.platform.api.security.DefaultUrpSessionIdPolicy
 import org.openurp.platform.user.service.impl.DaoUserStore
-import org.beangle.ids.cas.cache.CasCacheService
 
 /**
  * @author chaostone
@@ -66,9 +65,8 @@ class TicketModule extends BindModule {
   override def binding() {
     bind("jedis.Factory", classOf[JedisPoolFactory]).constructor(Map("host" -> $("redis.host"), "port" -> $("redis.port")))
     bind("serializer.default", DefaultBinarySerializer)
-    bind("cache.Redis", classOf[RedisCacheManager]).property("ttl", "3600")//one hour
-    bind(classOf[CasCacheService]).constructor(ref("cache.Redis"))
-    bind(classOf[CachedTicketRegistry])
+    bind(classOf[DefaultTicketCacheService]).constructor(ref("jedis.Factory"))
+    bind(classOf[DefaultTicketRegistry])
     bind(classOf[DefaultServiceTicketIdGenerator])
   }
 }
@@ -104,7 +102,7 @@ class DaoRealmModule extends BindModule {
 
 class SessionModule extends BindModule {
   override def binding() {
-    bind("cache.Caffeine", classOf[CaffeineCacheManager])
+    bind("cache.Caffeine", classOf[CaffeineCacheManager]).constructor(true)
     //.constructor("ehcache-session", false)
     bind("DataSource.session", classOf[DataSourceFactory])
       .property("name", "session")

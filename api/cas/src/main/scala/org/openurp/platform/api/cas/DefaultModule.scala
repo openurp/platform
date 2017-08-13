@@ -27,7 +27,7 @@ class DefaultModule extends BindModule with PropertySource {
     bind("security.Realm.default", classOf[DefaultAccountRealm]).constructor(bean(classOf[RemoteAccountStore]))
     bind("security.Authenticator", classOf[RealmAuthenticator]).constructor(List(ref("security.Realm.default")))
 
-    bind("cache.Caffeine", classOf[CaffeineCacheManager])
+    bind("cache.Caffeine", classOf[CaffeineCacheManager]).constructor(true)
 
     bind("security.SessionRepo.http", classOf[CasHttpSessionRepo])
       .constructor(ref("cache.Caffeine"), ref("casConfig"))
