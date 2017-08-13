@@ -1,14 +1,9 @@
 package org.openurp.platform.api.security
 
+import org.beangle.commons.net.http.HttpUtils
 import org.beangle.security.authc.{ Account, AccountStore, DefaultAccount }
 import org.openurp.platform.api.Urp
 import org.openurp.platform.api.util.JSON
-import org.beangle.commons.web.util.HttpUtils
-
-import org.beangle.security.authc.{ Account, AccountStore, DefaultAccount }
-import org.openurp.platform.api.Urp
-import org.openurp.platform.api.util.JSON
-import org.beangle.commons.web.util.HttpUtils
 
 /**
  * @author chaostone
@@ -18,7 +13,7 @@ class RemoteAccountStore extends AccountStore {
 
   def load(principal: Any): Option[Account] = {
     val url = Urp.platformBase + "/user/accounts/" + principal.toString + ".json"
-    HttpUtils.getResponseText(url) match {
+    HttpUtils.getText(url) match {
       case Some(u) =>
         val data = JSON.parse(u).asInstanceOf[collection.Map[String, _]]
         if (data.isEmpty) None
