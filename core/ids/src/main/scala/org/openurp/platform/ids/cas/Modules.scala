@@ -12,7 +12,7 @@ import org.beangle.commons.lang.Strings
 import org.beangle.data.jdbc.ds.DataSourceFactory
 import org.beangle.ids.cas.id.impl.DefaultServiceTicketIdGenerator
 import org.beangle.ids.cas.ticket.{ DefaultTicketCacheService, DefaultTicketRegistry }
-import org.beangle.ids.cas.web.action.{ LoginAction, LogoutAction, ServiceValidateAction }
+import org.beangle.ids.cas.web.action.{ LoginAction, LogoutAction, ServiceValidateAction, SessionAction }
 import org.beangle.security.authc.{ DefaultAccountRealm, RealmAuthenticator }
 import org.beangle.security.authz.PublicAuthorizer
 import org.beangle.security.realm.ldap.{ DefaultCredentialsChecker, PoolingContextSource, SimpleLdapUserStore }
@@ -122,5 +122,6 @@ class WebModule extends BindModule {
     bind(classOf[LoginAction])
     bind(classOf[ServiceValidateAction])
     bind(classOf[LogoutAction])
+    bind(classOf[SessionAction])
   }
 }
