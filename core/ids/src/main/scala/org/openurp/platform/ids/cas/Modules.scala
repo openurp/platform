@@ -2,28 +2,27 @@ package org.openurp.platform.ids.cas
 
 import java.io.FileInputStream
 
-import org.beangle.commons.lang.Strings
-import org.beangle.cache.ehcache.{ EhCacheChainedManager, EhCacheManager }
-import org.beangle.cache.redis.{ JedisPoolFactory, RedisBroadcasterBuilder, RedisCacheManager }
+import org.beangle.cache.caffeine.CaffeineCacheManager
+import org.beangle.cache.redis.JedisPoolFactory
 import org.beangle.cdi.PropertySource
 import org.beangle.cdi.bind.BindModule
 import org.beangle.commons.collection.Collections
+import org.beangle.commons.io.DefaultBinarySerializer
+import org.beangle.commons.lang.Strings
 import org.beangle.data.jdbc.ds.DataSourceFactory
 import org.beangle.ids.cas.id.impl.DefaultServiceTicketIdGenerator
-import org.beangle.ids.cas.ticket.impl.CachedTicketRegistry
-import org.beangle.ids.cas.web.action.{ LoginAction, LogoutAction, ServiceValidateAction }
+import org.beangle.ids.cas.ticket.{ DefaultTicketCacheService, DefaultTicketRegistry }
+import org.beangle.ids.cas.web.action.{ LoginAction, LogoutAction, ServiceValidateAction, SessionAction }
 import org.beangle.security.authc.{ DefaultAccountRealm, RealmAuthenticator }
 import org.beangle.security.authz.PublicAuthorizer
-import org.beangle.security.realm.ldap.{ DefaultCredentialsChecker, PoolingContextSource }
+import org.beangle.security.realm.ldap.{ DefaultCredentialsChecker, PoolingContextSource, SimpleLdapUserStore }
 import org.beangle.security.session.jdbc.DBSessionRegistry
 import org.beangle.security.web.{ UrlEntryPoint, WebSecurityManager }
 import org.beangle.security.web.access.{ DefaultAccessDeniedHandler, SecurityInterceptor }
 import org.openurp.platform.api.Urp
 import org.openurp.platform.api.app.UrpApp
-import org.openurp.platform.api.security.{ DefaultUrpSessionIdPolicy, RemoteAccountStore }
+import org.openurp.platform.api.security.DefaultUrpSessionIdPolicy
 import org.openurp.platform.user.service.impl.DaoUserStore
-import org.beangle.serializer.fst.FSTSerializer
-import org.beangle.security.realm.ldap.SimpleLdapUserStore
 
 /**
  * @author chaostone
@@ -64,7 +63,10 @@ class DefaultModule extends BindModule with PropertySource {
 
 class TicketModule extends BindModule {
   override def binding() {
-    bind(classOf[CachedTicketRegistry]).constructor(bean(classOf[RedisCacheManager]).property("ttl", "60"))
+    bind("jedis.Factory", classOf[JedisPoolFactory]).constructor(Map("host" -> $("redis.host"), "port" -> $("redis.port")))
+    bind("serializer.default", DefaultBinarySerializer)
+    bind(classOf[DefaultTicketCacheService]).constructor(ref("jedis.Factory"))
+    bind(classOf[DefaultTicketRegistry])
     bind(classOf[DefaultServiceTicketIdGenerator])
   }
 }
@@ -100,34 +102,26 @@ class DaoRealmModule extends BindModule {
 
 class SessionModule extends BindModule {
   override def binding() {
-    //session registry
-    bind("jedis.Factory", classOf[JedisPoolFactory]).constructor(Map("host" -> $("redis.host"), "port" -> $("redis.port")))
-    bind("serializer.fst", classOf[FSTSerializer])
-
-    bind("cache.Ehcache", classOf[EhCacheManager]).constructor("ehcache-session", false)
-
-    bind("cache.Chained.session", classOf[EhCacheChainedManager])
-      .constructor(ref("cache.Ehcache"), bean(classOf[RedisCacheManager]), true)
-      .property("broadcasterBuilder", bean(classOf[RedisBroadcasterBuilder]))
-
-    bind("DataSource.session", classOf[DataSourceFactory]).property("name", "session").property("url", UrpApp.getUrpAppFile.get.getAbsolutePath)
+    bind("cache.Caffeine", classOf[CaffeineCacheManager]).constructor(true)
+    //.constructor("ehcache-session", false)
+    bind("DataSource.session", classOf[DataSourceFactory])
+      .property("name", "session")
+      .property("url", UrpApp.getUrpAppFile.get.getAbsolutePath)
 
     bind("security.SessionRegistry.db", classOf[DBSessionRegistry])
-      .constructor(ref("DataSource.session"), ref("serializer.fst"),
-        ref("cache.Chained.session"), ref("cache.Ehcache"))
-      .property("sessionTable", "session.session_infoes").property("statTable", "session.session_stats")
-      .property("enableCleanup", true)
+      .constructor(ref("DataSource.session"), ref("cache.Caffeine"))
+      .property("sessionTable", "session.session_infoes")
 
     bind("security.SessionIdPolicy.urp", classOf[DefaultUrpSessionIdPolicy])
       .property("path", "/").property("domain", Strings.substringAfter(Urp.base, "//"))
-
   }
 }
 
 class WebModule extends BindModule {
   override def binding() {
-    bind(classOf[LoginAction]).constructor(?, ?, ref("cache.Ehcache"))
+    bind(classOf[LoginAction])
     bind(classOf[ServiceValidateAction])
-    bind(classOf[LogoutAction]).constructor(?, ref("cache.Ehcache"))
+    bind(classOf[LogoutAction])
+    bind(classOf[SessionAction])
   }
 }
