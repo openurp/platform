@@ -64,7 +64,7 @@ class RemoteAuthorizer(cacheManager: CacheManager) extends Authorizer with Initi
               var rs = res.matches(Strings.splitToInt(account.authorities).toSet)
               if (!rs) {
                 roots.get("roots") match {
-                  case Some(s) => s.contains(account.getName)
+                  case Some(s) => rs = s.contains(account.getName)
                   case None =>
                     RemoteService.roots foreach { r =>
                       roots.put("roots", r)
