@@ -9,7 +9,7 @@ import org.beangle.security.authc.{ DefaultAccountRealm, RealmAuthenticator }
 import org.beangle.security.realm.cas.{ CasConfig, CasEntryPoint }
 import org.beangle.security.web.access.{ AuthorizationFilter, DefaultAccessDeniedHandler, SecurityInterceptor }
 import org.openurp.platform.api.Urp
-import org.openurp.platform.api.security.{ DefaultUrpSessionIdPolicy, RemoteAccountStore, RemoteAuthorizer }
+import org.openurp.platform.api.security.{ DefaultUrpSessionIdPolicy, RemoteAuthorizer }
 
 class DefaultModule extends BindModule with PropertySource {
 
@@ -24,8 +24,7 @@ class DefaultModule extends BindModule with PropertySource {
     bind("web.Interceptor.security", classOf[SecurityInterceptor]).constructor(
       List(ref("security.Filter.authorization")), ?, ?, ?)
 
-    bind("security.Realm.default", classOf[DefaultAccountRealm]).constructor(bean(classOf[RemoteAccountStore]))
-    bind("security.Authenticator", classOf[RealmAuthenticator]).constructor(List(ref("security.Realm.default")))
+    bind("security.Authenticator", classOf[RealmAuthenticator])
 
     bind("cache.Caffeine", classOf[CaffeineCacheManager]).constructor(true)
 
