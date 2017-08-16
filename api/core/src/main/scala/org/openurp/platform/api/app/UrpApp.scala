@@ -44,36 +44,40 @@ object UrpApp extends Logging {
   }
 
   private def readProperties(): Map[String, Any] = {
-    val configs = ClassLoaders.getResources("META-INF/openurp/app.properties")
-    val appManifest = if (configs.isEmpty) {
-      Map.empty[String, String]
-    } else {
-      IOs.readJavaProperties(configs.head)
-    }
-    val name = appManifest.get("name") match {
-      case Some(n) => n
-      case None    => throw new RuntimeException("cannot find META-INF/openurp/app.properties")
-    }
-
-    //app path starts with /
-    var appPath = Strings.replace(name, "-", "/")
-    appPath = "/" + Strings.replace(appPath, ".", "/")
-
-    val result = new collection.mutable.HashMap[String, Any]
-    result ++= appManifest
-    val appconf = new File(Urp.home + appPath + "/conf.properties")
-    if (appconf.exists) result ++= IOs.readJavaProperties(appconf.toURI.toURL)
-    result.put("path", appPath)
-
-    val appFile = new File(Urp.home + appPath + ".xml")
-    if (appFile.exists()) {
-      val is = new FileInputStream(appFile)
-      scala.xml.XML.load(is) \\ "app" foreach { app =>
-        result ++= app.attributes.asAttrMap
+    try {
+      val configs = ClassLoaders.getResources("META-INF/openurp/app.properties")
+      val appManifest = if (configs.isEmpty) {
+        Map.empty[String, String]
+      } else {
+        IOs.readJavaProperties(configs.head)
       }
-      IOs.close(is)
+      val name = appManifest.get("name") match {
+        case Some(n) => n
+        case None    => throw new RuntimeException("cannot find META-INF/openurp/app.properties")
+      }
+
+      //app path starts with /
+      var appPath = Strings.replace(name, "-", "/")
+      appPath = "/" + Strings.replace(appPath, ".", "/")
+
+      val result = new collection.mutable.HashMap[String, Any]
+      result ++= appManifest
+      val appconf = new File(Urp.home + appPath + "/conf.properties")
+      if (appconf.exists) result ++= IOs.readJavaProperties(appconf.toURI.toURL)
+      result.put("path", appPath)
+
+      val appFile = new File(Urp.home + appPath + ".xml")
+      if (appFile.exists()) {
+        val is = new FileInputStream(appFile)
+        scala.xml.XML.load(is) \\ "app" foreach { app =>
+          result ++= app.attributes.asAttrMap
+        }
+        IOs.close(is)
+      }
+      result.toMap
+    } catch {
+      case e: Throwable => logger.error("Issue exception when read property", e); System.exit(1); Map.empty
     }
-    result.toMap
   }
 
   def getUrpAppFile: Option[File] = {
