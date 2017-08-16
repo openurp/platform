@@ -25,7 +25,7 @@ class AccountWS(userService: UserService, entityDao: EntityDao) extends ActionSu
         properties += ("accountLocked" -> user.locked)
         properties += ("credentialExpired" -> user.credentialExpired)
         properties += ("enabled" -> user.enabled)
-        properties += ("authorities" -> user.roles.filter(_.member==true).map(_.role.id).toSet)
+        properties += ("authorities" -> user.roles.filter(_.member==true).map(_.role.id).mkString(","))
         val details = new Properties()
         details += ("category" -> user.category.id)
         properties += ("details" -> details)
