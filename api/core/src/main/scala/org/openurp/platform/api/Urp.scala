@@ -4,10 +4,11 @@ import org.beangle.commons.io.IOs
 import org.beangle.commons.lang.SystemInfo
 import org.beangle.commons.lang.Strings
 import java.io.File
+import org.beangle.commons.logging.Logging
 
-object Urp {
+object Urp extends Logging {
 
-  val home = SystemInfo.properties.get("openurp.home").getOrElse(SystemInfo.user.home + "/.openurp")
+  val home = findHome()
 
   val properties = readConfig(home + "/conf.properties")
 
@@ -19,12 +20,22 @@ object Urp {
 
   val webappBase = readBase("openurp.webapp", "localhost:8080")
 
+  private def findHome(): String = {
+    val home = SystemInfo.properties.get("openurp.home").getOrElse(SystemInfo.user.home + "/.openurp")
+    logger.info("Openurp Home:" + home)
+    home
+  }
+
   private def readConfig(location: String): Map[String, String] = {
-    val configFile = new File(location)
-    if (!configFile.exists) {
-      Map.empty
-    } else {
-      IOs.readJavaProperties(configFile.toURI().toURL())
+    try {
+      val configFile = new File(location)
+      if (!configFile.exists) {
+        Map.empty
+      } else {
+        IOs.readJavaProperties(configFile.toURI().toURL())
+      }
+    } catch {
+      case e: Throwable => logger.error("Read config error", e); Map.empty
     }
   }
 

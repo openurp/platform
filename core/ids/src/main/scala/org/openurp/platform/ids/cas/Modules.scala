@@ -115,6 +115,7 @@ class SessionModule extends BindModule {
     protobuf.register(classOf[DefaultSession], SessionSerializer)
     protobuf.register(classOf[DefaultAccount], AccountSerializer)
 
+    bind("Serializer.protobuf",protobuf)
     bind("security.SessionRegistry.db", classOf[DBSessionRegistry])
       .constructor(ref("DataSource.session"), ref("cache.Caffeine"), protobuf)
       .property("sessionTable", "session.session_infoes")
