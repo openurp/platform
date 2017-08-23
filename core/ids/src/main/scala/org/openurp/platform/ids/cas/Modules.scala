@@ -13,12 +13,15 @@ import org.beangle.data.jdbc.ds.DataSourceFactory
 import org.beangle.ids.cas.id.impl.DefaultServiceTicketIdGenerator
 import org.beangle.ids.cas.ticket.{ DefaultTicketCacheService, DefaultTicketRegistry }
 import org.beangle.ids.cas.web.action.{ LoginAction, LogoutAction, ServiceValidateAction, SessionAction }
-import org.beangle.security.authc.{ DefaultAccountRealm, RealmAuthenticator }
+import org.beangle.security.authc.{ DefaultAccount, DefaultAccountRealm, RealmAuthenticator }
 import org.beangle.security.authz.PublicAuthorizer
+import org.beangle.security.protobuf.{ AccountSerializer, SessionSerializer }
 import org.beangle.security.realm.ldap.{ DefaultCredentialsChecker, PoolingContextSource, SimpleLdapUserStore }
+import org.beangle.security.session.DefaultSession
 import org.beangle.security.session.jdbc.DBSessionRegistry
 import org.beangle.security.web.{ UrlEntryPoint, WebSecurityManager }
 import org.beangle.security.web.access.{ DefaultAccessDeniedHandler, SecurityInterceptor }
+import org.beangle.serializer.protobuf.ProtobufSerializer
 import org.openurp.platform.api.Urp
 import org.openurp.platform.api.app.UrpApp
 import org.openurp.platform.api.security.DefaultUrpSessionIdPolicy
@@ -108,8 +111,12 @@ class SessionModule extends BindModule {
       .property("name", "session")
       .property("url", UrpApp.getUrpAppFile.get.getAbsolutePath)
 
+    val protobuf = new ProtobufSerializer
+    protobuf.register(classOf[DefaultSession], SessionSerializer)
+    protobuf.register(classOf[DefaultAccount], AccountSerializer)
+
     bind("security.SessionRegistry.db", classOf[DBSessionRegistry])
-      .constructor(ref("DataSource.session"), ref("cache.Caffeine"))
+      .constructor(ref("DataSource.session"), ref("cache.Caffeine"), protobuf)
       .property("sessionTable", "session.session_infoes")
 
     bind("security.SessionIdPolicy.urp", classOf[DefaultUrpSessionIdPolicy])
