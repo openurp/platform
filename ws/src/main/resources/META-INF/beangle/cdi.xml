@@ -4,6 +4,8 @@
     <module class="org.openurp.platform.ws.DefaultModule"/>
   </container>
   <container>
+    <module class="org.beangle.serializer.text.DefaultModule"/>
+    <module class="org.beangle.serializer.json.DefaultModule"/>
     <module class="org.openurp.platform.ws.DaoModule"/>
     <module class="org.openurp.platform.security.service.DefaultModule"/>
     <module class="org.openurp.platform.user.service.DefaultModule"/>
