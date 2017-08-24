@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.openurp.platform.core</groupId>
     <artifactId>openurp-platform-core-parent</artifactId>
-    <version>0.0.22</version>
+    <version>0.0.23</version>
   </parent>
   <groupId>org.openurp.platform.core</groupId>
   <artifactId>openurp-platform-core-ids</artifactId>
@@ -33,6 +33,10 @@
     <dependency>
       <groupId>org.beangle.security</groupId>
       <artifactId>beangle-security-session_2.12</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.beangle.security</groupId>
+      <artifactId>beangle-security-protobuf_2.12</artifactId>
     </dependency>
     <dependency>
       <groupId>org.openurp.platform.api</groupId>
