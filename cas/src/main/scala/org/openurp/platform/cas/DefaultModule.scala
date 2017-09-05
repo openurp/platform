@@ -7,7 +7,6 @@ import org.beangle.cdi.PropertySource
 import org.beangle.cdi.bind.BindModule
 import org.beangle.commons.collection.Collections
 import org.beangle.ids.cas.id.impl.DefaultServiceTicketIdGenerator
-import org.beangle.ids.cas.service.DaoCredentialsChecker
 import org.beangle.ids.cas.ticket.{ DefaultTicketCacheService, DefaultTicketRegistry }
 import org.beangle.security.authz.PublicAuthorizer
 import org.beangle.security.web.{ UrlEntryPoint, WebSecurityManager }

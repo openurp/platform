@@ -7,10 +7,11 @@ import org.beangle.security.realm.ldap.LdapUserStore
 
 import javax.sql.DataSource
 
-class DBLdapCredentialsChecker(dataSource: DataSource, passwordSql: String) extends CredentialsChecker {
+class DBLdapCredentialsChecker(dataSource: DataSource) extends CredentialsChecker {
   private val executor = new JdbcExecutor(dataSource)
 
-  //"select password from usr.users where code = ?"
+  var passwordSql: String = "select password from usr.users where code = ?"
+
   var ldapUserStore: LdapUserStore = _
   override def check(principal: Any, credential: Any): Boolean = {
     val passwords = executor.query(passwordSql, principal)
