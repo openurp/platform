@@ -10,7 +10,7 @@
   <groupId>org.openurp.platform</groupId>
   <artifactId>openurp-platform-admin_2.12</artifactId>
   <packaging>jar</packaging>
-  <name>OpenURP Platform Webapp</name>
+  <name>OpenURP Platform Admin</name>
 
   <properties>
     <bundle.symbolicName>org.openurp.platform.webapp</bundle.symbolicName>

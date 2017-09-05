@@ -21,10 +21,10 @@ import org.beangle.security.session.jdbc.DBSessionRegistry
 import org.beangle.security.web.{ UrlEntryPoint, WebSecurityManager }
 import org.beangle.security.web.access.{ DefaultAccessDeniedHandler, SecurityInterceptor }
 import org.beangle.serializer.protobuf.ProtobufSerializer
-import org.openurp.platform.api.Urp
-import org.openurp.platform.api.app.UrpApp
-import org.openurp.platform.api.security.DefaultUrpSessionIdPolicy
-import org.openurp.platform.user.service.impl.DaoUserStore
+import org.openurp.app.UrpApp
+import org.openurp.app.Urp
+import org.openurp.platform.cas.service.DaoAccountStore
+import org.openurp.platform.cas.service.DefaultUrpSessionIdPolicy
 
 /**
  * @author chaostone
@@ -95,7 +95,7 @@ class DaoRealmModule extends BindModule {
       .property("url", UrpApp.getUrpAppFile.get.getAbsolutePath).primary()
 
     bind("security.Realm.default", classOf[DefaultAccountRealm])
-      .constructor(bean(classOf[DaoUserStore]), ref("security.CredentialsChecker.default"))
+      .constructor(bean(classOf[DaoAccountStore]), ref("security.CredentialsChecker.default"))
     bind("security.Authenticator", classOf[RealmAuthenticator])
       .constructor(List(ref("security.Realm.default")))
   }

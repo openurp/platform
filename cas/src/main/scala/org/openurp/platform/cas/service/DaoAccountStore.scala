@@ -1,5 +1,4 @@
-
-package org.openurp.platform.user.service.impl
+package org.openurp.platform.cas.service
 
 import org.beangle.commons.collection.Collections
 import org.beangle.data.dao.{ EntityDao, OqlBuilder }
@@ -7,7 +6,7 @@ import org.beangle.security.authc.{ Account, AccountStore, DefaultAccount }
 import org.openurp.platform.user.model.{ RoleMember, UserProfile }
 import org.openurp.platform.user.service.UserService
 
-class DaoUserStore(userService: UserService, entityDao: EntityDao) extends AccountStore {
+class DaoAccountStore(userService: UserService, entityDao: EntityDao) extends AccountStore {
 
   def load(principal: Any): Option[Account] = {
 
@@ -28,12 +27,19 @@ class DaoUserStore(userService: UserService, entityDao: EntityDao) extends Accou
 
         val ups = entityDao.search(OqlBuilder.from(classOf[UserProfile], "up").where("up.user=:user", user))
         if (!ups.isEmpty) {
-          val profiles = Collections.newBuffer[String]
-          ups foreach { up =>
-            val ps = up.properties map (e => e._1.name + ":" + e._2)
-            profiles += ps.mkString(",")
+          val domainUps = ups.groupBy(up => up.domain)
+          domainUps foreach {
+            case (domain, dups) =>
+              val str = new StringBuilder
+              str += '['
+              val profiles = Collections.newBuffer[String]
+              dups foreach { up =>
+                val ps = up.properties map (e => e._1.name + ":" + e._2)
+                profiles += ps.mkString(",")
+              }
+              str += ']'
+              account.details += "profiles_" + domain.name -> str.toString
           }
-          account.details += "profiles" -> ("[" + profiles.mkString(",") + "]")
         }
 
         Some(account)
