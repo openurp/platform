@@ -9,6 +9,11 @@ object DefaultMapping extends MappingModule {
     defaultIdGenerator("auto_increment")
     defaultCache("openurp.platform.security", "read-write")
 
+    bind[Org].on(e => declare(
+      e.code is (length(50), unique),
+      e.name is length(100),
+      e.wwwUrl & e.logoUrl are length(200)))
+
     bind[App].on(e => declare(
       e.getName is (length(100), unique),
       e.title is length(100),
