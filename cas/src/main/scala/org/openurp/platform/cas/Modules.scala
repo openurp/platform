@@ -1,4 +1,4 @@
-package org.openurp.platform.ids.cas
+package org.openurp.platform.cas
 
 import java.io.FileInputStream
 
@@ -25,6 +25,7 @@ import org.openurp.app.UrpApp
 import org.openurp.app.Urp
 import org.openurp.platform.cas.service.DaoAccountStore
 import org.openurp.platform.cas.service.DefaultUrpSessionIdPolicy
+import org.beangle.ids.cas.service.DaoCredentialsChecker
 
 /**
  * @author chaostone
@@ -75,7 +76,7 @@ class TicketModule extends BindModule {
 class DbCredentialsModule extends BindModule {
   override def binding() {
     bind("security.CredentialsChecker.default", classOf[DaoCredentialsChecker])
-      .constructor(ref("DataSource.security"))
+      .constructor(ref("DataSource.security"), "select password from usr.users where code=?")
   }
 }
 
@@ -112,7 +113,7 @@ class SessionModule extends BindModule {
     protobuf.register(classOf[DefaultSession], SessionSerializer)
     protobuf.register(classOf[DefaultAccount], AccountSerializer)
 
-    bind("Serializer.protobuf",protobuf)
+    bind("Serializer.protobuf", protobuf)
     bind("security.SessionRegistry.db", classOf[DBSessionRegistry])
       .constructor(ref("DataSource.session"), ref("cache.Caffeine"), protobuf)
       .property("sessionTable", "session.session_infoes")

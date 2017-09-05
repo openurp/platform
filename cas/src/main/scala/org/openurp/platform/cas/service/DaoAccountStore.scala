@@ -35,7 +35,7 @@ class DaoAccountStore(userService: UserService, entityDao: EntityDao) extends Ac
               val profiles = Collections.newBuffer[String]
               dups foreach { up =>
                 val ps = up.properties map (e => e._1.name + ":" + e._2)
-                profiles += ps.mkString(",")
+                profiles += "{" + ps.mkString(",") + "}"
               }
               str += ']'
               account.details += "profiles_" + domain.name -> str.toString
