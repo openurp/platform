@@ -104,7 +104,6 @@ class DaoRealmModule extends BindModule {
 class SessionModule extends BindModule {
   override def binding() {
     bind("cache.Caffeine", classOf[CaffeineCacheManager]).constructor(true)
-    //.constructor("ehcache-session", false)
     bind("DataSource.session", classOf[DataSourceFactory])
       .property("name", "session")
       .property("url", UrpApp.getUrpAppFile.get.getAbsolutePath)

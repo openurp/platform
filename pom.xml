@@ -13,42 +13,30 @@
   <name>OpenURP Platform Parent</name>
 
   <modules>
-    <module>api</module>
     <module>core</module>
     <module>ws</module>
-    <module>webapp</module>
+    <module>admin</module>
   </modules>
+
+  <properties>
+    <app.version>0.0.1</app.version>
+  </properties>
 
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>org.openurp.platform.api</groupId>
-        <artifactId>openurp-platform-api-core</artifactId>
-        <version>${project.version}</version>
+        <groupId>org.openurp.app</groupId>
+        <artifactId>openurp-app-api_2.12</artifactId>
+        <version>${app.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.openurp.platform.api</groupId>
-        <artifactId>openurp-platform-api-datasource</artifactId>
-        <version>${project.version}</version>
+        <groupId>org.openurp.app</groupId>
+        <artifactId>openurp-app-cas_2.12</artifactId>
+        <version>${app.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.openurp.platform.api</groupId>
-        <artifactId>openurp-platform-api-cas</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.openurp.platform.core</groupId>
-        <artifactId>openurp-platform-core-config</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.openurp.platform.core</groupId>
-        <artifactId>openurp-platform-core-user</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.openurp.platform.core</groupId>
-        <artifactId>openurp-platform-core-security</artifactId>
+        <groupId>org.openurp.platform</groupId>
+        <artifactId>openurp-platform-core_2.12</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>

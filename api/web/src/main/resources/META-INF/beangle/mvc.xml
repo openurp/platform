@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<mvc>
-  <profile name="openurp" package="org.openurp.*.action">
-   <interceptors>
-      <interceptor name="web.Interceptor.hibernate"/>
-      <interceptor name="web.Interceptor.security"/>
-    </interceptors>
-  </profile>
-</mvc>
