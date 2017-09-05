@@ -1,12 +1,13 @@
-package net.openurp.sfu.platform.cas.service
+package org.openurp.platform.cas.service
 
-import org.beangle.security.authc.CredentialsChecker
-import javax.sql.DataSource
 import org.beangle.data.jdbc.query.JdbcExecutor
+import org.beangle.security.authc.CredentialsChecker
 import org.beangle.security.codec.DefaultPasswordEncoder
 import org.beangle.security.realm.ldap.LdapUserStore
 
-class DbLdapCredentialsChecker(dataSource: DataSource, passwordSql: String) extends CredentialsChecker {
+import javax.sql.DataSource
+
+class DBLdapCredentialsChecker(dataSource: DataSource, passwordSql: String) extends CredentialsChecker {
   private val executor = new JdbcExecutor(dataSource)
 
   //"select password from usr.users where code = ?"
