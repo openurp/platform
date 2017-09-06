@@ -33,7 +33,8 @@ import org.openurp.platform.cas.service.DefaultUrpSessionIdPolicy
 class SessionModule extends BindModule {
   override def binding() {
     bind("cache.Caffeine", classOf[CaffeineCacheManager]).constructor(true)
-    bind("DataSource.session", classOf[DataSourceFactory])
+    //inner usage
+    bind("DataSource.session#", classOf[DataSourceFactory])
       .property("name", "session")
       .property("url", UrpApp.getUrpAppFile.get.getAbsolutePath)
 
@@ -43,7 +44,7 @@ class SessionModule extends BindModule {
 
     bind("Serializer.protobuf", protobuf)
     bind("security.SessionRegistry.db", classOf[DBSessionRegistry])
-      .constructor(ref("DataSource.session"), ref("cache.Caffeine"), protobuf)
+      .constructor(ref("DataSource.session#"), ref("cache.Caffeine"), protobuf)
       .property("sessionTable", "session.session_infoes")
 
     bind("security.SessionIdPolicy.urp", classOf[DefaultUrpSessionIdPolicy])
