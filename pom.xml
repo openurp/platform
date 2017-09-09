@@ -4,22 +4,24 @@
   <parent>
     <groupId>org.openurp</groupId>
     <artifactId>openurp-parent</artifactId>
-    <version>0.2.2</version>
+    <version>0.2.4</version>
   </parent>
   <groupId>org.openurp.platform</groupId>
   <artifactId>openurp-platform-parent</artifactId>
-  <version>0.0.24-SNAPSHOT</version>
+  <version>0.0.24</version>
   <packaging>pom</packaging>
   <name>OpenURP Platform Parent</name>
 
   <modules>
     <module>core</module>
     <module>ws</module>
-    <module>admin</module>
+    <module>cas</module>
+    <module>web</module>
+    <module>adminapp</module>
   </modules>
 
   <properties>
-    <app.version>0.0.1</app.version>
+    <openurp.app.version>0.0.1</openurp.app.version>
   </properties>
 
   <dependencyManagement>
@@ -27,16 +29,26 @@
       <dependency>
         <groupId>org.openurp.app</groupId>
         <artifactId>openurp-app-api_2.12</artifactId>
-        <version>${app.version}</version>
+        <version>${openurp.app.version}</version>
       </dependency>
       <dependency>
         <groupId>org.openurp.app</groupId>
         <artifactId>openurp-app-cas_2.12</artifactId>
-        <version>${app.version}</version>
+        <version>${openurp.app.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.openurp.app</groupId>
+        <artifactId>openurp-app-nav</artifactId>
+        <version>${openurp.app.version}</version>
       </dependency>
       <dependency>
         <groupId>org.openurp.platform</groupId>
         <artifactId>openurp-platform-core_2.12</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.openurp.platform</groupId>
+        <artifactId>openurp-platform-web_2.12</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>

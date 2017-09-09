@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.openurp.platform</groupId>
     <artifactId>openurp-platform-parent</artifactId>
-    <version>0.0.24-SNAPSHOT</version>
+    <version>0.0.24</version>
   </parent>
 
   <groupId>org.openurp.platform</groupId>
@@ -54,7 +54,10 @@
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-ehcache</artifactId>
     </dependency>
-
+    <dependency>
+      <groupId>com.zaxxer</groupId>
+      <artifactId>HikariCP</artifactId>
+    </dependency>
   </dependencies>
 
 </project>

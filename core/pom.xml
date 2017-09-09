@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.openurp.platform</groupId>
     <artifactId>openurp-platform-parent</artifactId>
-    <version>0.0.24-SNAPSHOT</version>
+    <version>0.0.24</version>
   </parent>
 
   <groupId>org.openurp.platform</groupId>
@@ -45,10 +45,6 @@
     <dependency>
       <groupId>org.beangle.cache</groupId>
       <artifactId>beangle-cache-api_2.12</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.beangle.security</groupId>
-      <artifactId>beangle-security-web_2.12</artifactId>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>
