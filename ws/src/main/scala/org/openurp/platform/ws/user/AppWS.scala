@@ -1,3 +1,21 @@
+/*
+ * Beangle, Agile Development Scaffold and Toolkit
+ *
+ * Copyright (c) 2005-2017, Beangle Software.
+ *
+ * Beangle is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Beangle is distributed in the hope that it will be useful.
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Beangle.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.openurp.platform.ws.user
 
 import org.beangle.commons.collection.Properties
@@ -13,6 +31,7 @@ import org.beangle.webmvc.api.annotation.mapping
 import org.beangle.commons.collection.Collections
 import org.openurp.platform.security.model.FuncPermission
 import org.openurp.platform.user.model.Root
+import org.openurp.platform.config.model.AppType
 
 /**
  * @author chaostone
@@ -24,10 +43,11 @@ class AppWS(userService: UserService, entityDao: EntityDao) extends ActionSuppor
   def index(@param("userCode") userCode: String): Seq[Properties] = {
     userService.get(userCode) match {
       case Some(user) =>
-        val fpAppQuery = OqlBuilder.from[App](classOf[FuncPermission].getName, "fp").join("fp.role.members", "m")
+        val fpAppQuery = OqlBuilder.from[App](classOf[FuncPermission].getName, "fp")
+          .join("fp.role.members", "m")
           .where("m.user=:user and m.member=true", user)
           .where("fp.resource.app.enabled=true")
-          .where("fp.resource.app.appType='web-app'")
+          .where(s"fp.resource.app.appType='${AppType.Webapp}'")
           .select("distinct fp.resource.app").cacheable()
 
         val fpApps = entityDao.search(fpAppQuery)
@@ -36,7 +56,7 @@ class AppWS(userService: UserService, entityDao: EntityDao) extends ActionSuppor
         apps ++= fpApps
 
         val rootsQuery = OqlBuilder.from(classOf[Root], "root")
-          .where("root.user=:user and root.app.enabled=true and root.app.appType='web-app'", user)
+          .where(s"root.user=:user and root.app.enabled=true and root.app.appType='${AppType.Webapp}'", user)
           .cacheable()
         val roots = entityDao.search(rootsQuery)
         apps ++= (roots.map(a => a.app))

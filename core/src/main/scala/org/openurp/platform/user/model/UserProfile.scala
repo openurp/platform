@@ -1,0 +1,32 @@
+/*
+ * Beangle, Agile Development Scaffold and Toolkit
+ *
+ * Copyright (c) 2005-2017, Beangle Software.
+ *
+ * Beangle is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Beangle is distributed in the hope that it will be useful.
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Beangle.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package org.openurp.platform.user.model
+
+import org.beangle.commons.collection.Collections
+import org.beangle.data.model.LongId
+import org.openurp.platform.config.model.Domain
+
+/**
+ * 用户在某个App上的配置
+ */
+class UserProfile extends LongId with Profile {
+  var user: User = _
+  var domain: Domain = _
+  var properties = Collections.newMap[Dimension, String]
+}

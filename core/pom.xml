@@ -4,23 +4,52 @@
   <parent>
     <groupId>org.openurp.platform</groupId>
     <artifactId>openurp-platform-parent</artifactId>
-    <version>0.0.23</version>
+    <version>0.0.24</version>
   </parent>
 
-  <groupId>org.openurp.platform.core</groupId>
-  <artifactId>openurp-platform-core-parent</artifactId>
-  <packaging>pom</packaging>
-  <name>OpenURP Platform Core Parent</name>
+  <groupId>org.openurp.platform</groupId>
+  <artifactId>openurp-platform-core_2.12</artifactId>
+  <packaging>jar</packaging>
+  <name>OpenURP Platform Core</name>
 
   <properties>
     <bundle.symbolicName>org.openurp.platform.core</bundle.symbolicName>
     <bundle.namespace>org.openurp</bundle.namespace>
   </properties>
 
-  <modules>
-    <module>config</module>
-    <module>user</module>
-    <module>security</module>
-    <module>ids</module>
-  </modules>
+  <dependencies>
+    <dependency>
+      <groupId>org.openurp.app</groupId>
+      <artifactId>openurp-app-api_2.12</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.beangle.commons</groupId>
+      <artifactId>beangle-commons-web_2.12</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.beangle.cdi</groupId>
+      <artifactId>beangle-cdi-api_2.12</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.beangle.data</groupId>
+      <artifactId>beangle-data-model_2.12</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.beangle.data</groupId>
+      <artifactId>beangle-data-orm_2.12</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.beangle.data</groupId>
+      <artifactId>beangle-data-jdbc_2.12</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.beangle.cache</groupId>
+      <artifactId>beangle-cache-api_2.12</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+    </dependency>
+  </dependencies>
+
 </project>
