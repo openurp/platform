@@ -16,7 +16,8 @@
     <module>core</module>
     <module>ws</module>
     <module>cas</module>
-    <module>admin</module>
+    <module>web</module>
+    <module>adminapp</module>
   </modules>
 
   <properties>
@@ -36,8 +37,18 @@
         <version>${openurp.app.version}</version>
       </dependency>
       <dependency>
+        <groupId>org.openurp.app</groupId>
+        <artifactId>openurp-app-nav</artifactId>
+        <version>${openurp.app.version}</version>
+      </dependency>
+      <dependency>
         <groupId>org.openurp.platform</groupId>
         <artifactId>openurp-platform-core_2.12</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.openurp.platform</groupId>
+        <artifactId>openurp-platform-web_2.12</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>

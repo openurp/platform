@@ -29,7 +29,7 @@ object DefaultMapping extends MappingModule {
 
     bind[Org].on(e => declare(
       e.code is (length(50), unique),
-      e.name is length(100),
+      e.name & e.shortName are length(100),
       e.wwwUrl & e.logoUrl are length(200)))
 
     bind[App].on(e => declare(

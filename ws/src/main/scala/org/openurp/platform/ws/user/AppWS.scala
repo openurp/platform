@@ -31,6 +31,7 @@ import org.beangle.webmvc.api.annotation.mapping
 import org.beangle.commons.collection.Collections
 import org.openurp.platform.security.model.FuncPermission
 import org.openurp.platform.user.model.Root
+import org.openurp.platform.config.model.AppType
 
 /**
  * @author chaostone
@@ -42,10 +43,11 @@ class AppWS(userService: UserService, entityDao: EntityDao) extends ActionSuppor
   def index(@param("userCode") userCode: String): Seq[Properties] = {
     userService.get(userCode) match {
       case Some(user) =>
-        val fpAppQuery = OqlBuilder.from[App](classOf[FuncPermission].getName, "fp").join("fp.role.members", "m")
+        val fpAppQuery = OqlBuilder.from[App](classOf[FuncPermission].getName, "fp")
+          .join("fp.role.members", "m")
           .where("m.user=:user and m.member=true", user)
           .where("fp.resource.app.enabled=true")
-          .where("fp.resource.app.appType='web-app'")
+          .where(s"fp.resource.app.appType='${AppType.Webapp}'")
           .select("distinct fp.resource.app").cacheable()
 
         val fpApps = entityDao.search(fpAppQuery)
@@ -54,7 +56,7 @@ class AppWS(userService: UserService, entityDao: EntityDao) extends ActionSuppor
         apps ++= fpApps
 
         val rootsQuery = OqlBuilder.from(classOf[Root], "root")
-          .where("root.user=:user and root.app.enabled=true and root.app.appType='web-app'", user)
+          .where(s"root.user=:user and root.app.enabled=true and root.app.appType='${AppType.Webapp}'", user)
           .cacheable()
         val roots = entityDao.search(rootsQuery)
         apps ++= (roots.map(a => a.app))

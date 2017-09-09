@@ -24,6 +24,7 @@ import org.beangle.data.model.pojo.{ Named, Remark }
 class Org extends IntId with Named with Remark {
 
   var code: String = _
+  var shortName: String = _
   var logoUrl: String = _
   var wwwUrl: String = _
 

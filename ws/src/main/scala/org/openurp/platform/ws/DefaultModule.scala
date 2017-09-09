@@ -27,11 +27,12 @@ import org.openurp.platform.ws.user.AppWS
 import org.openurp.platform.ws.user.RootWS
 import org.openurp.platform.ws.user.{ AccountWS, DimensionWS, ProfileWS }
 import org.openurp.platform.ws.security.{ func, data }
+import org.openurp.platform.ws.config.OrgWS
 
 class DefaultModule extends BindModule {
 
   protected override def binding() {
-    bind(classOf[DatasourceWS])
+    bind(classOf[DatasourceWS], classOf[OrgWS])
     bind(classOf[TokenWS])
 
     bind(classOf[func.MenuWS])

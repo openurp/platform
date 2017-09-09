@@ -58,7 +58,7 @@ class DaoAccountStore(userService: UserService, entityDao: EntityDao, sf: Sessio
                 str += '['
                 val profiles = Collections.newBuffer[String]
                 dups foreach { up =>
-                  val ps = up.properties map (e => e._1.name + ":'" + e._2 + "'")
+                  val ps = up.properties map (e => s""""${e._1.name}":"${e._2}"""")
                   profiles += "{" + ps.mkString(",") + "}"
                 }
                 str ++= profiles.mkString(",")
