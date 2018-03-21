@@ -21,7 +21,7 @@
   </modules>
 
   <properties>
-    <openurp.app.version>0.0.1</openurp.app.version>
+    <openurp.app.version>0.0.3</openurp.app.version>
   </properties>
 
   <dependencyManagement>
