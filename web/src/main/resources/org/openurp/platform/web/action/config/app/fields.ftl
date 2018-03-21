@@ -50,7 +50,7 @@
     var h = 600;   //高度
     var t = (screen.height-h)/2; //离顶部距离
     var l = (screen.width-w)/2; //离左边距离
-    window.open("${b.url('!datasource')}","","top="+t+",left="+l+",height="+h+", width="+w+", modal=yes, titlebar=no, toolbar=no, menubar=no, scrollbars=yes, resizable=no,fullscreen=1, location=no,status=no");  
+    window.open("${b.url('!datasource')}","","top="+t+",left="+l+",height="+h+", width="+w+", modal=yes, titlebar=no, toolbar=no, menubar=no, scrollbars=yes, resizable=no,fullscreen=1, location=no,status=no");
     return false;
   });
   function addDataSource(datas){
@@ -73,7 +73,7 @@
     $(this).parent().parent().fadeOut(function (){$(this).remove()});
     return false;
   });
-  
+
   function beforeSubmit(){
     var allNumber = true;
     $(".maxActive").each(function (){
