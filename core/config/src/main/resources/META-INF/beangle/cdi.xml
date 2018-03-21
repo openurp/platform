@@ -1,6 +1,0 @@
-<?xml version="1.0"?>
-<cdi>
-  <container>
-    <module class="org.openurp.platform.config.service.DefaultModule"/>
-  </container>
-</cdi>
