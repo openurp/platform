@@ -21,9 +21,9 @@ package org.openurp.platform.cas
 import java.io.FileInputStream
 
 import org.beangle.cdi.bind.BindModule
+import org.beangle.ids.cas.service.DBLdapCredentialsChecker
 import org.beangle.security.realm.ldap.{ PoolingContextSource, SimpleLdapUserStore }
 import org.openurp.app.UrpApp
-import org.openurp.platform.cas.service.DBLdapCredentialsChecker
 
 class DBLdapCredentialsModule extends BindModule {
   override def binding() {
@@ -38,7 +38,9 @@ class DBLdapCredentialsModule extends BindModule {
       }
       is.close()
     }
+
     bind("security.CredentialsChecker.default", classOf[DBLdapCredentialsChecker])
       .constructor(ref("DataSource.security"))
+      .property("passwordSql", "select password from usr.users where code = ?")
   }
 }
