@@ -23,9 +23,10 @@ import org.beangle.cdi.bind.BindModule
 import org.beangle.commons.lang.Strings
 import org.beangle.data.jdbc.ds.DataSourceFactory
 import org.beangle.security.authc.DefaultAccount
-import org.beangle.security.protobuf.{ AccountSerializer, SessionSerializer }
+import org.beangle.security.session.Session
 import org.beangle.security.session.DefaultSession
 import org.beangle.security.session.jdbc.DBSessionRegistry
+import org.beangle.security.session.protobuf.{ AccountSerializer, AgentSerializer, SessionSerializer }
 import org.beangle.serializer.protobuf.ProtobufSerializer
 import org.openurp.app.{ Urp, UrpApp }
 import org.openurp.platform.cas.service.DefaultUrpSessionIdPolicy
@@ -41,6 +42,7 @@ class SessionModule extends BindModule {
     val protobuf = new ProtobufSerializer
     protobuf.register(classOf[DefaultSession], SessionSerializer)
     protobuf.register(classOf[DefaultAccount], AccountSerializer)
+    protobuf.register(classOf[Session.Agent], AgentSerializer)
 
     bind("Serializer.protobuf", protobuf)
     bind("security.SessionRegistry.db", classOf[DBSessionRegistry])

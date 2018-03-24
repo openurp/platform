@@ -22,10 +22,10 @@ import java.time.Instant
 
 import org.beangle.data.dao.OqlBuilder
 import org.beangle.data.model.util.Hierarchicals
+import org.beangle.security.Securities
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.app.UrpApp
-import org.openurp.app.security.Securities
 import org.openurp.platform.config.model.App
 import org.openurp.platform.security.service.ProfileService
 import org.openurp.platform.user.model.{ Role, User }

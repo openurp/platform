@@ -30,7 +30,7 @@ import org.openurp.platform.user.service.UserService
 import org.openurp.platform.user.service.DataResolver
 import org.openurp.platform.security.service.ProfileService
 import org.openurp.platform.config.model.Domain
-import org.openurp.app.security.Securities
+import org.beangle.security.Securities
 
 /**
  * @author chaostone

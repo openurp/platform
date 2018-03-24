@@ -24,10 +24,10 @@ import org.beangle.commons.lang.Strings
 import org.beangle.data.dao.{ Condition, OqlBuilder }
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
-import org.openurp.app.security.Securities
 import org.openurp.platform.user.model.{ User, UserCategory }
 import org.openurp.platform.user.service.UserService
 import org.beangle.security.codec.DefaultPasswordEncoder
+import org.beangle.security.Securities
 
 /**
  * 用户管理响应处理类

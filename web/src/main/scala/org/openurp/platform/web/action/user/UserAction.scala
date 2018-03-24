@@ -23,11 +23,11 @@ import java.time.Instant
 import org.beangle.commons.collection.{ Collections, Order }
 import org.beangle.commons.lang.Strings
 import org.beangle.data.dao.{ Condition, Operation, OqlBuilder }
+import org.beangle.security.Securities
 import org.beangle.webmvc.api.context.Params
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.app.UrpApp
-import org.openurp.app.security.Securities
 import org.openurp.platform.user.model.{ MemberShip, Role, RoleMember, User }
 import org.openurp.platform.user.service.UserService
 import org.openurp.platform.web.helper.UserDashboardHelper

@@ -22,12 +22,12 @@ import org.beangle.commons.bean.Properties
 import org.beangle.commons.lang.Strings
 import org.beangle.data.dao.{ EntityDao, OqlBuilder }
 import org.beangle.webmvc.api.context.{ ActionContext, Params }
-import org.openurp.app.security.Securities
 import org.openurp.platform.config.model.Domain
 import org.openurp.platform.security.service.ProfileService
 import org.openurp.platform.user.model.{ Dimension, Profile, User, UserProfile }
 import org.openurp.platform.user.service.DataResolver
 import org.openurp.platform.user.service.impl.CsvDataResolver
+import org.beangle.security.Securities
 
 class ProfileHelper(entityDao: EntityDao, profileService: ProfileService) {
   var dataResolver: DataResolver = CsvDataResolver

@@ -25,7 +25,6 @@ import org.beangle.webmvc.api.context.ActionContext
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.app.UrpApp
-import org.openurp.app.security.Securities
 import org.openurp.platform.config.model.App
 import org.openurp.platform.config.service.AppService
 import org.openurp.platform.security.model.{ FuncPermission, FuncResource, Menu }
@@ -33,6 +32,7 @@ import org.openurp.platform.security.service.{ FuncPermissionService, MenuServic
 import org.openurp.platform.user.model.{ Role, User }
 import org.openurp.platform.user.service.UserService
 import org.openurp.platform.web.helper.AppHelper
+import org.beangle.security.Securities
 
 /**
  * 权限分配与管理响应类

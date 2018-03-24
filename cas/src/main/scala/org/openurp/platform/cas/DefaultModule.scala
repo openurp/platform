@@ -30,6 +30,7 @@ import org.beangle.security.authz.PublicAuthorizer
 import org.beangle.security.web.{ UrlEntryPoint, WebSecurityManager }
 import org.beangle.security.web.access.{ DefaultAccessDeniedHandler, SecurityInterceptor }
 import org.openurp.app.UrpApp
+import org.beangle.security.web.access.DefaultSecurityContextBuilder
 
 /**
  * @author chaostone
@@ -44,6 +45,7 @@ class DefaultModule extends BindModule with PropertySource {
     bind("web.Interceptor.security", classOf[SecurityInterceptor])
     //authorizer and manager
     bind("security.SecurityManager.default", classOf[WebSecurityManager])
+    bind(classOf[DefaultSecurityContextBuilder])
     bind("security.Authorizer.public", PublicAuthorizer)
   }
 
