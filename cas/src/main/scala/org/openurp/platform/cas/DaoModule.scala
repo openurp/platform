@@ -1,20 +1,20 @@
 /*
- * Beangle, Agile Development Scaffold and Toolkit
+ * OpenURP, Agile University Resource Planning Solution.
  *
- * Copyright (c) 2005-2017, Beangle Software.
+ * Copyright © 2005, The OpenURP Software.
  *
- * Beangle is free software: you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Beangle is distributed in the hope that it will be useful.
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with Beangle.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.openurp.platform.cas
 
@@ -37,7 +37,7 @@ object DaoModule extends BindModule {
         "hibernate.jdbc.fetch_size=8", "hibernate.jdbc.batch_size=20",
         "hibernate.jdbc.batch_versioned_data=true", "hibernate.jdbc.use_streams_for_binary=true",
         "hibernate.jdbc.use_get_generated_keys=true",
-        "hibernate.cache.region.factory_class=org.hibernate.cache.EhCacheRegionFactory",
+        "hibernate.cache.region.factory_class=org.hibernate.cache.ehcache.EhCacheRegionFactory",
         "hibernate.cache.use_second_level_cache=true", "hibernate.cache.use_query_cache=true",
         "hibernate.query.substitutions=true 1, false 0, yes 'Y', no 'N'", "hibernate.show_sql=" + this.devEnabled))
       .description("Hibernate配置信息").nowire("propertiesArray")

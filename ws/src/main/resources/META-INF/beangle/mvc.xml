@@ -8,7 +8,7 @@
       <interceptor name="web.Interceptor.cors"/>
     </interceptors>
   </profile>
-  
+
   <profile name="openurp-platform-ws-security-func" package="org.openurp.platform.ws.security.func">
    <action suffix="WS" defaultMethod="index"/>
    <url path="/security/func/{app}/" suffix="" style="plur-seo" />
@@ -26,5 +26,5 @@
       <interceptor name="web.Interceptor.cors"/>
     </interceptors>
   </profile>
-  
+
 </mvc>

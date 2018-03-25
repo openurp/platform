@@ -9,7 +9,7 @@
   <legend>[@b.a href="!edit?id=" + profile.id]修改[/@] [@b.a href="!remove?profile.id=" + profile.id]删除[/@]</legend>
   [#list profile.properties?keys as field]
   <li>${field.title}</li>
-    
+
     [#if profile.properties.get(field)??]
     [#if field.multiple && field.properties?? && profile.properties.get(field)!='*']
     [#list fieldMaps[profile.id?string][field.name]! as value][#list field.properties?split(",") as pName]${value[pName]!} [/#list][#if value_has_next],[/#if][/#list]

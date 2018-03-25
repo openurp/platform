@@ -15,4 +15,3 @@
     [@b.col width="8%" property="restrictions" title="其他约束" /]
   [/@]
 [/@]
-  

@@ -9,7 +9,7 @@
 [@b.tabs id="userinfotabs"]
   [@b.tab label="user.members"]
   [@b.form name="userForm" action="!save" class="listform" theme="list" onsubmit="return validateMembers()"]
-  
+
     [@b.grid  items=roles?sort_by("indexno") var="role" sortable="false"]
       [@b.row]
         <tr [#if role??]id="${role.indexno}"[/#if]>

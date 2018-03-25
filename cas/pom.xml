@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.openurp.platform</groupId>
     <artifactId>openurp-platform-parent</artifactId>
-    <version>0.0.24</version>
+    <version>0.0.25</version>
   </parent>
   <groupId>org.openurp.platform</groupId>
   <artifactId>openurp-platform-cas_2.12</artifactId>
@@ -35,12 +35,12 @@
       <artifactId>beangle-security-session_2.12</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.beangle.security</groupId>
-      <artifactId>beangle-security-protobuf_2.12</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.beangle.data</groupId>
       <artifactId>beangle-data-hibernate_2.12</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-ehcache</artifactId>
     </dependency>
     <dependency>
       <groupId>org.openurp.app</groupId>
