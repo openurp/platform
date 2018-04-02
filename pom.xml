@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.openurp</groupId>
     <artifactId>openurp-parent</artifactId>
-    <version>0.2.10</version>
+    <version>0.2.11-SNAPSHOT</version>
   </parent>
   <groupId>org.openurp.platform</groupId>
   <artifactId>openurp-platform-parent</artifactId>
@@ -21,7 +21,7 @@
   </modules>
 
   <properties>
-    <openurp.app.version>0.0.4</openurp.app.version>
+    <openurp.app.version>0.0.5-SNAPSHOT</openurp.app.version>
   </properties>
 
   <dependencyManagement>
