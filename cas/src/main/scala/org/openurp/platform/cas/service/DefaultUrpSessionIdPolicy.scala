@@ -18,16 +18,29 @@
  */
 package org.openurp.platform.cas.service
 
+import org.beangle.commons.lang.Strings
+import org.beangle.ids.cas.id.impl.DefaultIdGenerator
 import org.beangle.security.web.session.CookieSessionIdPolicy
+import org.openurp.app.Urp
 
 import javax.servlet.http.HttpServletRequest
-import org.beangle.ids.cas.id.impl.DefaultIdGenerator
 
 /**
  * @author chaostone
  */
 class DefaultUrpSessionIdPolicy extends CookieSessionIdPolicy("URP_SID") {
   private val sessionIdGenerator = new DefaultIdGenerator("URP-", 35)
+
+  this.domain = makeDomain()
+
+  private def makeDomain(): String = {
+    var base = Strings.substringAfter(Urp.base, "//")
+    //remove port
+    if (base.contains(":")) {
+      base = Strings.substringBefore(base, ":")
+    }
+    base
+  }
 
   protected override def generateId(request: HttpServletRequest): String = {
     sessionIdGenerator.nextid()

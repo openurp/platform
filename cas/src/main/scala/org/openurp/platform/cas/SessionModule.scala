@@ -45,6 +45,6 @@ class SessionModule extends BindModule {
       .property("sessionTable", "session.session_infoes")
 
     bind("security.SessionIdPolicy.urp", classOf[DefaultUrpSessionIdPolicy])
-      .property("path", "/").property("domain", Strings.substringAfter(Urp.base, "//"))
+      .property("path", "/")
   }
 }
