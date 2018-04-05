@@ -4,12 +4,12 @@
   <parent>
     <groupId>org.openurp.platform</groupId>
     <artifactId>openurp-platform-parent</artifactId>
-    <version>0.0.27-SNAPSHOT</version>
+    <version>0.1.0-SNAPSHOT</version>
   </parent>
 
   <groupId>org.openurp.platform</groupId>
   <artifactId>openurp-platform-ws_2.12</artifactId>
-  <packaging>war</packaging>
+  <packaging>jar</packaging>
   <name>OpenURP Platform Web Service</name>
 
   <properties>

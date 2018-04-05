@@ -31,6 +31,7 @@ import org.beangle.security.web.{ UrlEntryPoint, WebSecurityManager }
 import org.beangle.security.web.access.{ DefaultAccessDeniedHandler, SecurityInterceptor }
 import org.openurp.app.UrpApp
 import org.beangle.security.web.access.DefaultSecurityContextBuilder
+import org.openurp.app.security.RemoteAuthorizer
 
 /**
  * @author chaostone
@@ -39,14 +40,14 @@ class DefaultModule extends BindModule with PropertySource {
 
   override def binding() {
     // entry point
-    bind("security.EntryPoint.url", classOf[UrlEntryPoint]).constructor("/login").primary()
+    bind("security.EntryPoint.url", classOf[UrlEntryPoint]).constructor("/cas/login").primary()
     //interceptor
     bind("security.AccessDeniedHandler.default", classOf[DefaultAccessDeniedHandler]).constructor($("security.access.errorPage", "/403.html"))
     bind("web.Interceptor.security", classOf[SecurityInterceptor])
     //authorizer and manager
     bind("security.SecurityManager.default", classOf[WebSecurityManager])
     bind(classOf[DefaultSecurityContextBuilder])
-    bind("security.Authorizer.public", PublicAuthorizer)
+    bind("security.Authorizer.remote", classOf[RemoteAuthorizer]).property("publics", List("/cas/", "/portal/"))
   }
 
   override def properties: collection.Map[String, String] = {

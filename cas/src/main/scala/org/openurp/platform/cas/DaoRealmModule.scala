@@ -26,9 +26,6 @@ import org.openurp.platform.cas.service.DaoAccountStore
 
 class DaoRealmModule extends BindModule {
   override def binding() {
-    bind("DataSource.security", classOf[DataSourceFactory]).property("name", "security")
-      .property("url", UrpApp.getUrpAppFile.get.getAbsolutePath).primary()
-
     bind("security.Realm.default", classOf[DefaultAccountRealm])
       .constructor(bean(classOf[DaoAccountStore]), ref("security.CredentialsChecker.default"))
     bind("security.Authenticator", classOf[RealmAuthenticator])

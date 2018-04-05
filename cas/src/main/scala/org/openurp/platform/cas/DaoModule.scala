@@ -26,10 +26,15 @@ import org.springframework.beans.factory.config.PropertiesFactoryBean
 import org.springframework.transaction.interceptor.TransactionProxyFactoryBean
 import org.beangle.data.hibernate.DomainFactory
 import org.beangle.security.realm.ldap.PoolingContextSource
+import org.openurp.app.UrpApp
+import org.beangle.data.jdbc.ds.DataSourceFactory
 
 object DaoModule extends BindModule {
 
   protected override def binding(): Unit = {
+    bind("DataSource.security", classOf[DataSourceFactory]).property("name", "default")
+      .property("url", UrpApp.getUrpAppFile.get.getAbsolutePath).primary()
+
     bind("HibernateConfig.default", classOf[PropertiesFactoryBean]).property(
       "properties",
       props(
@@ -46,7 +51,6 @@ object DaoModule extends BindModule {
       .property("properties", ref("HibernateConfig.default"))
       .property("configLocations", "classpath*:META-INF/hibernate.cfg.xml")
       .property("ormLocations", "classpath*:META-INF/beangle/orm.xml")
-      .constructor(ref("DataSource.security"))
       .primary
 
     bind("HibernateTransactionManager.default", classOf[HibernateTransactionManager]).primary

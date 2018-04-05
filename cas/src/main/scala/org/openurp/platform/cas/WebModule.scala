@@ -27,6 +27,6 @@ class WebModule extends BindModule {
     bind(classOf[ServiceValidateAction])
     bind(classOf[LogoutAction])
     bind(classOf[SessionAction])
-    bind(classOf[SessionsAction]).constructor(ref("DataSource.security"))
+    bind(classOf[SessionsAction])
   }
 }
