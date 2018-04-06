@@ -23,6 +23,7 @@ import org.openurp.platform.web.action.security.{ DashboardAction, DataPermissio
 import org.openurp.platform.web.action.user.{ AccountAction, DimensionAction, RoleAction, UserAction, ProfileAction }
 import org.beangle.cache.concurrent.ConcurrentMapCacheManager
 import org.openurp.platform.web.helper.UserDashboardHelper
+import org.openurp.platform.web.action.IndexAction
 
 class SecurityModule extends BindModule {
 
@@ -32,6 +33,8 @@ class SecurityModule extends BindModule {
     bind(classOf[FuncResourceAction], classOf[MenuAction])
     bind(classOf[DataPermissionAction])
     bind(classOf[DataResourceAction])
+
+    bind(classOf[IndexAction])
 
     bind("userDashboardHelper", classOf[UserDashboardHelper])
   }

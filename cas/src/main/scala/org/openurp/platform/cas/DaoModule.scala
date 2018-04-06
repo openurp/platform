@@ -19,21 +19,17 @@
 package org.openurp.platform.cas
 
 import org.beangle.cdi.bind.BindModule
-import org.beangle.data.hibernate.HibernateEntityDao
+import org.beangle.data.hibernate.{ DomainFactory, HibernateEntityDao }
 import org.beangle.data.hibernate.spring.{ HibernateTransactionManager, LocalSessionFactoryBean }
 import org.beangle.data.hibernate.spring.web.OpenSessionInViewInterceptor
+import org.openurp.app.datasource.AppDataSourceFactory
 import org.springframework.beans.factory.config.PropertiesFactoryBean
 import org.springframework.transaction.interceptor.TransactionProxyFactoryBean
-import org.beangle.data.hibernate.DomainFactory
-import org.beangle.security.realm.ldap.PoolingContextSource
-import org.openurp.app.UrpApp
-import org.beangle.data.jdbc.ds.DataSourceFactory
 
 object DaoModule extends BindModule {
 
   protected override def binding(): Unit = {
-    bind("DataSource.security", classOf[DataSourceFactory]).property("name", "default")
-      .property("url", UrpApp.getUrpAppFile.get.getAbsolutePath).primary()
+    bind("DataSource.security", classOf[AppDataSourceFactory])
 
     bind("HibernateConfig.default", classOf[PropertiesFactoryBean]).property(
       "properties",

@@ -32,6 +32,7 @@ import org.beangle.security.web.access.{ DefaultAccessDeniedHandler, SecurityInt
 import org.openurp.app.UrpApp
 import org.beangle.security.web.access.DefaultSecurityContextBuilder
 import org.openurp.app.security.RemoteAuthorizer
+import org.beangle.security.web.access.AuthorizationFilter
 
 /**
  * @author chaostone
@@ -42,12 +43,17 @@ class DefaultModule extends BindModule with PropertySource {
     // entry point
     bind("security.EntryPoint.url", classOf[UrlEntryPoint]).constructor("/cas/login").primary()
     //interceptor
-    bind("security.AccessDeniedHandler.default", classOf[DefaultAccessDeniedHandler]).constructor($("security.access.errorPage", "/403.html"))
+    bind("security.AccessDeniedHandler.default", classOf[DefaultAccessDeniedHandler])
+      .constructor($("security.access.errorPage", "/403.html"))
+    bind("security.Filter.authorization", classOf[AuthorizationFilter])
     bind("web.Interceptor.security", classOf[SecurityInterceptor])
+      .property(
+        "filters", List(ref("security.Filter.authorization")))
     //authorizer and manager
     bind("security.SecurityManager.default", classOf[WebSecurityManager])
     bind(classOf[DefaultSecurityContextBuilder])
-    bind("security.Authorizer.remote", classOf[RemoteAuthorizer]).property("publics", List("/cas/", "/portal/"))
+
+    bind("security.Authorizer.remote", classOf[RemoteAuthorizer]).property("publics", List("/cas/"))
   }
 
   override def properties: collection.Map[String, String] = {
