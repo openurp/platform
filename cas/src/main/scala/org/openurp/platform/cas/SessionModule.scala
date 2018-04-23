@@ -41,10 +41,9 @@ class SessionModule extends BindModule {
 
     bind("Serializer.protobuf", protobuf)
     bind("security.SessionRegistry.db", classOf[DBSessionRegistry])
-      .constructor(ref("DataSource.security"), ref("cache.Caffeine"), protobuf)
+      .constructor(?, ref("cache.Caffeine"), protobuf)
       .property("sessionTable", "session.session_infoes")
 
     bind("security.SessionIdPolicy.urp", classOf[DefaultUrpSessionIdPolicy])
-      .property("path", "/")
   }
 }

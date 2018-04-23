@@ -26,8 +26,6 @@ import org.openurp.app.{ Urp, UrpApp }
 import org.openurp.app.security.RemoteService
 
 class IndexAction extends ActionSupport with ServletSupport {
-  var casConfig: CasConfig = _
-
   def index(): View = {
     put("appsJson", RemoteService.getAppsJson())
     put("menusJson", RemoteService.getMenusJson())
@@ -39,6 +37,6 @@ class IndexAction extends ActionSupport with ServletSupport {
   }
 
   def logout(): View = {
-    redirect(to(Cas.cleanup(casConfig, request, response)), null)
+    redirect(to("/cas/logout"), null)
   }
 }

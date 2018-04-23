@@ -31,15 +31,8 @@ import javax.servlet.http.HttpServletRequest
 class DefaultUrpSessionIdPolicy extends CookieSessionIdPolicy("URP_SID") {
   private val sessionIdGenerator = new DefaultIdGenerator("URP-", 35)
 
-  this.domain = makeDomain()
-
-  private def makeDomain(): String = {
-    var base = Strings.substringAfter(Urp.base, "//")
-    //remove port
-    if (base.contains(":")) {
-      base = Strings.substringBefore(base, ":")
-    }
-    base
+  override def init(): Unit = {
+    this.base = Urp.base
   }
 
   protected override def generateId(request: HttpServletRequest): String = {

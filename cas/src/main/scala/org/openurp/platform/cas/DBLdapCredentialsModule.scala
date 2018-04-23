@@ -40,7 +40,6 @@ class DBLdapCredentialsModule extends BindModule {
     }
 
     bind("security.CredentialsChecker.default", classOf[DBLdapCredentialsChecker])
-      .constructor(ref("DataSource.security"))
       .property("passwordSql", "select password from usr.users where code = ?")
   }
 }

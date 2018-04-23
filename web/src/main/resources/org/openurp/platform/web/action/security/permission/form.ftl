@@ -1,11 +1,9 @@
 [#ftl]
 [@b.head/]
 [#include "../status.ftl"/]
-<script type="text/javascript" src="${base}/static/beangle/beangle-ui-tabletree.js"></script>
-<link rel="stylesheet" href="${base}/static/beangle/css/beangle-ui-tabletree.css"/>
-[#--<script type="text/javascript">
+[<script type="text/javascript">
   bg.ui.load("tabletree");
-</script>--]
+</script>
 <script type="text/javascript">
   function getIds(){
     return(getCheckBoxValue(document.getElementsByName("menuId")));
@@ -39,7 +37,7 @@
   bar.addItem("${b.text("action.collapse")}","bg.tabletree.collapseAllRowsFor('meunPermissionTable',1);",'tree-folder-open');
   bar.addItem("${b.text("action.save")}",save,'save.png');
   function switchRole(form,roleId){
-    form.action="${base}/security/permission/{roleId}/edit".replace("{roleId}",roleId)
+    form.action="${base}/admin/security/permission/{roleId}/edit".replace("{roleId}",roleId)
     form.submit();
   }
 [/@]

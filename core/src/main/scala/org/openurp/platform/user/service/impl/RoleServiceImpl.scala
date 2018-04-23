@@ -41,8 +41,9 @@ class RoleServiceImpl extends RoleService {
 
   override def move(role: Role, parent: Role, indexno: Int): Unit = {
     val nodes =
-      if (null != parent) Hierarchicals.move(role, parent, indexno)
-      else {
+      if (null != parent) {
+        Hierarchicals.move(role, parent, indexno)
+      } else {
         val builder = OqlBuilder.from(classOf[Role], "r")
           .where("r.parent is null")
           .orderBy("r.indexno")

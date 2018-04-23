@@ -18,7 +18,6 @@
  */
 package org.openurp.platform.ws
 
-import org.beangle.cache.concurrent.ConcurrentMapCacheManager
 import org.beangle.cdi.bind.BindModule
 import org.openurp.platform.oauth.service.impl.MemTokenRepository
 import org.openurp.platform.ws.config.DatasourceWS
@@ -42,6 +41,6 @@ class DefaultModule extends BindModule {
     bind(classOf[AccountWS], classOf[AppWS], classOf[DimensionWS])
     bind(classOf[RootWS], classOf[ProfileWS])
 
-    bind(classOf[MemTokenRepository], classOf[ConcurrentMapCacheManager])
+    bind(classOf[MemTokenRepository])
   }
 }
