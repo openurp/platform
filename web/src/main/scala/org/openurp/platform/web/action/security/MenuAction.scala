@@ -83,7 +83,7 @@ class MenuAction extends RestfulAction[Menu] {
       }
     }
     entityDao.saveOrUpdate(parents)
-    super.removeAndRedirect(entities)
+    super.removeAndRedirect(List.empty[Menu])
   }
 
   @ignore

@@ -127,8 +127,9 @@ class MenuServiceImpl(val entityDao: EntityDao) extends MenuService {
 
   def move(menu: Menu, location: Menu, index: Int): Unit = {
     val nodes =
-      if (null != location) Hierarchicals.move(menu, location, index)
-      else {
+      if (null != location) {
+        Hierarchicals.move(menu, location, index)
+      } else {
         val builder = OqlBuilder.from(classOf[Menu], "m")
           .where("m.app = :app and m.parent is null", menu.app)
           .orderBy("m.indexno")

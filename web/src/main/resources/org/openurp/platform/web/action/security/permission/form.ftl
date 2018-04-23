@@ -1,11 +1,9 @@
 [#ftl]
 [@b.head/]
 [#include "../status.ftl"/]
-<script type="text/javascript" src="${base}/static/beangle/beangle-ui-tabletree.js"></script>
-<link rel="stylesheet" href="${base}/static/beangle/css/beangle-ui-tabletree.css"/>
-[#--<script type="text/javascript">
+[<script type="text/javascript">
   bg.ui.load("tabletree");
-</script>--]
+</script>
 <script type="text/javascript">
   function getIds(){
     return(getCheckBoxValue(document.getElementsByName("menuId")));
