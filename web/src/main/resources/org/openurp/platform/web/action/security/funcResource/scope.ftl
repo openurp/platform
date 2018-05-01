@@ -3,7 +3,7 @@
 [#assign scopeNames={'Public':'public','Protected':'protected','Private':'private'}/]
 [#assign scopeTitles={'Public':'公开资源,不限权限','Protected':'公有资源,需要登录即可访问','Private':'私有资源,需要权限分配'}/]
 [#macro resourceScope scope]
-<img src="${b.uitheme.iconurl('beangle','status/'+ scopeNames[scope?string] + '.png')!}"/>${scopes[scope?string]}
+<img src="${static_base + '/bui/0.0.2/icons/16x16/status/'+ scopeNames[scope?string] + '.png'}"/>${scopes[scope?string]}
 [/#macro]
 
 [#macro resourceScopeSelect scope]

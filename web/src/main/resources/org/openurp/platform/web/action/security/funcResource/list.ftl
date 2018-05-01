@@ -14,7 +14,7 @@
   [/@]
   [@b.row]
     [@b.boxcol /]
-    [@b.col  width="37%" property="name" align="left" style="padding-left:10px"title="common.name"/]
+    [@b.col  width="37%" property="name" style="text-align:left;padding-left:10px"title="common.name"/]
     [@b.col  width="28%" property="title" title="common.title"]${(resource.title)!}[/@]
     [@b.col  width="10%" property="scope" title="可见范围"][@resourceScope resource.scope/][/@]
     [@b.col  width="10%" property="enabled" title="common.status"][@enableInfo resource.enabled/][/@]

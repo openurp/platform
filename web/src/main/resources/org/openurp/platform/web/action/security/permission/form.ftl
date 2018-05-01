@@ -58,7 +58,8 @@
       [/#list]
       </select>
     </td>
-    <td><input name="displayFreezen" [#if Parameters['displayFreezen']??]checked="checked"[/#if] onclick="this.form.submit();" id="displayFreezen" type="checkbox"><label for="displayFreezen">显示冻结菜单</label></td>
+    [#assign displayFreezen=Parameters['displayFreezen']!"false"/]
+    <td><input name="displayFreezen" [#if displayFreezen='1'|| displayFreezen='on'|| displayFreezen='yes']checked="checked"[/#if] onclick="this.form.submit();" id="displayFreezen" type="checkbox"><label for="displayFreezen">显示冻结菜单</label></td>
   </tr>
 </table>
 <table width="100%" class="gridtable"  id="meunPermissionTable" >
