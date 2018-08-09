@@ -138,6 +138,7 @@ class UserAction extends RestfulAction[User] {
     for (m <- newMembers) ob.saveOrUpdate(m)
     for (m <- removedMembers) ob.remove(m)
     entityDao.execute(ob)
+    entityDao.refresh(user)
     return redirect("search", "info.save.success")
   }
 
