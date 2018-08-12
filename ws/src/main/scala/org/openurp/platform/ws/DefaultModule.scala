@@ -27,6 +27,7 @@ import org.openurp.platform.ws.user.RootWS
 import org.openurp.platform.ws.user.{ AccountWS, DimensionWS, ProfileWS }
 import org.openurp.platform.ws.security.{ func, data }
 import org.openurp.platform.ws.config.OrgWS
+import org.openurp.platform.ws.user.AvatarWS
 
 class DefaultModule extends BindModule {
 
@@ -38,7 +39,7 @@ class DefaultModule extends BindModule {
     bind(classOf[func.ResourceWS], classOf[func.PermissionWS])
     bind(classOf[data.PermissionWS], classOf[data.ResourceWS])
 
-    bind(classOf[AccountWS], classOf[AppWS], classOf[DimensionWS])
+    bind(classOf[AccountWS], classOf[AppWS], classOf[DimensionWS], classOf[AvatarWS])
     bind(classOf[RootWS], classOf[ProfileWS])
 
     bind(classOf[MemTokenRepository])

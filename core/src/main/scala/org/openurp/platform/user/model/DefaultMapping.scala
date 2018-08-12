@@ -20,6 +20,7 @@ package org.openurp.platform.user.model
 
 import scala.reflect.runtime.universe
 import org.beangle.data.orm.MappingModule
+import org.beangle.data.orm.IdGenerator
 
 object DefaultMapping extends MappingModule {
 
@@ -65,6 +66,9 @@ object DefaultMapping extends MappingModule {
       e.children is depends("parent"),
       e.members is depends("group"),
       e.properties is (eleLength(2000), cacheable)))
+
+    bind[Avatar].on(e => declare(
+      e.id is length(50))).generator(IdGenerator.Assigned)
 
     bind[Root]
 
