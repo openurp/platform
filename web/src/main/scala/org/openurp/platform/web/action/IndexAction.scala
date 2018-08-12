@@ -18,24 +18,13 @@
  */
 package org.openurp.platform.web.action
 
-import org.beangle.security.Securities
-import org.beangle.security.realm.cas.{ Cas, CasConfig }
 import org.beangle.webmvc.api.action.{ ActionSupport, ServletSupport }
 import org.beangle.webmvc.api.view.View
-import org.openurp.app.{ Urp, UrpApp }
-import org.openurp.app.security.RemoteService
-import org.beangle.commons.codec.digest.Digests
+import org.openurp.app.web.NavContext
 
 class IndexAction extends ActionSupport with ServletSupport {
   def index(): View = {
-    put("appsJson", RemoteService.getAppsJson())
-    put("menusJson", RemoteService.getMenusJson())
-    put("appName", UrpApp.name)
-    put("URP", Urp)
-    put("org", RemoteService.getOrg)
-    val user = Securities.session.get.principal
-    put("user", user)
-    put("avatar_url", Urp.platformBase + "/user/avatars/" + Digests.md5Hex(user.getName))
+    put("nav", NavContext.get(request))
     forward()
   }
 
