@@ -68,7 +68,8 @@ object DefaultMapping extends MappingModule {
       e.properties is (eleLength(2000), cacheable)))
 
     bind[Avatar].on(e => declare(
-      e.id is length(50))).generator(IdGenerator.Assigned)
+      e.id is length(50),
+      e.fileName is length(50))).generator(IdGenerator.Assigned)
 
     bind[Root]
 
