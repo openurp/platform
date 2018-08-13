@@ -16,19 +16,25 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.openurp.platform.web.action
+package org.openurp.platform.user.model
 
-import org.beangle.webmvc.api.action.{ ActionSupport, ServletSupport }
-import org.beangle.webmvc.api.view.View
-import org.openurp.app.web.NavContext
+import org.beangle.data.model.StringId
+import java.time.LocalDate
+import java.time.LocalDateTime
 
-class IndexAction extends ActionSupport with ServletSupport {
-  def index(): View = {
-    put("nav", NavContext.get(request))
-    forward()
-  }
+class Avatar extends StringId {
 
-  def logout(): View = {
-    redirect(to("/cas/logout"), null)
+  var user: User = _
+
+  var updatedAt: LocalDateTime = _
+
+  var image: Array[Byte] = _
+
+  var fileName: String = _
+
+  def this(user: User, image: Array[Byte]) {
+    this()
+    this.user = user
+    this.image = image
   }
 }

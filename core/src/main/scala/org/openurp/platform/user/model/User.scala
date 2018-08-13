@@ -39,12 +39,14 @@ class User extends LongId with Coded with Named with Updated with TemporalOn wit
   var properties = Collections.newMap[Dimension, String]
   var category: UserCategory = _
 
+  var avatarId: Option[String] = None
+
   def credential = password
 
   def accountExpired: Boolean = {
     endOn match {
       case Some(e) => LocalDate.now.isAfter(e)
-      case None    => false
+      case None => false
     }
   }
 
