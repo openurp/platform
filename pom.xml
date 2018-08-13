@@ -8,7 +8,7 @@
   </parent>
   <groupId>org.openurp.platform</groupId>
   <artifactId>openurp-platform-parent</artifactId>
-  <version>0.1.3-SNAPSHOT</version>
+  <version>0.1.3</version>
   <packaging>pom</packaging>
   <name>OpenURP Platform Parent</name>
 
@@ -20,7 +20,7 @@
   </modules>
 
   <properties>
-    <openurp.app.version>0.0.8</openurp.app.version>
+    <openurp.app.version>0.0.10</openurp.app.version>
   </properties>
 
   <dependencyManagement>
@@ -37,7 +37,7 @@
       </dependency>
       <dependency>
         <groupId>org.openurp.app</groupId>
-        <artifactId>openurp-app-nav</artifactId>
+        <artifactId>openurp-app-web_2.12</artifactId>
         <version>${openurp.app.version}</version>
       </dependency>
       <dependency>

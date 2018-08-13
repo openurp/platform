@@ -102,27 +102,52 @@ class AvatarAction extends ActionSupport {
     getAll("zipfile", classOf[Part]) foreach { zipFile =>
       val tmpFile = new File(SystemInfo.tmpDir + "/photo" + System.currentTimeMillis())
       IOs.copy(zipFile.getInputStream, new FileOutputStream(tmpFile))
-      put("fileNames", unzip(tmpFile, "GBK"))
+      put("total", processZip(tmpFile, "GBK"))
+    }
+    get("dirInServer") foreach { dirInServer =>
+      put("total", processDir(new File(dirInServer)))
     }
     forward()
   }
 
-  def unzip(zipfile: File, encoding: String): List[String] = {
+  def processDir(dir: File): Int = {
+    if (!dir.exists()) return 0
+    var i = 0
+    dir.list() foreach { name =>
+      val file = new File(dir.getAbsolutePath + "/" + name)
+      if (name.indexOf(".") < 1) {
+        logger.warn(name + " without suffix,skipped")
+      } else if (file.isDirectory()) {
+        logger.info(name + " is dir,skipped")
+      } else {
+        val usercode = Strings.substringBeforeLast(name, ".")
+        val users = entityDao.findBy(classOf[User], "code", List(usercode))
+        if (users.isEmpty) {
+          logger.warn("Cannot find user info of " + usercode);
+        } else {
+          i += 1
+          val user = users.head
+          val bos = new ByteArrayOutputStream()
+          IOs.copy(new FileInputStream(dir.getAbsolutePath + "/" + name), bos)
+          val bytes = bos.toByteArray()
+          saveOrUpdate(user, bytes, name)
+        }
+      }
+    }
+    i
+  }
+
+  def processZip(zipfile: File, encoding: String): Int = {
     val file: ZipFile = if (null == encoding) new ZipFile(zipfile)
     else new ZipFile(zipfile, encoding)
-    val fileNames = new collection.mutable.ListBuffer[String]
+    var i = 0
     try {
-
       val en = file.getEntries()
-      var i = 0
       import scala.collection.JavaConversions._
       en.foreach { ze =>
-        fileNames += ze.getName()
-        println(ze.getName())
         i = i + 1
         if (!ze.isDirectory()) {
           val photoname = if (ze.getName().contains("/")) Strings.substringAfterLast(ze.getName(), "/") else ze.getName()
-
           if (photoname.indexOf(".") < 1) {
             logger.warn(photoname + " format is error")
           } else {
@@ -138,16 +163,13 @@ class AvatarAction extends ActionSupport {
               saveOrUpdate(user, bytes, photoname)
             }
           }
-        } else {
-          println("dir:" + ze.getName())
         }
       }
-      put("total", i)
       file.close()
     } catch {
       case e: IOException => Throwables.propagate(e)
     }
-    fileNames.toList
+    i
   }
 
   def saveOrUpdate(user: User, bytes: Array[Byte], fileName: String) {
