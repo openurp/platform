@@ -20,6 +20,7 @@ package org.openurp.platform.cas
 
 import org.beangle.cdi.bind.BindModule
 import org.beangle.ids.cas.web.action.{ LoginAction, LogoutAction, ServiceValidateAction, SessionAction, SessionsAction }
+import org.openurp.platform.cas.web.EditAction
 
 class WebModule extends BindModule {
   override def binding() {
@@ -28,5 +29,6 @@ class WebModule extends BindModule {
     bind(classOf[LogoutAction])
     bind(classOf[SessionAction])
     bind(classOf[SessionsAction])
+    bind(classOf[EditAction])
   }
 }

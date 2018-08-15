@@ -69,11 +69,12 @@ object DefaultMapping extends MappingModule {
 
     bind[Avatar].on(e => declare(
       e.id is length(50),
+      e.image is length(Avatar.MaxSize),
       e.fileName is length(50))).generator(IdGenerator.Assigned)
 
     bind[Root]
 
-    all.cacheable()
+    all.except(classOf[Avatar]).cacheable()
   }
 
 }
