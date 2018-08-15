@@ -48,6 +48,7 @@ class AvatarAction extends ActionSupport {
     }
     query.where("user.avatarId is not null")
     query.limit(QueryHelper.pageLimit)
+    query.orderBy("user.code")
     put("users", entityDao.search(query))
     forward()
   }
@@ -130,7 +131,11 @@ class AvatarAction extends ActionSupport {
           val bos = new ByteArrayOutputStream()
           IOs.copy(new FileInputStream(dir.getAbsolutePath + "/" + name), bos)
           val bytes = bos.toByteArray()
-          saveOrUpdate(user, bytes, name)
+          if (bytes.length > Avatar.MaxSize) {
+            saveOrUpdate(user, bytes, name)
+          } else {
+            i -= 1
+          }
         }
       }
     }
@@ -160,7 +165,11 @@ class AvatarAction extends ActionSupport {
               val bos = new ByteArrayOutputStream()
               IOs.copy(file.getInputStream(ze), bos)
               val bytes = bos.toByteArray()
-              saveOrUpdate(user, bytes, photoname)
+              if (bytes.length > Avatar.MaxSize) {
+                saveOrUpdate(user, bytes, photoname)
+              } else {
+                i -= 1
+              }
             }
           }
         }

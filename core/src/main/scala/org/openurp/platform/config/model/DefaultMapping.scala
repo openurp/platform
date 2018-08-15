@@ -58,7 +58,7 @@ object DefaultMapping extends MappingModule {
     bind[Domain].on(e => declare(
       e.name is (length(100), unique),
       e.title is length(200),
-      e.children is depends("parent")))
+      e.children is (depends("parent"), cacheable)))
 
     all.cacheable()
   }

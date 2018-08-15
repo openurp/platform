@@ -22,6 +22,10 @@ import org.beangle.data.model.StringId
 import java.time.LocalDate
 import java.time.LocalDateTime
 
+object Avatar {
+  var MaxSize = 500 * 1024  //500k
+}
+
 class Avatar extends StringId {
 
   var user: User = _

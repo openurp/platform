@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<mvc>
+  <profile name="cas.platform" package="org.openurp.platform.cas.web">
+    <url path="/cas" suffix=""  style="seo" />
+    <interceptors>
+      <interceptor name="web.Interceptor.security"/>
+      <interceptor name="web.Interceptor.hibernate"/>
+    </interceptors>
+  </profile>
+</mvc>
