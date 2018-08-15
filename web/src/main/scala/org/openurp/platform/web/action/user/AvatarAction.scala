@@ -149,8 +149,7 @@ class AvatarAction extends ActionSupport {
     var i = 0
     try {
       val en = file.getEntries()
-      import scala.collection.JavaConversions._
-      en.foreach { ze =>
+      scala.collection.JavaConverters.enumerationAsScalaIterator(en) foreach { ze =>
         i = i + 1
         if (!ze.isDirectory()) {
           val photoname = if (ze.getName().contains("/")) Strings.substringAfterLast(ze.getName(), "/") else ze.getName()
