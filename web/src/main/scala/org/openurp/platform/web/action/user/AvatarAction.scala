@@ -131,9 +131,10 @@ class AvatarAction extends ActionSupport {
           val bos = new ByteArrayOutputStream()
           IOs.copy(new FileInputStream(dir.getAbsolutePath + "/" + name), bos)
           val bytes = bos.toByteArray()
-          if (bytes.length > Avatar.MaxSize) {
+          if (bytes.length <= Avatar.MaxSize) {
             saveOrUpdate(user, bytes, name)
           } else {
+            logger.warn("Cannot import photo size greate than 500k")
             i -= 1
           }
         }
@@ -148,8 +149,7 @@ class AvatarAction extends ActionSupport {
     var i = 0
     try {
       val en = file.getEntries()
-      import scala.collection.JavaConversions._
-      en.foreach { ze =>
+      scala.collection.JavaConverters.enumerationAsScalaIterator(en) foreach { ze =>
         i = i + 1
         if (!ze.isDirectory()) {
           val photoname = if (ze.getName().contains("/")) Strings.substringAfterLast(ze.getName(), "/") else ze.getName()
@@ -159,15 +159,16 @@ class AvatarAction extends ActionSupport {
             val usercode = Strings.substringBeforeLast(photoname, ".")
             val users = entityDao.findBy(classOf[User], "code", List(usercode))
             if (users.isEmpty) {
-              println("Cannot find user info of " + usercode);
+              logger.warn("Cannot find user info of " + usercode);
             } else {
               val user = users.head
               val bos = new ByteArrayOutputStream()
               IOs.copy(file.getInputStream(ze), bos)
               val bytes = bos.toByteArray()
-              if (bytes.length > Avatar.MaxSize) {
+              if (bytes.length <= Avatar.MaxSize) {
                 saveOrUpdate(user, bytes, photoname)
               } else {
+                logger.warn("Cannot import photo size greate than 500k")
                 i -= 1
               }
             }
