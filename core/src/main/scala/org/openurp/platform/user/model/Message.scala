@@ -18,26 +18,33 @@
  */
 package org.openurp.platform.user.model
 
-import org.beangle.data.model.StringId
-import java.time.LocalDate
 import java.time.LocalDateTime
-import org.beangle.data.model.pojo.Updated
+import org.beangle.data.model.LongId
+import java.time.Instant
 
-object Avatar {
-  var MaxSize = 500 * 1024 //500k
+object Message {
+  val Newly = 1
+  val Readed = 2
+  val InTrash = 3
 }
 
-class Avatar extends StringId with Updated {
+class Message extends LongId {
+  /** 标题 */
+  var title: String = _
 
-  var user: User = _
+  /** 内容 */
+  var content: String = _
 
-  var image: Array[Byte] = _
+  /** 发送人 */
+  var sender: User = _
 
-  var fileName: String = _
+  /**接受人*/
+  var recipient: User = _
 
-  def this(user: User, image: Array[Byte]) {
-    this()
-    this.user = user
-    this.image = image
-  }
+  /** 消息状态 */
+  var status: Int = _
+
+  /** 发送日期 */
+  var sentAt: Instant = _
+
 }

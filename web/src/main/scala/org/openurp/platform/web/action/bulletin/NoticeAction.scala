@@ -16,28 +16,11 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.openurp.platform.user.model
+package org.openurp.platform.web.action.bulletin
 
-import org.beangle.data.model.StringId
-import java.time.LocalDate
-import java.time.LocalDateTime
-import org.beangle.data.model.pojo.Updated
+import org.beangle.webmvc.entity.action.RestfulAction
+import org.openurp.platform.bulletin.model.Notice
 
-object Avatar {
-  var MaxSize = 500 * 1024 //500k
-}
+class NoticeAction extends RestfulAction[Notice] {
 
-class Avatar extends StringId with Updated {
-
-  var user: User = _
-
-  var image: Array[Byte] = _
-
-  var fileName: String = _
-
-  def this(user: User, image: Array[Byte]) {
-    this()
-    this.user = user
-    this.image = image
-  }
 }

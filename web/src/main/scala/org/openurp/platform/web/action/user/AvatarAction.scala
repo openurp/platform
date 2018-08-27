@@ -35,6 +35,7 @@ import org.openurp.platform.user.model.{ Avatar, User }
 import javax.servlet.http.Part
 import org.beangle.commons.activation.MimeTypes
 import org.beangle.webmvc.api.view.Status
+import java.time.Instant
 
 class AvatarAction extends ActionSupport {
 
@@ -198,7 +199,7 @@ class AvatarAction extends ActionSupport {
     }
     user.avatarId = Some(avatar.id)
     avatar.fileName = fileName
-    avatar.updatedAt = LocalDateTime.now
+    avatar.updatedAt = Instant.now
     entityDao.saveOrUpdate(avatar, user)
   }
 

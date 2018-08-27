@@ -16,28 +16,24 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.openurp.platform.user.model
+package org.openurp.platform.bulletin.model
 
-import org.beangle.data.model.StringId
+import org.beangle.data.model.LongId
+import org.openurp.platform.config.model.Domain
+import org.openurp.platform.user.model.UserCategory
 import java.time.LocalDate
-import java.time.LocalDateTime
-import org.beangle.data.model.pojo.Updated
 
-object Avatar {
-  var MaxSize = 500 * 1024 //500k
-}
+class Notice extends LongId {
 
-class Avatar extends StringId with Updated {
+  var domain: Domain = _
 
-  var user: User = _
+  var title: String = _
 
-  var image: Array[Byte] = _
+  var content: String = _
 
-  var fileName: String = _
+  var userCategory: UserCategory = _
 
-  def this(user: User, image: Array[Byte]) {
-    this()
-    this.user = user
-    this.image = image
-  }
+  var isTop: Boolean = _
+
+  var publishedOn: LocalDate = _
 }

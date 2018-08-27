@@ -18,26 +18,17 @@
  */
 package org.openurp.platform.user.model
 
-import org.beangle.data.model.StringId
-import java.time.LocalDate
-import java.time.LocalDateTime
+import org.beangle.data.model.LongId
 import org.beangle.data.model.pojo.Updated
+import org.openurp.platform.config.model.Domain
 
-object Avatar {
-  var MaxSize = 500 * 1024 //500k
-}
-
-class Avatar extends StringId with Updated {
+class Todo extends LongId with Updated {
 
   var user: User = _
 
-  var image: Array[Byte] = _
+  var domain: Domain = _
 
-  var fileName: String = _
+  var content: String = _
 
-  def this(user: User, image: Array[Byte]) {
-    this()
-    this.user = user
-    this.image = image
-  }
+  var isDone: Boolean = _
 }

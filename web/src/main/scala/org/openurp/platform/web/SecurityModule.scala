@@ -20,8 +20,9 @@ package org.openurp.platform.web
 
 import org.beangle.cdi.bind.BindModule
 import org.openurp.platform.web.action.IndexAction
+import org.openurp.platform.web.action.bulletin.{ DocAction, NewsAction, NoticeAction }
 import org.openurp.platform.web.action.security.{ DashboardAction, DataPermissionAction, DataResourceAction, FuncResourceAction, MenuAction, PermissionAction }
-import org.openurp.platform.web.action.user.{ AccountAction, AvatarAction, DimensionAction, ProfileAction, RoleAction, UserAction }
+import org.openurp.platform.web.action.user.{ AccountAction, AvatarAction, DimensionAction, MessageAction, NotificationAction, ProfileAction, RoleAction, TodoAction, UserAction }
 import org.openurp.platform.web.helper.UserDashboardHelper
 
 class SecurityModule extends BindModule {
@@ -30,6 +31,11 @@ class SecurityModule extends BindModule {
     bind(classOf[AccountAction], classOf[DashboardAction], classOf[AvatarAction])
     bind(classOf[DimensionAction], classOf[PermissionAction], classOf[UserAction],
       classOf[RoleAction], classOf[ProfileAction])
+
+    bind(classOf[TodoAction], classOf[MessageAction], classOf[NotificationAction])
+
+    bind(classOf[DocAction], classOf[NoticeAction], classOf[NewsAction])
+
     bind(classOf[FuncResourceAction], classOf[MenuAction])
     bind(classOf[DataPermissionAction])
     bind(classOf[DataResourceAction])

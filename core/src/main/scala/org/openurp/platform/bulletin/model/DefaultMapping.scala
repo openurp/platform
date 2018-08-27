@@ -16,28 +16,25 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.openurp.platform.user.model
+package org.openurp.platform.bulletin.model
 
-import org.beangle.data.model.StringId
-import java.time.LocalDate
-import java.time.LocalDateTime
-import org.beangle.data.model.pojo.Updated
+import org.beangle.data.orm.MappingModule
 
-object Avatar {
-  var MaxSize = 500 * 1024 //500k
-}
+object DefaultMapping extends MappingModule {
 
-class Avatar extends StringId with Updated {
+  def binding(): Unit = {
+    defaultIdGenerator("auto_increment")
+    defaultCache("openurp.platform.security", "read-write")
 
-  var user: User = _
+    bind[Doc]
 
-  var image: Array[Byte] = _
+    bind[News].on(e => declare(
+      e.content is length(4000)))
 
-  var fileName: String = _
+    bind[Notice].on(e => declare(
+      e.content is length(4000)))
 
-  def this(user: User, image: Array[Byte]) {
-    this()
-    this.user = user
-    this.image = image
+    all.cacheable()
+
   }
 }

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <orm>
+  <mapping class="org.openurp.platform.bulletin.model.DefaultMapping"/>
   <mapping class="org.openurp.platform.config.model.DefaultMapping"/>
   <mapping class="org.openurp.platform.security.model.DefaultMapping"/>
   <mapping class="org.openurp.platform.user.model.DefaultMapping"/>
   <naming>
+    <profile package = "org.openurp.platform.bulletin" pluralize="true" schema="bulletin"/>
     <profile package = "org.openurp.platform.config" pluralize="true" schema="cfg"/>
     <profile package = "org.openurp.platform.security" pluralize="true" schema="se"/>
     <profile package = "org.openurp.platform.user" pluralize="true" schema="usr"/>
