@@ -16,24 +16,17 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.openurp.platform.bulletin.model
+package org.openurp.platform.web
 
-import org.beangle.data.model.pojo.TemporalOn
-import org.beangle.data.model.LongId
-import org.beangle.data.model.pojo.Updated
-import org.openurp.platform.user.model.User
-import org.openurp.platform.config.model.Domain
-import org.openurp.platform.user.model.UserCategory
+import org.beangle.cdi.bind.BindModule
+import org.openurp.platform.action.admin.config.{ AppAction, DbAction }
+import org.openurp.platform.action.admin.config.AppAction
+import org.openurp.platform.action.admin.config.DbAction
 
-class Doc extends LongId with Updated with TemporalOn {
+class ConfigModule extends BindModule {
 
-  var domain: Domain = _
-
-  var uploadBy: User = _
-
-  var name: String = _
-
-  var file: Attachment = _
-
-  var userCategory: UserCategory = _
+  protected override def binding() {
+    bind(classOf[AppAction])
+    bind(classOf[DbAction])
+  }
 }

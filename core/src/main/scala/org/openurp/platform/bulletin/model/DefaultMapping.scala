@@ -28,13 +28,15 @@ object DefaultMapping extends MappingModule {
 
     bind[Doc]
 
+    bind[Attachment]
+
     bind[News].on(e => declare(
-      e.content is length(4000)))
+      e.content is lob))
 
     bind[Notice].on(e => declare(
-      e.content is length(4000)))
+      e.content is lob))
 
-    all.cacheable()
+    all.except(classOf[Attachment]) cacheable ()
 
   }
 }

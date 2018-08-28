@@ -16,24 +16,19 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.openurp.platform.bulletin.model
+package org.openurp.platform.action.admin
 
-import org.beangle.data.model.pojo.TemporalOn
-import org.beangle.data.model.LongId
-import org.beangle.data.model.pojo.Updated
-import org.openurp.platform.user.model.User
-import org.openurp.platform.config.model.Domain
-import org.openurp.platform.user.model.UserCategory
+import org.beangle.webmvc.api.action.{ ActionSupport, ServletSupport }
+import org.beangle.webmvc.api.view.View
+import org.openurp.app.web.NavContext
 
-class Doc extends LongId with Updated with TemporalOn {
+class IndexAction extends ActionSupport with ServletSupport {
+  def index(): View = {
+    put("nav", NavContext.get(request))
+    forward()
+  }
 
-  var domain: Domain = _
-
-  var uploadBy: User = _
-
-  var name: String = _
-
-  var file: Attachment = _
-
-  var userCategory: UserCategory = _
+  def logout(): View = {
+    redirect(to("/cas/logout"), null)
+  }
 }

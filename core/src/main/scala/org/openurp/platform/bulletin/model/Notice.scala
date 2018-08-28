@@ -22,6 +22,7 @@ import org.beangle.data.model.LongId
 import org.openurp.platform.config.model.Domain
 import org.openurp.platform.user.model.UserCategory
 import java.time.LocalDate
+import org.openurp.platform.user.model.User
 
 class Notice extends LongId {
 
@@ -33,7 +34,9 @@ class Notice extends LongId {
 
   var userCategory: UserCategory = _
 
-  var isTop: Boolean = _
+  var sticky: Boolean = _
 
   var publishedOn: LocalDate = _
+
+  var operator: User = _
 }
