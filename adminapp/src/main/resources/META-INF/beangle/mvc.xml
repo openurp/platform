@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<mvc>
+  <profile name="openurp-platform-admin" package="org.openurp.platform.action">
+    <url path="/" suffix="" style="seo" />
+    <interceptors>
+      <interceptor name="web.Interceptor.hibernate" />
+      <interceptor name="web.Interceptor.security" />
+    </interceptors>
+  </profile>
+</mvc>

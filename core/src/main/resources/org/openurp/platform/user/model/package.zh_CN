@@ -43,14 +43,15 @@ Avatar.image=图像
 Avatar.fileName=文件名
 
 Dimension=数据维度
-Dimension.domains=数据维度关联领域
+Dimension.name=名称
+Dimension.domains=关联领域
 Dimension.keyName=关键字
 Dimension.title=标题
 Dimension.source=来源
 Dimension.multiple=是否多值
 Dimension.required=是否必须
 Dimension.typeName=类型名
-Dimension.properties=属性
+Dimension.properties=其他属性
 
 UserProfile=用户配置
 UserProfile.properties=用户配置-属性

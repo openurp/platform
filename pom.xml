@@ -16,8 +16,8 @@
     <module>core</module>
     <module>ws</module>
     <module>cas</module>
-    <module>admin</module>
-    <module>me</module>
+    <module>adminapp</module>
+    <module>userapp</module>
   </modules>
 
   <properties>
@@ -28,27 +28,27 @@
     <dependencies>
       <dependency>
         <groupId>org.openurp.app</groupId>
-        <artifactId>openurp-app-api_2.12</artifactId>
+        <artifactId>openurp-app-api</artifactId>
         <version>${openurp.app.version}</version>
       </dependency>
       <dependency>
         <groupId>org.openurp.app</groupId>
-        <artifactId>openurp-app-cas_2.12</artifactId>
+        <artifactId>openurp-app-cas</artifactId>
         <version>${openurp.app.version}</version>
       </dependency>
       <dependency>
         <groupId>org.openurp.app</groupId>
-        <artifactId>openurp-app-web_2.12</artifactId>
+        <artifactId>openurp-app-web</artifactId>
         <version>${openurp.app.version}</version>
       </dependency>
       <dependency>
         <groupId>org.openurp.platform</groupId>
-        <artifactId>openurp-platform-core_2.12</artifactId>
+        <artifactId>openurp-platform-core</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.openurp.platform</groupId>
-        <artifactId>openurp-platform-web_2.12</artifactId>
+        <artifactId>openurp-platform-admin</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
