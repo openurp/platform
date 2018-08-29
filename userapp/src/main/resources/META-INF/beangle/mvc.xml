@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <mvc>
-  <profile name="openurp-platform-user" package="org.openurp.platform.action">
+  <profile name="openurp-platform-user" package="org.openurp.platform.user.action">
     <url path="/" suffix="" style="seo" />
     <interceptors>
       <interceptor name="web.Interceptor.hibernate" />

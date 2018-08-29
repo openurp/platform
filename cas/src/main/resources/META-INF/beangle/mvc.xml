@@ -1,10 +1,16 @@
 <?xml version="1.0"?>
 <mvc>
-  <profile name="cas.platform" package="org.openurp.platform.cas.web">
-    <url path="/cas" suffix=""  style="seo" />
+  <profile name="openurp.platform.cas" package="org.openurp.platform.cas.web">
+    <url path="/" suffix=""  style="seo" />
     <interceptors>
       <interceptor name="web.Interceptor.security"/>
       <interceptor name="web.Interceptor.hibernate"/>
+    </interceptors>
+  </profile>
+  <profile name="cas" package="org.beangle.ids.cas.web.action">
+    <url path="/" suffix="" style="seo" />
+    <interceptors>
+      <interceptor name="web.Interceptor.security" />
     </interceptors>
   </profile>
 </mvc>

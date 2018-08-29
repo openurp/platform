@@ -68,5 +68,9 @@
       <artifactId>commons-compress</artifactId>
       <version>${commons.compress}</version>
     </dependency>
+    <dependency>
+      <groupId>com.zaxxer</groupId>
+      <artifactId>HikariCP</artifactId>
+    </dependency>
   </dependencies>
 </project>
