@@ -21,26 +21,7 @@ package org.openurp.platform.action.admin
 import org.beangle.cdi.bind.BindModule
 import org.openurp.platform.action.admin.bulletin.{ DocAction, NewsAction, NoticeAction }
 import org.openurp.platform.action.admin.security.{ DashboardAction, DataPermissionAction, DataResourceAction, FuncResourceAction, MenuAction, PermissionAction }
-import org.openurp.platform.action.admin.user.{ AccountAction, AvatarAction, DimensionAction, MessageAction, NotificationAction, ProfileAction, RoleAction, TodoAction, UserAction }
-import org.openurp.platform.action.helper.UserDashboardHelper
-import org.openurp.platform.action.admin.bulletin.DocAction
-import org.openurp.platform.action.admin.bulletin.NewsAction
-import org.openurp.platform.action.admin.bulletin.NoticeAction
-import org.openurp.platform.action.admin.security.DashboardAction
-import org.openurp.platform.action.admin.security.DataPermissionAction
-import org.openurp.platform.action.admin.security.DataResourceAction
-import org.openurp.platform.action.admin.security.FuncResourceAction
-import org.openurp.platform.action.admin.security.MenuAction
-import org.openurp.platform.action.admin.security.PermissionAction
-import org.openurp.platform.action.admin.user.AccountAction
-import org.openurp.platform.action.admin.user.AvatarAction
-import org.openurp.platform.action.admin.user.DimensionAction
-import org.openurp.platform.action.admin.user.MessageAction
-import org.openurp.platform.action.admin.user.NotificationAction
-import org.openurp.platform.action.admin.user.ProfileAction
-import org.openurp.platform.action.admin.user.RoleAction
-import org.openurp.platform.action.admin.user.TodoAction
-import org.openurp.platform.action.admin.user.UserAction
+import org.openurp.platform.action.admin.user.{ AccountAction, AvatarAction, DimensionAction, ProfileAction, RoleAction, UserAction }
 import org.openurp.platform.action.helper.UserDashboardHelper
 
 class SecurityModule extends BindModule {
@@ -49,8 +30,6 @@ class SecurityModule extends BindModule {
     bind(classOf[AccountAction], classOf[DashboardAction], classOf[AvatarAction])
     bind(classOf[DimensionAction], classOf[PermissionAction], classOf[UserAction],
       classOf[RoleAction], classOf[ProfileAction])
-
-    bind(classOf[TodoAction], classOf[MessageAction], classOf[NotificationAction])
 
     bind(classOf[DocAction], classOf[NoticeAction], classOf[NewsAction])
 

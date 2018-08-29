@@ -16,11 +16,11 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.openurp.platform.action.admin.user
+package org.openurp.platform.action.user
 
 import org.beangle.webmvc.entity.action.RestfulAction
-import org.openurp.platform.user.model.Notification
+import org.openurp.platform.user.model.Todo
 
-class NotificationAction extends RestfulAction[Notification] {
+class TodoAction extends RestfulAction[Todo] {
 
 }

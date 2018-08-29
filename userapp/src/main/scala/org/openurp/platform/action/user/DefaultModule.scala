@@ -16,11 +16,13 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.openurp.platform.action.admin.user
+package org.openurp.platform.action.user
 
-import org.beangle.webmvc.entity.action.RestfulAction
-import org.openurp.platform.user.model.Todo
+import org.beangle.cdi.bind.BindModule
 
-class TodoAction extends RestfulAction[Todo] {
+class DefaultModule extends BindModule {
 
+  protected override def binding() {
+    bind(classOf[TodoAction], classOf[MessageAction], classOf[NotificationAction])
+  }
 }

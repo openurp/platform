@@ -9,7 +9,7 @@
 
   <groupId>org.openurp.platform</groupId>
   <artifactId>openurp-platform-adminapp</artifactId>
-  <packaging>jar</packaging>
+  <packaging>war</packaging>
   <name>OpenURP Platform Adminapp</name>
 
   <properties>
