@@ -8,8 +8,8 @@
   </parent>
 
   <groupId>org.openurp.platform</groupId>
-  <artifactId>openurp-platform-ws_2.12</artifactId>
-  <packaging>jar</packaging>
+  <artifactId>openurp-platform-ws</artifactId>
+  <packaging>war</packaging>
   <name>OpenURP Platform Web Service</name>
 
   <properties>
@@ -20,11 +20,11 @@
   <dependencies>
     <dependency>
       <groupId>org.openurp.app</groupId>
-      <artifactId>openurp-app-api_2.12</artifactId>
+      <artifactId>openurp-app-api</artifactId>
     </dependency>
     <dependency>
       <groupId>org.openurp.platform</groupId>
-      <artifactId>openurp-platform-core_2.12</artifactId>
+      <artifactId>openurp-platform-core</artifactId>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>
@@ -57,6 +57,10 @@
     <dependency>
       <groupId>com.zaxxer</groupId>
       <artifactId>HikariCP</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.beangle.cache</groupId>
+      <artifactId>beangle-cache-caffeine_2.12</artifactId>
     </dependency>
   </dependencies>
 

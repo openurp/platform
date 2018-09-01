@@ -8,7 +8,7 @@
   </parent>
 
   <groupId>org.openurp.platform</groupId>
-  <artifactId>openurp-platform-core_2.12</artifactId>
+  <artifactId>openurp-platform-core</artifactId>
   <packaging>jar</packaging>
   <name>OpenURP Platform Core</name>
 
@@ -20,7 +20,7 @@
   <dependencies>
     <dependency>
       <groupId>org.openurp.app</groupId>
-      <artifactId>openurp-app-api_2.12</artifactId>
+      <artifactId>openurp-app-api</artifactId>
     </dependency>
     <dependency>
       <groupId>org.beangle.commons</groupId>

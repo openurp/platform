@@ -1,5 +1,9 @@
-Doc=文档
+Attachment=附件
+Attachment.size=大小
+Attachment.content=内容
+Attachment.fileName=文件名
 
+Doc=文档
 Doc.name=名称
 Doc.path=路径
 Doc.uploadBy=上传人
@@ -14,3 +18,4 @@ Notice=公告
 Notice.content=内容
 Notice.title=标题
 Notice.publishedOn=发布日期
+Notice.sticky=是否置顶

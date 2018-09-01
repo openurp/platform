@@ -41,7 +41,7 @@ class DefaultModule extends BindModule with PropertySource {
 
   override def binding() {
     // entry point
-    bind("security.EntryPoint.url", classOf[UrlEntryPoint]).constructor("/cas/login").primary()
+    bind("security.EntryPoint.url", classOf[UrlEntryPoint]).constructor("/login").primary()
     //interceptor
     bind("security.AccessDeniedHandler.default", classOf[DefaultAccessDeniedHandler])
       .constructor($("security.access.errorPage", "/403.html"))
@@ -53,7 +53,7 @@ class DefaultModule extends BindModule with PropertySource {
     bind("security.SecurityManager.default", classOf[WebSecurityManager])
     bind(classOf[DefaultSecurityContextBuilder])
 
-    bind("security.Authorizer.remote", classOf[RemoteAuthorizer]).property("publics", List("/cas/"))
+    bind("security.Authorizer.remote", classOf[RemoteAuthorizer]).property("publics", List("/"))
   }
 
   override def properties: collection.Map[String, String] = {
