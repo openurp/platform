@@ -21,16 +21,15 @@ package org.openurp.platform.user.model
 import org.beangle.data.model.StringId
 import java.time.LocalDate
 import java.time.LocalDateTime
+import org.beangle.data.model.pojo.Updated
 
 object Avatar {
-  var MaxSize = 500 * 1024  //500k
+  var MaxSize = 500 * 1024 //500k
 }
 
-class Avatar extends StringId {
+class Avatar extends StringId with Updated {
 
   var user: User = _
-
-  var updatedAt: LocalDateTime = _
 
   var image: Array[Byte] = _
 

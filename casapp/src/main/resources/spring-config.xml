@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+  <bean id="web.Interceptor.security">
+    <property name="filters">
+      <list>
+        <ref bean="security.Filter.authorization" />
+      </list>
+    </property>
+  </bean>
+</beans>

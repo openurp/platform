@@ -38,6 +38,7 @@ import org.beangle.commons.bean.Initializing
 import java.time.LocalDateTime
 import org.beangle.commons.lang.ClassLoaders
 import java.io.ByteArrayOutputStream
+import java.time.Instant
 
 class AvatarWS(entityDao: EntityDao, cacheManager: CacheManager)
   extends ActionSupport with ServletSupport with Initializing {
@@ -52,7 +53,7 @@ class AvatarWS(entityDao: EntityDao, cacheManager: CacheManager)
     cache = cacheManager.getCache("avatar", classOf[String], classOf[Avatar])
     defaultOne = new Avatar
     defaultOne.fileName = "default_avatar.jpg"
-    defaultOne.updatedAt = LocalDateTime.now
+    defaultOne.updatedAt = Instant.now
     ClassLoaders.getResourceAsStream("org/openurp/platform/ws/default_avatar.jpg") foreach {
       is =>
         val out = new ByteArrayOutputStream()
@@ -76,7 +77,7 @@ class AvatarWS(entityDao: EntityDao, cacheManager: CacheManager)
   }
 
   private def deliver(avatar: Avatar): Unit = {
-    val lastModified = avatar.updatedAt.toEpochSecond(ZoneOffset.UTC)
+    val lastModified = avatar.updatedAt.toEpochMilli()
     if (etagChanged(String.valueOf(lastModified), request, response)) {
       CacheControl.expiresAfter(expireMinutes, response)
       response.setDateHeader("Last-Modified", lastModified)

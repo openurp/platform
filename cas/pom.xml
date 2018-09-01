@@ -4,10 +4,10 @@
   <parent>
     <groupId>org.openurp.platform</groupId>
     <artifactId>openurp-platform-parent</artifactId>
-    <version>0.1.5</version>
+    <version>0.2.0</version>
   </parent>
   <groupId>org.openurp.platform</groupId>
-  <artifactId>openurp-platform-cas_2.12</artifactId>
+  <artifactId>openurp-platform-cas</artifactId>
   <packaging>jar</packaging>
   <name>OpenURP Platform Cas</name>
 
@@ -44,12 +44,12 @@
     </dependency>
     <dependency>
       <groupId>org.openurp.app</groupId>
-      <artifactId>openurp-app-api_2.12</artifactId>
+      <artifactId>openurp-app-api</artifactId>
       <version>${openurp.app.version}</version>
     </dependency>
     <dependency>
       <groupId>org.openurp.platform</groupId>
-      <artifactId>openurp-platform-core_2.12</artifactId>
+      <artifactId>openurp-platform-core</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>

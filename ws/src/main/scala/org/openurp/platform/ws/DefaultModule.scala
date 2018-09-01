@@ -28,6 +28,7 @@ import org.openurp.platform.ws.user.{ AccountWS, DimensionWS, ProfileWS }
 import org.openurp.platform.ws.security.{ func, data }
 import org.openurp.platform.ws.config.OrgWS
 import org.openurp.platform.ws.user.AvatarWS
+import org.beangle.cache.caffeine.CaffeineCacheManager
 
 class DefaultModule extends BindModule {
 
@@ -43,5 +44,6 @@ class DefaultModule extends BindModule {
     bind(classOf[RootWS], classOf[ProfileWS])
 
     bind(classOf[MemTokenRepository])
+    bind("cache.Caffeine", classOf[CaffeineCacheManager]).constructor(true)
   }
 }

@@ -74,6 +74,12 @@ object DefaultMapping extends MappingModule {
 
     bind[Root]
 
+    bind[Message]
+
+    bind[Notification]
+
+    bind[Todo]
+
     all.except(classOf[Avatar]).cacheable()
   }
 

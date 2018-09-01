@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<mvc>
+  <static>
+    <bundle name="urp" version="default"/>
+  </static>
+</mvc>
