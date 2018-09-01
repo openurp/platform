@@ -1,7 +1,7 @@
 [#ftl]
 [@b.head/]
 [@b.toolbar title="数据限制域元信息配置"]bar.addBack("${b.text("action.back")}");[/@]
-[@b.form action=b.rest.save_url(dimension) theme="list"]
+[@b.form action=b.rest.save(dimension) theme="list"]
   [@b.textfield label="common.name" name="dimension.name" value="${dimension.name!}" required="true" maxlength="50"/]
   [@b.textfield name="dimension.title" value="${dimension.title!}" required="true" maxlength="50"/]
   [@b.textfield name="dimension.typeName" value=dimension.typeName! required="true" style="width:300px"/]

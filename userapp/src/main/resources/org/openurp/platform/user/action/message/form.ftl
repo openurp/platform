@@ -1,7 +1,7 @@
 [#ftl]
 [@b.head/]
 
-[@b.form action=b.rest.save_url(message) name="newMessageForm" onsubmit="validateMessage"]
+[@b.form action=b.rest.save(message) name="newMessageForm" onsubmit="validateMessage"]
 <input type="hidden" value="&message.status=1" name="_params">
 <div class="box box-primary">
             <div class="box-header with-border">

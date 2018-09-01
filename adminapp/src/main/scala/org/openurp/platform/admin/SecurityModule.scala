@@ -40,6 +40,8 @@ class SecurityModule extends BindModule {
 
     bind(classOf[IndexAction])
 
+    bind(classOf[action.session.IndexAction])
+
     bind("userDashboardHelper", classOf[UserDashboardHelper])
   }
 }

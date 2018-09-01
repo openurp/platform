@@ -25,6 +25,7 @@ import java.io.InputStream
 import org.beangle.commons.io.IOs
 import java.io.ByteArrayOutputStream
 import java.time.Instant
+import org.beangle.commons.lang.Strings
 
 object Attachment {
   def apply(name: String, is: InputStream): Attachment = {
@@ -47,6 +48,10 @@ class Attachment extends LongId with Updated {
   var content: Array[Byte] = _
 
   var fileName: String = _
+
+  def ext: String = {
+    Strings.substringAfterLast(fileName, ".")
+  }
 
   def merge(newer: Attachment): Unit = {
     this.size = newer.size

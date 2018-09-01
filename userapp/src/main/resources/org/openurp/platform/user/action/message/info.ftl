@@ -1,4 +1,7 @@
-[@b.head/]
+[@b.head]
+${b.script("openurp-default","js/adminlte.js")}
+${b.css("openurp-default","css/adminlte.css")}
+[/@]
 <div class="box box-primary">
             <div class="box-header with-border">
               <h3 class="box-title">查看消息</h3>

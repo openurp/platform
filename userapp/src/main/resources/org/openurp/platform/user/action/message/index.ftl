@@ -1,5 +1,8 @@
 [#ftl]
-[@b.head/]
+[@b.head]
+${b.script("openurp-default","js/adminlte.js")}
+${b.css("openurp-default","css/adminlte.css")}
+[/@]
 <link rel="stylesheet" href="http://localhost/static/font-awesome/4.7.0/css/font-awesome.css"/>
     <section class="content-header">
       <h1>

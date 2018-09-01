@@ -29,6 +29,9 @@ import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.platform.user.model.{ Message, User }
 import java.util.ArrayList
+import org.openurp.app.Urp
+import org.beangle.commons.collection.Collections
+import org.beangle.commons.codec.digest.Digests
 
 class MessageAction extends RestfulAction[Message] {
 
@@ -49,7 +52,7 @@ class MessageAction extends RestfulAction[Message] {
       msg.status = Message.Readed
       entityDao.saveOrUpdate(msg)
     }
-    put("isMe",msg.recipient.code == me)
+    put("isMe", msg.recipient.code == me)
     put(simpleEntityName, msg)
     forward()
   }
@@ -61,6 +64,20 @@ class MessageAction extends RestfulAction[Message] {
     builder.limit(getPageLimit)
     builder.orderBy("message.sentAt desc")
     put("messages", entityDao.search(builder))
+    forward()
+  }
+
+  def newly(): View = {
+    val builder = getQueryBuilder()
+    builder.limit(1, 5)
+    builder.where("message.status=" + Message.Newly)
+    val messages = entityDao.search(builder)
+    put("messages", messages)
+    val avatarUrls = messages map { m =>
+      (m.sender.code, Urp.api + "/platform/user/avatars/" + Digests.md5Hex(m.sender.code))
+    }
+    put("avatarUrls", avatarUrls.toMap)
+    put("urp", Urp)
     forward()
   }
 

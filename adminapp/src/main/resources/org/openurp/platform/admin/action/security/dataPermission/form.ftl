@@ -2,7 +2,7 @@
 [@b.toolbar title="ui.dataPermission.info"]
 bar.addBack("${b.text("action.back")}");
 [/@]
-[@b.form action=b.rest.save_url(permission) theme="list"]
+[@b.form action=b.rest.save(permission) theme="list"]
   [@b.textfield label="描述" name="permission.description" value="${permission.description!}" maxlength="100" style="width:300px;" required="true" /]
   [@b.select label="关联数据对象" name="permission.resource.id" value=permission.resource! option=r"${item.name} ${item.title}" required="true" items=dataResources?sort_by("title") width="250px"/]
   [@b.select label="领域" name="permission.domain.id" value=permission.domain!  option="id,title" empty="..." items=domains width="200px" required="true"/]

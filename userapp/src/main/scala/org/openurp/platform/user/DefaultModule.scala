@@ -20,10 +20,14 @@ package org.openurp.platform.user
 
 import org.beangle.cdi.bind.BindModule
 import org.openurp.platform.user.action.{ IndexAction, MessageAction, NotificationAction, TodoAction }
+import org.openurp.platform.user.action.NoticeAction
+import org.openurp.platform.user.action.DocAction
 
 class DefaultModule extends BindModule {
 
   protected override def binding() {
     bind(classOf[IndexAction], classOf[TodoAction], classOf[MessageAction], classOf[NotificationAction])
+
+    bind(classOf[DocAction], classOf[NoticeAction])
   }
 }

@@ -4,7 +4,7 @@ ${b.css("kindeditor","themes/default/default.css")}
 ${b.script("kindeditor","kindeditor-all-min.js")}
 ${b.script("kindeditor","lang/zh-CN.js")}
 [@b.toolbar title="新建/修改通知公告"]bar.addBack();[/@]
-[@b.form action=b.rest.save_url(notice) theme="list" onsubmit="syncEditor"]
+[@b.form action=b.rest.save(notice) theme="list" onsubmit="syncEditor"]
   [@b.textfield name="notice.title" label="标题" value="${notice.title!}" required="true" maxlength="100"/]
   [@b.select name="notice.domain.id" label="业务" value="${(notice.domain.id)!}" option="id,title" required="true" items=domains/]
   [@b.select name="notice.userCategory.id" label="面向用户" value="${(notice.userCategory.id)!}" required="true" items=userCategories/]

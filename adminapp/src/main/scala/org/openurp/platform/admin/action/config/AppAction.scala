@@ -62,13 +62,14 @@ class AppAction(dbService: DbService) extends RestfulAction[App] {
           removed += ds
         }
       }
-
+      sets --= removed
       for (id <- ids if !processed.contains(id)) {
         val set = populate(classOf[DataSource], "ds" + id)
         set.app = app
         set.password = encrypt(set.password, app.secret)
         sets += set
       }
+
       saveOrUpdate(app)
       redirect("search", "info.save.success")
     } catch {

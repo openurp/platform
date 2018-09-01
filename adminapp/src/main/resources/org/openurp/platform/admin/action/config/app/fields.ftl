@@ -56,7 +56,6 @@
   function addDataSource(datas){
     $.each(datas, function (index, value){
       var id = value[0], name = value[1];
-      if($("input[value='" + id + "']").length == 0){
         var tr = $('<tr><td>'+name+'</td>'+
             '<td><input name="ds" type="hidden" value="'+id+'"/><input name="ds'+id+'.db.id" type="hidden" value="' + id + '"/><input name="ds'+id+'.name" style="width:60px" maxlength="40"/></td>'+
             '<td><input name="ds'+id+'.username" style="width:60px"/></td>'+
@@ -66,7 +65,6 @@
             '<td><button class="delDataSourceBtn">删除</button></td></tr>');
         $(".dstable").append(tr);
         tr.hide().fadeIn();
-      }
     });
   }
   $(".dstable").on("click", ".delDataSourceBtn", function (){
