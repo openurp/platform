@@ -16,7 +16,7 @@
   [/@]
   [#if role.persisted]
   [@b.tab label="角色属性"]
-    [@b.div href="/admin/security/role!profile?role.id=${role.id}"/]
+    [@b.div href="/security/role!profile?role.id=${role.id}"/]
   [/@]
   [/#if]
 [/@]

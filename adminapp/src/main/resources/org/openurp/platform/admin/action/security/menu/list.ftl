@@ -10,14 +10,34 @@
   function activate(isActivate){
     return action.multi("activate","确定操作?","isActivate="+isActivate);
   }
+  function NamedFunction(name,func,objectCount){
+    this.name=name;
+    this.func=func;
+    this.objectCount=(null==objectCount)?'ge0':objectCount;
+  }
+  var exportToXml = function(methodName,confirmMsg,extparams,ajax,target){
+      return  new NamedFunction(methodName,function(){
+        var form=action.getForm();
+        if(null!=confirmMsg && ''!=confirmMsg){
+          if(!confirm(confirmMsg))return;
+        }
+        if(null!=extparams){
+          bg.form.addHiddens(form,extparams);
+        }
+        if(""!=action.page.paramstr){
+          bg.form.addHiddens(form,action.page.paramstr);
+          bg.form.addParamsInput(form,action.page.paramstr);
+        }
+        bg.form.submit(form,action.applyMethod(methodName),target,null,ajax);
+      });
+    }
   function redirectTo(url){window.open(url);}
   bar.addItem("${b.text("action.new")}",action.add());
   bar.addItem("${b.text("action.edit")}",action.edit());
   bar.addItem("${b.text("action.freeze")}",activate(0),'action-freeze');
   bar.addItem("${b.text("action.activate")}",activate(1),'action-activate');
   bar.addItem("${b.text("action.delete")}",action.remove());
-  bar.addItem("${b.text("action.export")}",action.exportData("code:代码,title:common.title,name:common.name,entry:入口,resources:使用资源,enabled:common.status,remark:common.remark",null,"&fileName=菜单信息"));
-  [#--bar.addItem("菜单配置","redirectTo('${b.url('profile!search')}')");--]
+  bar.addItem("${b.text("action.export")}",exportToXml("exportToXml",null,null,true,'_blank'));
 [/@]
   [@b.row]
     <tr [#if menu??] title="入口及备注:${(menu.entry.name)!} ${(menu.remark?html)!}" id="${menu.indexno}"[/#if]>
