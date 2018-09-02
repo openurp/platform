@@ -83,7 +83,7 @@ class MenuAction extends RestfulAction[Menu] {
       }
     }
     entityDao.saveOrUpdate(parents)
-    super.removeAndRedirect(List.empty[Menu])
+    super.removeAndRedirect(entities)
   }
 
   @ignore
@@ -131,6 +131,19 @@ class MenuAction extends RestfulAction[Menu] {
       put("roles", entityDao.search(roleQuery))
     }
     return forward()
+  }
+
+  def exportToXml(): View = {
+    val query = getQueryBuilder()
+    query.limit(null)
+    query.where("menu.parent is null")
+    val menus = entityDao.search(query)
+    put("menus", menus)
+    forward()
+  }
+
+  def importFromXml(): View = {
+    null
   }
 
 }

@@ -18,17 +18,22 @@
  */
 package org.openurp.platform.admin.action
 
+import org.beangle.security.realm.cas.{ Cas, CasConfig }
 import org.beangle.webmvc.api.action.{ ActionSupport, ServletSupport }
+import org.beangle.webmvc.api.context.ActionContext
 import org.beangle.webmvc.api.view.View
 import org.openurp.app.web.NavContext
 
 class IndexAction extends ActionSupport with ServletSupport {
+
+  var casConfig: CasConfig = _
+
   def index(): View = {
     put("nav", NavContext.get(request))
     forward()
   }
 
   def logout(): View = {
-    redirect(to("/cas/logout"), null)
+    redirect(to(Cas.cleanup(casConfig, ActionContext.current.request, ActionContext.current.response)), null)
   }
 }
