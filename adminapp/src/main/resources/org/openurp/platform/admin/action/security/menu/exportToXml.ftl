@@ -1,6 +1,6 @@
 [#ftl attributes={'content_type':'application/xml'}]
 [#macro displayMenus menu]
-  <menu entry="${(menu.entry.name)!}" title="${menu.title}" params="${menu.params!}" enabled="${menu.enabled?c}">
+  <menu indexno="${menu.indexno}" entry="${(menu.entry.name)!}" title="${menu.title}" name="${menu.name}" params="${menu.params!}" enabled="${menu.enabled?c}">
      [#if menu.resources?size>0]
      <resources>
        [#list menu.resources as r]

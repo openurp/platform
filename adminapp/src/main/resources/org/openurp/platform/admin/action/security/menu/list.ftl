@@ -38,6 +38,7 @@
   bar.addItem("${b.text("action.activate")}",activate(1),'action-activate');
   bar.addItem("${b.text("action.delete")}",action.remove());
   bar.addItem("${b.text("action.export")}",exportToXml("exportToXml",null,null,true,'_blank'));
+  bar.addItem("导入",action.method('importFromXml'));
 [/@]
   [@b.row]
     <tr [#if menu??] title="入口及备注:${(menu.entry.name)!} ${(menu.remark?html)!}" id="${menu.indexno}"[/#if]>

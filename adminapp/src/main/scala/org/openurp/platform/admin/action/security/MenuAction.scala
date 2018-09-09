@@ -24,11 +24,13 @@ import org.beangle.data.model.util.Hierarchicals
 import org.beangle.webmvc.api.annotation.{ ignore, param }
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
+import org.openurp.platform.admin.helper.AppHelper
 import org.openurp.platform.config.model.App
 import org.openurp.platform.config.service.AppService
 import org.openurp.platform.security.model.{ FuncPermission, FuncResource, Menu }
 import org.openurp.platform.security.service.MenuService
-import org.openurp.platform.admin.helper.AppHelper
+
+import javax.servlet.http.Part
 
 class MenuAction extends RestfulAction[Menu] {
   var menuService: MenuService = _
@@ -143,7 +145,13 @@ class MenuAction extends RestfulAction[Menu] {
   }
 
   def importFromXml(): View = {
-    null
+    val parts = getAll("menufile", classOf[Part])
+    if (parts.isEmpty) {
+      forward()
+    } else {
+      val app = entityDao.get(classOf[App], getInt("menu.app.id").get)
+      menuService.importFrom(app, scala.xml.XML.load(parts.head.getInputStream))
+      return redirect("search", "info.save.success")
+    }
   }
-
 }

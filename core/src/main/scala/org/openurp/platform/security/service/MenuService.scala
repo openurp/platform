@@ -37,4 +37,7 @@ trait MenuService {
   def getMenus(app: App): Seq[Menu]
 
   def move(menu: Menu, location: Menu, index: Int): Unit
+
+  def importFrom(app: App, xml: scala.xml.Node): Unit
+
 }
