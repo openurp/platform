@@ -142,12 +142,17 @@ class MenuServiceImpl(val entityDao: EntityDao) extends MenuService {
   }
 
   def importFrom(app: App, xml: scala.xml.Node): Unit = {
+    parseMenu(app, None, xml)
+  }
+
+  private def parseMenu(app: App, parent: Option[Menu], xml: scala.xml.Node): Unit = {
     (xml \ "menu") foreach { m =>
       val indexno = (m \ "@indexno").text.trim
       val title = (m \ "@title").text.trim
       val menus = findMenu(app, indexno, title)
+      var menu: Menu = null
       if (menus.isEmpty) {
-        val menu = new Menu
+        menu = new Menu
         menu.title = title
         menu.indexno = indexno
         menu.app = app
@@ -180,11 +185,14 @@ class MenuServiceImpl(val entityDao: EntityDao) extends MenuService {
         }
         val entry = findFuncResource(app, (m \ "@entry").text.trim)
         menu.entry = entry
+        menu.parent = parent
         entityDao.saveOrUpdate(menu)
-        val children = (m \ "children")
-        if (!children.isEmpty) {
-          importFrom(app, children.head)
-        }
+      } else {
+        menu = menus.head
+      }
+      val children = (m \ "children")
+      if (!children.isEmpty) {
+        parseMenu(app, Some(menu), children.head)
       }
     }
   }
