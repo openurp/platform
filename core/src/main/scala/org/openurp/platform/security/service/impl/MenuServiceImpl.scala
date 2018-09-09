@@ -19,10 +19,12 @@
 package org.openurp.platform.security.service.impl
 
 import org.beangle.commons.collection.Collections
+import org.beangle.commons.lang.Strings
 import org.beangle.data.dao.{ EntityDao, OqlBuilder }
 import org.beangle.data.model.util.Hierarchicals
+import org.beangle.security.authz.Scopes
 import org.openurp.platform.config.model.App
-import org.openurp.platform.security.model.{ FuncPermission, Menu }
+import org.openurp.platform.security.model.{ FuncPermission, FuncResource, Menu }
 import org.openurp.platform.security.service.MenuService
 import org.openurp.platform.user.model.{ Role, User }
 
@@ -137,5 +139,101 @@ class MenuServiceImpl(val entityDao: EntityDao) extends MenuService {
         Hierarchicals.move(menu, entityDao.search(builder).toBuffer, index)
       }
     entityDao.saveOrUpdate(nodes)
+  }
+
+  def importFrom(app: App, xml: scala.xml.Node): Unit = {
+    parseMenu(app, None, xml)
+  }
+
+  private def parseMenu(app: App, parent: Option[Menu], xml: scala.xml.Node): Unit = {
+    (xml \ "menu") foreach { m =>
+      val indexno = (m \ "@indexno").text.trim
+      val title = (m \ "@title").text.trim
+      val menus = findMenu(app, indexno, title)
+      var menu: Menu = null
+      if (menus.isEmpty) {
+        menu = new Menu
+        menu.title = title
+        menu.indexno = indexno
+        menu.app = app
+
+        val name = (m \ "@name")
+        if (name.isEmpty) {
+          menu.name = menu.title
+        } else {
+          menu.name = name.text.trim
+        }
+        val params = (m \ "@params")
+        if (params.isEmpty) {
+          menu.params = None
+        } else {
+          menu.params = Some(params.text.trim)
+        }
+        val enabled = (m \ "@enabled")
+        if (enabled.isEmpty) {
+          menu.enabled = true
+        } else {
+          menu.enabled = enabled.text.trim.toBoolean
+        }
+        (m \ "resources" \ "resource") foreach { r =>
+          val name = (r \ "@name").text.trim
+          val title = (r \ "@title").text.trim
+          val scope = (r \ "@scope").text.trim
+          val enabled = (r \ "@enabled").text.trim
+          val fr = findOrCreateFuncResource(app, name, title, scope, enabled)
+          menu.resources += fr
+        }
+        val entry = findFuncResource(app, (m \ "@entry").text.trim)
+        menu.entry = entry
+        menu.parent = parent
+        entityDao.saveOrUpdate(menu)
+      } else {
+        menu = menus.head
+      }
+      val children = (m \ "children")
+      if (!children.isEmpty) {
+        parseMenu(app, Some(menu), children.head)
+      }
+    }
+  }
+
+  private def findMenu(app: App, indexno: String, title: String): Option[Menu] = {
+    val builder = OqlBuilder.from(classOf[Menu], "m").where("m.app=:app", app)
+    builder.where("m.indexno=:indexno and m.title=:title", indexno, title)
+    val res = entityDao.search(builder)
+    if (res.size >= 1) {
+      Some(res.head)
+    } else {
+      None
+    }
+  }
+  private def findFuncResource(app: App, name: String): Option[FuncResource] = {
+    val builder = OqlBuilder.from(classOf[FuncResource], "fr").where("fr.app=:app", app)
+    builder.where("fr.name=:name", name)
+    val res = entityDao.search(builder)
+    if (res.size >= 1) {
+      Some(res.head)
+    } else {
+      None
+    }
+  }
+
+  private def findOrCreateFuncResource(app: App, name: String, title: String, scope: String, enabled: String): FuncResource = {
+    findFuncResource(app, name) match {
+      case None =>
+        val resource = new FuncResource()
+        resource.app = app
+        resource.name = name
+        resource.title = title
+        resource.scope = Scopes.withName(scope).asInstanceOf[Scopes.Scope]
+        if (Strings.isEmpty(enabled)) {
+          resource.enabled = true
+        } else {
+          resource.enabled = enabled.toBoolean
+        }
+        entityDao.saveOrUpdate(resource)
+        resource
+      case Some(r) => r
+    }
   }
 }
