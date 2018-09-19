@@ -164,7 +164,7 @@ class MenuServiceImpl(val entityDao: EntityDao) extends MenuService {
           menu.name = name.text.trim
         }
         val params = (m \ "@params")
-        if (params.isEmpty) {
+        if (params.isEmpty || Strings.isBlank(params.text)) {
           menu.params = None
         } else {
           menu.params = Some(params.text.trim)
