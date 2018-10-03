@@ -26,4 +26,5 @@ class News extends LongId {
   var publishedOn: LocalDate = _
   var url: String = _
   var content: Option[String] = None
+  var archived: Boolean = _
 }
