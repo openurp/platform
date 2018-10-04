@@ -46,7 +46,7 @@
             </tr>
             <tr>
                 <td colspan="2">
-                    <input type="submit" name="submitBtn" tabindex="6" class="blue-button"  onclick="checkLogin(this.form)" value="登录"/>
+                    <input type="submit" name="submitBtn" tabindex="6" class="blue-button"  onclick="return checkLogin(this.form)" value="登录"/>
                 </td>
             </tr>
         </table>
@@ -58,8 +58,13 @@
      </form>
    </div>
 </div>
-
+${b.script("cryptojs","rollups/aes.js")}
+${b.script("cryptojs","components/mode-ecb.js")}
 <script type="text/javascript">
+    var key= location.hostname;
+    if(key.length>=16) key= key.substring(0,16);
+    else  key= (key+'0'.repeat(16-key.length));
+    key=CryptoJS.enc.Utf8.parse(key);
     var form  = document.loginForm;
     function checkLogin(form){
         if(!form['username'].value){
@@ -68,6 +73,10 @@
         if(!form['password'].value){
             alert("密码不能为空");return false;
         }
+        try{
+        var encryptedData = CryptoJS.AES.encrypt(form['password'].value, key, {mode: CryptoJS.mode.ECB,padding: CryptoJS.pad.Pkcs7});
+        form['password'].value=("?"+encryptedData.ciphertext);
+        }catch(e){alert(e);return false;}
         return true;
     }
 </script>
