@@ -39,4 +39,6 @@ class Notice extends LongId {
   var publishedOn: LocalDate = _
 
   var operator: User = _
+
+  var archived: Boolean = _
 }

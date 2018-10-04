@@ -25,7 +25,7 @@ import org.openurp.platform.user.model.User
 import org.openurp.platform.config.model.Domain
 import org.openurp.platform.user.model.UserCategory
 
-class Doc extends LongId with Updated with TemporalOn {
+class Doc extends LongId with Updated {
 
   var domain: Domain = _
 
@@ -36,4 +36,6 @@ class Doc extends LongId with Updated with TemporalOn {
   var file: Attachment = _
 
   var userCategory: UserCategory = _
+
+  var archived: Boolean = _
 }
