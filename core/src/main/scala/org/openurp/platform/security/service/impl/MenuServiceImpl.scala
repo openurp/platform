@@ -1,19 +1,19 @@
 /*
  * OpenURP, Agile University Resource Planning Solution.
  *
- * Copyright © 2005, The OpenURP Software.
+ * Copyright © 2014, The OpenURP Software.
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful.
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
+ * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.openurp.platform.security.service.impl
@@ -27,6 +27,7 @@ import org.openurp.platform.config.model.App
 import org.openurp.platform.security.model.{ FuncPermission, FuncResource, Menu }
 import org.openurp.platform.security.service.MenuService
 import org.openurp.platform.user.model.{ Role, User }
+import org.openurp.platform.config.model.Domain
 
 /**
  * @author chaostone
@@ -35,22 +36,32 @@ class MenuServiceImpl(val entityDao: EntityDao) extends MenuService {
 
   def getTopMenus(app: App, user: User): Seq[Menu] = {
     val roles = user.roles.filter(m => m.member).map { m => m.role }
-    getTopMenus(app, roles)
+    getTopMenus(null, Some(app), roles)
+  }
+
+  def getTopMenus(domain: Domain, user: User): Seq[Menu] = {
+    val roles = user.roles.filter(m => m.member).map { m => m.role }
+    getTopMenus(domain, None, roles)
   }
 
   def getTopMenus(app: App, role: Role): Seq[Menu] = {
-    getTopMenus(app, List(role))
+    getTopMenus(null, Some(app), List(role))
   }
 
-  private def getTopMenus(app: App, roles: Iterable[Role]): Seq[Menu] = {
+  private def getTopMenus(domain: Domain, app: Option[App], roles: Iterable[Role]): Seq[Menu] = {
     val menuSet = Collections.newSet[Menu]
     roles foreach { role =>
       val query = OqlBuilder.from[Menu](classOf[Menu].getName + " menu," + classOf[FuncPermission].getName + " fp")
-        .where("menu.app=:app", app)
         .where("menu.enabled=true")
         .where("fp.role =:role", role)
-        .where("fp.resource=menu.entry and fp.resource.app=:app", app)
-        .select("menu").cacheable()
+        .where("fp.resource=menu.entry")
+        .select("menu")
+
+      app match {
+        case Some(p) => query.where("menu.app=:app", p)
+        case None    => query.where("menu.app.domain=:domain", domain)
+      }
+      query.cacheable()
 
       entityDao.search(query).foreach { m =>
         menuSet += m

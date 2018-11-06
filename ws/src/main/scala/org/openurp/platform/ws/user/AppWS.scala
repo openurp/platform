@@ -1,19 +1,19 @@
 /*
  * OpenURP, Agile University Resource Planning Solution.
  *
- * Copyright © 2005, The OpenURP Software.
+ * Copyright © 2014, The OpenURP Software.
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful.
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
+ * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.openurp.platform.ws.user
@@ -65,7 +65,7 @@ class AppWS(userService: UserService, entityDao: EntityDao) extends ActionSuppor
           apps --= apps.filter { a => a.domain == null || a.domain.name != d }
         }
         val appBuffer = apps.toBuffer.sorted
-        appBuffer.map(app => new Properties(app, "id", "name", "title", "url", "logoUrl", "domain"))
+        appBuffer.map(app => new Properties(app, "id", "name", "title", "base", "url", "logoUrl", "domain", "embeddable"))
       case None => Seq.empty
     }
   }
