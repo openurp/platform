@@ -36,6 +36,11 @@ class Menu extends IntId with Named with Enabled with Hierarchical[Menu] with Re
   }
 
   override def compare(m: Menu): Int = {
-    indexno.compareTo(m.indexno)
+    var appCompareRs = app.compare(m.app)
+    if (appCompareRs == 0) {
+      indexno.compareTo(m.indexno)
+    } else {
+      appCompareRs
+    }
   }
 }

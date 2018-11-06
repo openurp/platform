@@ -21,8 +21,11 @@ package org.openurp.platform.security.service
 import org.openurp.platform.config.model.App
 import org.openurp.platform.security.model.Menu
 import org.openurp.platform.user.model.{ Role, User }
+import org.openurp.platform.config.model.Domain
 
 trait MenuService {
+
+  def getTopMenus(domain: Domain, user: User): Seq[Menu]
 
   def getTopMenus(app: App, user: User): Seq[Menu]
 

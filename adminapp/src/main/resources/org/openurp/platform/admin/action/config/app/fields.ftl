@@ -3,7 +3,10 @@
 [@b.textfield name="app.title" label="标题" value="${app.title!}" required="true" maxlength="200"/]
 [@b.radios name="app.appType" label="类型" items={'web-service':'web服务 ','web-app':'web应用'} value="${app.appType!}" required="true" /]
 [@b.select name="app.domain.id" label="领域" value="${(app.domain.id)!}" option="id,title" required="true" items=domains/]
-[@b.textfield name="app.url" label="URL" value="${app.url!}" required="true" maxlength="200" style="width:300px"/]
+[@b.textfield name="app.base" label="上下文地址" value="${app.base!}" required="true" maxlength="200" style="width:300px"/]
+[@b.textfield name="app.url" label="入口" value="${app.url!}" required="true" maxlength="200" style="width:300px"/]
+[@b.radios name="app.embeddable" label="是否可嵌入" value=app.embeddable required="true" /]
+
 [@b.field label="引用资源"]
   <div style="margin-left:120px;">
     <style>.itable th, .itable td{padding:3px 5px;}</style>

@@ -27,6 +27,7 @@ import org.openurp.platform.config.model.App
 import org.openurp.platform.security.model.{ FuncPermission, FuncResource, Menu }
 import org.openurp.platform.security.service.MenuService
 import org.openurp.platform.user.model.{ Role, User }
+import org.openurp.platform.config.model.Domain
 
 /**
  * @author chaostone
@@ -35,22 +36,32 @@ class MenuServiceImpl(val entityDao: EntityDao) extends MenuService {
 
   def getTopMenus(app: App, user: User): Seq[Menu] = {
     val roles = user.roles.filter(m => m.member).map { m => m.role }
-    getTopMenus(app, roles)
+    getTopMenus(null, Some(app), roles)
+  }
+
+  def getTopMenus(domain: Domain, user: User): Seq[Menu] = {
+    val roles = user.roles.filter(m => m.member).map { m => m.role }
+    getTopMenus(domain, None, roles)
   }
 
   def getTopMenus(app: App, role: Role): Seq[Menu] = {
-    getTopMenus(app, List(role))
+    getTopMenus(null, Some(app), List(role))
   }
 
-  private def getTopMenus(app: App, roles: Iterable[Role]): Seq[Menu] = {
+  private def getTopMenus(domain: Domain, app: Option[App], roles: Iterable[Role]): Seq[Menu] = {
     val menuSet = Collections.newSet[Menu]
     roles foreach { role =>
       val query = OqlBuilder.from[Menu](classOf[Menu].getName + " menu," + classOf[FuncPermission].getName + " fp")
-        .where("menu.app=:app", app)
         .where("menu.enabled=true")
         .where("fp.role =:role", role)
-        .where("fp.resource=menu.entry and fp.resource.app=:app", app)
-        .select("menu").cacheable()
+        .where("fp.resource=menu.entry")
+        .select("menu")
+
+      app match {
+        case Some(p) => query.where("menu.app=:app", p)
+        case None    => query.where("menu.app.domain=:domain", domain)
+      }
+      query.cacheable()
 
       entityDao.search(query).foreach { m =>
         menuSet += m

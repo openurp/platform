@@ -54,8 +54,8 @@ class MenuWS extends ActionSupport with EntitySupport[Menu] {
   @response
   def index(@param("app") appName: String): Seq[Any] = {
     val menus = appService.getApp(appName) match {
-      case Some(app) =>menuService.getTopMenus(app)
-      case None =>  List.empty[Menu]
+      case Some(app) => menuService.getTopMenus(app)
+      case None      => List.empty[Menu]
     }
     menus map (m => convert(m))
   }
@@ -63,11 +63,25 @@ class MenuWS extends ActionSupport with EntitySupport[Menu] {
   @response
   @mapping("user/{user}")
   def user(@param("app") appName: String, @param("user") username: String): Iterable[Any] = {
+    val forDomain = getBoolean("forDomain", false)
     appService.getApp(appName) match {
       case Some(app) =>
         userService.get(username) match {
-          case Some(u) => menuService.getTopMenus(app, u) map (m => convert(m))
-          case None    => List.empty[Menu]
+          case Some(u) =>
+            if (forDomain) {
+              val menus = menuService.getTopMenus(app.domain, u)
+              val domain = new Properties(app.domain, "id", "name", "title")
+              val appMenus = menus.groupBy(_.app)
+              appMenus map {
+                case (app, menus) =>
+                  val appProps = new Properties(app, "id", "name", "title", "base", "url", "logoUrl", "embeddable")
+                  appProps.put("domain", domain)
+                  AppMenu(appProps, menus.map(convert(_)))
+              }
+            } else {
+              menuService.getTopMenus(app, u) map (m => convert(m))
+            }
+          case None => List.empty[Menu]
         }
       case None => List.empty[Menu]
     }
@@ -98,3 +112,5 @@ class MenuWS extends ActionSupport with EntitySupport[Menu] {
   }
 
 }
+
+case class AppMenu(app: Properties, menus: Iterable[Properties])
