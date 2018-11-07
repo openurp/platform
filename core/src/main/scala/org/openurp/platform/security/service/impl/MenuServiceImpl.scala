@@ -59,7 +59,7 @@ class MenuServiceImpl(val entityDao: EntityDao) extends MenuService {
 
       app match {
         case Some(p) => query.where("menu.app=:app", p)
-        case None    => query.where("menu.app.domain=:domain", domain)
+        case None    => query.where("menu.app.domain=:domain and menu.app.enabled=true", domain)
       }
       query.cacheable()
 
