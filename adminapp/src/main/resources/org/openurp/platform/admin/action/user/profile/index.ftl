@@ -5,8 +5,8 @@
 [/@]
 [#if (profiles?size==0)]没有设置[/#if]
  [#list profiles as profile]
-  <fieldSet  align="center">
-  <legend>[@b.a href="!edit?id=" + profile.id]修改[/@] [@b.a href="!remove?profile.id=" + profile.id]删除[/@]</legend>
+  <ul align="center">
+  [@b.a href="!edit?id=" + profile.id]修改[/@] [@b.a href="!remove?profile.id=" + profile.id]删除[/@]
   [#list profile.properties?keys as field]
   <li>${field.title}</li>
 
@@ -18,7 +18,7 @@
     [/#if]
     [/#if]
   [/#list]
-  </fieldSet>
+  </ul>
 [/#list]
 <br/>
 

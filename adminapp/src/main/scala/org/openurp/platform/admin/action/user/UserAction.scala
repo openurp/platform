@@ -31,6 +31,7 @@ import org.openurp.app.UrpApp
 import org.openurp.platform.user.model.{ MemberShip, Role, RoleMember, User }
 import org.openurp.platform.user.service.UserService
 import org.openurp.platform.admin.helper.UserDashboardHelper
+import org.openurp.platform.user.model.UserCategory
 
 /**
  * 用户管理响应处理类
@@ -41,6 +42,10 @@ class UserAction extends RestfulAction[User] {
 
   var userService: UserService = _
   var userDashboardHelper: UserDashboardHelper = _
+
+  override def indexSetting(): Unit = {
+    put("categories", entityDao.getAll(classOf[UserCategory]))
+  }
 
   override def info(id: String): View = {
     val userId = Params.converter.convert(id, classOf[Long])

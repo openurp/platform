@@ -1,6 +1,6 @@
 [#ftl]
 [@b.head/]
-[@b.toolbar title='${b.text("entity.user")}${b.text("common.detail")}']bar.addBack("${b.text("action.back")}");[/@]
+[@b.toolbar title='用户明细']bar.addBack("${b.text("action.back")}");[/@]
 [#macro info(name,title='')]
   [#if title=='']
    <td class="title">${b.text('user.'+name)}:</td>
@@ -23,7 +23,7 @@
   </tr>
   <tr>
     <td class="title" >${b.text("user.members")}:</td>
-    <td  class="content" colspan="3">[#list user.roles?sort_by(['role','indexno']) as m]${m.role.indexno} ${m.role.name}([#if m.member]${b.text('member.member')}[/#if][#if m.manager] ${b.text('member.manager')}[/#if][#if m.granter] ${b.text('member.granter')}[/#if])<br>[/#list]</td>
+    <td class="content" colspan="3">[#list user.roles?sort_by(['role','indexno']) as m]${m.role.indexno} ${m.role.name}([#if m.member]成员[/#if][#if m.manager] 管理者[/#if][#if m.granter] 可授权[/#if])<br>[/#list]</td>
   </tr>
   <tr>
     <td class="title">身份:</td>

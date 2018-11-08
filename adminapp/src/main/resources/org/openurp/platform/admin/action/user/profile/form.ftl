@@ -3,6 +3,7 @@
 [@b.toolbar title="数据授权"]
   function save(){if(confirm("确定设置?")){bg.form.submit(document.profileForm);}}
   bar.addItem("${b.text("action.save")}",save);
+  bar.addBack();
   function changeDomain(){
     document.profileForm.action='${b.url("!editNew")}'
     bg.form.submit(document.profileForm)
