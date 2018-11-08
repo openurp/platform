@@ -18,19 +18,17 @@
  */
 package org.openurp.platform.admin.action.user
 
-import org.beangle.commons.lang.Numbers
-import org.beangle.data.dao.{ Operation, OqlBuilder }
-import org.beangle.webmvc.api.annotation.{ ignore, param }
+import org.beangle.data.dao.OqlBuilder
+import org.beangle.security.Securities
+import org.beangle.webmvc.api.annotation.ignore
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.platform.admin.helper.ProfileHelper
-import org.openurp.platform.user.model.UserProfile
-import org.openurp.platform.user.service.impl.CsvDataResolver
-import org.openurp.platform.user.service.UserService
-import org.openurp.platform.user.service.DataResolver
-import org.openurp.platform.security.service.ProfileService
 import org.openurp.platform.config.model.Domain
-import org.beangle.security.Securities
+import org.openurp.platform.security.service.ProfileService
+import org.openurp.platform.user.model.{ Dimension, UserProfile }
+import org.openurp.platform.user.service.{ DataResolver, UserService }
+import org.openurp.platform.user.service.impl.CsvDataResolver
 
 /**
  * @author chaostone
@@ -93,8 +91,10 @@ class ProfileAction(profileService: ProfileService) extends RestfulAction[UserPr
 
   protected override def editSetting(profile: UserProfile): Unit = {
     val helper = new ProfileHelper(entityDao, profileService)
-    val domains = entityDao.getAll(classOf[Domain])
-    if (null == profile.domain) profile.domain = domains.head
+    val builder=OqlBuilder.from[Domain](classOf[Dimension].getName,"d")
+    builder.join("d.domains", "domain").select("distinct domain")
+    val domains = entityDao.search(builder)
+    if (null == profile.domain && !domains.isEmpty) profile.domain = domains.head
     if (null == profile.user) profile.user = userService.get(Securities.user).get
     put("domains", domains)
     helper.fillEditInfo(profile, true, profile.domain)
