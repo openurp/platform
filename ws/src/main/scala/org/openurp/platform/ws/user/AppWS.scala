@@ -67,7 +67,7 @@ class AppWS(userService: UserService, entityDao: EntityDao) extends ActionSuppor
         val appBuffer = apps.toBuffer.sorted
         appBuffer.map { app =>
           val p = new Properties(app, "id", "name", "title", "base", "url", "logoUrl", "navStyle")
-          p.add("domain", app.domain, "id", "name")
+          p.add("domain", app.domain, "id", "name", "title")
           p
         }
       case None => Seq.empty
