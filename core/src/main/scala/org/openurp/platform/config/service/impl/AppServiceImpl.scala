@@ -22,6 +22,7 @@ import org.openurp.platform.config.service.AppService
 import org.beangle.data.dao.EntityDao
 import org.beangle.data.dao.OqlBuilder
 import org.openurp.platform.config.model.App
+import org.openurp.platform.config.model.AppType
 
 /**
  * @author chaostone
@@ -50,7 +51,7 @@ class AppServiceImpl(entityDao: EntityDao) extends AppService {
   }
 
   override def getWebapps(): Seq[App] = {
-    entityDao.search(OqlBuilder.from(classOf[App], "app").where("app.appType=:typ and app.enabled=true", "web-app").orderBy("app.indexno"))
+    entityDao.search(OqlBuilder.from(classOf[App], "app").where("app.appType.name=:typ and app.enabled=true", AppType.Webapp).orderBy("app.indexno"))
   }
 
   override def getApps(): Seq[App] = {

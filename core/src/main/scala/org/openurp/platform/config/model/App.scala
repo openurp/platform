@@ -28,13 +28,13 @@ class App extends IntId with Named with Enabled with Ordered[App] with Principal
   var secret: String = _
   var title: String = _
   var datasources = Collections.newBuffer[DataSource]
-  var appType: String = _
+  var appType: AppType = _
   var url: String = _
   var base: String = _
   var logoUrl: Option[String] = None
   var indexno: String = _
   var domain: Domain = _
-  var embeddable: Boolean = true
+  var navStyle: Option[String] = None
 
   def getName = name
 

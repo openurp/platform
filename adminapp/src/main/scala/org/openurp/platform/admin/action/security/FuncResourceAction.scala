@@ -23,11 +23,10 @@ import org.beangle.data.model.Entity
 import org.beangle.webmvc.api.annotation.ignore
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
-import org.openurp.platform.config.model.App
-import org.openurp.platform.security.model.{ FuncPermission, FuncResource, Menu }
-import org.openurp.platform.security.service.FuncPermissionService
 import org.openurp.platform.admin.helper.AppHelper
 import org.openurp.platform.config.service.AppService
+import org.openurp.platform.security.model.{ FuncPermission, FuncResource, Menu }
+import org.openurp.platform.security.service.FuncPermissionService
 
 /**
  * 系统模块管理响应类
@@ -92,4 +91,29 @@ class FuncResourceAction extends RestfulAction[FuncResource] {
     AppHelper.putApps(appService.getApps(), "resource.app.id", entityDao)
   }
 
+  @ignore
+  protected override def removeAndRedirect(entities: Seq[FuncResource]): View = {
+    try {
+      //删除相关表
+      val menuBuilder2 = OqlBuilder.from(classOf[Menu], "m").join("m.resources", "r");
+      ("r in(:entries)", entities)
+      val menus2 = entityDao.search(menuBuilder2)
+      menus2 foreach (m => m.resources --= entities)
+      entityDao.saveOrUpdate(menus2)
+
+      //重置依次作为入口的菜单
+      val menuBuilder = OqlBuilder.from(classOf[Menu], "m").
+        where("m.entry in(:entries)", entities)
+      val menus = entityDao.search(menuBuilder)
+      menus foreach (m => m.entry = None)
+
+      remove(entities)
+      redirect("search", "info.remove.success")
+    } catch {
+      case e: Exception => {
+        logger.info("removeAndForwad failure", e)
+        redirect("search", "info.delete.failure")
+      }
+    }
+  }
 }
