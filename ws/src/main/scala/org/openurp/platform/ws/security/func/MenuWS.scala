@@ -74,8 +74,8 @@ class MenuWS extends ActionSupport with EntitySupport[Menu] {
               val appMenus = menus.groupBy(_.app)
               appMenus map {
                 case (app, menus) =>
-                  val appProps = new Properties(app, "id", "name", "title", "base", "url", "logoUrl", "embeddable")
-                  appProps.put("domain", domain)
+                  val appProps = new Properties(app, "id", "name", "title", "base", "url", "logoUrl", "navStyle")
+                  appProps.add("domain", app.domain, "id", "name")
                   AppMenu(appProps, menus.map(convert(_)))
               }
             } else {

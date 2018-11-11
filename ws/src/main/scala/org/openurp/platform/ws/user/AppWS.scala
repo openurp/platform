@@ -47,7 +47,7 @@ class AppWS(userService: UserService, entityDao: EntityDao) extends ActionSuppor
           .join("fp.role.members", "m")
           .where("m.user=:user and m.member=true", user)
           .where("fp.resource.app.enabled=true")
-          .where(s"fp.resource.app.appType='${AppType.Webapp}'")
+          .where(s"fp.resource.app.appType.name='${AppType.Webapp}'")
           .select("distinct fp.resource.app").cacheable()
 
         val fpApps = entityDao.search(fpAppQuery)
@@ -56,7 +56,7 @@ class AppWS(userService: UserService, entityDao: EntityDao) extends ActionSuppor
         apps ++= fpApps
 
         val rootsQuery = OqlBuilder.from(classOf[Root], "root")
-          .where(s"root.user=:user and root.app.enabled=true and root.app.appType='${AppType.Webapp}'", user)
+          .where(s"root.user=:user and root.app.enabled=true and root.app.appType.name='${AppType.Webapp}'", user)
           .cacheable()
         val roots = entityDao.search(rootsQuery)
         apps ++= (roots.map(a => a.app))
@@ -65,7 +65,11 @@ class AppWS(userService: UserService, entityDao: EntityDao) extends ActionSuppor
           apps --= apps.filter { a => a.domain == null || a.domain.name != d }
         }
         val appBuffer = apps.toBuffer.sorted
-        appBuffer.map(app => new Properties(app, "id", "name", "title", "base", "url", "logoUrl", "domain", "embeddable"))
+        appBuffer.map { app =>
+          val p = new Properties(app, "id", "name", "title", "base", "url", "logoUrl", "navStyle")
+          p.add("domain", app.domain, "id", "name")
+          p
+        }
       case None => Seq.empty
     }
   }

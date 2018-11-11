@@ -15,7 +15,7 @@
     [@b.col width="30%" property="name" title="名称"][@b.a href="!info?id=${app.id}"]${app.name!}[/@][/@]
     [@b.col width="20%" property="title" title="标题"/]
     [@b.col width="15%" property="domain.title" title="领域"/]
-    [@b.col width="10%" property="appType" title="类型"]${types[app.appType]!'unknown'}[/@]
+    [@b.col width="10%" property="appType.title" title="类型"/]
     [@b.col width="10%" property="enabled" title="是否可用" /]
   [/@]
 [/@]

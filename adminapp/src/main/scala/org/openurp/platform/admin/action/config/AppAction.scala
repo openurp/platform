@@ -29,6 +29,7 @@ import org.openurp.platform.config.service.DbService
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
 import org.openurp.platform.config.model.Domain
+import org.openurp.platform.config.model.AppType
 
 class AppAction(dbService: DbService) extends RestfulAction[App] {
 
@@ -39,8 +40,14 @@ class AppAction(dbService: DbService) extends RestfulAction[App] {
     forward()
   }
 
+  protected override def indexSetting(): Unit = {
+    put("domains", entityDao.getAll(classOf[Domain]))
+    put("appTypes", entityDao.getAll(classOf[AppType]))
+  }
+
   protected override def editSetting(entity: App): Unit = {
     put("domains", entityDao.getAll(classOf[Domain]))
+    put("appTypes", entityDao.getAll(classOf[AppType]))
   }
 
   @ignore
