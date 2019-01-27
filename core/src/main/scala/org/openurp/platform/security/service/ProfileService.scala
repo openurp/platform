@@ -25,7 +25,7 @@ trait ProfileService {
 
   def getProfiles(user: User, resource: FuncResource): Seq[Profile]
 
-  def getDimensionValues(field: Dimension, keys: Any*): Seq[Any]
+  def getDimensionValues(field: Dimension, keys: String*): Seq[Any]
 
   def getDimension(fieldName: String): Dimension
 

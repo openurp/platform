@@ -28,6 +28,10 @@ import org.openurp.platform.security.model.Menu
 import org.openurp.platform.security.service.MenuService
 import org.openurp.platform.user.model.Role
 import org.openurp.platform.user.service.UserService
+import org.openurp.platform.user.model.User
+import org.openurp.platform.config.model.Domain
+import scala.collection.mutable.ArrayBuffer
+import scala.collection.mutable.Buffer
 
 class MenuWS extends ActionSupport with EntitySupport[Menu] {
 
@@ -62,28 +66,29 @@ class MenuWS extends ActionSupport with EntitySupport[Menu] {
 
   @response
   @mapping("user/{user}")
-  def user(@param("app") appName: String, @param("user") username: String): Iterable[Any] = {
+  def user(@param("app") appName: String, @param("user") username: String): Any = {
+    val up = userService.get(username)
+    if (up.isEmpty) {
+      return "{}"
+    }
+    val u = up.get
+    val app = appService.getApp(appName)
     val forDomain = getBoolean("forDomain", false)
-    appService.getApp(appName) match {
+    app match {
       case Some(app) =>
-        userService.get(username) match {
-          case Some(u) =>
-            if (forDomain) {
-              val menus = menuService.getTopMenus(app.domain, u)
-              val domain = new Properties(app.domain, "id", "name", "title")
-              val appMenus = menus.groupBy(_.app)
-              appMenus map {
-                case (app, menus) =>
-                  val appProps = new Properties(app, "id", "name", "title", "base", "url", "logoUrl", "navStyle")
-                  appProps.add("domain", app.domain, "id", "name", "title")
-                  AppMenu(appProps, menus.map(convert(_)))
-              }
-            } else {
-              menuService.getTopMenus(app, u) map (m => convert(m))
-            }
-          case None => List.empty[Menu]
+        if (forDomain) {
+          getDomainMenus(app.domain, u)
+        } else {
+          val appProps = new Properties(app, "id", "name", "title", "base", "url", "logoUrl", "navStyle")
+          appProps.add("domain", app.domain, "id", "name", "title", "indexno")
+          val menus = menuService.getTopMenus(app, u) map (m => convert(m))
+          AppMenus(appProps, menus)
         }
-      case None => List.empty[Menu]
+      case None =>
+        appService.getDomain(appName) match {
+          case None    => "{}"
+          case Some(d) => getDomainMenus(d, u)
+        }
     }
   }
 
@@ -95,6 +100,41 @@ class MenuWS extends ActionSupport with EntitySupport[Menu] {
         val roles = entityDao.findBy(classOf[Role], "id", List(roleId))
         menuService.getTopMenus(app, roles.head) map (m => convert(m))
       case None => List.empty[Menu]
+    }
+  }
+
+  private def getDomainMenus(dm: Domain, u: User): DomainMenus = {
+    val menus = menuService.getTopMenus(Some(dm), u)
+    val appsMenus = menus.groupBy(_.app)
+    val domainApps = appsMenus.keys.groupBy(_.domain)
+    val directMenuMaps = domainApps map {
+      case (oned, apps) =>
+        val domain = new Properties(oned, "id", "name", "title", "indexno")
+        val appMenus = domainApps(oned).toBuffer.sorted map { app =>
+          val appProps = new Properties(app, "id", "name", "title", "base", "url", "logoUrl", "navStyle")
+          AppMenus(appProps, appsMenus(app).map(convert(_)))
+        }
+        (oned, DomainMenus(domain, appMenus, new ArrayBuffer[DomainMenus]))
+    }
+
+    val domainMenuMaps = new collection.mutable.HashMap[Domain, DomainMenus]
+    domainMenuMaps ++= directMenuMaps
+
+    directMenuMaps.keys.toSeq.sorted foreach (addParent(_, domainMenuMaps))
+    domainMenuMaps(dm)
+  }
+
+  private def addParent(domain: Domain, domainMenuMaps: collection.mutable.HashMap[Domain, DomainMenus]): Unit = {
+    domain.parent foreach { pd =>
+      val parent = domainMenuMaps.get(pd) match {
+        case Some(s) => s
+        case None =>
+          val s = DomainMenus(new Properties(pd, "id", "name", "title", "indexno"), List.empty, new ArrayBuffer[DomainMenus])
+          domainMenuMaps.put(pd, s)
+          s
+      }
+      parent.children += domainMenuMaps(domain)
+      pd.parent foreach (addParent(_, domainMenuMaps))
     }
   }
 
@@ -113,4 +153,6 @@ class MenuWS extends ActionSupport with EntitySupport[Menu] {
 
 }
 
-case class AppMenu(app: Properties, menus: Iterable[Properties])
+case class AppMenus(app: Properties, menus: Iterable[Properties])
+
+case class DomainMenus(domain: Properties, appMenus: Iterable[AppMenus], children: Buffer[DomainMenus])

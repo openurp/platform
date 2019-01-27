@@ -39,7 +39,7 @@ class MenuServiceImpl(val entityDao: EntityDao) extends MenuService {
     getTopMenus(null, Some(app), roles)
   }
 
-  def getTopMenus(domain: Domain, user: User): Seq[Menu] = {
+  def getTopMenus(domain: Option[Domain], user: User): Seq[Menu] = {
     val roles = user.roles.filter(m => m.member).map { m => m.role }
     getTopMenus(domain, None, roles)
   }
@@ -48,7 +48,7 @@ class MenuServiceImpl(val entityDao: EntityDao) extends MenuService {
     getTopMenus(null, Some(app), List(role))
   }
 
-  private def getTopMenus(domain: Domain, app: Option[App], roles: Iterable[Role]): Seq[Menu] = {
+  private def getTopMenus(domain: Option[Domain], app: Option[App], roles: Iterable[Role]): Seq[Menu] = {
     val menuSet = Collections.newSet[Menu]
     roles foreach { role =>
       val query = OqlBuilder.from[Menu](classOf[Menu].getName + " menu," + classOf[FuncPermission].getName + " fp")
@@ -59,8 +59,12 @@ class MenuServiceImpl(val entityDao: EntityDao) extends MenuService {
 
       app match {
         case Some(p) => query.where("menu.app=:app", p)
-        case None    => query.where("menu.app.domain=:domain and menu.app.enabled=true", domain)
+        case None =>
+          domain foreach { dm =>
+            query.where("menu.app.domain in (:domains) and menu.app.enabled=true", Hierarchicals.getFamily(dm))
+          }
       }
+
       query.cacheable()
 
       entityDao.search(query).foreach { m =>

@@ -32,11 +32,11 @@ class ProfileServiceImpl extends ProfileService {
     Seq.empty
   }
 
-  def getDimensionValues(field: Dimension, keys: Any*): Seq[Any] = {
+  def getDimensionValues(field: Dimension, keys: String*): Seq[Any] = {
     val source = field.source
+    val keySet = keys.toSet
     if (source.startsWith("json:")) {
       val json = source.substring(5)
-      val keySet = keys.toSet
       JSON.parse(json).asInstanceOf[Seq[Any]].filter { x => Properties.get(x, field.keyName) }
     } else if (source.startsWith("csv:")) {
       val csv = source.substring(4)
@@ -52,7 +52,11 @@ class ProfileServiceImpl extends ProfileService {
           for (j <- 0 until heads.length) {
             p.put(heads(j), datas(j))
           }
-          data += p
+          p.get(field.keyName) foreach { id =>
+            if (keys.isEmpty || keys.contains("*") || keys.contains(id)) {
+              data += p
+            }
+          }
         }
         i += 1
       }

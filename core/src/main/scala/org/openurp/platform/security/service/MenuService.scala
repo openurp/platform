@@ -25,7 +25,7 @@ import org.openurp.platform.config.model.Domain
 
 trait MenuService {
 
-  def getTopMenus(domain: Domain, user: User): Seq[Menu]
+  def getTopMenus(domain: Option[Domain], user: User): Seq[Menu]
 
   def getTopMenus(app: App, user: User): Seq[Menu]
 
