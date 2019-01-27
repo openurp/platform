@@ -29,6 +29,7 @@ import scala.collection.mutable.ArrayBuffer
 import org.openurp.platform.user.model.Profile
 import org.beangle.commons.collection.Collections
 import org.openurp.platform.user.service.UserService
+import org.openurp.platform.security.service.ProfileService
 
 /**
  * @author chaostone
@@ -36,6 +37,8 @@ import org.openurp.platform.user.service.UserService
 class ProfileWS(entityDao: EntityDao) extends ActionSupport {
 
   var userService: UserService = _
+
+  var profileService: ProfileService = _
 
   @response
   @mapping("{userCode}")
@@ -50,6 +53,7 @@ class ProfileWS(entityDao: EntityDao) extends ActionSupport {
         val appProfiles = entityDao.search(userProfileQuery);
         val profiles = if (user.properties.isEmpty) appProfiles else List(user) ++ appProfiles
 
+        val resolved = getBoolean("resolved", false)
         profiles map { profile =>
           val p = new Properties()
           val properties = Collections.newBuffer[Properties]
@@ -65,6 +69,9 @@ class ProfileWS(entityDao: EntityDao) extends ActionSupport {
               dimension.put("keyName", d.keyName)
               entry.put("dimension", dimension)
               entry.put("value", v)
+              if (resolved) {
+                entry.put("value", profileService.getDimensionValues(d, v))
+              }
               properties += entry
           }
           p

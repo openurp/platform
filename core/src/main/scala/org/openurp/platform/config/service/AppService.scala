@@ -19,10 +19,15 @@
 package org.openurp.platform.config.service
 
 import org.openurp.platform.config.model.App
+import org.openurp.platform.config.model.Domain
+
 /**
  * @author chaostone
  */
 trait AppService {
+
+  def getDomain(name: String): Option[Domain]
+
   def getApp(name: String, secret: String): Option[App]
 
   def getApp(name: String): Option[App]
@@ -30,4 +35,5 @@ trait AppService {
   def getWebapps(): Seq[App]
 
   def getApps(): Seq[App]
+
 }
