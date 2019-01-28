@@ -8,7 +8,7 @@ img {border:0 none;vertical-align:middle}
 [#macro menuitem image="" link="" name="" remark=""]
 [@ems.guard res=link]
 <tr>
-  <td>[@b.a href=link]<img height="48" style="margin-right:1em" alt="" width="48" src="${b.theme.iconurl(image!,48)}" />[/@]</td>
+  <td>[@b.a href=link]<img height="48" style="margin-right:1em" alt="" width="48" src="${b.static_url("bui","icons/48x48/actions/"+image!)}" />[/@]</td>
   <td style="vertical-align:middle">
     <div class="link">[@b.a href="${link}"]${name}[/@]</div>
     <div style="color:gray; text-decoration:none;">${remark!}</div>

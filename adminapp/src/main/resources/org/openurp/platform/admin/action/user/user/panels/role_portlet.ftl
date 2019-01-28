@@ -5,9 +5,9 @@
   [@b.grid  items=user.members var="m" sortable="false"]
     [@b.row]
       [@b.col width="49%" title="info.role" property="role.name"]<span title="加入时间：${(m.createdAt?string('yyyy-MM-dd HH:mm'))!}">${m.role.name}</span>[/@]
-      [@b.col width="17%" title="成员"][#if m.member]<img src="${b.theme.iconurl('actions/activate.png')}"/>[/#if][/@]
-      [@b.col width="17%" title="授权"][#if m.granter]<img src="${b.theme.iconurl('actions/activate.png')}"/>[/#if][/@]
-      [@b.col width="17%" title="管理"][#if m.manager]<img src="${b.theme.iconurl('actions/activate.png')}"/>[/#if][/@]
+      [@b.col width="17%" title="成员"][#if m.member]<img src="${b.static_url("bui","icons/16x16/actions/activate.png")}"/>[/#if][/@]
+      [@b.col width="17%" title="授权"][#if m.granter]<img src="${b.static_url("bui","icons/16x16/actions/activate.png")}"/>[/#if][/@]
+      [@b.col width="17%" title="管理"][#if m.manager]<img src="${b.static_url("bui","icons/16x16/actions/activate.png")}"/>[/#if][/@]
     [/@]
   [/@]
   </div>
