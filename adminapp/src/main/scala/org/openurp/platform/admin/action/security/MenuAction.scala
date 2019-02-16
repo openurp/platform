@@ -104,6 +104,10 @@ class MenuAction extends RestfulAction[Menu] {
       for (one <- family) one.enabled = false
       entityDao.saveOrUpdate(family)
     }
+    entityDao.evict(menu)
+    if (null != parent) {
+      entityDao.evict(parent)
+    }
     return redirect("search", "info.save.success")
   }
 

@@ -143,6 +143,14 @@ class MenuServiceImpl(val entityDao: EntityDao) extends MenuService {
   }
 
   def move(menu: Menu, location: Menu, index: Int): Unit = {
+    menu.parent foreach { p =>
+      if (null == location || p != location) {
+        menu.parent = None
+        entityDao.saveOrUpdate(menu)
+        entityDao.refresh(p)
+      }
+    }
+
     val nodes =
       if (null != location) {
         Hierarchicals.move(menu, location, index)
@@ -150,10 +158,13 @@ class MenuServiceImpl(val entityDao: EntityDao) extends MenuService {
         val builder = OqlBuilder.from(classOf[Menu], "m")
           .where("m.app = :app and m.parent is null", menu.app)
           .orderBy("m.indexno")
-        if (None != menu.parent) entityDao.evict(menu.parent.get)
         Hierarchicals.move(menu, entityDao.search(builder).toBuffer, index)
       }
     entityDao.saveOrUpdate(nodes)
+
+    if (null != location) {
+      entityDao.refresh(location)
+    }
   }
 
   def importFrom(app: App, xml: scala.xml.Node): Unit = {
