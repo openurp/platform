@@ -28,8 +28,8 @@
     <div class="login">
    <img style="width:182px;height:35px;margin-top:22px;margin-bottom:23px" src="${b.static_url('openurp-default','images/banner.png')}"/>
      <form name="loginForm" action="${base}/login" target="_top" method="post">
-     [#if Parameters['sid_name']??]<input type="hidden" name="sid_name" value="${Parameters['sid_name']}">[/#if]
-     [#if Parameters['service']??]<input type="hidden" name="service" value="${Parameters['service']}">[/#if]
+     [#if Parameters['sid_name']??]<input type="hidden" name="sid_name" value="${Parameters['sid_name']?html}">[/#if]
+     [#if Parameters['service']??]<input type="hidden" name="service" value="${Parameters['service']?html}">[/#if]
         <table class="logintable">
             <tr style="height:30px">
                 <td colspan="2" style="text-align:center;color:red;">${error!}</td>
