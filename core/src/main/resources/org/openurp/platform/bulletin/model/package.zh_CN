@@ -22,3 +22,4 @@ Notice.title=标题
 Notice.publishedOn=发布日期
 Notice.sticky=是否置顶
 Notice.archived=是否归档
+Notice.popup=是否弹窗

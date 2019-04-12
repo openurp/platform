@@ -25,7 +25,7 @@ import org.beangle.webmvc.api.annotation.ignore
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.platform.bulletin.model.Notice
-import org.openurp.platform.config.model.Domain
+import org.openurp.platform.config.model.App
 import org.openurp.platform.user.model.{ User, UserCategory }
 
 class NoticeAction extends RestfulAction[Notice] {
@@ -36,7 +36,7 @@ class NoticeAction extends RestfulAction[Notice] {
 
   override protected def editSetting(entity: Notice): Unit = {
     put("userCategories", entityDao.getAll(classOf[UserCategory]))
-    put("domains", entityDao.getAll(classOf[Domain]))
+    put("apps", entityDao.getAll(classOf[App]))
   }
 
   @ignore

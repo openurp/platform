@@ -82,10 +82,9 @@ class ProfileAction(profileService: ProfileService) extends RestfulAction[UserPr
       entityDao.saveOrUpdate(profile.user)
       redirect("index", s"&profile.user.id=${profile.user.id}", "info.remove.success")
     } catch {
-      case e: Exception => {
+      case e: Exception =>
         logger.info("removeAndForwad failure", e)
         redirect("appinfo", s"&profile.user.id=${profile.user.id}", "info.delete.failure")
-      }
     }
   }
 
@@ -94,7 +93,7 @@ class ProfileAction(profileService: ProfileService) extends RestfulAction[UserPr
     val builder=OqlBuilder.from[Domain](classOf[Dimension].getName,"d")
     builder.join("d.domains", "domain").select("distinct domain")
     val domains = entityDao.search(builder)
-    if (null == profile.domain && !domains.isEmpty) profile.domain = domains.head
+    if (null == profile.domain && domains.nonEmpty) profile.domain = domains.head
     if (null == profile.user) profile.user = userService.get(Securities.user).get
     put("domains", domains)
     helper.fillEditInfo(profile, true, profile.domain)

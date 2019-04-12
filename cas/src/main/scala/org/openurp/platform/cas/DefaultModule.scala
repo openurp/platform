@@ -24,15 +24,17 @@ import org.beangle.cache.redis.JedisPoolFactory
 import org.beangle.cdi.PropertySource
 import org.beangle.cdi.bind.BindModule
 import org.beangle.commons.collection.Collections
+import org.beangle.commons.lang.Strings
 import org.beangle.ids.cas.id.impl.DefaultServiceTicketIdGenerator
 import org.beangle.ids.cas.ticket.{ DefaultTicketCacheService, DefaultTicketRegistry }
+import org.beangle.ids.cas.LoginConfig
 import org.beangle.security.authz.PublicAuthorizer
 import org.beangle.security.web.{ UrlEntryPoint, WebSecurityManager }
 import org.beangle.security.web.access.{ DefaultAccessDeniedHandler, SecurityInterceptor }
-import org.openurp.app.UrpApp
 import org.beangle.security.web.access.DefaultSecurityContextBuilder
-import org.openurp.app.security.RemoteAuthorizer
 import org.beangle.security.web.access.AuthorizationFilter
+import org.openurp.app.{ UrpApp, Urp }
+import org.openurp.app.security.RemoteAuthorizer
 
 /**
  * @author chaostone
@@ -54,6 +56,12 @@ class DefaultModule extends BindModule with PropertySource {
     bind(classOf[DefaultSecurityContextBuilder])
 
     bind("security.Authorizer.remote", classOf[RemoteAuthorizer]).property("publics", List("/"))
+
+    bind("casConfig", classOf[LoginConfig])
+      .property("enableCaptcha", $("login.enableCaptcha"))
+      .property("forceHttps", $("login.forceHttps"))
+      .property("key", $("login.key"))
+      .property("origin", $("login.origin"))
   }
 
   override def properties: collection.Map[String, String] = {
@@ -71,8 +79,27 @@ class DefaultModule extends BindModule with PropertySource {
         datas += ("redis.host" -> (e \\ "host").text.trim)
         datas += ("redis.port" -> (e \\ "port").text.trim)
       }
+      (app \\ "config" \\ "login") foreach { n =>
+        val e = n.asInstanceOf[scala.xml.Elem]
+        datas += ("login.enableCaptcha" -> getAttribute(e, "enableCaptcha", "false"))
+        datas += ("login.forceHttps" -> getAttribute(e, "forceHttps", "false"))
+        datas += ("login.key" -> getAttribute(e, "key", Urp.base))
+        datas += ("login.origin" -> getAttribute(e, "origin", Urp.base))
+      }
+      if (!datas.contains("login.origin")) {
+        datas += ("login.key" -> Urp.base)
+        datas += ("login.origin" -> Urp.base)
+      }
       is.close()
     }
     datas.toMap
+  }
+  private def getAttribute(e: scala.xml.Elem, name: String, defaultValue: String): String = {
+    val v = (e \ ("@" + name)).text.trim
+    if (Strings.isEmpty(v)) {
+      defaultValue
+    } else {
+      v
+    }
   }
 }

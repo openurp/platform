@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.openurp.platform</groupId>
     <artifactId>openurp-platform-parent</artifactId>
-    <version>0.2.15</version>
+    <version>0.2.16</version>
   </parent>
   <groupId>org.openurp.platform</groupId>
   <artifactId>openurp-platform-cas</artifactId>
@@ -18,8 +18,8 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.beangle.ids.cas</groupId>
-      <artifactId>beangle-ids-cas-web_2.12</artifactId>
+      <groupId>org.beangle.ids</groupId>
+      <artifactId>beangle-ids-cas_2.12</artifactId>
       <version>${beangle.ids.version}</version>
     </dependency>
     <dependency>
