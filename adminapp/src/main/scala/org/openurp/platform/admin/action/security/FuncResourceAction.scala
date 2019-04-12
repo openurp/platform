@@ -27,7 +27,7 @@ import org.openurp.platform.admin.helper.AppHelper
 import org.openurp.platform.config.service.AppService
 import org.openurp.platform.security.model.{ FuncPermission, FuncResource, Menu }
 import org.openurp.platform.security.service.FuncPermissionService
-
+import org.beangle.security.authz.Scopes
 /**
  * 系统模块管理响应类
  *
@@ -79,8 +79,12 @@ class FuncResourceAction extends RestfulAction[FuncResource] {
     return forward()
   }
 
-  protected override def editSetting(entity: FuncResource): Unit = {
+  protected override def editSetting(resource: FuncResource): Unit = {
     put("apps", appService.getApps())
+    if (!resource.persisted) {
+      resource.scope = Scopes.Private
+      resource.enabled = true
+    }
   }
 
   protected override def simpleEntityName: String = {

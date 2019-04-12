@@ -37,13 +37,22 @@
             <tr>
                 <td><label for="username">用户名:&nbsp;</label></td>
                 <td>
-                    <input name="username" id="username" tabindex="1" autofocus="autofocus" title="请输入用户名" type="text" value="${(Parameters['username']?html)!}" style="width:105px;"/>
+                    <input name="username" id="username" tabindex="1" autofocus="autofocus" title="请输入用户名"  placeholder="用户名" type="text" value="${(Parameters['username']?html)!}" style="width:105px;"/>
                 </td>
             </tr>
             <tr>
                 <td><label for="password">密　码:&nbsp;</label></td>
-                <td><input id="password" name="password"  tabindex="2" type="password" style="width:105px;"/></td>
+                <td><input id="password" name="password"  tabindex="2" type="password" style="width:105px;" autocomplete="off" placeholder="密码"/></td>
             </tr>
+            [#if config.enableCaptcha]
+            <tr>
+                <td><label for="password">验证码:&nbsp;</label></td>
+                <td>
+                  <input id="captcha_response" name="captcha_response" tabindex="3" type="text" style="width:50px;" placeholder="验证码"/>
+                  <img src="${b.url("!captcha")}?t=${current_timestamp}" id="captcha_image" style="vertical-align:top;margin-top:1px;border:0px" width="90" height="25"  title="点击更换" onclick="change_captcha()">
+                </td>
+            </tr>
+            [/#if]
             <tr>
                 <td colspan="2">
                     <input type="submit" name="submitBtn" tabindex="6" class="blue-button"  onclick="return checkLogin(this.form)" value="登录"/>
@@ -73,11 +82,20 @@ ${b.script("cryptojs","components/mode-ecb.js")}
         if(!form['password'].value){
             alert("密码不能为空");return false;
         }
+        [#if config.enableCaptcha]
+        if(!form['captcha_response'].value){
+            alert("验证码不能为空");return false;
+        }
+        [/#if]
         try{
         var encryptedData = CryptoJS.AES.encrypt(form['password'].value, key, {mode: CryptoJS.mode.ECB,padding: CryptoJS.pad.Pkcs7});
         form['password'].value=("?"+encryptedData.ciphertext);
         }catch(e){alert(e);return false;}
         return true;
+    }
+
+    function change_captcha(){
+       document.getElementById('captcha_image').src="${b.url("!captcha")}?t="+(new Date()).getTime();
     }
 </script>
 </body>

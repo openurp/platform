@@ -52,7 +52,6 @@ class MenuAction extends RestfulAction[Menu] {
     val app = entityDao.get(classOf[App], menu.app.id);
 
     var folders = Collections.newBuffer[Menu]
-
     // 查找可以作为父节点的菜单
     val folderBuilder = OqlBuilder.from(classOf[Menu], "m")
     folderBuilder.where("m.entry is null and m.app=:app", app)
@@ -73,6 +72,10 @@ class MenuAction extends RestfulAction[Menu] {
     alternatives --= menu.resources
     put("alternatives", alternatives)
     put("resources", resources)
+
+    if (!menu.persisted) {
+      menu.enabled = true
+    }
   }
 
   @ignore
@@ -93,6 +96,13 @@ class MenuAction extends RestfulAction[Menu] {
     val resources = entityDao.find(classOf[FuncResource], intIds("resource"))
     menu.resources.clear()
     menu.resources ++= resources
+    //检查入口资源是否在使用资源列表中
+    menu.entry.foreach { entry =>
+      if (!resources.exists(_ == entry)) {
+        menu.resources += entry
+      }
+    }
+
     val newParentId = getInt("parent.id")
     val indexno = getInt("indexno", 0)
     var parent: Menu = null

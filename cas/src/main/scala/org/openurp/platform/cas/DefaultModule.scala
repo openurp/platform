@@ -58,7 +58,7 @@ class DefaultModule extends BindModule with PropertySource {
     bind("security.Authorizer.remote", classOf[RemoteAuthorizer]).property("publics", List("/"))
 
     bind("casConfig", classOf[LoginConfig])
-      .property("enableCaptha", $("login.enableCaptha"))
+      .property("enableCaptcha", $("login.enableCaptcha"))
       .property("forceHttps", $("login.forceHttps"))
       .property("key", $("login.key"))
       .property("origin", $("login.origin"))
@@ -81,7 +81,7 @@ class DefaultModule extends BindModule with PropertySource {
       }
       (app \\ "config" \\ "login") foreach { n =>
         val e = n.asInstanceOf[scala.xml.Elem]
-        datas += ("login.enableCaptha" -> getAttribute(e, "enableCaptha", "false"))
+        datas += ("login.enableCaptcha" -> getAttribute(e, "enableCaptcha", "false"))
         datas += ("login.forceHttps" -> getAttribute(e, "forceHttps", "false"))
         datas += ("login.key" -> getAttribute(e, "key", Urp.base))
         datas += ("login.origin" -> getAttribute(e, "origin", Urp.base))

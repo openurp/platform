@@ -18,15 +18,17 @@
  */
 package org.openurp.platform.bulletin.model
 
-import org.beangle.data.model.LongId
-import org.openurp.platform.config.model.Domain
-import org.openurp.platform.user.model.UserCategory
 import java.time.LocalDate
+
+import org.beangle.data.model.LongId
+import org.beangle.data.model.pojo.DateRange
+import org.openurp.platform.config.model.App
+import org.openurp.platform.user.model.UserCategory
 import org.openurp.platform.user.model.User
 
-class Notice extends LongId {
+class Notice extends LongId with DateRange {
 
-  var domain: Domain = _
+  var app: App = _
 
   var title: String = _
 
@@ -41,4 +43,6 @@ class Notice extends LongId {
   var operator: User = _
 
   var archived: Boolean = _
+
+  var popup: Boolean = _
 }
