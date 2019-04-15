@@ -68,7 +68,7 @@ class MessageAction extends RestfulAction[Message] {
   }
 
   def newly(): View = {
-    val builder = getQueryBuilder()
+    val builder = getQueryBuilder
     builder.limit(1, 5)
     builder.where("message.status=" + Message.Newly)
     val messages = entityDao.search(builder)
@@ -81,8 +81,8 @@ class MessageAction extends RestfulAction[Message] {
     forward()
   }
 
-  override protected def getQueryBuilder(): OqlBuilder[Message] = {
-    val builder = super.getQueryBuilder()
+  override protected def getQueryBuilder: OqlBuilder[Message] = {
+    val builder = super.getQueryBuilder
     builder.where("message.recipient.code=:me", Securities.user)
     builder
   }

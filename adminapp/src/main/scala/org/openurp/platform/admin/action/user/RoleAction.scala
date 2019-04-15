@@ -69,7 +69,7 @@ class RoleAction(val roleService: RoleService, val userService: UserService) ext
     forward()
   }
 
-  protected override def getQueryBuilder(): OqlBuilder[Role] = {
+  protected override def getQueryBuilder: OqlBuilder[Role] = {
     val entityQuery = OqlBuilder.from(classOf[Role], "role")
     val me = entityDao.findBy(classOf[User], "code", List(Securities.user)).head
     //    if (!userService.isRoot(me, app.name)) {
