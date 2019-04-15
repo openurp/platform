@@ -43,7 +43,7 @@ class MenuWS extends ActionSupport with EntitySupport[Menu] {
 
   var userService: UserService = _
 
-  private def getQueryBuilder(): OqlBuilder[Menu] = {
+  private def getQueryBuilder: OqlBuilder[Menu] = {
     val builder = OqlBuilder.from(classOf[Menu], "menu")
     QueryHelper.populateConditions(builder)
     builder.where("menu.enabled=true")

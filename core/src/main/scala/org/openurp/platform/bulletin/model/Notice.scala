@@ -20,11 +20,13 @@ package org.openurp.platform.bulletin.model
 
 import java.time.LocalDate
 
+import org.beangle.commons.collection.Collections
 import org.beangle.data.model.LongId
 import org.beangle.data.model.pojo.DateRange
 import org.openurp.platform.config.model.App
-import org.openurp.platform.user.model.UserCategory
-import org.openurp.platform.user.model.User
+import org.openurp.platform.user.model.{User, UserCategory}
+
+import scala.collection.mutable.Buffer
 
 class Notice extends LongId with DateRange {
 
@@ -45,4 +47,6 @@ class Notice extends LongId with DateRange {
   var archived: Boolean = _
 
   var popup: Boolean = _
+
+  var docs:Buffer[Doc]=Collections.newBuffer[Doc]
 }

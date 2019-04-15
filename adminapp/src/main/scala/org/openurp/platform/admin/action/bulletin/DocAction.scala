@@ -18,17 +18,19 @@
  */
 package org.openurp.platform.admin.action.bulletin
 
+import java.io.ByteArrayInputStream
 import java.time.Instant
 
-import org.beangle.security.Securities
-import org.beangle.webmvc.api.annotation.ignore
-import org.beangle.webmvc.api.view.View
-import org.beangle.webmvc.entity.action.RestfulAction
-import org.openurp.platform.bulletin.model.{ Attachment, Doc }
-import org.openurp.platform.config.model.Domain
-import org.openurp.platform.user.model.{ User, UserCategory }
-
 import javax.servlet.http.Part
+import org.beangle.commons.activation.MimeTypes
+import org.beangle.commons.lang.Strings
+import org.beangle.security.Securities
+import org.beangle.webmvc.api.annotation.{ignore, mapping, param}
+import org.beangle.webmvc.api.view.{Stream, View}
+import org.beangle.webmvc.entity.action.RestfulAction
+import org.openurp.platform.bulletin.model.{Attachment, Doc}
+import org.openurp.platform.config.model.Domain
+import org.openurp.platform.user.model.{User, UserCategory}
 
 class DocAction extends RestfulAction[Doc] {
 
@@ -39,6 +41,16 @@ class DocAction extends RestfulAction[Doc] {
   override protected def editSetting(entity: Doc): Unit = {
     put("userCategories", entityDao.getAll(classOf[UserCategory]))
     put("domains", entityDao.getAll(classOf[Domain]))
+  }
+
+  private def decideContentType(fileName: String): String = {
+    MimeTypes.getMimeType(Strings.substringAfterLast(fileName, "."), MimeTypes.ApplicationOctetStream).toString
+  }
+
+  def download(@param("id") id: String): View = {
+    val doc = entityDao.get(classOf[Doc], id.toLong)
+    Stream(new ByteArrayInputStream(doc.file.content), this.decideContentType(doc.file.fileName),
+      doc.file.fileName)
   }
 
   @ignore

@@ -12,5 +12,14 @@
     <div class="mailbox-read-message">
       ${notice.content}
     </div>
+    [#if notice.docs?size>0]
+    <div class="mailbox-read-message">
+      <ul>附件列表
+      [#list notice.docs as doc]
+      <li>[@b.a href="doc!download?id="+doc.id target="_new"]${doc.name}[/@]</li>
+      [/#list]
+      </ul>
+    </div>
+    [/#if]
   </div>
 [@b.foot/]
