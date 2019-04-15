@@ -150,7 +150,7 @@ class MenuAction extends RestfulAction[Menu] {
   }
 
   def exportToXml(): View = {
-    val query = getQueryBuilder()
+    val query = getQueryBuilder
     query.limit(null)
     query.where("menu.parent is null")
     val menus = entityDao.search(query)

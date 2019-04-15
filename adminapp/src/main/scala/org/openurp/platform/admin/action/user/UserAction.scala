@@ -75,7 +75,7 @@ class UserAction extends RestfulAction[User] {
     entityDao.findBy(classOf[User], "code", List(Securities.user)).head
   }
 
-  protected override def getQueryBuilder(): OqlBuilder[User] = {
+  protected override def getQueryBuilder: OqlBuilder[User] = {
     val manager = loginUser
     val userQuery = OqlBuilder.from(classOf[User], "user")
     // 查询角色
