@@ -18,16 +18,14 @@
  */
 package org.openurp.platform.bulletin.model
 
-import org.beangle.data.model.pojo.TemporalOn
 import org.beangle.data.model.LongId
 import org.beangle.data.model.pojo.Updated
-import org.openurp.platform.user.model.User
-import org.openurp.platform.config.model.Domain
-import org.openurp.platform.user.model.UserCategory
+import org.openurp.platform.config.model.App
+import org.openurp.platform.user.model.{User, UserCategory}
 
 class Doc extends LongId with Updated {
 
-  var domain: Domain = _
+  var app: App = _
 
   var uploadBy: User = _
 

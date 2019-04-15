@@ -18,18 +18,17 @@
  */
 package org.openurp.platform.user.action
 
-import org.beangle.data.dao.{ EntityDao, OqlBuilder }
-import org.beangle.security.Securities
-import org.beangle.webmvc.api.action.ActionSupport
-import org.beangle.webmvc.api.view.View
-import org.beangle.webmvc.api.view.Stream
-import org.openurp.platform.bulletin.model.Doc
-import org.openurp.platform.user.model.User
-import org.beangle.webmvc.api.annotation.mapping
-import org.beangle.webmvc.api.annotation.param
+import java.io.ByteArrayInputStream
+
 import org.beangle.commons.activation.MimeTypes
 import org.beangle.commons.lang.Strings
-import java.io.ByteArrayInputStream
+import org.beangle.data.dao.{EntityDao, OqlBuilder}
+import org.beangle.security.Securities
+import org.beangle.webmvc.api.action.ActionSupport
+import org.beangle.webmvc.api.annotation.{mapping, param}
+import org.beangle.webmvc.api.view.{Stream, View}
+import org.openurp.platform.bulletin.model.Doc
+import org.openurp.platform.user.model.User
 
 class DocAction extends ActionSupport {
 

@@ -20,11 +20,16 @@ package org.openurp.platform.admin.action.bulletin
 
 import java.time.LocalDate
 
+import javax.servlet.http.Part
+import java.time.Instant
+
 import org.beangle.security.Securities
 import org.beangle.webmvc.api.annotation.ignore
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.platform.bulletin.model.Notice
+import org.openurp.platform.bulletin.model.Doc
+import org.openurp.platform.bulletin.model.Attachment
 import org.openurp.platform.config.model.App
 import org.openurp.platform.user.model.{ User, UserCategory }
 
@@ -43,6 +48,18 @@ class NoticeAction extends RestfulAction[Notice] {
   override protected def saveAndRedirect(notice: Notice): View = {
     notice.publishedOn = LocalDate.now
     notice.operator = entityDao.findBy(classOf[User], "code", List(Securities.user)).head
+    getAll("notice_doc", classOf[Part]) foreach { docFile =>
+      val doc = new Doc
+      doc.app = notice.app
+      val attachment = Attachment(docFile.getSubmittedFileName, docFile.getInputStream)
+      doc.file = attachment
+      doc.name = attachment.fileName
+      doc.uploadBy = notice.operator
+      doc.userCategory = notice.userCategory
+      doc.updatedAt=Instant.now
+      entityDao.saveOrUpdate(doc.file, doc)
+      notice.docs += doc
+    }
     super.saveAndRedirect(notice)
   }
 }
