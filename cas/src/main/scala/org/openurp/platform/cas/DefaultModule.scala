@@ -26,14 +26,14 @@ import org.beangle.cdi.bind.BindModule
 import org.beangle.commons.collection.Collections
 import org.beangle.commons.lang.Strings
 import org.beangle.ids.cas.id.impl.DefaultServiceTicketIdGenerator
-import org.beangle.ids.cas.ticket.{ DefaultTicketCacheService, DefaultTicketRegistry }
+import org.beangle.ids.cas.ticket.{DefaultTicketCacheService, DefaultTicketRegistry}
 import org.beangle.ids.cas.LoginConfig
 import org.beangle.security.authz.PublicAuthorizer
-import org.beangle.security.web.{ UrlEntryPoint, WebSecurityManager }
-import org.beangle.security.web.access.{ DefaultAccessDeniedHandler, SecurityInterceptor }
+import org.beangle.security.web.{UrlEntryPoint, WebSecurityManager}
+import org.beangle.security.web.access.{DefaultAccessDeniedHandler, SecurityInterceptor}
 import org.beangle.security.web.access.DefaultSecurityContextBuilder
 import org.beangle.security.web.access.AuthorizationFilter
-import org.openurp.app.{ UrpApp, Urp }
+import org.openurp.app.{UrpApp, Urp}
 import org.openurp.app.security.RemoteAuthorizer
 
 /**
@@ -55,7 +55,7 @@ class DefaultModule extends BindModule with PropertySource {
     bind("security.SecurityManager.default", classOf[WebSecurityManager])
     bind(classOf[DefaultSecurityContextBuilder])
 
-    bind("security.Authorizer.remote", classOf[RemoteAuthorizer]).property("publics", List("/"))
+    bind("security.Authorizer.remote", PublicAuthorizer)
 
     bind("casConfig", classOf[LoginConfig])
       .property("enableCaptcha", $("login.enableCaptcha"))
