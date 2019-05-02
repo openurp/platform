@@ -36,7 +36,7 @@ object DefaultMapping extends MappingModule {
     bind[Notice].on(e => declare(
       e.content is lob))
 
-    all.except(classOf[Attachment]) cacheable ()
+    all.except(classOf[Attachment]) cacheAll()
 
   }
 }

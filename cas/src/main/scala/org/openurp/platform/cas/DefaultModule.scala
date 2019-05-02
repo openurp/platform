@@ -54,8 +54,7 @@ class DefaultModule extends BindModule with PropertySource {
     //authorizer and manager
     bind("security.SecurityManager.default", classOf[WebSecurityManager])
     bind(classOf[DefaultSecurityContextBuilder])
-
-    bind("security.Authorizer.remote", PublicAuthorizer)
+    bind("security.Authorizer.public", PublicAuthorizer)
 
     bind("casConfig", classOf[LoginConfig])
       .property("enableCaptcha", $("login.enableCaptcha"))
