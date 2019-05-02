@@ -29,7 +29,7 @@ import org.beangle.webmvc.api.annotation.{ignore, mapping, param}
 import org.beangle.webmvc.api.view.{Stream, View}
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.platform.bulletin.model.{Attachment, Doc}
-import org.openurp.platform.config.model.Domain
+import org.openurp.platform.config.model.App
 import org.openurp.platform.user.model.{User, UserCategory}
 
 class DocAction extends RestfulAction[Doc] {
@@ -40,7 +40,7 @@ class DocAction extends RestfulAction[Doc] {
 
   override protected def editSetting(entity: Doc): Unit = {
     put("userCategories", entityDao.getAll(classOf[UserCategory]))
-    put("domains", entityDao.getAll(classOf[Domain]))
+    put("apps", entityDao.getAll(classOf[App]))
   }
 
   private def decideContentType(fileName: String): String = {
