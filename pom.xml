@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.openurp</groupId>
     <artifactId>openurp-parent</artifactId>
-    <version>0.2.34</version>
+    <version>0.3.0-SNAPSHOT</version>
   </parent>
   <groupId>org.openurp.platform</groupId>
   <artifactId>openurp-platform-parent</artifactId>
@@ -23,7 +23,7 @@
   </modules>
 
   <properties>
-    <openurp.app.version>0.1.16</openurp.app.version>
+    <openurp.app.version>0.1.17-SNAPSHOT</openurp.app.version>
   </properties>
 
   <dependencyManagement>
@@ -55,7 +55,7 @@
       </dependency>
       <dependency>
         <groupId>org.beangle.webui</groupId>
-        <artifactId>beangle-webui-bootstrap_2.12</artifactId>
+        <artifactId>beangle-webui-bootstrap_2.13</artifactId>
         <version>${beangle.webui.version}</version>
       </dependency>
       <dependency>

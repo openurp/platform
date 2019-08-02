@@ -29,7 +29,6 @@ import org.openurp.platform.user.model.UserProfile
 
 /**
  * @author chaostone
- * @version $Id: DashboardHelper.java Nov 3, 2010 5:19:42 PM chaostone $
  */
 class UserDashboardHelper {
 

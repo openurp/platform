@@ -84,7 +84,7 @@ class AccountAction extends RestfulAction[User] {
     return redirect("search", "info.save.success")
   }
 
-  protected override def editSetting(user: User) {
+  protected override def editSetting(user: User): Unit = {
     put("categories", entityDao.getAll(classOf[UserCategory]))
   }
 
@@ -150,7 +150,7 @@ class AccountAction extends RestfulAction[User] {
     else ""
   }
 
-  protected def processPassword(user: User) {
+  protected def processPassword(user: User): Unit = {
     var password = get("password").orNull
     if (Strings.isBlank(password) && !user.persisted) {
       password = user.code

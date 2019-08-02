@@ -66,7 +66,7 @@ class DashboardAction extends ActionSupport {
     val rs = new collection.mutable.HashMap[String, collection.mutable.Map[Object, Object]]
     for (data <- datas) {
       val roleStat = data.asInstanceOf[Array[Object]]
-      val key = roleStat(0) + " " + roleStat(1)
+      val key = s"${roleStat(0)} ${roleStat(1)}"
       val statusMap = rs.getOrElseUpdate(key, new collection.mutable.HashMap[Object, Object])
       statusMap.put(roleStat(2), roleStat(3))
     }

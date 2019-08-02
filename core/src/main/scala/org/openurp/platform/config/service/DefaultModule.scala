@@ -25,7 +25,7 @@ import org.openurp.platform.config.service.impl.AppServiceImpl
 
 class DefaultModule extends BindModule {
 
-  protected override def binding() {
+  protected override def binding(): Unit = {
     bind(classOf[AppDataPermissionManagerImpl])
     bind(classOf[DbServiceImpl])
     bind(classOf[AppServiceImpl])

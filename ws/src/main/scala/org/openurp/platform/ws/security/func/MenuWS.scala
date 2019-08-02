@@ -56,7 +56,7 @@ class MenuWS extends ActionSupport with EntitySupport[Menu] {
   }
 
   @response
-  def index(@param("app") appName: String): Seq[Any] = {
+  def index(@param("app") appName: String): collection.Seq[Any] = {
     val menus = appService.getApp(appName) match {
       case Some(app) => menuService.getTopMenus(app)
       case None      => List.empty[Menu]

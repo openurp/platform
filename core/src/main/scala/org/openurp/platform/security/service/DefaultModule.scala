@@ -27,7 +27,7 @@ import org.openurp.platform.security.service.impl.MenuServiceImpl
 
 class DefaultModule extends BindModule{
 
-  override def binding() {
+  override def binding(): Unit = {
     bind(classOf[FuncPermissionServiceImpl])
     bind(classOf[MenuServiceImpl])
     bind(classOf[ProfileServiceImpl])

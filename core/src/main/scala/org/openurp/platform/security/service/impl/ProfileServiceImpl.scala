@@ -28,11 +28,11 @@ import org.openurp.app.util.JSON
 
 class ProfileServiceImpl extends ProfileService {
 
-  def getProfiles(user: User, resource: FuncResource): Seq[Profile] = {
+  def getProfiles(user: User, resource: FuncResource): collection.Seq[Profile] = {
     Seq.empty
   }
 
-  def getDimensionValues(field: Dimension, keys: String*): Seq[Any] = {
+  def getDimensionValues(field: Dimension, keys: String*): collection.Seq[Any] = {
     val source = field.source
     val keySet = keys.toSet
     if (source.startsWith("json:")) {

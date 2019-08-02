@@ -19,10 +19,9 @@
 package org.openurp.platform.index.action
 
 import org.beangle.webmvc.api.action.ActionSupport
-import org.openurp.app.Urp
-import org.beangle.webmvc.api.view.View
-import org.beangle.webmvc.api.annotation.action
 import org.beangle.webmvc.api.annotation.mapping
+import org.beangle.webmvc.api.view.View
+import org.openurp.app.Urp
 
 class IndexAction extends ActionSupport {
 

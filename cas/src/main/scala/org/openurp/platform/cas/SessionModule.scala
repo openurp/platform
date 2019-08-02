@@ -32,7 +32,7 @@ import org.openurp.app.{ Urp, UrpApp }
 import org.openurp.platform.cas.service.DefaultUrpSessionIdPolicy
 
 class SessionModule extends BindModule {
-  override def binding() {
+  override def binding(): Unit = {
     bind("cache.Caffeine", classOf[CaffeineCacheManager]).constructor(true)
     val protobuf = new ProtobufSerializer
     protobuf.register(classOf[DefaultSession], SessionSerializer)

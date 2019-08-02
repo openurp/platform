@@ -25,19 +25,19 @@ import org.openurp.platform.config.model.Domain
 
 trait MenuService {
 
-  def getTopMenus(domain: Option[Domain], user: User): Seq[Menu]
+  def getTopMenus(domain: Option[Domain], user: User): collection.Seq[Menu]
 
-  def getTopMenus(app: App, user: User): Seq[Menu]
+  def getTopMenus(app: App, user: User): collection.Seq[Menu]
 
-  def getTopMenus(app: App, role: Role): Seq[Menu]
+  def getTopMenus(app: App, role: Role): collection.Seq[Menu]
 
-  def getTopMenus(app: App): Seq[Menu]
+  def getTopMenus(app: App): collection.Seq[Menu]
 
-  def getMenus(app: App, role: Role): Seq[Menu]
+  def getMenus(app: App, role: Role): collection.Seq[Menu]
 
-  def getMenus(app: App, user: User): Seq[Menu]
+  def getMenus(app: App, user: User): collection.Seq[Menu]
 
-  def getMenus(app: App): Seq[Menu]
+  def getMenus(app: App): collection.Seq[Menu]
 
   def move(menu: Menu, location: Menu, index: Int): Unit
 

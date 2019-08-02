@@ -25,7 +25,7 @@ import org.openurp.platform.admin.action.config.DbAction
 
 class ConfigModule extends BindModule {
 
-  protected override def binding() {
+  protected override def binding(): Unit = {
     bind(classOf[AppAction])
     bind(classOf[DbAction])
   }

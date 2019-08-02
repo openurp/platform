@@ -34,21 +34,21 @@ import org.openurp.platform.config.model.Domain
  */
 class MenuServiceImpl(val entityDao: EntityDao) extends MenuService {
 
-  def getTopMenus(app: App, user: User): Seq[Menu] = {
+  def getTopMenus(app: App, user: User): collection.Seq[Menu] = {
     val roles = user.roles.filter(m => m.member).map { m => m.role }
     getTopMenus(null, Some(app), roles)
   }
 
-  def getTopMenus(domain: Option[Domain], user: User): Seq[Menu] = {
+  def getTopMenus(domain: Option[Domain], user: User): collection.Seq[Menu] = {
     val roles = user.roles.filter(m => m.member).map { m => m.role }
     getTopMenus(domain, None, roles)
   }
 
-  def getTopMenus(app: App, role: Role): Seq[Menu] = {
+  def getTopMenus(app: App, role: Role): collection.Seq[Menu] = {
     getTopMenus(null, Some(app), List(role))
   }
 
-  private def getTopMenus(domain: Option[Domain], app: Option[App], roles: Iterable[Role]): Seq[Menu] = {
+  private def getTopMenus(domain: Option[Domain], app: Option[App], roles: Iterable[Role]): collection.Seq[Menu] = {
     val menuSet = Collections.newSet[Menu]
     roles foreach { role =>
       val query = OqlBuilder.from[Menu](classOf[Menu].getName + " menu," + classOf[FuncPermission].getName + " fp")
@@ -96,7 +96,7 @@ class MenuServiceImpl(val entityDao: EntityDao) extends MenuService {
     menu.children.foreach { c => reserveChildren(c, menus) }
   }
 
-  def getMenus(app: App, role: Role): Seq[Menu] = {
+  def getMenus(app: App, role: Role): collection.Seq[Menu] = {
     val query = buildMenuQuery(app, role)
     query.where("menu.enabled = true")
     val menus = Collections.newSet[Menu]
@@ -104,7 +104,7 @@ class MenuServiceImpl(val entityDao: EntityDao) extends MenuService {
     addParentMenus(menus)
   }
 
-  def getMenus(app: App, user: User): Seq[Menu] = {
+  def getMenus(app: App, user: User): collection.Seq[Menu] = {
     val menus = Collections.newSet[Menu]
     for (rm <- user.roles) {
       if (rm.member) {
@@ -116,12 +116,12 @@ class MenuServiceImpl(val entityDao: EntityDao) extends MenuService {
     addParentMenus(menus)
   }
 
-  override def getTopMenus(app: App): Seq[Menu] = {
+  override def getTopMenus(app: App): collection.Seq[Menu] = {
     val builder = OqlBuilder.from(classOf[Menu]).where("menu.app= :app and menu.parent = null", app).orderBy("menu.indexno").cacheable()
     entityDao.search(builder)
   }
 
-  override def getMenus(app: App): Seq[Menu] = {
+  override def getMenus(app: App): collection.Seq[Menu] = {
     val builder = OqlBuilder.from(classOf[Menu]).where("menu.app= :app", app).orderBy("menu.indexno").cacheable()
     entityDao.search(builder)
   }
@@ -137,7 +137,7 @@ class MenuServiceImpl(val entityDao: EntityDao) extends MenuService {
     builder
   }
 
-  private def addParentMenus(menus: collection.mutable.Set[Menu]): Seq[Menu] = {
+  private def addParentMenus(menus: collection.mutable.Set[Menu]): collection.Seq[Menu] = {
     Hierarchicals.addParent(menus)
     menus.toList.sorted
   }

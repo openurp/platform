@@ -22,7 +22,7 @@ import org.beangle.data.orm.MappingModule
 
 object DefaultMapping extends MappingModule {
 
-  def binding(): Unit = {
+  override def binding(): Unit = {
     defaultIdGenerator("auto_increment")
     defaultCache("openurp.platform.security", "read-write")
 
@@ -36,7 +36,6 @@ object DefaultMapping extends MappingModule {
     bind[Notice].on(e => declare(
       e.content is lob))
 
-    all.except(classOf[Attachment]) cacheAll()
-
+    all.except(classOf[Attachment]).cacheAll()
   }
 }

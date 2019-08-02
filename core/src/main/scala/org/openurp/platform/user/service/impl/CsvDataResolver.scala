@@ -22,6 +22,7 @@ import org.beangle.commons.lang.Strings
 import org.openurp.platform.user.service.DataResolver
 import org.beangle.commons.conversion.impl.DefaultConversion
 import org.beangle.commons.bean.Properties
+import org.beangle.commons.lang.reflect.Reflections
 import org.openurp.platform.user.model.Dimension
 
 object CsvDataResolver extends DataResolver {
@@ -41,7 +42,7 @@ object CsvDataResolver extends DataResolver {
       for (obj <- items) {
         for (prop <- properties) {
           try {
-            val value: Any = Properties.get(obj, prop);
+            val value: Any = Properties.get(obj, prop)
             sb.append(String.valueOf(value)).append(';')
           } catch {
             case e: Exception => e.printStackTrace()
@@ -51,11 +52,11 @@ object CsvDataResolver extends DataResolver {
         sb.append(',')
       }
     }
-    if (sb.length() > 0) sb.deleteCharAt(sb.length() - 1)
+    if (sb.nonEmpty) sb.deleteCharAt(sb.length() - 1)
     sb.toString()
   }
 
-  def unmarshal[T](field: Dimension, source: String): Seq[T] = {
+  def unmarshal[T](field: Dimension, source: String): collection.Seq[T] = {
     if (Strings.isEmpty(source)) return List.empty
 
     val properties = new collection.mutable.ListBuffer[String]
@@ -63,10 +64,10 @@ object CsvDataResolver extends DataResolver {
     if (null != field.properties) properties ++= Strings.split(field.properties, ",")
 
     val datas = Strings.split(source, ",")
-    val rs = new collection.mutable.ListBuffer[T];
+    val rs = new collection.mutable.ListBuffer[T]
     if (properties.isEmpty) {
       val clazz = Class.forName(field.typeName).asInstanceOf[Class[T]]
-      val conversion = DefaultConversion.Instance;
+      val conversion = DefaultConversion.Instance
       for (data <- datas) rs += conversion.convert(data, clazz)
       return rs
     } else {
@@ -92,7 +93,7 @@ object CsvDataResolver extends DataResolver {
 
   def newInstance(field: Dimension): Object = {
     try {
-      Class.forName(field.typeName).newInstance().asInstanceOf[Object]
+      Reflections.newInstance[Object](field.typeName)
     } catch {
       case t: Throwable => new collection.mutable.HashMap[String, Any]
     }

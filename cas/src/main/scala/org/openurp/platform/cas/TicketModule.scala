@@ -24,7 +24,7 @@ import org.beangle.ids.cas.id.impl.DefaultServiceTicketIdGenerator
 import org.beangle.ids.cas.ticket.{ DefaultTicketCacheService, DefaultTicketRegistry }
 
 class TicketModule extends BindModule {
-  override def binding() {
+  override def binding(): Unit = {
     bind("jedis.Factory", classOf[JedisPoolFactory]).constructor(Map("host" -> $("redis.host"), "port" -> $("redis.port")))
     bind(classOf[DefaultTicketCacheService]).constructor(ref("jedis.Factory"))
     bind(classOf[DefaultTicketRegistry])

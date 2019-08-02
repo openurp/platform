@@ -36,6 +36,6 @@ trait FuncPermissionService {
 
   def activate(resourceId: Iterable[Int], active: Boolean): Unit
 
-  def authorize(app: App, role: Role, resources: Set[FuncResource])
+  def authorize(app: App, role: Role, resources: Set[FuncResource]): Unit
 
 }

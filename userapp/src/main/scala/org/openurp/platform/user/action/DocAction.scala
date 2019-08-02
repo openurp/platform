@@ -20,7 +20,7 @@ package org.openurp.platform.user.action
 
 import java.io.ByteArrayInputStream
 
-import org.beangle.commons.activation.MimeTypes
+import org.beangle.commons.activation.MediaTypes
 import org.beangle.commons.lang.Strings
 import org.beangle.data.dao.{EntityDao, OqlBuilder}
 import org.beangle.security.Securities
@@ -46,7 +46,7 @@ class DocAction extends ActionSupport {
   }
 
   private def decideContentType(fileName: String): String = {
-    MimeTypes.getMimeType(Strings.substringAfterLast(fileName, "."), MimeTypes.ApplicationOctetStream).toString
+    MediaTypes.get(Strings.substringAfterLast(fileName, "."), MediaTypes.ApplicationOctetStream).toString
   }
 
   @mapping("{id}")

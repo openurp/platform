@@ -27,7 +27,7 @@ import org.openurp.platform.admin.helper.UserDashboardHelper
 
 class SecurityModule extends BindModule {
 
-  protected override def binding() {
+  protected override def binding(): Unit = {
     bind(classOf[AccountAction], classOf[DashboardAction], classOf[AvatarAction])
     bind(classOf[DimensionAction], classOf[PermissionAction], classOf[UserAction],
       classOf[RoleAction], classOf[ProfileAction])

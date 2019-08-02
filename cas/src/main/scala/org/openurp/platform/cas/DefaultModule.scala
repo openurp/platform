@@ -41,7 +41,7 @@ import org.openurp.app.security.RemoteAuthorizer
  */
 class DefaultModule extends BindModule with PropertySource {
 
-  override def binding() {
+  override def binding(): Unit = {
     // entry point
     bind("security.EntryPoint.url", classOf[UrlEntryPoint]).constructor("/login").primary()
     //interceptor

@@ -19,24 +19,24 @@
   <dependencies>
     <dependency>
       <groupId>org.beangle.ids</groupId>
-      <artifactId>beangle-ids-cas_2.12</artifactId>
+      <artifactId>beangle-ids-cas_2.13</artifactId>
       <version>${beangle.ids.version}</version>
     </dependency>
     <dependency>
       <groupId>org.beangle.cache</groupId>
-      <artifactId>beangle-cache-caffeine_2.12</artifactId>
+      <artifactId>beangle-cache-caffeine_2.13</artifactId>
     </dependency>
     <dependency>
       <groupId>org.beangle.cache</groupId>
-      <artifactId>beangle-cache-redis_2.12</artifactId>
+      <artifactId>beangle-cache-redis_2.13</artifactId>
     </dependency>
     <dependency>
       <groupId>org.beangle.security</groupId>
-      <artifactId>beangle-security-session_2.12</artifactId>
+      <artifactId>beangle-security-session_2.13</artifactId>
     </dependency>
     <dependency>
       <groupId>org.beangle.data</groupId>
-      <artifactId>beangle-data-hibernate_2.12</artifactId>
+      <artifactId>beangle-data-hibernate_2.13</artifactId>
     </dependency>
     <dependency>
       <groupId>org.hibernate</groupId>

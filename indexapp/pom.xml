@@ -20,7 +20,7 @@
   <dependencies>
     <dependency>
       <groupId>org.beangle.commons</groupId>
-      <artifactId>beangle-commons-core_2.12</artifactId>
+      <artifactId>beangle-commons-core_2.13</artifactId>
     </dependency>
     <dependency>
       <groupId>org.openurp.app</groupId>
@@ -43,11 +43,11 @@
     </dependency>
      <dependency>
       <groupId>org.beangle.webmvc</groupId>
-      <artifactId>beangle-webmvc-view_2.12</artifactId>
+      <artifactId>beangle-webmvc-view_2.13</artifactId>
     </dependency>
     <dependency>
       <groupId>org.beangle.webmvc</groupId>
-      <artifactId>beangle-webmvc-spring-plugin_2.12</artifactId>
+      <artifactId>beangle-webmvc-spring-plugin_2.13</artifactId>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>

@@ -147,7 +147,7 @@ class UserAction extends RestfulAction[User] {
     return redirect("search", "info.save.success")
   }
 
-  protected override def editSetting(user: User) {
+  protected override def editSetting(user: User): Unit = {
     val manager = loginUser
     val roles = new collection.mutable.HashSet[Role]
     val mngMemberMap = new collection.mutable.HashMap[Role, RoleMember]
