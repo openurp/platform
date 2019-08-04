@@ -10,11 +10,11 @@
 
   <cache eternal="false" overflowToDisk="false" maxElementsInMemory="10000"
     timeToLiveSeconds="900" timeToIdleSeconds="120"
-    name="org.hibernate.cache.spi.UpdateTimestampsCache"></cache>
+    name="default-update-timestamps-region"></cache>
 
   <cache eternal="false" overflowToDisk="false" maxElementsInMemory="10000"
     timeToLiveSeconds="900" timeToIdleSeconds="120"
-    name="org.hibernate.cache.internal.StandardQueryCache"></cache>
+    name="default-query-results-region"></cache>
 
   <cache eternal="false" overflowToDisk="false" maxElementsInMemory="10000"
     timeToLiveSeconds="900" timeToIdleSeconds="120"
