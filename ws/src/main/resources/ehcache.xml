@@ -1,22 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="ehcache.xsd"
-    updateCheck="false" monitoring="autodetect" dynamicConfig="true">
+<config
+        xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+        xmlns='http://www.ehcache.org/v3'
+        xmlns:jsr107='http://www.ehcache.org/v3/jsr107'>
 
-  <diskStore path="java.io.tmpdir"/>
+    <cache alias="default-update-timestamps-region">
+        <key-type>java.lang.Object</key-type>
+        <value-type>java.lang.Object</value-type>
+        <expiry>
+            <ttl unit="seconds">900</ttl>
+        </expiry>
+        <heap unit="entries">10000</heap>
+    </cache>
 
-  <defaultCache maxElementsInMemory="10000" eternal="false" timeToIdleSeconds="120"
-    timeToLiveSeconds="900" overflowToDisk="false"/>
+    <cache alias="default-query-results-region">
+        <key-type>java.lang.Object</key-type>
+        <value-type>java.lang.Object</value-type>
+        <expiry>
+            <ttl unit="seconds">900</ttl>
+        </expiry>
+        <heap unit="entries">10000</heap>
+    </cache>
 
-  <cache eternal="false" overflowToDisk="false" maxElementsInMemory="10000"
-    timeToLiveSeconds="900" timeToIdleSeconds="120"
-    name="default-update-timestamps-region"></cache>
-
-  <cache eternal="false" overflowToDisk="false" maxElementsInMemory="10000"
-    timeToLiveSeconds="900" timeToIdleSeconds="120"
-    name="default-query-results-region"></cache>
-
-  <cache eternal="false" overflowToDisk="false" maxElementsInMemory="10000"
-    timeToLiveSeconds="900" timeToIdleSeconds="120"
-    name="openurp.platform.security"></cache>
-</ehcache>
+    <cache alias="openurp.platform.security">
+        <key-type>java.lang.Object</key-type>
+        <value-type>java.lang.Object</value-type>
+        <expiry>
+            <ttl unit="seconds">900</ttl>
+        </expiry>
+        <heap unit="entries">10000</heap>
+    </cache>
+</config>
