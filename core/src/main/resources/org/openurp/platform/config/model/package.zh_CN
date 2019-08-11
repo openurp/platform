@@ -8,12 +8,19 @@ App.secret=密钥
 App.url=应用地址
 App.indexno=排序索引号
 App.logoUrl=应用LOGO
-App.appType=应用类型
+App.base=上下文
+App.navStyle=导航风格
+
+AppType=应用类型
+AppType.title=标题
 
 DataSource=数据源
 DataSource.maxActive=最大连接数
-DataSource.password=密码
-DataSource.username=用户名
+
+Credential=凭证
+Credential.password=密码
+Credential.username=用户名
+Credential.expiredAt=过期时间
 
 Org=组织
 Org.code=代码
