@@ -19,11 +19,9 @@
 package org.openurp.platform.ws.user
 
 import org.beangle.commons.collection.Properties
-import org.beangle.data.dao.{ EntityDao, OqlBuilder }
-import org.beangle.webmvc.api.action.{ ActionSupport, EntitySupport }
-import org.beangle.webmvc.api.annotation.{ mapping, param, response }
-import org.openurp.platform.user.model.{ RoleMember, User }
-import org.openurp.platform.user.service.UserService
+import org.beangle.data.dao.{EntityDao, OqlBuilder}
+import org.beangle.webmvc.api.action.ActionSupport
+import org.beangle.webmvc.api.annotation.{mapping, param, response}
 import org.openurp.platform.user.model.Dimension
 
 /**

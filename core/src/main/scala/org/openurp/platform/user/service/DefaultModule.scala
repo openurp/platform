@@ -23,7 +23,7 @@ import org.openurp.platform.user.service.impl.{ RoleServiceImpl, UserServiceImpl
 
 class DefaultModule extends BindModule{
 
-  override def binding() {
+  override def binding(): Unit = {
     bind(classOf[UserServiceImpl])
     bind(classOf[RoleServiceImpl])
   }

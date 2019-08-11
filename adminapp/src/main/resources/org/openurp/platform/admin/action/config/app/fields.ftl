@@ -14,8 +14,7 @@
       <thead>
         <th>数据源</th>
         <th style="width:60px">名称</th>
-        <th style="width:60px">用户名</th>
-        <th>密码</th>
+        <th style="width:100px">凭证</th>
         <th>最大连接数</th>
         <th>备注</th>
         <th>操作</th>
@@ -25,8 +24,13 @@
           <tr>
             <td>${v.db.name}</td>
             <td><input name="ds${v.db.id}.name" value="${v.name!}" style="width:40px" maxlength="40"/></td>
-            <td><input name="ds${v.db.id}.username" value="${v.username!}" style="width:80px"/></td>
-            <td><input type="password" name="ds${v.db.id}.password" value="" style="width:80px"/></td>
+            <td>
+              <select name="ds${v.db.id}.credential.id" style="width:100px">
+                 [#list credentials as credential]
+                 <option value="${credential.id}" [#if credential.id=v.credential.id]selected="selected"[/#if]>${credential.name}</option>
+                 [/#list]
+              </select>
+            </td>
             <td>
                <input name="ds" type="hidden" value="${v.db.id}"/>
                <input name="ds${v.db.id}.db.id" type="hidden" value="${v.db.id}"/>
@@ -61,8 +65,7 @@
       var id = value[0], name = value[1];
         var tr = $('<tr><td>'+name+'</td>'+
             '<td><input name="ds" type="hidden" value="'+id+'"/><input name="ds'+id+'.db.id" type="hidden" value="' + id + '"/><input name="ds'+id+'.name" style="width:60px" maxlength="40"/></td>'+
-            '<td><input name="ds'+id+'.username" style="width:60px"/></td>'+
-            '<td><input type="password" name="ds'+id+'.password" style="width:100px"/></td>'+
+            '<td><select name="ds'+id+'.credential.id" style="width:100px">[#list credentials as c]<option value="${c.id}">${c.name}</option>[/#list]</select></td>'+
             '<td><input class="maxActive" name="ds'+id+'.maxActive" style="width:60px"/></td>'+
             '<td><input name="ds'+id+'.remark" style="width:100px"/></td>'+
             '<td><button class="delDataSourceBtn">删除</button></td></tr>');

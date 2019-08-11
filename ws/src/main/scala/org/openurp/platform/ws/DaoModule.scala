@@ -19,8 +19,8 @@
 package org.openurp.platform.ws
 
 import org.beangle.cdi.bind.BindModule
-import org.beangle.data.hibernate.{ DomainFactory, HibernateEntityDao }
-import org.beangle.data.hibernate.spring.{ HibernateTransactionManager, LocalSessionFactoryBean }
+import org.beangle.data.hibernate.{DomainFactory, HibernateEntityDao}
+import org.beangle.data.hibernate.spring.{HibernateTransactionManager, LocalSessionFactoryBean}
 import org.beangle.data.hibernate.spring.web.OpenSessionInViewInterceptor
 import org.openurp.app.datasource.AppDataSourceFactory
 import org.springframework.beans.factory.config.PropertiesFactoryBean
@@ -35,10 +35,12 @@ object DaoModule extends BindModule {
       "properties",
       props(
         "hibernate.max_fetch_depth=1", "hibernate.default_batch_fetch_size=500",
-        "hibernate.jdbc.fetch_size=8", "hibernate.jdbc.batch_size=20",
+        "hibernate.jdbc.fetch_size=500", "hibernate.jdbc.batch_size=20",
         "hibernate.jdbc.batch_versioned_data=true", "hibernate.jdbc.use_streams_for_binary=true",
         "hibernate.jdbc.use_get_generated_keys=true",
-        "hibernate.cache.region.factory_class=org.hibernate.cache.ehcache.EhCacheRegionFactory",
+        "hibernate.javax.cache.missing_cache_strategy=create",
+        "hibernate.javax.cache.provider=org.ehcache.jsr107.EhcacheCachingProvider",
+        "hibernate.javax.cache.uri=classpath:ehcache.xml",
         "hibernate.cache.use_second_level_cache=true", "hibernate.cache.use_query_cache=true",
         "hibernate.query.substitutions=true 1, false 0, yes 'Y', no 'N'", "hibernate.show_sql=" + this.devEnabled))
       .description("Hibernate配置信息").nowire("propertiesArray")

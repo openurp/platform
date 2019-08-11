@@ -19,13 +19,12 @@
 package org.openurp.platform.cas.service
 
 import org.beangle.commons.collection.Collections
-import org.beangle.data.dao.{ EntityDao, OqlBuilder }
-import org.beangle.security.authc.{ Account, AccountStore, DefaultAccount }
-import org.openurp.platform.user.model.{ RoleMember, UserProfile }
-import org.openurp.platform.user.service.UserService
+import org.beangle.data.dao.{EntityDao, OqlBuilder}
 import org.beangle.data.hibernate.spring.SessionUtils
-import org.beangle.data.hibernate.HibernateEntityDao
+import org.beangle.security.authc.{Account, AccountStore, DefaultAccount}
 import org.hibernate.SessionFactory
+import org.openurp.platform.user.model.{RoleMember, UserProfile}
+import org.openurp.platform.user.service.UserService
 
 class DaoAccountStore(userService: UserService, entityDao: EntityDao, sf: SessionFactory) extends AccountStore {
 
@@ -50,7 +49,7 @@ class DaoAccountStore(userService: UserService, entityDao: EntityDao, sf: Sessio
           val upQuery = OqlBuilder.from(classOf[UserProfile], "up").where("up.user=:user", user)
           val ups = entityDao.search(upQuery)
 
-          if (!ups.isEmpty) {
+          if (ups.nonEmpty) {
             val domainUps = ups.groupBy(up => up.domain)
             domainUps foreach {
               case (domain, dups) =>
@@ -58,7 +57,7 @@ class DaoAccountStore(userService: UserService, entityDao: EntityDao, sf: Sessio
                 str += '['
                 val profiles = Collections.newBuffer[String]
                 dups foreach { up =>
-                  val ps = up.properties map (e => s""""${e._1.name}":"${e._2}"""")
+                  val ps = up.properties.map (e => s""""${e._1.name}":"${e._2}"""")
                   profiles += "{" + ps.mkString(",") + "}"
                 }
                 str ++= profiles.mkString(",")

@@ -24,15 +24,15 @@ import org.openurp.platform.ws.config.DatasourceWS
 import org.openurp.platform.ws.oauth.TokenWS
 import org.openurp.platform.ws.user.AppWS
 import org.openurp.platform.ws.user.RootWS
-import org.openurp.platform.ws.user.{ AccountWS, DimensionWS, ProfileWS }
-import org.openurp.platform.ws.security.{ func, data }
+import org.openurp.platform.ws.user.{AccountWS, DimensionWS, ProfileWS}
+import org.openurp.platform.ws.security.{func, data}
 import org.openurp.platform.ws.config.OrgWS
 import org.openurp.platform.ws.user.AvatarWS
 import org.beangle.cache.caffeine.CaffeineCacheManager
 
 class DefaultModule extends BindModule {
 
-  protected override def binding() {
+  protected override def binding(): Unit = {
     bind(classOf[DatasourceWS], classOf[OrgWS])
     bind(classOf[TokenWS])
 

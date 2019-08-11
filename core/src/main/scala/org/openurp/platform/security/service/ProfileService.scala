@@ -23,9 +23,9 @@ import org.openurp.platform.security.model.FuncResource
 
 trait ProfileService {
 
-  def getProfiles(user: User, resource: FuncResource): Seq[Profile]
+  def getProfiles(user: User, resource: FuncResource): collection.Seq[Profile]
 
-  def getDimensionValues(field: Dimension, keys: String*): Seq[Any]
+  def getDimensionValues(field: Dimension, keys: String*): collection.Seq[Any]
 
   def getDimension(fieldName: String): Dimension
 

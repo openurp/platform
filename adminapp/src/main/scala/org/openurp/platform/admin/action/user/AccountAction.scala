@@ -18,20 +18,18 @@
  */
 package org.openurp.platform.admin.action.user
 
-import org.beangle.commons.codec.digest.Digests
 import org.beangle.commons.collection.Order
 import org.beangle.commons.lang.Strings
-import org.beangle.data.dao.{ Condition, OqlBuilder }
+import org.beangle.data.dao.{Condition, OqlBuilder}
+import org.beangle.security.Securities
+import org.beangle.security.codec.DefaultPasswordEncoder
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
-import org.openurp.platform.user.model.{ User, UserCategory }
+import org.openurp.platform.user.model.{User, UserCategory}
 import org.openurp.platform.user.service.UserService
-import org.beangle.security.codec.DefaultPasswordEncoder
-import org.beangle.security.Securities
 
 /**
  * 用户管理响应处理类
- *
  * @author chaostone 2005-9-29
  */
 class AccountAction extends RestfulAction[User] {
@@ -39,7 +37,6 @@ class AccountAction extends RestfulAction[User] {
   var userService: UserService = _
 
   protected override def getQueryBuilder: OqlBuilder[User] = {
-    val manager = loginUser
     val userQuery = OqlBuilder.from(classOf[User], "user")
     // 查询角色
     val sb = new StringBuilder("exists(from user.members m where ")
@@ -72,8 +69,10 @@ class AccountAction extends RestfulAction[User] {
       return forward(to(this, "edit"))
     }
     // 检验用户合法性
-    var errorMsg = checkUser(user)
-    if (Strings.isNotEmpty(errorMsg)) { return forward(to(this, "edit"), errorMsg); }
+    val errorMsg = checkUser(user)
+    if (Strings.isNotEmpty(errorMsg)) {
+      return forward(to(this, "edit"), errorMsg)
+    }
     processPassword(user)
 
     if (!user.persisted) {
@@ -81,16 +80,17 @@ class AccountAction extends RestfulAction[User] {
     } else {
       entityDao.saveOrUpdate(user)
     }
-    return redirect("search", "info.save.success")
+    redirect("search", "info.save.success")
   }
 
-  protected override def editSetting(user: User) {
+  protected override def editSetting(user: User): Unit = {
     put("categories", entityDao.getAll(classOf[UserCategory]))
   }
 
   private def loginUser: User = {
     entityDao.findBy(classOf[User], "code", List(Securities.user)).head
   }
+
   /**
    * 删除一个或多个用户
    */
@@ -115,15 +115,15 @@ class AccountAction extends RestfulAction[User] {
         }
       }
     } catch {
-      case e: Exception => sb.append(',').append(removed.getName())
+      case _: Exception => sb.append(',').append(removed.getName())
     }
-    if (sb.length() > 0) {
+    if (sb.nonEmpty) {
       sb.deleteCharAt(0)
       addFlashMessage("security.info.userRemovePartial", success, sb)
     } else if (expected == success && success > 0) {
       addFlashMessage("info.remove.success")
     }
-    return redirect("search")
+    redirect("search")
   }
 
   /**
@@ -136,21 +136,21 @@ class AccountAction extends RestfulAction[User] {
     val manager = loginUser
     var msg = "security.info.freeze.success"
     if (Strings.isNotEmpty(isActivate) && "false".equals(isActivate)) {
-      successCnt = userService.updateState(manager, userIds, false)
+      successCnt = userService.updateState(manager, userIds, active = false)
     } else {
       msg = "security.info.activate.success"
-      successCnt = userService.updateState(manager, userIds, true)
+      successCnt = userService.updateState(manager, userIds, active = true)
     }
     addFlashMessage(msg, successCnt)
-    return redirect("search")
+    redirect("search")
   }
 
   protected def checkUser(user: User): String = {
-    if (!user.persisted && entityDao.exists(entityName, "code", user.code)) "error.model.existed";
+    if (!user.persisted && entityDao.exists(entityName, "code", user.code)) "error.model.existed"
     else ""
   }
 
-  protected def processPassword(user: User) {
+  protected def processPassword(user: User): Unit = {
     var password = get("password").orNull
     if (Strings.isBlank(password) && !user.persisted) {
       password = user.code

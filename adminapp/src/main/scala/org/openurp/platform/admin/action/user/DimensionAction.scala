@@ -18,23 +18,23 @@
  */
 package org.openurp.platform.admin.action.user
 
-import org.beangle.webmvc.api.annotation.ignore
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
-import org.openurp.platform.user.model.Dimension
 import org.openurp.platform.config.model.Domain
+import org.openurp.platform.user.model.Dimension
 
 /**
  * 数据限制域元信息配置类
- *
  * @author chaostone
  */
 class DimensionAction extends RestfulAction[Dimension] {
 
   override def editSetting(dimension: Dimension): Unit = {
-    val domains = entityDao.getAll(classOf[Domain]).toBuffer -- dimension.domains
+
+    val domains = entityDao.getAll(classOf[Domain]).toBuffer.subtractAll(dimension.domains)
     put("domains", domains)
   }
+
   protected override def saveAndRedirect(field: Dimension): View = {
     if (entityDao.duplicate(classOf[Dimension], field.id, "name", field.name)) {
       addError("名称重复")

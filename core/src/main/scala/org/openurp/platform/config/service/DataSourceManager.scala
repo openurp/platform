@@ -16,15 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.openurp.platform.config.service.impl
+package org.openurp.platform.config.service
 
-import org.beangle.data.dao.EntityDao
-import org.openurp.platform.config.service.AppDataPermissionManager
+trait DataSourceManager  {
 
-class AppDataPermissionManagerImpl(val entityDao: EntityDao) extends AppDataPermissionManager {
-
-  def activate(resourceId: Iterable[Int], active: Boolean): Unit = {
-
-  }
+  def activate(resourceId: Iterable[Int], active: Boolean): Unit
 
 }

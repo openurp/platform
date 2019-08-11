@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.openurp.platform</groupId>
     <artifactId>openurp-platform-parent</artifactId>
-    <version>0.2.18</version>
+    <version>0.2.19</version>
   </parent>
 
   <groupId>org.openurp.platform</groupId>
@@ -32,27 +32,31 @@
     </dependency>
     <dependency>
       <groupId>org.beangle.webmvc</groupId>
-      <artifactId>beangle-webmvc-core_2.12</artifactId>
+      <artifactId>beangle-webmvc-core_2.13</artifactId>
     </dependency>
     <dependency>
       <groupId>org.beangle.webmvc</groupId>
-      <artifactId>beangle-webmvc-spring-plugin_2.12</artifactId>
+      <artifactId>beangle-webmvc-spring-plugin_2.13</artifactId>
     </dependency>
     <dependency>
       <groupId>org.beangle.webmvc</groupId>
-      <artifactId>beangle-webmvc-entity-plugin_2.12</artifactId>
+      <artifactId>beangle-webmvc-entity-plugin_2.13</artifactId>
     </dependency>
     <dependency>
       <groupId>org.beangle.serializer</groupId>
-      <artifactId>beangle-serializer-text_2.12</artifactId>
+      <artifactId>beangle-serializer-text_2.13</artifactId>
     </dependency>
     <dependency>
       <groupId>org.beangle.data</groupId>
-      <artifactId>beangle-data-hibernate_2.12</artifactId>
+      <artifactId>beangle-data-hibernate_2.13</artifactId>
     </dependency>
     <dependency>
       <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-ehcache</artifactId>
+      <artifactId>hibernate-jcache</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.ehcache</groupId>
+      <artifactId>ehcache</artifactId>
     </dependency>
     <dependency>
       <groupId>com.zaxxer</groupId>
@@ -60,7 +64,7 @@
     </dependency>
     <dependency>
       <groupId>org.beangle.cache</groupId>
-      <artifactId>beangle-cache-caffeine_2.12</artifactId>
+      <artifactId>beangle-cache-caffeine_2.13</artifactId>
     </dependency>
   </dependencies>
 

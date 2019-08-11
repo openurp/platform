@@ -20,12 +20,11 @@ package org.openurp.platform.admin.action.config
 
 import java.sql.DriverManager
 
-import collection.mutable.ListBuffer
-
-import org.beangle.webmvc.api.annotation.ignore
+import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.platform.config.model.Db
-import org.beangle.webmvc.api.view.View
+
+import scala.collection.mutable.ListBuffer
 
 class DbAction extends RestfulAction[Db] {
 

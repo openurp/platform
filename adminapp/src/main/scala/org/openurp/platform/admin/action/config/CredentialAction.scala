@@ -16,17 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.openurp.platform.index.action
+package org.openurp.platform.admin.action.config
 
-import org.beangle.webmvc.api.action.ActionSupport
-import org.beangle.webmvc.api.annotation.mapping
-import org.beangle.webmvc.api.view.View
-import org.openurp.app.Urp
+import org.beangle.webmvc.entity.action.RestfulAction
+import org.openurp.platform.config.model.{Credential}
 
-class IndexAction extends ActionSupport {
+class CredentialAction  extends RestfulAction[Credential] {
 
-  @mapping("")
-  def index(): View = {
-    redirect(to(Urp.portal), "")
-  }
 }

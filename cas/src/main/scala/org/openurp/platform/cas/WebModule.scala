@@ -24,7 +24,7 @@ import org.beangle.ids.cas.web.helper.CaptchaHelper
 import org.openurp.platform.cas.web.EditAction
 
 class WebModule extends BindModule {
-  override def binding() {
+  override def binding(): Unit = {
     bind(classOf[LoginAction])
     bind(classOf[ServiceValidateAction])
     bind(classOf[LogoutAction])

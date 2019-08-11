@@ -22,10 +22,10 @@ import java.io.ByteArrayInputStream
 import java.time.Instant
 
 import javax.servlet.http.Part
-import org.beangle.commons.activation.MimeTypes
+import org.beangle.commons.activation.MediaTypes
 import org.beangle.commons.lang.Strings
 import org.beangle.security.Securities
-import org.beangle.webmvc.api.annotation.{ignore, mapping, param}
+import org.beangle.webmvc.api.annotation.{ignore, param}
 import org.beangle.webmvc.api.view.{Stream, View}
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.platform.bulletin.model.{Attachment, Doc}
@@ -44,7 +44,7 @@ class DocAction extends RestfulAction[Doc] {
   }
 
   private def decideContentType(fileName: String): String = {
-    MimeTypes.getMimeType(Strings.substringAfterLast(fileName, "."), MimeTypes.ApplicationOctetStream).toString
+    MediaTypes.get(Strings.substringAfterLast(fileName, "."), MediaTypes.ApplicationOctetStream).toString
   }
 
   def download(@param("id") id: String): View = {
@@ -60,10 +60,9 @@ class DocAction extends RestfulAction[Doc] {
       entityDao.remove(entities, files)
       redirect("search", "info.remove.success")
     } catch {
-      case e: Exception => {
+      case e: Exception =>
         logger.info("removeAndForwad failure", e)
         redirect("search", "info.delete.failure")
-      }
     }
   }
 

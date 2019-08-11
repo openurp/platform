@@ -18,15 +18,16 @@
  */
 package org.openurp.platform.ws.oauth
 
-import java.{ util => ju }
+import java.time.{Duration, Instant}
 import java.util.UUID
+
 import org.beangle.commons.collection.Properties
-import org.beangle.data.dao.{ EntityDao, OqlBuilder }
+import org.beangle.data.dao.EntityDao
 import org.beangle.webmvc.api.action.ActionSupport
-import org.beangle.webmvc.api.annotation.{ param, response }
-import org.openurp.platform.config.model.{ AccessToken, App }
-import org.openurp.platform.oauth.service.TokenRepository
+import org.beangle.webmvc.api.annotation.{param, response}
+import org.openurp.platform.config.model.AccessToken
 import org.openurp.platform.config.service.AppService
+import org.openurp.platform.oauth.service.TokenRepository
 
 class TokenWS(tokenRepository: TokenRepository, appService: AppService) extends ActionSupport {
 
@@ -65,12 +66,10 @@ class TokenWS(tokenRepository: TokenRepository, appService: AppService) extends 
   }
 
   private def generateAccessTokenId(): String = {
-    UUID.randomUUID().toString()
+    UUID.randomUUID().toString
   }
 
-  private def generateExpiredAt(): ju.Date = {
-    val expiredAt = ju.Calendar.getInstance
-    expiredAt.add(ju.Calendar.MONTH, 12)
-    expiredAt.getTime
+  private def generateExpiredAt(): Instant = {
+    Instant.now.plus(Duration.ofDays(12 * 30))
   }
 }

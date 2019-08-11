@@ -20,16 +20,12 @@ package org.openurp.platform.admin.helper
 
 import org.beangle.data.dao.EntityDao
 import org.beangle.security.session.SessionRegistry
-import org.beangle.webmvc.api.context.{ ActionContext, Params }
-import org.openurp.platform.security.service.{ FuncPermissionService, MenuService, ProfileService }
-import org.openurp.platform.security.model.Menu
-import org.openurp.platform.user.model.Role
-import org.openurp.platform.user.model.User
-import org.openurp.platform.user.model.UserProfile
+import org.beangle.webmvc.api.context.ActionContext
+import org.openurp.platform.security.service.{FuncPermissionService, MenuService, ProfileService}
+import org.openurp.platform.user.model.{User, UserProfile}
 
 /**
  * @author chaostone
- * @version $Id: DashboardHelper.java Nov 3, 2010 5:19:42 PM chaostone $
  */
 class UserDashboardHelper {
 

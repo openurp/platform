@@ -18,20 +18,14 @@
  */
 package org.openurp.platform.ws.user
 
-import org.beangle.commons.collection.Properties
-import org.beangle.data.dao.{ EntityDao, OqlBuilder }
-import org.beangle.webmvc.api.action.{ ActionSupport, EntitySupport }
-import org.beangle.webmvc.api.annotation.{ param, response }
-import org.openurp.platform.config.model.App
-import org.openurp.platform.user.model.User
+import org.beangle.commons.collection.{Collections, Properties}
+import org.beangle.data.dao.{EntityDao, OqlBuilder}
+import org.beangle.webmvc.api.action.{ActionSupport, EntitySupport}
+import org.beangle.webmvc.api.annotation.{mapping, param, response}
+import org.openurp.platform.config.model.{App, AppType}
+import org.openurp.platform.security.model.FuncPermission
+import org.openurp.platform.user.model.{Root, User}
 import org.openurp.platform.user.service.UserService
-import org.openurp.platform.security.model.FuncPermission
-import org.openurp.platform.user.model.Root
-import org.beangle.webmvc.api.annotation.mapping
-import org.beangle.commons.collection.Collections
-import org.openurp.platform.security.model.FuncPermission
-import org.openurp.platform.user.model.Root
-import org.openurp.platform.config.model.AppType
 
 /**
  * @author chaostone
@@ -40,7 +34,7 @@ class AppWS(userService: UserService, entityDao: EntityDao) extends ActionSuppor
 
   @response
   @mapping("{userCode}")
-  def index(@param("userCode") userCode: String): Seq[Properties] = {
+  def index(@param("userCode") userCode: String): collection.Seq[Properties] = {
     userService.get(userCode) match {
       case Some(user) =>
         val fpAppQuery = OqlBuilder.from[App](classOf[FuncPermission].getName, "fp")
@@ -59,7 +53,7 @@ class AppWS(userService: UserService, entityDao: EntityDao) extends ActionSuppor
           .where(s"root.user=:user and root.app.enabled=true and root.app.appType.name='${AppType.Webapp}'", user)
           .cacheable()
         val roots = entityDao.search(rootsQuery)
-        apps ++= (roots.map(a => a.app))
+        apps ++= roots.map(a => a.app)
         val domain = get("domain")
         domain foreach { d =>
           apps --= apps.filter { a => a.domain == null || a.domain.name != d }

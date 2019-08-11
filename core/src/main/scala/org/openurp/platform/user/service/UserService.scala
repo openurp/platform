@@ -28,17 +28,17 @@ trait UserService {
 
   def get(id: Long): User
 
-  def getUsers(id: Long*): Seq[User]
+  def getUsers(id: Long*): collection.Seq[User]
 
-  def getRoles(user: User, ship: MemberShip.Ship): Seq[RoleMember]
+  def getRoles(user: User, ship: MemberShip.Ship): collection.Seq[RoleMember]
 
   def isManagedBy(manager: User, user: User): Boolean
 
-  def create(creator: User, user: User)
+  def create(creator: User, user: User): Unit
 
   def updateState(manager: User, userIds: Iterable[Long], active: Boolean): Int
 
-  def remove(creator: User, user: User)
+  def remove(creator: User, user: User): Unit
 
   def isRoot(user: User, appName: String): Boolean
 }

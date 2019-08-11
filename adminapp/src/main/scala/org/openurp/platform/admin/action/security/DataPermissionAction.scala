@@ -21,18 +21,18 @@ package org.openurp.platform.admin.action.security
 import org.beangle.webmvc.api.annotation.ignore
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
-import org.openurp.platform.config.model.{ App, Domain }
-import org.openurp.platform.security.model.{ DataPermission, DataResource, FuncResource }
+import org.openurp.platform.config.model.{App, Domain}
+import org.openurp.platform.security.model.{DataPermission, DataResource, FuncResource}
 import org.openurp.platform.user.model.Role
+
 /**
  * 数据限制模式元信息配置类
- *
  * @author chaostone
  */
 class DataPermissionAction extends RestfulAction[DataPermission] {
   @ignore
   protected override def simpleEntityName: String = {
-    return "permission"
+    "permission"
   }
 
   protected override def editSetting(dataPermission: DataPermission): Unit = {
@@ -46,7 +46,7 @@ class DataPermissionAction extends RestfulAction[DataPermission] {
   protected override def saveAndRedirect(dataPermission: DataPermission): View = {
     if (entityDao.duplicate(classOf[DataPermission], dataPermission.id, "remark", dataPermission.remark)) {
       addError("限制模式描述重复")
-      return forward(to(this, "edit"))
+      forward(to(this, "edit"))
     } else {
       entityDao.saveOrUpdate(dataPermission)
       redirect("search", "info.save.success")

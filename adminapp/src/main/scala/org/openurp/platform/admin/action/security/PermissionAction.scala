@@ -21,7 +21,7 @@ package org.openurp.platform.admin.action.security
 import org.beangle.commons.lang.Numbers
 import org.beangle.data.dao.OqlBuilder
 import org.beangle.security.Securities
-import org.beangle.webmvc.api.annotation.{ mapping, param }
+import org.beangle.webmvc.api.annotation.{mapping, param}
 import org.beangle.webmvc.api.context.ActionContext
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
@@ -29,14 +29,13 @@ import org.openurp.app.UrpApp
 import org.openurp.platform.admin.helper.AppHelper
 import org.openurp.platform.config.model.App
 import org.openurp.platform.config.service.AppService
-import org.openurp.platform.security.model.{ FuncPermission, FuncResource, Menu }
-import org.openurp.platform.security.service.{ FuncPermissionService, MenuService }
-import org.openurp.platform.user.model.{ Role, User }
+import org.openurp.platform.security.model.{FuncPermission, FuncResource, Menu}
+import org.openurp.platform.security.service.{FuncPermissionService, MenuService}
+import org.openurp.platform.user.model.{Role, User}
 import org.openurp.platform.user.service.UserService
 
 /**
  * 权限分配与管理响应类
- *
  * @author chaostone 2005-10-9
  */
 class PermissionAction extends RestfulAction[FuncPermission] {
@@ -45,6 +44,7 @@ class PermissionAction extends RestfulAction[FuncPermission] {
   var funcPermissionService: FuncPermissionService = _
   var userService: UserService = _
   var appService: AppService = _
+
   /**
    * 根据菜单配置来分配权限
    */
@@ -62,7 +62,7 @@ class PermissionAction extends RestfulAction[FuncPermission] {
       if (granterRoles.contains(r) || isPlatformRoot) mngRoles += r
     }
     put("mngRoles", mngRoles)
-    val apps = appService.getWebapps()
+    val apps = appService.getWebapps
     AppHelper.putApps(apps, "app.id", entityDao)
 
     val app: App = ActionContext.current.attribute("current_app")
@@ -87,7 +87,7 @@ class PermissionAction extends RestfulAction[FuncPermission] {
         mngMenus ++= menuSet.toList.sorted
       }
       put("mngResources", mngResources.toSet)
-      val displayFreezen = getBoolean("displayFreezen", false)
+      val displayFreezen = getBoolean("displayFreezen", defaultValue = false)
       if (!displayFreezen) {
         val freezed = new collection.mutable.ListBuffer[Menu]
         for (menu <- mngMenus) if (!menu.enabled) freezed += menu
@@ -122,7 +122,7 @@ class PermissionAction extends RestfulAction[FuncPermission] {
     }
     put("mngMenus", mngMenus)
     put("role", role)
-    return forward()
+    forward()
   }
 
   /**

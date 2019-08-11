@@ -16,17 +16,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.openurp.platform.index.action
+package org.openurp.platform.config.service.impl
 
-import org.beangle.webmvc.api.action.ActionSupport
-import org.beangle.webmvc.api.annotation.mapping
-import org.beangle.webmvc.api.view.View
-import org.openurp.app.Urp
+import org.beangle.data.dao.EntityDao
+import org.openurp.platform.config.service.DataSourceManager
 
-class IndexAction extends ActionSupport {
+class DataSourceManagerImpl(val entityDao: EntityDao) extends DataSourceManager {
 
-  @mapping("")
-  def index(): View = {
-    redirect(to(Urp.portal), "")
+  def activate(resourceId: Iterable[Int], active: Boolean): Unit = {
+
   }
+
 }

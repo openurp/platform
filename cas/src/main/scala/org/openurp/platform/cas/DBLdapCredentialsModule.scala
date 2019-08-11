@@ -22,15 +22,15 @@ import java.io.FileInputStream
 
 import org.beangle.cdi.bind.BindModule
 import org.beangle.ids.cas.service.DBLdapCredentialsChecker
-import org.beangle.security.realm.ldap.{ PoolingContextSource, SimpleLdapUserStore }
+import org.beangle.security.realm.ldap.{PoolingContextSource, SimpleLdapUserStore}
 import org.openurp.app.UrpApp
 
 class DBLdapCredentialsModule extends BindModule {
-  override def binding() {
+  override def binding(): Unit = {
     UrpApp.getUrpAppFile foreach { file =>
       val is = new FileInputStream(file)
       val app = scala.xml.XML.load(is)
-      if ((app \\ "ldap").size > 0) {
+      if ((app \\ "ldap").nonEmpty) {
         bind("security.ldap.source", classOf[PoolingContextSource])
           .constructor($("ldap.url"), $("ldap.user"), $("ldap.password"))
         bind("security.LdapUserStore.default", classOf[SimpleLdapUserStore])

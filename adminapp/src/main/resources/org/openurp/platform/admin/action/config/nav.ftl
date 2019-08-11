@@ -1,0 +1,5 @@
+[#ftl]
+  [@b.nav class="nav nav-tabs"]
+    [@b.navitem href="db"]关系数据库[/@]
+    [@b.navitem href="credential"]凭证管理[/@]
+  [/@]

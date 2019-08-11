@@ -41,11 +41,11 @@ class UserServiceImpl(val entityDao: EntityDao) extends UserService {
     entityDao.get(classOf[User], id)
   }
 
-  def getUsers(ids: Long*): Seq[User] = {
+  def getUsers(ids: Long*): collection.Seq[User] = {
     entityDao.find(classOf[User], ids.toList)
   }
 
-  def getRoles(user: User, ship: Ship): Seq[RoleMember] = {
+  def getRoles(user: User, ship: Ship): collection.Seq[RoleMember] = {
     ship match {
       case Manager => user.roles.filter(m => m.manager)
       case Granter => user.roles.filter(m => m.granter)

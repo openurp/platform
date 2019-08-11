@@ -42,17 +42,17 @@ class FuncResourceAction extends RestfulAction[FuncResource] {
    */
   def activate(): View = {
     val resourceIds = intIds("resource")
-    val enabled = getBoolean("enabled", false)
+    val enabled = getBoolean("enabled", defaultValue = false)
     funcPermissionService.activate(resourceIds, enabled)
-    return redirect("search", "info.save.success")
+    redirect("search", "info.save.success")
   }
 
   protected override def saveAndRedirect(resource: FuncResource): View = {
     if (null != resource) {
       val builder = OqlBuilder.from[Int](classOf[FuncResource].getName, "fr").where("fr.name=:name and fr.app = :app", resource.name, resource.app).select("fr.id")
       val ids = entityDao.search(builder)
-      if (!resource.persisted && !ids.isEmpty || resource.persisted && !ids.isEmpty && !ids.contains(resource.id)) {
-        return redirect("edit", "error.notUnique");
+      if (!resource.persisted && ids.nonEmpty || resource.persisted && ids.nonEmpty && !ids.contains(resource.id)) {
+        return redirect("edit", "error.notUnique")
       }
     }
     entityDao.saveOrUpdate(resource)
@@ -76,11 +76,11 @@ class FuncResourceAction extends RestfulAction[FuncResource] {
     put(simpleEntityName, entity)
     put("roles", entityDao.search(roleQuery))
     put("menus", entityDao.search(query))
-    return forward()
+    forward()
   }
 
   protected override def editSetting(resource: FuncResource): Unit = {
-    put("apps", appService.getApps())
+    put("apps", appService.getApps)
     if (!resource.persisted) {
       resource.scope = Scopes.Private
       resource.enabled = true
@@ -92,15 +92,14 @@ class FuncResourceAction extends RestfulAction[FuncResource] {
   }
 
   protected override def indexSetting(): Unit = {
-    AppHelper.putApps(appService.getApps(), "resource.app.id", entityDao)
+    AppHelper.putApps(appService.getApps, "resource.app.id", entityDao)
   }
 
   @ignore
   protected override def removeAndRedirect(entities: Seq[FuncResource]): View = {
     try {
       //删除相关表
-      val menuBuilder2 = OqlBuilder.from(classOf[Menu], "m").join("m.resources", "r");
-      ("r in(:entries)", entities)
+      val menuBuilder2 = OqlBuilder.from(classOf[Menu], "m").join("m.resources", "r")
       val menus2 = entityDao.search(menuBuilder2)
       menus2 foreach (m => m.resources --= entities)
       entityDao.saveOrUpdate(menus2)
@@ -114,10 +113,9 @@ class FuncResourceAction extends RestfulAction[FuncResource] {
       remove(entities)
       redirect("search", "info.remove.success")
     } catch {
-      case e: Exception => {
+      case e: Exception =>
         logger.info("removeAndForwad failure", e)
         redirect("search", "info.delete.failure")
-      }
     }
   }
 }

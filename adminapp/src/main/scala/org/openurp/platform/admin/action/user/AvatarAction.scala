@@ -18,24 +18,23 @@
  */
 package org.openurp.platform.admin.action.user
 
-import java.io.{ ByteArrayInputStream, ByteArrayOutputStream, File, FileInputStream, FileOutputStream, IOException }
-import java.time.LocalDateTime
-
-import org.apache.commons.compress.archivers.zip.ZipFile
-import org.beangle.commons.codec.digest.Digests
-import org.beangle.commons.io.IOs
-import org.beangle.commons.lang.{ Strings, SystemInfo, Throwables }
-import org.beangle.data.dao.{ EntityDao, OqlBuilder }
-import org.beangle.webmvc.api.action.ActionSupport
-import org.beangle.webmvc.api.annotation.{ mapping, param }
-import org.beangle.webmvc.api.view.{ Stream, View }
-import org.beangle.webmvc.entity.helper.QueryHelper
-import org.openurp.platform.user.model.{ Avatar, User }
+import java.io._
+import java.time.Instant
 
 import javax.servlet.http.Part
-import org.beangle.commons.activation.MimeTypes
-import org.beangle.webmvc.api.view.Status
-import java.time.Instant
+import org.apache.commons.compress.archivers.zip.ZipFile
+import org.beangle.commons.activation.MediaTypes
+import org.beangle.commons.codec.digest.Digests
+import org.beangle.commons.io.IOs
+import org.beangle.commons.lang.{Strings, SystemInfo, Throwables}
+import org.beangle.data.dao.{EntityDao, OqlBuilder}
+import org.beangle.webmvc.api.action.ActionSupport
+import org.beangle.webmvc.api.annotation.{mapping, param}
+import org.beangle.webmvc.api.view.{Status, Stream, View}
+import org.beangle.webmvc.entity.helper.QueryHelper
+import org.openurp.platform.user.model.{Avatar, User}
+
+import scala.jdk.javaapi.CollectionConverters.asScala
 
 class AvatarAction extends ActionSupport {
 
@@ -72,28 +71,13 @@ class AvatarAction extends ActionSupport {
     }
   }
 
-  private def loadImage(avatarId: String): Array[Byte] = {
-    val avatar = entityDao.get(classOf[Avatar], avatarId)
-    if (null == avatar) {
-      val nfile = new File(this.getClass().getClassLoader().getResource("DefaultPhoto.gif").getFile())
-      val in = new FileInputStream(nfile)
-      new Array[Byte](nfile.length.toInt)
-    } else {
-      avatar.image
-    }
-  }
-
   private def decideContentType(fileName: String): String = {
-    MimeTypes.getMimeType(Strings.substringAfterLast(fileName, "."), MimeTypes.ApplicationOctetStream).toString
+    MediaTypes.get(Strings.substringAfterLast(fileName, "."), MediaTypes.ApplicationOctetStream).toString
   }
 
   private def loadAvatar(avatarId: String): Option[Avatar] = {
     val avatar = entityDao.get(classOf[Avatar], avatarId)
-    if (null == avatar) {
-      None
-    } else {
-      Some(avatar)
-    }
+    Option(avatar)
   }
 
   def uploadSetting(): View = {
@@ -119,19 +103,19 @@ class AvatarAction extends ActionSupport {
       val file = new File(dir.getAbsolutePath + "/" + name)
       if (name.indexOf(".") < 1) {
         logger.warn(name + " without suffix,skipped")
-      } else if (file.isDirectory()) {
+      } else if (file.isDirectory) {
         logger.info(name + " is dir,skipped")
       } else {
         val usercode = Strings.substringBeforeLast(name, ".")
         val users = entityDao.findBy(classOf[User], "code", List(usercode))
         if (users.isEmpty) {
-          logger.warn("Cannot find user info of " + usercode);
+          logger.warn("Cannot find user info of " + usercode)
         } else {
           i += 1
           val user = users.head
           val bos = new ByteArrayOutputStream()
           IOs.copy(new FileInputStream(dir.getAbsolutePath + "/" + name), bos)
-          val bytes = bos.toByteArray()
+          val bytes = bos.toByteArray
           if (bytes.length <= Avatar.MaxSize) {
             saveOrUpdate(user, bytes, name)
           } else {
@@ -150,22 +134,22 @@ class AvatarAction extends ActionSupport {
     var i = 0
     try {
       val en = file.getEntries()
-      scala.collection.JavaConverters.enumerationAsScalaIterator(en) foreach { ze =>
+      asScala(en) foreach { ze =>
         i = i + 1
-        if (!ze.isDirectory()) {
-          val photoname = if (ze.getName().contains("/")) Strings.substringAfterLast(ze.getName(), "/") else ze.getName()
+        if (!ze.isDirectory) {
+          val photoname = if (ze.getName.contains("/")) Strings.substringAfterLast(ze.getName, "/") else ze.getName
           if (photoname.indexOf(".") < 1) {
             logger.warn(photoname + " format is error")
           } else {
             val usercode = Strings.substringBeforeLast(photoname, ".")
             val users = entityDao.findBy(classOf[User], "code", List(usercode))
             if (users.isEmpty) {
-              logger.warn("Cannot find user info of " + usercode);
+              logger.warn("Cannot find user info of " + usercode)
             } else {
               val user = users.head
               val bos = new ByteArrayOutputStream()
               IOs.copy(file.getInputStream(ze), bos)
-              val bytes = bos.toByteArray()
+              val bytes = bos.toByteArray
               if (bytes.length <= Avatar.MaxSize) {
                 saveOrUpdate(user, bytes, photoname)
               } else {
@@ -183,7 +167,7 @@ class AvatarAction extends ActionSupport {
     i
   }
 
-  def saveOrUpdate(user: User, bytes: Array[Byte], fileName: String) {
+  def saveOrUpdate(user: User, bytes: Array[Byte], fileName: String): Unit = {
     val usercode = user.code
     val query = OqlBuilder.from(classOf[Avatar], "avatar")
     query.where("avatar.user.id=:userId", user.id)

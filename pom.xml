@@ -4,11 +4,11 @@
   <parent>
     <groupId>org.openurp</groupId>
     <artifactId>openurp-parent</artifactId>
-    <version>0.2.34</version>
+    <version>0.3.2</version>
   </parent>
   <groupId>org.openurp.platform</groupId>
   <artifactId>openurp-platform-parent</artifactId>
-  <version>0.2.18</version>
+  <version>0.2.19</version>
   <packaging>pom</packaging>
   <name>OpenURP Platform Parent</name>
 
@@ -23,7 +23,7 @@
   </modules>
 
   <properties>
-    <openurp.app.version>0.1.16</openurp.app.version>
+    <openurp.app.version>0.1.17</openurp.app.version>
   </properties>
 
   <dependencyManagement>
@@ -55,13 +55,18 @@
       </dependency>
       <dependency>
         <groupId>org.beangle.webui</groupId>
-        <artifactId>beangle-webui-bootstrap_2.12</artifactId>
+        <artifactId>beangle-webui-bootstrap_2.13</artifactId>
         <version>${beangle.webui.version}</version>
       </dependency>
       <dependency>
         <groupId>org.hibernate</groupId>
-        <artifactId>hibernate-ehcache</artifactId>
+        <artifactId>hibernate-jcache</artifactId>
         <version>${hibernate.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.ehcache</groupId>
+        <artifactId>ehcache</artifactId>
+        <version>${ehcache.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

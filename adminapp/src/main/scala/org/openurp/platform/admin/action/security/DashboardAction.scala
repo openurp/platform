@@ -18,13 +18,12 @@
  */
 package org.openurp.platform.admin.action.security
 
-import org.beangle.data.dao.{ EntityDao, OqlBuilder }
+import org.beangle.data.dao.{EntityDao, OqlBuilder}
 import org.beangle.webmvc.api.action.ActionSupport
-import org.openurp.platform.security.model.{ DataPermission, FuncResource, Menu }
-import org.openurp.platform.user.model.{ Dimension, RoleMember }
-import org.openurp.platform.config.model.App
-import org.openurp.platform.config.service.AppService
 import org.beangle.webmvc.api.view.View
+import org.openurp.platform.config.service.AppService
+import org.openurp.platform.security.model.{DataPermission, FuncResource, Menu}
+import org.openurp.platform.user.model.{Dimension, RoleMember}
 
 class DashboardAction extends ActionSupport {
 
@@ -66,7 +65,7 @@ class DashboardAction extends ActionSupport {
     val rs = new collection.mutable.HashMap[String, collection.mutable.Map[Object, Object]]
     for (data <- datas) {
       val roleStat = data.asInstanceOf[Array[Object]]
-      val key = roleStat(0) + " " + roleStat(1)
+      val key = s"${roleStat(0)} ${roleStat(1)}"
       val statusMap = rs.getOrElseUpdate(key, new collection.mutable.HashMap[Object, Object])
       statusMap.put(roleStat(2), roleStat(3))
     }

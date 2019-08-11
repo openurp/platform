@@ -30,8 +30,7 @@ class AppServiceImpl(entityDao: EntityDao) extends AppService {
   override def getDomain(name: String): Option[Domain] = {
     val query = OqlBuilder.from(classOf[Domain], "d")
       .where("d.name=:name", name).cacheable()
-    val ds = entityDao.search(query)
-    if (ds.isEmpty) None else Some(ds.head)
+    entityDao.search(query).headOption
   }
 
   override def getApp(name: String, secret: String): Option[App] = {
@@ -39,14 +38,14 @@ class AppServiceImpl(entityDao: EntityDao) extends AppService {
       .where("app.name=:name and app.secret=:secret", name, secret).cacheable()
     val apps = entityDao.search(query)
     initialize(apps)
-    if (apps.isEmpty) None else Some(apps.head)
+    apps.headOption
   }
 
   override def getApp(name: String): Option[App] = {
     val query = OqlBuilder.from(classOf[App], "app").where("app.name=:name ", name).cacheable()
     val apps = entityDao.search(query)
     initialize(apps)
-    if (apps.isEmpty) None else Some(apps.head)
+    apps.headOption
   }
 
   private def initialize(apps: Iterable[App]): Unit = {
@@ -55,11 +54,11 @@ class AppServiceImpl(entityDao: EntityDao) extends AppService {
     }
   }
 
-  override def getWebapps(): Seq[App] = {
+  override def getWebapps: Seq[App] = {
     entityDao.search(OqlBuilder.from(classOf[App], "app").where("app.appType.name=:typ and app.enabled=true", AppType.Webapp).orderBy("app.indexno"))
   }
 
-  override def getApps(): Seq[App] = {
+  override def getApps: Seq[App] = {
     entityDao.search(OqlBuilder.from(classOf[App], "app").where("app.enabled=true").orderBy("app.indexno"))
   }
 }

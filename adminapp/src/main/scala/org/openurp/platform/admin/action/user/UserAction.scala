@@ -50,11 +50,11 @@ class UserAction extends RestfulAction[User] {
   override def info(id: String): View = {
     val userId = Params.converter.convert(id, classOf[Long])
     var managed: User = null
-    if (None != userId) {
+    if (userId.isDefined) {
       managed = entityDao.get(classOf[User], userId.get)
     } else {
       get("user.name") foreach { name =>
-        managed = userService.get(name).orNull.asInstanceOf[User]
+        managed = userService.get(name).orNull
       }
     }
     val me = loginUser
@@ -68,7 +68,7 @@ class UserAction extends RestfulAction[User] {
     } else {
       userDashboardHelper.buildDashboard(me)
     }
-    return forward()
+    forward()
   }
 
   private def loginUser: User = {
@@ -76,7 +76,6 @@ class UserAction extends RestfulAction[User] {
   }
 
   protected override def getQueryBuilder: OqlBuilder[User] = {
-    val manager = loginUser
     val userQuery = OqlBuilder.from(classOf[User], "user")
     // 查询角色
     val sb = new StringBuilder("exists(from user.roles m where ")
@@ -97,7 +96,7 @@ class UserAction extends RestfulAction[User] {
     }
     populateConditions(userQuery)
     userQuery.orderBy(get(Order.OrderStr).orNull).limit(getPageLimit)
-    return userQuery
+      userQuery
   }
 
   /**
@@ -122,9 +121,9 @@ class UserAction extends RestfulAction[User] {
       }
     for (member <- members) {
       var myMember = memberMap.getOrElse(member.role, null)
-      val isMember = getBoolean("member" + member.role.id, false)
-      val isGranter = getBoolean("granter" + member.role.id, false)
-      val isManager = getBoolean("manager" + member.role.id, false)
+      val isMember = getBoolean("member" + member.role.id, defaultValue = false)
+      val isGranter = getBoolean("granter" + member.role.id, defaultValue = false)
+      val isManager = getBoolean("manager" + member.role.id, defaultValue = false)
       if (!isMember && !isGranter && !isManager) {
         if (null != myMember) {
           user.roles -= myMember
@@ -144,10 +143,10 @@ class UserAction extends RestfulAction[User] {
     for (m <- removedMembers) ob.remove(m)
     entityDao.execute(ob)
     entityDao.refresh(user)
-    return redirect("search", "info.save.success")
+      redirect("search", "info.save.success")
   }
 
-  protected override def editSetting(user: User) {
+  protected override def editSetting(user: User): Unit = {
     val manager = loginUser
     val roles = new collection.mutable.HashSet[Role]
     val mngMemberMap = new collection.mutable.HashMap[Role, RoleMember]

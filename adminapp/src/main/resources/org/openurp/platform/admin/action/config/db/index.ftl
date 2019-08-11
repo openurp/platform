@@ -1,6 +1,6 @@
 [#ftl]
 [@b.head/]
-[@b.toolbar title="数据源"/]
+[#include "../nav.ftl"/]
 <table class="indexpanel">
   <tr>
     <td class="index_view">

@@ -18,12 +18,10 @@
  */
 package org.openurp.platform.cas.service
 
-import org.beangle.commons.lang.Strings
+import javax.servlet.http.HttpServletRequest
 import org.beangle.ids.cas.id.impl.DefaultIdGenerator
 import org.beangle.security.web.session.CookieSessionIdPolicy
 import org.openurp.app.Urp
-
-import javax.servlet.http.HttpServletRequest
 
 /**
  * @author chaostone

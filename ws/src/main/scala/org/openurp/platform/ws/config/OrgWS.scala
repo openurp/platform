@@ -18,12 +18,11 @@
  */
 package org.openurp.platform.ws.config
 
+import org.beangle.commons.collection.Properties
 import org.beangle.data.dao.EntityDao
 import org.beangle.webmvc.api.action.ActionSupport
-import org.openurp.platform.config.model.Org
-import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.api.annotation.response
-import org.beangle.commons.collection.Properties
+import org.openurp.platform.config.model.Org
 
 class OrgWS(entityDao: EntityDao) extends ActionSupport {
 

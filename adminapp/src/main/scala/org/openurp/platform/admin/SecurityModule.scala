@@ -20,14 +20,14 @@ package org.openurp.platform.admin
 
 import org.beangle.cdi.bind.BindModule
 import org.openurp.platform.admin.action.IndexAction
-import org.openurp.platform.admin.action.bulletin.{ DocAction, NewsAction, NoticeAction }
-import org.openurp.platform.admin.action.security.{ DashboardAction, DataPermissionAction, DataResourceAction, FuncResourceAction, MenuAction, PermissionAction }
-import org.openurp.platform.admin.action.user.{ AccountAction, AvatarAction, DimensionAction, ProfileAction, RoleAction, UserAction }
+import org.openurp.platform.admin.action.bulletin.{DocAction, NewsAction, NoticeAction}
+import org.openurp.platform.admin.action.security._
+import org.openurp.platform.admin.action.user._
 import org.openurp.platform.admin.helper.UserDashboardHelper
 
 class SecurityModule extends BindModule {
 
-  protected override def binding() {
+  protected override def binding(): Unit = {
     bind(classOf[AccountAction], classOf[DashboardAction], classOf[AvatarAction])
     bind(classOf[DimensionAction], classOf[PermissionAction], classOf[UserAction],
       classOf[RoleAction], classOf[ProfileAction])

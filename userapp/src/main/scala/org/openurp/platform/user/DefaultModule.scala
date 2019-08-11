@@ -25,7 +25,7 @@ import org.openurp.platform.user.action.DocAction
 
 class DefaultModule extends BindModule {
 
-  protected override def binding() {
+  protected override def binding(): Unit = {
     bind(classOf[IndexAction], classOf[TodoAction], classOf[MessageAction], classOf[NotificationAction])
 
     bind(classOf[DocAction], classOf[NoticeAction])

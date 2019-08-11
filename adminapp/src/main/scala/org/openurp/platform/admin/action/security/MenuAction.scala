@@ -18,26 +18,25 @@
  */
 package org.openurp.platform.admin.action.security
 
+import javax.servlet.http.Part
 import org.beangle.commons.collection.Collections
 import org.beangle.data.dao.OqlBuilder
 import org.beangle.data.model.util.Hierarchicals
-import org.beangle.webmvc.api.annotation.{ ignore, param }
+import org.beangle.webmvc.api.annotation.{ignore, param}
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.platform.admin.helper.AppHelper
 import org.openurp.platform.config.model.App
 import org.openurp.platform.config.service.AppService
-import org.openurp.platform.security.model.{ FuncPermission, FuncResource, Menu }
+import org.openurp.platform.security.model.{FuncPermission, FuncResource, Menu}
 import org.openurp.platform.security.service.MenuService
-
-import javax.servlet.http.Part
 
 class MenuAction extends RestfulAction[Menu] {
   var menuService: MenuService = _
   var appService: AppService = _
 
   protected override def indexSetting(): Unit = {
-    var apps = appService.getWebapps()
+    val apps = appService.getWebapps
     AppHelper.putApps(apps, "menu.app.id", entityDao)
   }
 
@@ -49,7 +48,7 @@ class MenuAction extends RestfulAction[Menu] {
 
   protected override def editSetting(menu: Menu): Unit = {
     //search profile in app scope
-    val app = entityDao.get(classOf[App], menu.app.id);
+    val app = entityDao.get(classOf[App], menu.app.id)
 
     var folders = Collections.newBuffer[Menu]
     // 查找可以作为父节点的菜单
@@ -98,7 +97,7 @@ class MenuAction extends RestfulAction[Menu] {
     menu.resources ++= resources
     //检查入口资源是否在使用资源列表中
     menu.entry.foreach { entry =>
-      if (!resources.exists(_ == entry)) {
+      if (!resources.contains(entry)) {
         menu.resources += entry
       }
     }
@@ -106,7 +105,7 @@ class MenuAction extends RestfulAction[Menu] {
     val newParentId = getInt("parent.id")
     val indexno = getInt("indexno", 0)
     var parent: Menu = null
-    if (None != newParentId) parent = entityDao.get(classOf[Menu], newParentId.get)
+    if (newParentId.isDefined) parent = entityDao.get(classOf[Menu], newParentId.get)
 
     menuService.move(menu, parent, indexno)
     if (!menu.enabled) {
@@ -118,7 +117,7 @@ class MenuAction extends RestfulAction[Menu] {
     if (null != parent) {
       entityDao.evict(parent)
     }
-    return redirect("search", "info.save.success")
+    redirect("search", "info.save.success")
   }
 
   /**
@@ -126,7 +125,7 @@ class MenuAction extends RestfulAction[Menu] {
    */
   def activate(): View = {
     val menuIds = intIds("menu")
-    val enabled = getBoolean("isActivate", true)
+    val enabled = getBoolean("isActivate", defaultValue = true)
 
     val updated = Collections.newSet[Menu]
     val menus = entityDao.find(classOf[Menu], menuIds)
@@ -135,18 +134,18 @@ class MenuAction extends RestfulAction[Menu] {
     }
     for (menu <- updated) menu.enabled = enabled
     entityDao.saveOrUpdate(updated)
-    return redirect("search", "info.save.success")
+    redirect("search", "info.save.success")
   }
 
   override def info(@param("id") id: String): View = {
     val menu = this.entityDao.get(classOf[Menu], Integer.parseInt(id))
     put("menu", menu)
-    if (!menu.resources.isEmpty) {
+    if (menu.resources.nonEmpty) {
       val roleQuery = OqlBuilder.from(classOf[FuncPermission], "auth")
       roleQuery.where("auth.resource in(:resources)", menu.resources).select("distinct auth.role")
       put("roles", entityDao.search(roleQuery))
     }
-    return forward()
+    forward()
   }
 
   def exportToXml(): View = {
@@ -165,7 +164,7 @@ class MenuAction extends RestfulAction[Menu] {
     } else {
       val app = entityDao.get(classOf[App], getInt("menu.app.id").get)
       menuService.importFrom(app, scala.xml.XML.load(parts.head.getInputStream))
-      return redirect("search", "info.save.success")
+      redirect("search", "info.save.success")
     }
   }
 }

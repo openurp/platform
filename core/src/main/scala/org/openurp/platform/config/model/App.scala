@@ -22,12 +22,14 @@ import java.security.Principal
 
 import org.beangle.commons.collection.Collections
 import org.beangle.data.model.IntId
-import org.beangle.data.model.pojo.{ Enabled, Named, Remark }
+import org.beangle.data.model.pojo.{Enabled, Named, Remark}
+
+import scala.collection.mutable
 
 class App extends IntId with Named with Enabled with Ordered[App] with Principal with Remark {
   var secret: String = _
   var title: String = _
-  var datasources = Collections.newBuffer[DataSource]
+  var datasources: mutable.Buffer[DataSource] = Collections.newBuffer[DataSource]
   var appType: AppType = _
   var url: String = _
   var base: String = _
@@ -36,9 +38,9 @@ class App extends IntId with Named with Enabled with Ordered[App] with Principal
   var domain: Domain = _
   var navStyle: Option[String] = None
 
-  def getName = name
+  def getName: String = name
 
-  def fullTitle = domain.title + " " + title
+  def fullTitle: String = domain.title + " " + title
 
   override def compare(m: App): Int = {
     indexno.compareTo(m.indexno)
