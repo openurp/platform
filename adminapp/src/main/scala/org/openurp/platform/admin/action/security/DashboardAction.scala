@@ -18,13 +18,12 @@
  */
 package org.openurp.platform.admin.action.security
 
-import org.beangle.data.dao.{ EntityDao, OqlBuilder }
+import org.beangle.data.dao.{EntityDao, OqlBuilder}
 import org.beangle.webmvc.api.action.ActionSupport
-import org.openurp.platform.security.model.{ DataPermission, FuncResource, Menu }
-import org.openurp.platform.user.model.{ Dimension, RoleMember }
-import org.openurp.platform.config.model.App
-import org.openurp.platform.config.service.AppService
 import org.beangle.webmvc.api.view.View
+import org.openurp.platform.config.service.AppService
+import org.openurp.platform.security.model.{DataPermission, FuncResource, Menu}
+import org.openurp.platform.user.model.{Dimension, RoleMember}
 
 class DashboardAction extends ActionSupport {
 

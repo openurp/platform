@@ -16,16 +16,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.openurp.platform.admin
+package org.openurp.platform.config.service.impl
 
-import org.beangle.cdi.bind.BindModule
-import org.openurp.platform.admin.action.config.{AppAction, CredentialAction, DbAction}
+import org.beangle.data.dao.EntityDao
+import org.openurp.platform.config.service.DataSourceManager
 
-class ConfigModule extends BindModule {
+class DataSourceManagerImpl(val entityDao: EntityDao) extends DataSourceManager {
 
-  protected override def binding(): Unit = {
-    bind(classOf[AppAction])
-    bind(classOf[DbAction])
-    bind(classOf[CredentialAction])
+  def activate(resourceId: Iterable[Int], active: Boolean): Unit = {
+
   }
+
 }

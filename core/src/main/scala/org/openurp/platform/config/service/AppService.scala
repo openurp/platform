@@ -32,8 +32,8 @@ trait AppService {
 
   def getApp(name: String): Option[App]
 
-  def getWebapps(): Seq[App]
+  def getWebapps: Seq[App]
 
-  def getApps(): Seq[App]
+  def getApps: Seq[App]
 
 }

@@ -38,13 +38,13 @@ class DatasourceWS(entityDao: EntityDao) extends ActionSupport with EntitySuppor
     val query = OqlBuilder.from(classOf[DataSource], "ds")
     query.where("ds.app=:app and ds.name=:key", exist, name)
     val set = entityDao.search(query)
-    if (set != null && set.size > 0) {
+    if (set != null && set.nonEmpty) {
       val rs = set.head
       val ds = new Properties
-      ds.put("user", rs.username)
-      ds.put("password", rs.password)
+      ds.put("user", rs.credential.username)
+      ds.put("password", "?"+rs.credential.password)
       ds.put("driver", rs.db.driver)
-      if (rs.db.url != None) {
+      if (rs.db.url.isDefined) {
         ds.put("url", rs.db.url.get)
       } else {
         ds.put("serverName", rs.db.serverName)

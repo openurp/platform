@@ -18,7 +18,8 @@
  */
 package org.openurp.platform.config.model
 
-import java.{ util => ju }
+import java.time.Instant
+
 import org.beangle.data.model.StringId
 
 class AccessToken extends StringId {
@@ -27,9 +28,9 @@ class AccessToken extends StringId {
 
   var principal: String = _
 
-  var expiredAt: ju.Date = _
+  var expiredAt: Instant = _
 
   def expired: Boolean = {
-    (new ju.Date).after(expiredAt)
+    Instant.now.isAfter(expiredAt)
   }
 }

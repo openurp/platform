@@ -18,10 +18,10 @@
  */
 package org.openurp.platform.ws.security.data
 
-import org.beangle.commons.collection.{ Collections, Properties }
-import org.beangle.data.dao.{ EntityDao, OqlBuilder }
+import org.beangle.commons.collection.Properties
+import org.beangle.data.dao.{EntityDao, OqlBuilder}
 import org.beangle.webmvc.api.action.ActionSupport
-import org.beangle.webmvc.api.annotation.{ mapping, param, response }
+import org.beangle.webmvc.api.annotation.{mapping, param, response}
 import org.openurp.platform.config.model.App
 import org.openurp.platform.security.model.DataPermission
 import org.openurp.platform.user.model.User
@@ -36,9 +36,10 @@ class PermissionWS(entityDao: EntityDao) extends ActionSupport {
   def index(@param("app") appName: String, @param("userCode") userCode: String, @param("data") dataName: String): Any = {
     val userQuery = OqlBuilder.from(classOf[User], "u").where("u.code =:userCode", userCode)
     val users = entityDao.search(userQuery)
-    val apps = entityDao.findBy(classOf[App], "name", List(appName));
-    if (users.isEmpty || apps.isEmpty) return List.empty
-    else {
+    val apps = entityDao.findBy(classOf[App], "name", List(appName))
+    if (users.isEmpty || apps.isEmpty) {
+      List.empty
+    } else {
       val u = users.head
       val app = apps.head
 
@@ -47,20 +48,18 @@ class PermissionWS(entityDao: EntityDao) extends ActionSupport {
       permissionQuery.where("dp.domain=:domain and dp.resource.name=:dataName", app.domain, dataName)
         .cacheable(true)
       val permissions = entityDao.search(permissionQuery)
-      val favorates = Collections.newBuffer[DataPermission]
-      val mostFavorates = permissions find (p => None != p.app && None != p.role && roleSet.contains(p.role.get))
+      val mostFavorates = permissions find (p => p.app.isDefined && p.role.isDefined && roleSet.contains(p.role.get))
       val p = mostFavorates match {
         case Some(p) => p
         case None =>
-          permissions find (x => None != x.app && None == x.role) match {
+          permissions find (x => x.app.isDefined && x.role.isEmpty) match {
             case Some(p) => p
             case None =>
-              permissions find (x => None == x.app && None != x.role) match {
+              permissions find (x => x.app.isEmpty && x.role.isDefined) match {
                 case Some(p) => p
-                case None => {
-                  val pp = permissions find (x => None == x.app && None == x.role)
+                case None =>
+                  val pp = permissions find (x => x.app.isEmpty && x.role.isEmpty)
                   pp.orNull
-                }
               }
           }
       }

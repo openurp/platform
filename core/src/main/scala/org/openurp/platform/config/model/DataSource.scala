@@ -19,15 +19,17 @@
 package org.openurp.platform.config.model
 
 import org.beangle.data.model.IntId
-import org.beangle.data.model.pojo.{ Named, Remark }
+import org.beangle.data.model.pojo.{Named, Remark}
 
+/** 应用数据源
+ * */
 class DataSource extends IntId with Named with Remark {
+  /** 应用 */
   var app: App = _
+  /** 数据库 */
   var db: Db = _
-  var username: String = _
-  var password: String = _
-  /**
-   * 最大活动连接数
-   */
+  /** 凭证 */
+  var credential: Credential = _
+  /** 最大活动连接数   */
   var maxActive: Int = _
 }

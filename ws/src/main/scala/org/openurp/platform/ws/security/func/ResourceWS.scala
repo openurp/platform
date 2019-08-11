@@ -18,19 +18,12 @@
  */
 package org.openurp.platform.ws.security.func
 
-import org.beangle.commons.collection.Properties
-import org.beangle.data.dao.OqlBuilder
-import org.beangle.data.dao.EntityDao
-import org.beangle.webmvc.api.action.{ ActionSupport, EntitySupport }
-import org.beangle.webmvc.api.annotation.{ mapping, param, response }
-import org.openurp.platform.security.model.FuncResource
+import org.beangle.commons.collection.{Collections, Properties}
+import org.beangle.data.dao.{EntityDao, OqlBuilder}
 import org.beangle.security.authz.Scopes
-import org.openurp.platform.security.model.FuncPermission
-import org.beangle.commons.collection.Collections
-import org.openurp.platform.security.model.FuncPermission
-import org.openurp.platform.security.model.FuncPermission
-import org.openurp.platform.security.model.FuncPermission
-import java.time.Instant
+import org.beangle.webmvc.api.action.{ActionSupport, EntitySupport}
+import org.beangle.webmvc.api.annotation.{mapping, param, response}
+import org.openurp.platform.security.model.{FuncPermission, FuncResource}
 
 /**
  * 系统功能资源web服务
@@ -69,7 +62,7 @@ class ResourceWS(entityDao: EntityDao) extends ActionSupport with EntitySupport[
     val query = OqlBuilder.from(classOf[FuncResource], "fr").where("fr.app.name=:app", app)
     query.where("fr.name=:name", name).cacheable()
     val resources = entityDao.search(query)
-    if (!resources.isEmpty) {
+    if (resources.nonEmpty) {
       val roleQuery = OqlBuilder.from[Integer](classOf[FuncPermission].getName, "fp")
         .where("fp.resource.app.name = :appName", app).where("fp.resource.name =:resourceName", name)
         .select("fp.role.id")

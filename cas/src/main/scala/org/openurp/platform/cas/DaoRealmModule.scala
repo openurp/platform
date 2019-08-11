@@ -19,9 +19,7 @@
 package org.openurp.platform.cas
 
 import org.beangle.cdi.bind.BindModule
-import org.beangle.data.jdbc.ds.DataSourceFactory
 import org.beangle.security.authc.{DefaultAccountRealm, RealmAuthenticator}
-import org.openurp.app.UrpApp
 import org.openurp.platform.cas.service.DaoAccountStore
 
 class DaoRealmModule extends BindModule {

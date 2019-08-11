@@ -60,10 +60,9 @@ class DocAction extends RestfulAction[Doc] {
       entityDao.remove(entities, files)
       redirect("search", "info.remove.success")
     } catch {
-      case e: Exception => {
+      case e: Exception =>
         logger.info("removeAndForwad failure", e)
         redirect("search", "info.delete.failure")
-      }
     }
   }
 

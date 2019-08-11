@@ -33,7 +33,7 @@ class ResourceWS extends ActionSupport with EntitySupport[DataResource] {
   def info(@param("name") name: String): Properties = {
     val query = OqlBuilder.from(classOf[DataResource], "fr").where("fr.name=:name", name)
     val resources = entityDao.search(query)
-    if (!resources.isEmpty) new Properties(resources.head, "id", "name", "title", "scope")
+    if (resources.nonEmpty) new Properties(resources.head, "id", "name", "title", "scope")
     else new Properties
   }
 

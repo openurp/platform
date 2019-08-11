@@ -19,13 +19,12 @@
 package org.openurp.platform.cas
 
 import org.beangle.cdi.bind.BindModule
-import org.beangle.data.hibernate.{ DomainFactory, HibernateEntityDao }
-import org.beangle.data.hibernate.spring.{ HibernateTransactionManager, LocalSessionFactoryBean }
 import org.beangle.data.hibernate.spring.web.OpenSessionInViewInterceptor
+import org.beangle.data.hibernate.spring.{HibernateTransactionManager, LocalSessionFactoryBean}
+import org.beangle.data.hibernate.{DomainFactory, HibernateEntityDao}
 import org.openurp.app.datasource.AppDataSourceFactory
 import org.springframework.beans.factory.config.PropertiesFactoryBean
 import org.springframework.transaction.interceptor.TransactionProxyFactoryBean
-import org.beangle.commons.lang.ClassLoaders
 
 object DaoModule extends BindModule {
 

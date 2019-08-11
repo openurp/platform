@@ -19,16 +19,9 @@
 package org.openurp.platform.admin
 
 import org.beangle.cdi.bind.BindModule
+import org.beangle.commons.lang.ClassLoaders
 import org.beangle.data.hibernate.{DomainFactory, HibernateEntityDao}
 import org.beangle.data.hibernate.spring.{HibernateTransactionManager, LocalSessionFactoryBean}
-import org.beangle.data.hibernate.spring.web.OpenSessionInViewInterceptor
-import org.openurp.app.datasource.AppDataSourceFactory
-import org.springframework.beans.factory.config.PropertiesFactoryBean
-import org.springframework.transaction.interceptor.TransactionProxyFactoryBean
-import org.beangle.data.hibernate.DomainFactory
-import org.beangle.data.hibernate.HibernateEntityDao
-import org.beangle.data.hibernate.spring.HibernateTransactionManager
-import org.beangle.data.hibernate.spring.LocalSessionFactoryBean
 import org.beangle.data.hibernate.spring.web.OpenSessionInViewInterceptor
 import org.openurp.app.datasource.AppDataSourceFactory
 import org.springframework.beans.factory.config.PropertiesFactoryBean

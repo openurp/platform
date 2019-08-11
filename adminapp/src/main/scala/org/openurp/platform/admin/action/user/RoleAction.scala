@@ -26,16 +26,15 @@ import org.beangle.security.Securities
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.app.UrpApp
+import org.openurp.platform.admin.helper.ProfileHelper
 import org.openurp.platform.config.model.App
 import org.openurp.platform.security.service.ProfileService
-import org.openurp.platform.user.model.{ Role, User }
-import org.openurp.platform.user.service.{ DataResolver, RoleService, UserService }
+import org.openurp.platform.user.model.{Role, User}
 import org.openurp.platform.user.service.impl.CsvDataResolver
-import org.openurp.platform.admin.helper.ProfileHelper
+import org.openurp.platform.user.service.{DataResolver, RoleService, UserService}
 
 /**
  * 角色信息维护响应类
- *
  * @author chaostone 2005-9-29
  */
 class RoleAction(val roleService: RoleService, val userService: UserService) extends RestfulAction[Role] {
@@ -71,7 +70,7 @@ class RoleAction(val roleService: RoleService, val userService: UserService) ext
 
   protected override def getQueryBuilder: OqlBuilder[Role] = {
     val entityQuery = OqlBuilder.from(classOf[Role], "role")
-    val me = entityDao.findBy(classOf[User], "code", List(Securities.user)).head
+    //val me = entityDao.findBy(classOf[User], "code", List(Securities.user)).head
     //    if (!userService.isRoot(me, app.name)) {
     //      entityQuery.join("role.members", "gm")
     //      entityQuery.where("gm.user=:me and gm.manager=true", me)
@@ -86,7 +85,7 @@ class RoleAction(val roleService: RoleService, val userService: UserService) ext
     val role = entity.asInstanceOf[Role]
     if (entity.persisted) {
       if (!roleService.isManagedBy(me, role)) {
-        return redirect("search", "不能修改该组,你没有" + role.parent.map(p => p.name).orNull + "的管理权限");
+        return redirect("search", "不能修改该组,你没有" + role.parent.map(p => p.name).orNull + "的管理权限")
       }
     }
     if (entityDao.duplicate(classOf[Role], role.id, "name", role.getName())) return redirect(
@@ -111,7 +110,7 @@ class RoleAction(val roleService: RoleService, val userService: UserService) ext
       for (one <- family) one.asInstanceOf[Role].enabled = false
       entityDao.saveOrUpdate(family)
     }
-    return redirect("search", "info.save.success")
+    redirect("search", "info.save.success")
   }
 
   def profile(): View = {
@@ -119,14 +118,13 @@ class RoleAction(val roleService: RoleService, val userService: UserService) ext
     val helper = new ProfileHelper(entityDao, profileService)
     helper.populateInfo(List(role))
     put("role", role)
-    return forward()
+    forward()
   }
 
   def editProfile(): View = {
     val role = entityDao.get(classOf[Role], intId("role"))
-    val me = entityDao.findBy(classOf[User], "code", List(Securities.user)).head
     val helper = new ProfileHelper(entityDao, profileService)
-    helper.fillEditInfo(role, true, null)
+    helper.fillEditInfo(role, isAdmin = true, null)
     put("role", role)
     forward()
   }

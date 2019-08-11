@@ -60,7 +60,7 @@ class ProfileAction(profileService: ProfileService) extends RestfulAction[UserPr
     val helper = new ProfileHelper(entityDao, profileService)
     helper.dataResolver = dataResolver
     //FIXME
-    helper.populateSaveInfo(profile, true, profile.domain)
+    helper.populateSaveInfo(profile, isAdmin = true, profile.domain)
     if (profile.properties.isEmpty) {
       if (profile.persisted) {
         entityDao.remove(profile)
@@ -96,7 +96,7 @@ class ProfileAction(profileService: ProfileService) extends RestfulAction[UserPr
     if (null == profile.domain && domains.nonEmpty) profile.domain = domains.head
     if (null == profile.user) profile.user = userService.get(Securities.user).get
     put("domains", domains)
-    helper.fillEditInfo(profile, true, profile.domain)
+    helper.fillEditInfo(profile, isAdmin = true, profile.domain)
   }
 
 }

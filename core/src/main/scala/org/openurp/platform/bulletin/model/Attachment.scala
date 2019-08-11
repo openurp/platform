@@ -18,14 +18,13 @@
  */
 package org.openurp.platform.bulletin.model
 
+import java.io.{ByteArrayOutputStream, InputStream}
+import java.time.Instant
+
+import org.beangle.commons.io.IOs
+import org.beangle.commons.lang.Strings
 import org.beangle.data.model.LongId
 import org.beangle.data.model.pojo.Updated
-import java.io.BufferedOutputStream
-import java.io.InputStream
-import org.beangle.commons.io.IOs
-import java.io.ByteArrayOutputStream
-import java.time.Instant
-import org.beangle.commons.lang.Strings
 
 object Attachment {
   def apply(name: String, is: InputStream): Attachment = {
@@ -34,7 +33,7 @@ object Attachment {
 
     val buf = new ByteArrayOutputStream
     IOs.copy(is, buf)
-    a.content = buf.toByteArray()
+    a.content = buf.toByteArray
     a.size = a.content.length
     a.updatedAt = Instant.now
     a
