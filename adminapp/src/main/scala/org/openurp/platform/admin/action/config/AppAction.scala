@@ -80,14 +80,4 @@ class AppAction(dbService: DbService) extends RestfulAction[App] {
         redirect("search", "info.save.failure")
     }
   }
-
-  private def encrypt(plainText: String, secretKey: String): String = {
-    var key = secretKey.getBytes("UTF-8")
-    val sha = MessageDigest.getInstance("SHA-1")
-    key = sha.digest(key)
-    key = ju.Arrays.copyOf(key, 16) // use only the first 128 bit
-    val cipher = Cipher.getInstance("AES")
-    cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key, "AES"))
-    Hex.encode(cipher.doFinal(plainText.getBytes("UTF-8")))
-  }
 }

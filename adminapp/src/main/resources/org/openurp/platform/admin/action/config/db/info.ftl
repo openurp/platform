@@ -10,15 +10,19 @@
   </tr>
   <tr>
     <td class="title" width="20%">URL</td>
-    <td class="content">${db.url}</td>
+    <td class="content">${db.url!}</td>
   </tr>
   <tr>
-    <td class="title" width="20%">DriverClassName</td>
-    <td class="content" >${db.driverClassName!}</td>
+    <td class="title">数据库驱动</td>
+    <td class="content" >${db.driver!}</td>
   </tr>
   <tr>
-    <td class="title" width="20%">用户名</td>
-    <td class="content" >${db.username!}</td>
+    <td class="title">服务器</td>
+    <td class="content" >${db.serverName!}</td>
+  </tr>
+  <tr>
+    <td class="title">数据库名</td>
+    <td class="content" >${db.databaseName!}</td>
   </tr>
   <tr>
     <td class="title" width="20%">备注</td>
