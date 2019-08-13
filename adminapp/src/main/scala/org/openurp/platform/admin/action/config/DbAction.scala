@@ -20,35 +20,69 @@ package org.openurp.platform.admin.action.config
 
 import java.sql.DriverManager
 
+import org.beangle.commons.lang.{Strings, Throwables}
+import org.beangle.data.jdbc.vendor.Vendors
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
-import org.openurp.platform.config.model.Db
-
-import scala.collection.mutable.ListBuffer
+import org.openurp.app.util.AesEncryptor
+import org.openurp.platform.config.model.{Credential, Db}
 
 class DbAction extends RestfulAction[Db] {
 
   override def simpleEntityName = "db"
 
-  def test(): View = {
-    val username = get("user", "")
-    val password = get("password", "")
+  def testSetting(): View = {
     val entities = getModels[Db](entityName, ids(simpleEntityName, entityDao.domain.getEntity(entityName).get.id.clazz))
-    val result = new ListBuffer[Tuple2[Db, Boolean]]
-    for (cfg <- entities) {
-      try {
-        val conn = DriverManager.getConnection(cfg.url.orNull, username, password)
-        conn.close()
-        result += cfg -> true
-      } catch {
-        case t: Throwable =>
-          t.printStackTrace()
-          result += cfg -> false
-      }
-    }
-    put("result", result)
+    put("credentials", entityDao.getAll(classOf[Credential]))
+    put("datasource", entities.head)
     forward()
   }
+
+  def test(): View = {
+    var username = get("username", "")
+    var password = get("password", "")
+    put("credentials", entityDao.getAll(classOf[Credential]))
+    val entities = getModels[Db](entityName, ids(simpleEntityName, entityDao.domain.getEntity(entityName).get.id.clazz))
+    val cfg = entities.head
+
+    val useCredential = getBoolean("use_credential", false)
+    try {
+      if (useCredential) {
+        val credential = entityDao.get(classOf[Credential], intId("credential"))
+        val key = get("key").orNull
+        username = credential.username
+        password = new AesEncryptor(key).decrypt(credential.password)
+      }
+      if (Strings.isNotBlank(username) && Strings.isNotBlank(password)) {
+
+        val url =
+          cfg.url match {
+            case None =>
+              Class.forName(Vendors.drivers(cfg.driver).className)
+              var format = Vendors.drivers(cfg.driver).urlformats.head
+              format = Strings.replace(format, "<host>", cfg.serverName)
+              format = Strings.replace(format, "<port>", cfg.portNumber.toString)
+              format = Strings.replace(format, "<database_name>", cfg.databaseName)
+              "jdbc:" + cfg.driver + ":" + format
+            case Some(u) => u
+          }
+        val conn = DriverManager.getConnection(url, username, password)
+        val msg = new StringBuilder
+        msg.append("DatabaseProductName:").append(conn.getMetaData.getDatabaseProductName)
+        msg.append("<br>DatabaseProductVersion:").append(conn.getMetaData.getDatabaseProductVersion)
+        put("msg", msg.toString)
+        conn.close()
+        put("passed", true)
+
+      }
+    } catch {
+      case t: Throwable =>
+        put("msg", Throwables.stackTrace(t))
+        put("passed", false)
+    }
+    forward()
+  }
+
 
   protected override def editSetting(entity: Db): Unit = {
     val drivers = Map("postgresql" -> "PostgreSQL", "oracle" -> "Oracle", "mysql" -> "MySQL", "db2" -> "DB2", "sqlserver" -> "Microsoft SQL Server")

@@ -3,7 +3,7 @@
 [@b.grid items=dbs var="db"]
   [@b.gridbar]
     bar.addItem("${b.text("action.new")}",action.add());
-    bar.addItem("${b.text("连接测试")}",action.multi("test"));
+    bar.addItem("${b.text("连接测试")}",action.single("testSetting"));
     bar.addItem("${b.text("action.modify")}",action.edit());
     bar.addItem("${b.text("action.delete")}",action.remove("确认删除?"));
   [/@]
