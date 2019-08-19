@@ -25,7 +25,15 @@
     <td class="content" >${db.databaseName!}</td>
   </tr>
   <tr>
-    <td class="title" width="20%">备注</td>
+    <td class="title">其他属性</td>
+    <td class="content" >
+    [#list db.properties?keys  as k]
+      ${k}=${db.properties[k]}[#if k_has_next]<br/>[/#if]
+    [/#list]
+    </td>
+  </tr>
+  <tr>
+    <td class="title">备注</td>
     <td class="content" >${db.remark!}</td>
   </tr>
 </table>

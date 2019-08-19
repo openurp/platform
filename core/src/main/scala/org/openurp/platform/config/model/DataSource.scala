@@ -31,5 +31,5 @@ class DataSource extends IntId with Named with Remark {
   /** 凭证 */
   var credential: Credential = _
   /** 最大活动连接数   */
-  var maxActive: Int = _
+  var maximumPoolSize: Int = _
 }

@@ -47,7 +47,7 @@
             <td align="center">${v.name}</td>
             <td align="center">${v.credential.username}</td>
             <td align="center">${v.credential.password}</td>
-            <td align="center">${v.maxActive}</td>
+            <td align="center">${v.maximumPoolSize}</td>
           </tr>
         [/#list]
       </tbody>

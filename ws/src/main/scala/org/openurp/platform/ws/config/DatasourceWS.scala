@@ -19,10 +19,10 @@
 package org.openurp.platform.ws.config
 
 import org.beangle.commons.collection.Properties
-import org.beangle.data.dao.{ EntityDao, OqlBuilder }
-import org.beangle.webmvc.api.action.{ ActionSupport, EntitySupport }
-import org.beangle.webmvc.api.annotation.{ mapping, param, response }
-import org.openurp.platform.config.model.{ App, DataSource }
+import org.beangle.data.dao.{EntityDao, OqlBuilder}
+import org.beangle.webmvc.api.action.{ActionSupport, EntitySupport}
+import org.beangle.webmvc.api.annotation.{mapping, param, response}
+import org.openurp.platform.config.model.{App, DataSource}
 
 class DatasourceWS(entityDao: EntityDao) extends ActionSupport with EntitySupport[DataSource] {
 
@@ -42,7 +42,7 @@ class DatasourceWS(entityDao: EntityDao) extends ActionSupport with EntitySuppor
       val rs = set.head
       val ds = new Properties
       ds.put("user", rs.credential.username)
-      ds.put("password", "?"+rs.credential.password)
+      ds.put("password", "?" + rs.credential.password)
       ds.put("driver", rs.db.driver)
       if (rs.db.url.isDefined) {
         ds.put("url", rs.db.url.get)
@@ -51,7 +51,10 @@ class DatasourceWS(entityDao: EntityDao) extends ActionSupport with EntitySuppor
         ds.put("databaseName", rs.db.databaseName)
         ds.put("portNumber", rs.db.portNumber)
       }
-      ds.put("maximumPoolSize", rs.maxActive)
+      ds.put("maximumPoolSize", rs.maximumPoolSize)
+      rs.db.properties foreach { case (k, v) =>
+        ds.put(k, v)
+      }
       ds
     } else "error:error_resource_key"
   }

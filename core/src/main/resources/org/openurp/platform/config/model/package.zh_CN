@@ -15,7 +15,7 @@ AppType=应用类型
 AppType.title=标题
 
 DataSource=数据源
-DataSource.maxActive=最大连接数
+DataSource.maximumPoolSize=最大连接数
 
 Credential=凭证
 Credential.password=密码

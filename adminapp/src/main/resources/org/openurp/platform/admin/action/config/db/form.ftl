@@ -11,6 +11,7 @@
     [@b.textfield name="db.databaseName" label="数据库名" value="${db.databaseName!}" required="true" maxlength="200"/]
     [@b.textfield name="db.portNumber" label="数据库端口" value="${db.portNumber!}" required="true" maxlength="200"/]
     [@b.textfield name="db.url" label="URL" value="${db.url!}" required="false" maxlength="200" style="width:300px;"/]
+    [@b.textarea name="properties" label="其他属性" value="${db.propertiesString}" maxlength="400" cols="50" comment="<a href='https://github.com/brettwooldridge/HikariCP' target='_blank'>属性参考</a>"/]
     [@b.textarea name="db.remark" label="备注" value="${db.remark!}" maxlength="200"/]
     [@b.formfoot]
       [@b.reset/]&nbsp;&nbsp;[@b.submit value="action.submit"/]

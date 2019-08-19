@@ -20,6 +20,7 @@ package org.openurp.platform.admin.action.config
 
 import java.sql.DriverManager
 
+import org.beangle.commons.collection.Collections
 import org.beangle.commons.lang.{Strings, Throwables}
 import org.beangle.data.jdbc.vendor.Vendors
 import org.beangle.webmvc.api.view.View
@@ -36,6 +37,24 @@ class DbAction extends RestfulAction[Db] {
     put("credentials", entityDao.getAll(classOf[Credential]))
     put("datasource", entities.head)
     forward()
+  }
+
+  override def saveAndRedirect(db: Db): View = {
+    val keys = Collections.newSet[String]
+    get("properties") foreach { p =>
+      var props = Strings.replace(p, "\r", "\n")
+      props = Strings.replace(p, ";", "\n")
+      val propArray = Strings.split(props, "\n")
+      propArray foreach { kv =>
+        val k = Strings.substringBefore(kv, "=").trim
+        val v = Strings.substringAfter(kv, "=").trim
+        keys.add(k)
+        db.properties.put(k, v)
+      }
+    }
+    val removedKey = db.properties.keys.toSet -- keys
+    db.properties.subtractAll(removedKey)
+    super.saveAndRedirect(db)
   }
 
   def test(): View = {
@@ -85,7 +104,8 @@ class DbAction extends RestfulAction[Db] {
 
 
   protected override def editSetting(entity: Db): Unit = {
-    val drivers = Map("postgresql" -> "PostgreSQL", "oracle" -> "Oracle", "mysql" -> "MySQL", "db2" -> "DB2", "sqlserver" -> "Microsoft SQL Server")
+    val drivers = Map("postgresql" -> "PostgreSQL", "oracle" -> "Oracle", "mysql" -> "MySQL",
+      "db2" -> "DB2", "sqlserver" -> "Microsoft SQL Server", "jtds" -> "Jtds(SQL Server)")
     put("drivers", drivers)
   }
 
