@@ -105,7 +105,7 @@ class DbAction extends RestfulAction[Db] {
 
   protected override def editSetting(entity: Db): Unit = {
     val drivers = Map("postgresql" -> "PostgreSQL", "oracle" -> "Oracle", "mysql" -> "MySQL",
-      "db2" -> "DB2", "sqlserver" -> "Microsoft SQL Server", "jtds" -> "jtds for sqlserver")
+      "db2" -> "DB2", "sqlserver" -> "Microsoft SQL Server", "jtds" -> "Jtds(SQL Server)")
     put("drivers", drivers)
   }
 
