@@ -34,7 +34,7 @@
             <td>
                <input name="ds" type="hidden" value="${v.db.id}"/>
                <input name="ds${v.db.id}.db.id" type="hidden" value="${v.db.id}"/>
-               <input class="maxActive" name="ds${v.db.id}.maxActive" value="${v.maxActive}" style="width:60px"/>
+               <input class="maximumPoolSize" name="ds${v.db.id}.maximumPoolSize" value="${v.maximumPoolSize}" style="width:60px"/>
             </td>
             <td><input name="ds${v.db.id}.remark" value="${v.remark!}" style="width:100px"/></td>
             <td><button class="delDataSourceBtn">删除</button></td>
@@ -66,7 +66,7 @@
         var tr = $('<tr><td>'+name+'</td>'+
             '<td><input name="ds" type="hidden" value="'+id+'"/><input name="ds'+id+'.db.id" type="hidden" value="' + id + '"/><input name="ds'+id+'.name" style="width:60px" maxlength="40"/></td>'+
             '<td><select name="ds'+id+'.credential.id" style="width:100px">[#list credentials as c]<option value="${c.id}">${c.name}</option>[/#list]</select></td>'+
-            '<td><input class="maxActive" name="ds'+id+'.maxActive" style="width:60px"/></td>'+
+            '<td><input class="maximumPoolSize" name="ds'+id+'.maximumPoolSize" style="width:60px"/></td>'+
             '<td><input name="ds'+id+'.remark" style="width:100px"/></td>'+
             '<td><button class="delDataSourceBtn">删除</button></td></tr>');
         $(".dstable").append(tr);
@@ -80,7 +80,7 @@
 
   function beforeSubmit(){
     var allNumber = true;
-    $(".maxActive").each(function (){
+    $(".maximumPoolSize").each(function (){
       allNumber = allNumber && /^\d+$/.test(this.value);
     });
     if(!allNumber){

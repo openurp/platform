@@ -20,7 +20,7 @@
     [@b.col width="8%" property="domain.title" title="领域"/]
     [@b.col width="8%" property="appType.title" title="类型"/]
     [@b.col width="11%" title="数据源" ]
-      [#list app.datasources as  ds]${ds.name}(${ds.maxActive})[/#list]
+      [#list app.datasources as  ds]${ds.name}(${ds.maximumPoolSize})[/#list]
     [/@]
     [@b.col width="7%" property="enabled" title="是否可用" ][@enableInfo app.enabled/][/@]
   [/@]

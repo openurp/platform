@@ -18,16 +18,10 @@
  */
 package org.openurp.platform.admin.action.config
 
-import java.security.MessageDigest
-import java.{util => ju}
-
-import javax.crypto.Cipher
-import javax.crypto.spec.SecretKeySpec
-import org.beangle.commons.codec.binary.Hex
 import org.beangle.webmvc.api.annotation.ignore
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
-import org.openurp.platform.config.model.{App, AppType, Credential, DataSource, Domain}
+import org.openurp.platform.config.model._
 import org.openurp.platform.config.service.DbService
 
 class AppAction(dbService: DbService) extends RestfulAction[App] {

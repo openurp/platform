@@ -18,13 +18,25 @@
  */
 package org.openurp.platform.config.model
 
+import org.beangle.commons.collection.Collections
 import org.beangle.data.model.IntId
-import org.beangle.data.model.pojo.{ Named, Remark }
+import org.beangle.data.model.pojo.{Named, Remark}
 
-class Db extends IntId with Named with Remark{
+import scala.collection.mutable
+
+class Db extends IntId with Named with Remark {
   var url: Option[String] = None
   var driver: String = _
   var serverName: String = _
   var databaseName: String = _
   var portNumber: Int = _
+  var properties: mutable.Map[String, String] = Collections.newMap[String, String]
+
+  def propertiesString: String = {
+    val sb = new mutable.StringBuilder
+    properties.foreach { case (k, v) =>
+      sb.append(k).append("=").append(v).append('\n')
+    }
+    sb.toString
+  }
 }
