@@ -12,7 +12,7 @@
       <input type="hidden" name="orderBy" value="notice.publishedAt desc"/>
     [/@]
     </td>
-    <td class="index_content">[@b.div id="noticelist" href="!search?orderBy=notice.publishedAt desc"/]
+    <td class="index_content">[@b.div id="noticelist" href="!search?orderBy=notice.createdAt desc"/]
     </td>
   </tr>
 </table>

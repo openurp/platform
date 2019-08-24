@@ -18,7 +18,7 @@
  */
 package org.openurp.platform.bulletin.model
 
-import java.time.LocalDate
+import java.time.Instant
 
 import org.beangle.commons.collection.Collections
 import org.beangle.data.model.LongId
@@ -40,13 +40,21 @@ class Notice extends LongId with DateRange {
 
   var sticky: Boolean = _
 
-  var publishedOn: LocalDate = _
+  var createdAt: Instant = _
+
+  var updatedAt: Instant = _
+
+  var publishedAt: Option[Instant] = None
 
   var operator: User = _
+
+  var auditor: Option[User] = None
 
   var archived: Boolean = _
 
   var popup: Boolean = _
 
-  var docs:mutable.Buffer[Doc]=Collections.newBuffer[Doc]
+  var docs: mutable.Buffer[Doc] = Collections.newBuffer[Doc]
+
+  var status: NoticeStatus.Status = NoticeStatus.Draft
 }

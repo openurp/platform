@@ -6,7 +6,7 @@
     [@b.col width="40%" property="title" title="标题"][@b.a href="!info?id=${notice.id}"]${notice.title!}[/@][/@]
     [@b.col width="15%" property="app.title" title="应用"/]
     [@b.col width="10%" property="userCategory.id" title="用户类别"]${notice.userCategory.name}[/@]
-    [@b.col width="15%" property="publishedOn" title="发布日期"]${notice.publishedOn?string("yy-MM-dd")}[/@]
+    [@b.col width="15%" property="publishedAt" title="发布日期"]${notice.publishedAt?string("yy-MM-dd")}[/@]
     [@b.col width="10%" property="sticky" title="是否置顶"]${notice.sticky?string("是","否")}[/@]
   [/@]
 [/@]

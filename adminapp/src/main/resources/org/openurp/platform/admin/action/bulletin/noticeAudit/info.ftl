@@ -3,5 +3,5 @@
 [@b.toolbar title="公告信息"]
   bar.addBack("${b.text("action.back")}");
 [/@]
-[#include "info_panel.ftl"/]
+[#include "../notice/info_panel.ftl"/]
 [@b.foot/]

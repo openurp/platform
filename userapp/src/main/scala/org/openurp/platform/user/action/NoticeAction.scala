@@ -18,12 +18,12 @@
  */
 package org.openurp.platform.user.action
 
-import org.beangle.data.dao.{ EntityDao, OqlBuilder }
+import org.beangle.data.dao.{EntityDao, OqlBuilder}
 import org.beangle.security.Securities
 import org.beangle.webmvc.api.action.ActionSupport
-import org.beangle.webmvc.api.annotation.{ mapping, param }
+import org.beangle.webmvc.api.annotation.{mapping, param}
 import org.beangle.webmvc.api.view.View
-import org.openurp.platform.bulletin.model.Notice
+import org.openurp.platform.bulletin.model.{Notice, NoticeStatus}
 import org.openurp.platform.user.model.User
 
 class NoticeAction extends ActionSupport {
@@ -35,7 +35,8 @@ class NoticeAction extends ActionSupport {
     val noticeQuery = OqlBuilder.from(classOf[Notice], "notice")
     noticeQuery.where("notice.userCategory=:category", me.category)
     noticeQuery.limit(1, 20)
-    noticeQuery.orderBy("notice.publishedOn desc")
+    noticeQuery.where("notice.status=:status",NoticeStatus.Passed)
+    noticeQuery.orderBy("notice.publishedAt desc")
     val notices = entityDao.search(noticeQuery)
     put("notices", notices)
     forward()

@@ -20,7 +20,7 @@ package org.openurp.platform.admin
 
 import org.beangle.cdi.bind.BindModule
 import org.openurp.platform.admin.action.IndexAction
-import org.openurp.platform.admin.action.bulletin.{DocAction, NewsAction, NoticeAction}
+import org.openurp.platform.admin.action.bulletin.{DocAction, NewsAction, NoticeAction, NoticeAuditAction}
 import org.openurp.platform.admin.action.security._
 import org.openurp.platform.admin.action.user._
 import org.openurp.platform.admin.helper.UserDashboardHelper
@@ -32,7 +32,7 @@ class SecurityModule extends BindModule {
     bind(classOf[DimensionAction], classOf[PermissionAction], classOf[UserAction],
       classOf[RoleAction], classOf[ProfileAction])
 
-    bind(classOf[DocAction], classOf[NoticeAction], classOf[NewsAction])
+    bind(classOf[DocAction], classOf[NoticeAction], classOf[NewsAction], classOf[NoticeAuditAction])
 
     bind(classOf[FuncResourceAction], classOf[MenuAction])
     bind(classOf[DataPermissionAction])
