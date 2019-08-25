@@ -38,7 +38,9 @@ class NoticeAuditAction extends ActionSupport with EntityAction[Notice] {
   }
 
   def search(): View = {
-    put("notices", entityDao.search(getQueryBuilder))
+    val builder = getQueryBuilder
+    builder.where("notice.status != :status", NoticeStatus.Draft)
+    put("notices", entityDao.search(builder))
     forward()
   }
 

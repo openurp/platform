@@ -18,9 +18,7 @@
  */
 package org.openurp.platform.user.model
 
-import scala.reflect.runtime.universe
-import org.beangle.data.orm.MappingModule
-import org.beangle.data.orm.IdGenerator
+import org.beangle.data.orm.{IdGenerator, MappingModule}
 
 object DefaultMapping extends MappingModule {
 
@@ -41,10 +39,10 @@ object DefaultMapping extends MappingModule {
       e.getName is length(100),
       e.children is depends("parent"),
       e.members is depends("role"),
-      e.properties is eleLength(2000))).cacheAll(excepts = Set("members"))
+      e.properties is eleLength(2000)))
 
     bind[User].on(e => declare(
-      e.code is (length(30), unique),
+      e.code is(length(30), unique),
       e.getName is length(100),
       e.password is length(200),
       e.remark is length(100),
@@ -53,7 +51,7 @@ object DefaultMapping extends MappingModule {
       e.properties is eleLength(2000)))
 
     bind[UserCategory].on(e => declare(
-      e.code is (length(30), unique),
+      e.code is(length(30), unique),
       e.name is length(100)))
 
     bind[UserProfile].on(e => declare(
@@ -77,7 +75,7 @@ object DefaultMapping extends MappingModule {
     bind[Notification]
     bind[Todo]
 
-    all.except(classOf[Avatar]).cacheAll(excepts = Set("Role.members"))
+    all.except(classOf[Avatar], classOf[RoleMember], classOf[GroupMember]).cacheAll()
   }
 
 }
