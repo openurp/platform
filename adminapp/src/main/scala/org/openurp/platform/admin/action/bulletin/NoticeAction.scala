@@ -18,35 +18,44 @@
  */
 package org.openurp.platform.admin.action.bulletin
 
-import java.time.LocalDate
-
-import javax.servlet.http.Part
 import java.time.Instant
 
+import javax.servlet.http.Part
 import org.beangle.security.Securities
 import org.beangle.webmvc.api.annotation.ignore
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
-import org.openurp.platform.bulletin.model.Notice
-import org.openurp.platform.bulletin.model.Doc
-import org.openurp.platform.bulletin.model.Attachment
+import org.openurp.platform.bulletin.model._
 import org.openurp.platform.config.model.App
-import org.openurp.platform.user.model.{ User, UserCategory }
+import org.openurp.platform.user.model.{User, UserCategory}
 
 class NoticeAction extends RestfulAction[Notice] {
 
   override protected def indexSetting(): Unit = {
     put("userCategories", entityDao.getAll(classOf[UserCategory]))
+    put("apps", entityDao.getAll(classOf[App]))
   }
 
   override protected def editSetting(entity: Notice): Unit = {
     put("userCategories", entityDao.getAll(classOf[UserCategory]))
     put("apps", entityDao.getAll(classOf[App]))
+    if (null == entity.status) {
+      entity.status = NoticeStatus.Draft
+    }
   }
 
   @ignore
   override protected def saveAndRedirect(notice: Notice): View = {
-    notice.publishedOn = LocalDate.now
+    notice.updatedAt = Instant.now
+    if (null == notice.createdAt) {
+      notice.createdAt = notice.updatedAt
+    }
+    val words = entityDao.getAll(classOf[SensitiveWord]).map(_.content).toSet
+    val results = SensitiveFilter(words).matchedWords(notice.content)
+    if (results.nonEmpty) {
+      addFlashMessage("找到敏感词汇:" + results.mkString(","))
+      throw new RuntimeException("找到敏感词汇:" + results.mkString(","))
+    }
     notice.operator = entityDao.findBy(classOf[User], "code", List(Securities.user)).head
     getAll("notice_doc", classOf[Part]) foreach { docFile =>
       val doc = new Doc
@@ -56,7 +65,7 @@ class NoticeAction extends RestfulAction[Notice] {
       doc.name = attachment.fileName
       doc.uploadBy = notice.operator
       doc.userCategory = notice.userCategory
-      doc.updatedAt=Instant.now
+      doc.updatedAt = Instant.now
       entityDao.saveOrUpdate(doc.file, doc)
       notice.docs += doc
     }

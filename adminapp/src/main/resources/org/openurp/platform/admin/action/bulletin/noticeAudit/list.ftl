@@ -4,9 +4,8 @@
 [@b.grid items=notices var="notice"]
   [@b.gridbar]
     bar.addItem("${b.text("action.info")}",action.info());
-    bar.addItem("起草",action.add());
-    bar.addItem("${b.text("action.modify")}",action.edit());
-    bar.addItem("${b.text("action.delete")}",action.remove("确认删除?"));
+    bar.addItem("审核通过",action.multi('audit','确定审核通过?',"passed=1"));
+    bar.addItem("退回",action.multi('audit','确定退回?',"passed=0"));
   [/@]
   [@b.row]
     [@b.boxcol /]

@@ -18,23 +18,22 @@
  */
 package org.openurp.platform.ws
 
+import org.beangle.cache.caffeine.CaffeineCacheManager
 import org.beangle.cdi.bind.BindModule
 import org.openurp.platform.oauth.service.impl.MemTokenRepository
-import org.openurp.platform.ws.config.DatasourceWS
+import org.openurp.platform.ws.bulletin.NoticeWS
+import org.openurp.platform.ws.config.{DatasourceWS, OrgWS}
 import org.openurp.platform.ws.oauth.TokenWS
-import org.openurp.platform.ws.user.AppWS
-import org.openurp.platform.ws.user.RootWS
-import org.openurp.platform.ws.user.{AccountWS, DimensionWS, ProfileWS}
-import org.openurp.platform.ws.security.{func, data}
-import org.openurp.platform.ws.config.OrgWS
-import org.openurp.platform.ws.user.AvatarWS
-import org.beangle.cache.caffeine.CaffeineCacheManager
+import org.openurp.platform.ws.security.{data, func}
+import org.openurp.platform.ws.user._
 
 class DefaultModule extends BindModule {
 
   protected override def binding(): Unit = {
     bind(classOf[DatasourceWS], classOf[OrgWS])
     bind(classOf[TokenWS])
+
+    bind(classOf[NoticeWS])
 
     bind(classOf[func.MenuWS])
     bind(classOf[func.ResourceWS], classOf[func.PermissionWS])

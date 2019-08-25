@@ -18,27 +18,14 @@
  */
 package org.openurp.platform.bulletin.model
 
-import org.beangle.data.orm.MappingModule
+object NoticeStatus extends Enumeration(0) {
+  val Draft = new Status("草稿")
+  val Submited = new Status("已提交")
+  val Unpassed = new Status("审核不通过")
+  val Passed = new Status("审核通过")
 
-object DefaultMapping extends MappingModule {
-
-  override def binding(): Unit = {
-    defaultIdGenerator("auto_increment")
-    defaultCache("openurp.platform.security", "read-write")
-
-    bind[Doc]
-
-    bind[Attachment]
-
-    bind[News].on(e => declare(
-      e.content is lob))
-
-    bind[Notice].on(e => declare(
-      e.content is lob))
-
-    bind[SensitiveWord].on(e => declare(
-      e.content is length(30)))
-
-    all.except(classOf[Attachment]).cacheAll()
+  class Status(val title: String) extends super.Val {
   }
+
+
 }

@@ -1,5 +1,10 @@
 [#ftl]
 [@b.head/]
+[#if notice.status.title="审核通过"]
+[@b.toolbar title="修改通知公告"]bar.addBack();[/@]
+<p class="bg-danger">该公告已经审核通过，不能更改，如需更改需审核环节退回</p>
+  [#include "info_panel.ftl"/]
+[#else]
 ${b.css("kindeditor","themes/default/default.css")}
 ${b.script("kindeditor","kindeditor-all-min.js")}
 ${b.script("kindeditor","lang/zh-CN.js")}
@@ -39,4 +44,5 @@ ${b.script("kindeditor","lang/zh-CN.js")}
          return true;
       }
     </script>
+[/#if]
 [@b.foot/]
