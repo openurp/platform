@@ -21,24 +21,33 @@ package org.openurp.platform.admin.action.bulletin
 import java.time.Instant
 
 import javax.servlet.http.Part
+import org.beangle.data.dao.OqlBuilder
 import org.beangle.security.Securities
 import org.beangle.webmvc.api.annotation.ignore
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.platform.bulletin.model._
-import org.openurp.platform.config.model.App
+import org.openurp.platform.config.model.{App, AppType}
 import org.openurp.platform.user.model.{User, UserCategory}
 
 class NoticeAction extends RestfulAction[Notice] {
 
   override protected def indexSetting(): Unit = {
     put("userCategories", entityDao.getAll(classOf[UserCategory]))
-    put("apps", entityDao.getAll(classOf[App]))
+    put("apps", getWebApps)
+  }
+
+  private def getWebApps: Iterable[App] = {
+    val query = OqlBuilder.from(classOf[App], "app").where("app.enabled =true")
+    query.where("app.appType.name=:appType", AppType.Webapp)
+    query.orderBy("app.indexno")
+    query.cacheable()
+    entityDao.search(query)
   }
 
   override protected def editSetting(entity: Notice): Unit = {
     put("userCategories", entityDao.getAll(classOf[UserCategory]))
-    put("apps", entityDao.getAll(classOf[App]))
+    put("apps", getWebApps)
     if (null == entity.status) {
       entity.status = NoticeStatus.Draft
     }
