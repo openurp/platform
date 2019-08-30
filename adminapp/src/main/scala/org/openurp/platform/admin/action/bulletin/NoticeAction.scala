@@ -78,6 +78,7 @@ class NoticeAction extends RestfulAction[Notice] {
       entityDao.saveOrUpdate(doc.file, doc)
       notice.docs += doc
     }
+    notice.status=NoticeStatus.Submited
     super.saveAndRedirect(notice)
   }
 }
