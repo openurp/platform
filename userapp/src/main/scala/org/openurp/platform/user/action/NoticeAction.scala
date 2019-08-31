@@ -20,11 +20,13 @@ package org.openurp.platform.user.action
 
 import org.beangle.data.dao.{EntityDao, OqlBuilder}
 import org.beangle.security.Securities
-import org.beangle.webmvc.api.action.ActionSupport
+import org.beangle.webmvc.api.action.{ActionSupport, EntitySupport, ParamSupport}
 import org.beangle.webmvc.api.annotation.{mapping, param}
+import org.beangle.webmvc.api.context.Params
 import org.beangle.webmvc.api.view.View
+import org.beangle.webmvc.entity.helper.QueryHelper
 import org.openurp.platform.bulletin.model.{Notice, NoticeStatus}
-import org.openurp.platform.user.model.{Role, User}
+import org.openurp.platform.user.model.User
 
 class NoticeAction extends ActionSupport {
 
@@ -32,24 +34,25 @@ class NoticeAction extends ActionSupport {
 
   def index(): View = {
     val me: User = entityDao.findBy(classOf[User], "code", List(Securities.user)).head
-    val query = getOqlBuilder
-    query.where("notice.userCategory=:category", me.category)
+    val query = getOqlBuilder(me.category.id)
+    query.limit(QueryHelper.pageLimit)
     put("notices", entityDao.search(query))
     forward()
   }
 
   @mapping("pannel/{category}")
   def pannel(@param("category") category: String): View = {
-    val query = getOqlBuilder
-    query.where("notice.userCategory.id=:category", category.toInt)
-    put("notices", entityDao.search(query.limit(1,10)))
+    val query = getOqlBuilder(category.toInt)
+    put("notices", entityDao.search(query.limit(1, 10)))
     forward()
   }
 
-  private def getOqlBuilder: OqlBuilder[Notice] = {
+  private def getOqlBuilder(categoryId: Int): OqlBuilder[Notice] = {
     val query = OqlBuilder.from(classOf[Notice], "notice")
     query.where("notice.archived=false")
     query.where("notice.status=:status", NoticeStatus.Passed)
+    query.join("notice.userCategories", "uc")
+    query.where("uc.id=:category", categoryId)
     query.orderBy("notice.publishedAt desc")
     query.cacheable(true)
     query

@@ -18,7 +18,7 @@
  */
 package org.openurp.platform.admin.action.bulletin
 
-import java.time.Instant
+import java.time.{Instant, LocalDate}
 
 import javax.servlet.http.Part
 import org.beangle.data.dao.OqlBuilder
@@ -53,6 +53,29 @@ class NoticeAction extends RestfulAction[Notice] {
     }
   }
 
+
+  override protected def removeAndRedirect(notices: Seq[Notice]): View = {
+    val docs = notices.map(_.docs).flatten
+    entityDao.remove(notices, docs)
+    redirect("search", "info.remove.success")
+  }
+
+  override protected def getQueryBuilder: OqlBuilder[Notice] = {
+    val builder = super.getQueryBuilder
+    getInt("userCategory.id") foreach { categoryId =>
+      builder.join("notice.userCategories", "uc")
+      builder.where("uc.id=:userCategoryId", categoryId)
+    }
+    getBoolean("active") foreach { active =>
+      if (active) {
+        builder.where(":now between notice.beginOn and notice.endOn", LocalDate.now)
+      } else {
+        builder.where(" not(:now between notice.beginOn and notice.endOn)", LocalDate.now)
+      }
+    }
+    builder
+  }
+
   @ignore
   override protected def saveAndRedirect(notice: Notice): View = {
     notice.updatedAt = Instant.now
@@ -66,6 +89,8 @@ class NoticeAction extends RestfulAction[Notice] {
       throw new RuntimeException("找到敏感词汇:" + results.mkString(","))
     }
     notice.operator = entityDao.findBy(classOf[User], "code", List(Securities.user)).head
+    notice.userCategories.clear()
+    notice.userCategories ++= entityDao.find(classOf[UserCategory], intIds("userCategory"))
     getAll("notice_doc", classOf[Part]) foreach { docFile =>
       val doc = new Doc
       doc.app = notice.app
@@ -73,11 +98,12 @@ class NoticeAction extends RestfulAction[Notice] {
       doc.file = attachment
       doc.name = attachment.fileName
       doc.uploadBy = notice.operator
-      doc.userCategory = notice.userCategory
+      doc.userCategories ++= notice.userCategories
       doc.updatedAt = Instant.now
       entityDao.saveOrUpdate(doc.file, doc)
       notice.docs += doc
     }
+    notice.status = NoticeStatus.Submited
     super.saveAndRedirect(notice)
   }
 }

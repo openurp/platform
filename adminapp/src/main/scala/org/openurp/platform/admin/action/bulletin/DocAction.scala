@@ -24,6 +24,7 @@ import java.time.Instant
 import javax.servlet.http.Part
 import org.beangle.commons.activation.MediaTypes
 import org.beangle.commons.lang.Strings
+import org.beangle.data.dao.OqlBuilder
 import org.beangle.security.Securities
 import org.beangle.webmvc.api.annotation.{ignore, param}
 import org.beangle.webmvc.api.view.{Stream, View}
@@ -36,6 +37,16 @@ class DocAction extends RestfulAction[Doc] {
 
   override protected def indexSetting(): Unit = {
     put("userCategories", entityDao.getAll(classOf[UserCategory]))
+  }
+
+
+  override protected def getQueryBuilder: OqlBuilder[Doc] = {
+    val builder = super.getQueryBuilder
+    getInt("userCategory.id") foreach { categoryId =>
+      builder.join("doc.userCategories", "uc")
+      builder.where("uc.id=:userCategoryId", categoryId)
+    }
+    builder
   }
 
   override protected def editSetting(entity: Doc): Unit = {
@@ -70,6 +81,8 @@ class DocAction extends RestfulAction[Doc] {
   override protected def saveAndRedirect(doc: Doc): View = {
     doc.updatedAt = Instant.now
     doc.uploadBy = entityDao.findBy(classOf[User], "code", List(Securities.user)).head
+    doc.userCategories.clear()
+    doc.userCategories ++= entityDao.find(classOf[UserCategory], intIds("userCategory"))
     getAll("docfile", classOf[Part]) foreach { docFile =>
       val attachment = Attachment(docFile.getSubmittedFileName, docFile.getInputStream)
       if (doc.file != null) {

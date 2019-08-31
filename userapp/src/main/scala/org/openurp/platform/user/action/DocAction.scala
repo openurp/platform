@@ -27,6 +27,7 @@ import org.beangle.security.Securities
 import org.beangle.webmvc.api.action.ActionSupport
 import org.beangle.webmvc.api.annotation.{mapping, param}
 import org.beangle.webmvc.api.view.{Stream, View}
+import org.beangle.webmvc.entity.helper.QueryHelper
 import org.openurp.platform.bulletin.model.Doc
 import org.openurp.platform.user.model.User
 
@@ -36,12 +37,26 @@ class DocAction extends ActionSupport {
 
   def index(): View = {
     val me: User = entityDao.findBy(classOf[User], "code", List(Securities.user)).head
-    val docQuery = OqlBuilder.from(classOf[Doc], "doc")
-    docQuery.where("doc.userCategory=:category", me.category)
-    docQuery.limit(1, 20)
-    docQuery.orderBy("doc.updatedAt desc")
-    val docs = entityDao.search(docQuery)
+    val query = getOqlBuilder(me.category.id)
+    query.limit(QueryHelper.pageLimit)
+    val docs = entityDao.search(query)
     put("docs", docs)
+    forward()
+  }
+
+  def getOqlBuilder(categoryId: Int): OqlBuilder[Doc] = {
+    val builder = OqlBuilder.from(classOf[Doc], "doc")
+    builder.join("doc.userCategories", "uc")
+    builder.where("uc.id=:categoryId", categoryId)
+    val orderBy = get("orderBy").getOrElse("doc.updatedAt desc")
+    builder.orderBy(orderBy)
+    builder
+  }
+
+  @mapping("pannel/{category}")
+  def pannel(@param("category") category: String): View = {
+    val query = getOqlBuilder(category.toInt)
+    put("docs", entityDao.search(query.limit(1, 10)))
     forward()
   }
 

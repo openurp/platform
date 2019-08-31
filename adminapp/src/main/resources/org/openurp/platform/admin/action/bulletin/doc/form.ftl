@@ -5,7 +5,7 @@
 [@b.form action=b.rest.save(doc) theme="list"   enctype="multipart/form-data"]
   [@b.textfield name="doc.name" label="标题" value="${doc.name!}" required="true" maxlength="100"/]
   [@b.select name="doc.app.id" label="应用" value="${(doc.app.id)!}" option="id,title" required="true" items=apps/]
-  [@b.select name="doc.userCategory.id" label="面向用户" value="${(doc.userCategory.id)!}" required="true" items=userCategories/]
+  [@b.checkboxes name="userCategory.id" label="面向用户" value=doc.userCategories required="true" items=userCategories/]
   [@b.radios name="doc.archived" label="是否归档" value=doc.archived required="true" /]
   [@b.field label="文件"]
     <input name="docfile" type="file"/>
