@@ -18,10 +18,13 @@
  */
 package org.openurp.platform.bulletin.model
 
+import org.beangle.commons.collection.Collections
 import org.beangle.data.model.LongId
 import org.beangle.data.model.pojo.Updated
 import org.openurp.platform.config.model.App
 import org.openurp.platform.user.model.{User, UserCategory}
+
+import scala.collection.mutable
 
 class Doc extends LongId with Updated {
 
@@ -33,7 +36,7 @@ class Doc extends LongId with Updated {
 
   var file: Attachment = _
 
-  var userCategory: UserCategory = _
+  var userCategories: mutable.Set[UserCategory] = Collections.newSet
 
   var archived: Boolean = _
 }

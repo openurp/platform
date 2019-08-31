@@ -18,7 +18,7 @@
  */
 package org.openurp.platform.admin.action.bulletin
 
-import java.time.Instant
+import java.time.{Instant, LocalDate}
 
 import org.beangle.security.Securities
 import org.beangle.webmvc.api.action.ActionSupport
@@ -37,9 +37,32 @@ class NoticeAuditAction extends ActionSupport with EntityAction[Notice] {
     forward()
   }
 
+  def archive(): View = {
+    val notices = entityDao.find(classOf[Notice], longIds("notice"))
+    val archived = getBoolean("archived", true)
+    notices foreach { notice =>
+      if (notice.status == NoticeStatus.Passed) {
+        notice.archived = archived
+      }
+    }
+    entityDao.saveOrUpdate(notices)
+    redirect("search", "info.save.success")
+  }
+
   def search(): View = {
     val builder = getQueryBuilder
     builder.where("notice.status != :status", NoticeStatus.Draft)
+    getInt("userCategory.id") foreach { categoryId =>
+      builder.join("notice.userCategories", "uc")
+      builder.where("uc.id=:userCategoryId", categoryId)
+    }
+    getBoolean("active") foreach { active =>
+      if (active) {
+        builder.where(":now between notice.beginOn and notice.endOn", LocalDate.now)
+      } else {
+        builder.where(" not(:now between notice.beginOn and notice.endOn)", LocalDate.now)
+      }
+    }
     put("notices", entityDao.search(builder))
     forward()
   }
