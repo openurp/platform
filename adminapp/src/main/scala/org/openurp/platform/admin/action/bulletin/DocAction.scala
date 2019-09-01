@@ -30,7 +30,7 @@ import org.beangle.webmvc.api.annotation.{ignore, param}
 import org.beangle.webmvc.api.view.{Stream, View}
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.platform.bulletin.model.{Attachment, Doc}
-import org.openurp.platform.config.model.App
+import org.openurp.platform.config.model.{App, AppType}
 import org.openurp.platform.user.model.{User, UserCategory}
 
 class DocAction extends RestfulAction[Doc] {
@@ -49,9 +49,17 @@ class DocAction extends RestfulAction[Doc] {
     builder
   }
 
+  private def getWebApps: Iterable[App] = {
+    val query = OqlBuilder.from(classOf[App], "app").where("app.enabled =true")
+    query.where("app.appType.name=:appType", AppType.Webapp)
+    query.orderBy("app.indexno")
+    query.cacheable()
+    entityDao.search(query)
+  }
+
   override protected def editSetting(entity: Doc): Unit = {
     put("userCategories", entityDao.getAll(classOf[UserCategory]))
-    put("apps", entityDao.getAll(classOf[App]))
+    put("apps", getWebApps)
   }
 
   private def decideContentType(fileName: String): String = {

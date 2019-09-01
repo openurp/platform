@@ -63,6 +63,9 @@ class NoticeAuditAction extends ActionSupport with EntityAction[Notice] {
         builder.where(" not(:now between notice.beginOn and notice.endOn)", LocalDate.now)
       }
     }
+    getBoolean("attached") foreach { attached =>
+      builder.where(if (attached) "size(notice.docs)>0" else "size(notice.docs)=0")
+    }
     put("notices", entityDao.search(builder))
     forward()
   }
