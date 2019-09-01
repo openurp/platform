@@ -1,7 +1,7 @@
 [#ftl/]
 <table style="font-size:10pt" width="100%">
 	   <tbody><tr>
-	     <td width="75%">标题</td>
+	     <td width="75%">文档标题</td>
 	     <td width="25%">发布时间</td>
 	   </tr>
 [#list docs as doc]
