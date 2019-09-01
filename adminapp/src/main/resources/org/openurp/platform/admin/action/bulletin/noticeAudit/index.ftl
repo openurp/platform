@@ -11,6 +11,7 @@
       [@b.textfield label="起草人" name="notice.operator.name" /]
       [@b.select label="是否有效" name="active" items={"1":"是","0":"否"} empty="..."/]
       [@b.select label="是否归档" name="notice.archived" items={"1":"是","0":"否"} empty="..."/]
+      [@b.select label="包含附件" name="attached" items={"1":"是","0":"否"} empty="..."/]
       <input type="hidden" name="orderBy" value="notice.publishedAt desc"/>
     [/@]
     </td>
