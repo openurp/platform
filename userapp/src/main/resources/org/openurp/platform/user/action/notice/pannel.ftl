@@ -14,4 +14,4 @@
 	   </tr>
 [/#list]
 </tbody></table>
-[@b.a href="!index"]&nbsp;更多...[/@]
+[@b.a href="!index" target="_blank"]&nbsp;更多...[/@]

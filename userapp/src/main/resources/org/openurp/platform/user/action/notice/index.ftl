@@ -5,7 +5,7 @@
     [@b.boxcol /]
     [@b.col width="40%" property="title" title="标题"]
       [@b.a href="!info?id=${notice.id}"]
-      [#if notice.docs?size>0]<image src=${b.static_url('bui',"icons/16x16/actions/paperclip.png")}/>[/#if]
+      [#if notice.docs?size>0]<image src="${b.static_url('bui',"icons/16x16/actions/paperclip.png")}" />[/#if]
       ${notice.title!}
       [/@]
     [/@]

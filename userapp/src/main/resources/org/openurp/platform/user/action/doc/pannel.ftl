@@ -10,8 +10,8 @@
 	      <a style="color:blue" alt="查看详情" target="_blank" href="${b.url("!info?id="+doc.id)}">
 	      ${doc.name}</a>
 	    </td>
-      <td>${(doc.publishedAt?string("yyyy-MM-dd"))!}</td>
+      <td>${(doc.updatedAt?string("yyyy-MM-dd"))!}</td>
 	   </tr>
 [/#list]
 </tbody></table>
-[@b.a href="!index"]&nbsp;更多...[/@]
+[@b.a href="!index" target="_blank"]&nbsp;更多...[/@]

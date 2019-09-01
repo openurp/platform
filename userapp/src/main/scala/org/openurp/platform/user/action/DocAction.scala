@@ -50,6 +50,7 @@ class DocAction extends ActionSupport {
     builder.where("uc.id=:categoryId", categoryId)
     val orderBy = get("orderBy").getOrElse("doc.updatedAt desc")
     builder.orderBy(orderBy)
+    builder.cacheable(true)
     builder
   }
 
