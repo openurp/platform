@@ -17,6 +17,10 @@
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    [#if Parameters['keyboard']??]
+    ${b.css("virtual-keyboard","dist/css/keyboard.min.css")}
+    ${b.css("virtual-keyboard","dist/css/keyboard-basic.min.css")}
+    [/#if]
   </head>
 <body>
 
@@ -26,10 +30,11 @@
         <table><tr><td><img style="width:100%;height:230px" src="${b.static_url('urp','images/bg.jpg')}"/></td></tr></table>
     </div>
     <div class="login">
-   <img style="width:182px;height:35px;margin-top:22px;margin-bottom:23px" src="${b.static_url('openurp-default','images/banner.png')}"/>
+   <img style="width:182px;height:35px;margin-top:22px;margin-bottom:23px" src="${b.static_url('urp','images/system.jpg')}"/>
      <form name="loginForm" action="${base}/login" target="_top" method="post">
      [#if Parameters['sid_name']??]<input type="hidden" name="sid_name" value="${Parameters['sid_name']?html}">[/#if]
      [#if Parameters['service']??]<input type="hidden" name="service" value="${Parameters['service']?html}">[/#if]
+     [#if Parameters['keyboard']??]<input type="hidden" name="keyboard" value="${Parameters['keyboard']?html}">[/#if]
         <table class="logintable">
             <tr style="height:30px">
                 <td colspan="2" style="text-align:center;color:red;">${error!}</td>
@@ -74,6 +79,16 @@ ${b.script("cryptojs","components/mode-ecb.js")}
     if(key.length>=16) key= key.substring(0,16);
     else  key= (key+'0'.repeat(16-key.length));
     key=CryptoJS.enc.Utf8.parse(key);
+
+   [#if Parameters['keyboard']??]
+    var keyboardOption={usePreview :false,autoAccept:true,maxLength:20,display: { 'accept' : 'OK' }}
+    $('#username').keyboard(keyboardOption);
+    $('#password').keyboard(keyboardOption);
+     [#if config.enableCaptcha]
+    $('#captcha_response').keyboard(keyboardOption);
+      [/#if]
+    [/#if]
+
     var form  = document.loginForm;
     function checkLogin(form){
         if(!form['username'].value){
