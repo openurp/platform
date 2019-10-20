@@ -18,16 +18,23 @@
  */
 package org.openurp.platform.cas.web
 
-import org.beangle.data.dao.EntityDao
-import org.beangle.webmvc.api.action.{ ActionSupport, ServletSupport }
-import org.beangle.webmvc.api.annotation.mapping
-import org.beangle.webmvc.api.view.View
-import org.beangle.security.Securities
-import org.openurp.platform.user.model.User
-import org.beangle.security.codec.DefaultPasswordEncoder
 import java.time.Instant
 
-class EditAction extends ActionSupport with ServletSupport {
+import org.beangle.data.dao.EntityDao
+import org.beangle.ids.cas.ticket.TicketRegistry
+import org.beangle.ids.cas.web.helper.SessionHelper
+import org.beangle.security.Securities
+import org.beangle.security.codec.DefaultPasswordEncoder
+import org.beangle.security.session.Session
+import org.beangle.security.web.WebSecurityManager
+import org.beangle.security.web.session.CookieSessionIdPolicy
+import org.beangle.webmvc.api.action.{ActionSupport, ServletSupport}
+import org.beangle.webmvc.api.annotation.mapping
+import org.beangle.webmvc.api.view.View
+import org.openurp.app.Urp
+import org.openurp.platform.user.model.User
+
+class EditAction(secuirtyManager: WebSecurityManager, ticketRegistry: TicketRegistry) extends ActionSupport with ServletSupport {
 
   var entityDao: EntityDao = _
 
@@ -47,6 +54,32 @@ class EditAction extends ActionSupport with ServletSupport {
       }
       entityDao.saveOrUpdate(users)
     }
-    redirect("index", "&updated=1", "info.save.success")
+    get("service") match {
+      case None =>
+        put("portal",Urp.portal)
+        forward("success")
+      case Some(service) => forwardService(service, Securities.session.get)
+    }
+  }
+
+  private def forwardService(service: String, session: Session): View = {
+    if (null == service) {
+      redirect("success", null)
+    } else {
+      val idPolicy = secuirtyManager.sessionIdPolicy.asInstanceOf[CookieSessionIdPolicy]
+      val isMember = SessionHelper.isMember(request, service, idPolicy)
+      if (isMember) {
+        if (SessionHelper.isSameDomain(request, service, idPolicy)) {
+          redirect(to(service), null)
+        } else {
+          val serviceWithSid =
+            service + (if (service.contains("?")) "&" else "?") + idPolicy.name + "=" + session.id
+          redirect(to(serviceWithSid), null)
+        }
+      } else {
+        val ticket = ticketRegistry.generate(session, service)
+        redirect(to(service + (if (service.contains("?")) "&" else "?") + "ticket=" + ticket), null)
+      }
+    }
   }
 }

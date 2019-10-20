@@ -29,6 +29,8 @@ import org.springframework.transaction.interceptor.TransactionProxyFactoryBean
 object DaoModule extends BindModule {
 
   protected override def binding(): Unit = {
+    wiredEagerly(false)
+
     bind("DataSource.security", classOf[AppDataSourceFactory])
 
     bind("HibernateConfig.default", classOf[PropertiesFactoryBean]).property(

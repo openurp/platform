@@ -22,6 +22,7 @@ import java.io.FileInputStream
 
 import org.beangle.cdi.bind.BindModule
 import org.beangle.ids.cas.service.DBLdapCredentialsChecker
+import org.beangle.security.authc.DefaultPasswordStrengthChecker
 import org.beangle.security.realm.ldap.{PoolingContextSource, SimpleLdapUserStore}
 import org.openurp.app.UrpApp
 
@@ -41,5 +42,7 @@ class DBLdapCredentialsModule extends BindModule {
 
     bind("security.CredentialsChecker.default", classOf[DBLdapCredentialsChecker])
       .property("passwordSql", "select password from usr.users where code = ?")
+
+    bind(classOf[DefaultPasswordStrengthChecker]).constructor(8)
   }
 }
