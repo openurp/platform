@@ -15,7 +15,7 @@
   <properties>
     <bundle.symbolicName>org.openurp.platform.adminapp</bundle.symbolicName>
     <bundle.namespace>org.openurp</bundle.namespace>
-    <commons.compress>1.18</commons.compress>
+    <commons.compress>1.19</commons.compress>
   </properties>
 
   <dependencies>
