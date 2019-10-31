@@ -18,18 +18,29 @@
  */
 package org.openurp.platform.admin.action.session
 
-import org.beangle.webmvc.api.action.ActionSupport
-import org.beangle.data.jdbc.query.JdbcExecutor
-import org.beangle.webmvc.api.view.View
-import org.beangle.commons.collection.Order
-import javax.sql.DataSource
 import java.sql.Timestamp
+
+import javax.sql.DataSource
+import org.beangle.commons.collection.{Collections, Order}
+import org.beangle.data.jdbc.query.JdbcExecutor
+import org.beangle.webmvc.api.action.ActionSupport
+import org.beangle.webmvc.api.view.View
+import org.openurp.platform.user.model.UserCategory
 
 class IndexAction(ds: DataSource) extends ActionSupport {
   val jdbcExecutor = new JdbcExecutor(ds)
 
   def index(): View = {
-    var sql = "select id,principal,description,ip,agent,os,login_at,last_access_at from session.session_infoes s"
+    var sql = "select id,name from usr.user_categories"
+    val categories = Collections.newMap[Int, UserCategory]
+    jdbcExecutor.query(sql) foreach { d =>
+      val category = new UserCategory
+      category.id = d(0).asInstanceOf[Number].intValue
+      category.name = d(1).asInstanceOf[String]
+      categories.put(category.id, category)
+    }
+
+    sql = "select id,principal,description,ip,agent,os,login_at,last_access_at,category_id from session.session_infoes s"
     get(Order.OrderStr).foreach { o =>
       sql += (" order by " + o)
     }
@@ -44,6 +55,15 @@ class IndexAction(ds: DataSource) extends ActionSupport {
       info.os = Option(d(5).asInstanceOf[String])
       info.loginAt = d(6).asInstanceOf[Timestamp].toInstant
       info.lastAccessAt = d(7).asInstanceOf[Timestamp].toInstant
+      val categoryId = d(8).asInstanceOf[Number].intValue
+      info.category = categories.get(categoryId) match {
+        case None =>
+          val c = new UserCategory()
+          c.id = categoryId
+          c.name = categoryId.toString
+          c
+        case Some(c) => c
+      }
       info
     }
     put("sessionInfoes", datas)

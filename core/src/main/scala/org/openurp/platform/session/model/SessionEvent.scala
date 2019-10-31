@@ -16,17 +16,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.openurp.platform.security.service
+package org.openurp.platform.session.model
 
-import org.beangle.cdi.bind.BindModule
-import org.openurp.platform.security.service.impl.{CategorySessionProfileImpl, FuncPermissionServiceImpl, MenuServiceImpl, ProfileServiceImpl}
+import org.beangle.data.model.LongId
+import org.beangle.data.model.pojo.{Named, Updated}
+import org.beangle.security.session.EventTypes
 
-class DefaultModule extends BindModule {
+class SessionEvent extends LongId with Updated with Named {
 
-  override def binding(): Unit = {
-    bind(classOf[FuncPermissionServiceImpl])
-    bind(classOf[MenuServiceImpl])
-    bind(classOf[ProfileServiceImpl])
-    bind(classOf[CategorySessionProfileImpl])
-  }
+  var eventType: EventTypes.Type = _
+
+  var principal: String = _
+
+  var username: String = _
+
+  var detail: String = _
+
+  var ip: String = _
 }

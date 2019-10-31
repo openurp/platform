@@ -38,7 +38,7 @@ class DaoAccountStore(userService: UserService, entityDao: EntityDao, sf: Sessio
           account.accountLocked = user.locked
           account.credentialExpired = user.credentialExpired
           account.disabled = !user.enabled
-          account.details += "category" -> user.category.id.toString
+          account.categoryId = user.category.id
 
           val query = OqlBuilder.from[Int](classOf[RoleMember].getName, "rm")
             .where("rm.user=:user and rm.member=true", user)

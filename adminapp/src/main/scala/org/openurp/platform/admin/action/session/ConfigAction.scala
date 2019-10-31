@@ -16,17 +16,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.openurp.platform.security.service
+package org.openurp.platform.admin.action.session
 
-import org.beangle.cdi.bind.BindModule
-import org.openurp.platform.security.service.impl.{CategorySessionProfileImpl, FuncPermissionServiceImpl, MenuServiceImpl, ProfileServiceImpl}
+import org.beangle.webmvc.entity.action.RestfulAction
+import org.openurp.platform.session.model.SessionConfig
+import org.openurp.platform.user.model.UserCategory
 
-class DefaultModule extends BindModule {
+class ConfigAction extends RestfulAction[SessionConfig] {
 
-  override def binding(): Unit = {
-    bind(classOf[FuncPermissionServiceImpl])
-    bind(classOf[MenuServiceImpl])
-    bind(classOf[ProfileServiceImpl])
-    bind(classOf[CategorySessionProfileImpl])
+  protected override def editSetting(resource: SessionConfig): Unit = {
+    put("categories", entityDao.getAll(classOf[UserCategory]))
   }
+
 }

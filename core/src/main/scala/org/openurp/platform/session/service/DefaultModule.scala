@@ -16,17 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.openurp.platform.security.service
+package org.openurp.platform.session.service
 
 import org.beangle.cdi.bind.BindModule
-import org.openurp.platform.security.service.impl.{CategorySessionProfileImpl, FuncPermissionServiceImpl, MenuServiceImpl, ProfileServiceImpl}
 
 class DefaultModule extends BindModule {
 
   override def binding(): Unit = {
-    bind(classOf[FuncPermissionServiceImpl])
-    bind(classOf[MenuServiceImpl])
-    bind(classOf[ProfileServiceImpl])
-    bind(classOf[CategorySessionProfileImpl])
+    bind(classOf[LoginEventTracker])
+    bind(classOf[LogoutEventTracker])
   }
 }

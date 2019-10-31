@@ -16,17 +16,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.openurp.platform.security.service
+package org.openurp.platform.session.model
 
-import org.beangle.cdi.bind.BindModule
-import org.openurp.platform.security.service.impl.{CategorySessionProfileImpl, FuncPermissionServiceImpl, MenuServiceImpl, ProfileServiceImpl}
+import org.beangle.data.orm.MappingModule
 
-class DefaultModule extends BindModule {
+object DefaultMapping extends MappingModule {
 
-  override def binding(): Unit = {
-    bind(classOf[FuncPermissionServiceImpl])
-    bind(classOf[MenuServiceImpl])
-    bind(classOf[ProfileServiceImpl])
-    bind(classOf[CategorySessionProfileImpl])
+  def binding(): Unit = {
+    defaultIdGenerator("auto_increment")
+
+    bind[SessionEvent].on(e => declare(
+      e.principal & e.username & e.name are length(100),
+      e.detail is length(1000)))
+
+    bind[SessionConfig]
   }
+
 }

@@ -16,17 +16,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.openurp.platform.security.service
+package org.openurp.platform.session.model
 
-import org.beangle.cdi.bind.BindModule
-import org.openurp.platform.security.service.impl.{CategorySessionProfileImpl, FuncPermissionServiceImpl, MenuServiceImpl, ProfileServiceImpl}
+import org.beangle.data.model.LongId
+import org.openurp.platform.user.model.UserCategory
 
-class DefaultModule extends BindModule {
-
-  override def binding(): Unit = {
-    bind(classOf[FuncPermissionServiceImpl])
-    bind(classOf[MenuServiceImpl])
-    bind(classOf[ProfileServiceImpl])
-    bind(classOf[CategorySessionProfileImpl])
-  }
+class SessionConfig extends LongId {
+  var category: UserCategory = _
+  var ttiMinutes: Int = _
+  var concurrent: Int = _
+  var capacity:Int=_
+  var checkConcurrent: Boolean = _
+  var checkCapacity: Boolean = _
 }

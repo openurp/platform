@@ -50,11 +50,12 @@ class DefaultModule extends BindModule with PropertySource {
     bind(classOf[DefaultSecurityContextBuilder])
     bind("security.Authorizer.public", PublicAuthorizer)
 
-    bind("casConfig", classOf[LoginConfig])
+    bind("loginConfig", classOf[LoginConfig])
       .property("enableCaptcha", $("login.enableCaptcha"))
       .property("forceHttps", $("login.forceHttps"))
       .property("key", $("login.key"))
       .property("origin", $("login.origin"))
+      .property("checkPasswordStrength", $("login.checkPasswordStrength"))
   }
 
   override def properties: collection.Map[String, String] = {
@@ -78,6 +79,7 @@ class DefaultModule extends BindModule with PropertySource {
         datas += ("login.forceHttps" -> getAttribute(e, "forceHttps", "false"))
         datas += ("login.key" -> getAttribute(e, "key", Urp.base))
         datas += ("login.origin" -> getAttribute(e, "origin", Urp.base))
+        datas += ("login.checkPasswordStrength" -> getAttribute(e, "checkPasswordStrength", "true"))
       }
       if (!datas.contains("login.origin")) {
         datas += ("login.key" -> Urp.base)
@@ -87,6 +89,7 @@ class DefaultModule extends BindModule with PropertySource {
     }
     datas.toMap
   }
+
   private def getAttribute(e: scala.xml.Elem, name: String, defaultValue: String): String = {
     val v = (e \ ("@" + name)).text.trim
     if (Strings.isEmpty(v)) {
