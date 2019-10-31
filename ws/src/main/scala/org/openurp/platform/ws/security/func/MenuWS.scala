@@ -107,7 +107,7 @@ class MenuWS extends ActionSupport with EntitySupport[Menu] {
     domainMenuMaps ++= directMenuMaps
 
     directMenuMaps.keys.toSeq.sorted foreach (addParent(_, domainMenuMaps))
-    domainMenuMaps(dm)
+    domainMenuMaps.get(dm).orNull
   }
 
   private def addParent(domain: Domain, domainMenuMaps: mutable.HashMap[Domain, DomainMenus]): Unit = {

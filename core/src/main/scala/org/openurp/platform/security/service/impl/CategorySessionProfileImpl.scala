@@ -27,14 +27,11 @@ class CategorySessionProfileImpl extends SessionProfileProvider {
   var entityDao: EntityDao = _
 
   override def getProfile(account: Account): SessionProfile = {
-    account.details.get("category") match {
-      case None => getDefaultProfile
-      case Some(category) => getProfile(category.toString.toInt)
-    }
+    getProfile(account.categoryId)
   }
 
   private def getDefaultProfile: SessionProfile = {
-    SessionProfile(30, 1, true, true)
+    SessionProfile(30, 1, Int.MaxValue, checkConcurrent = false, checkCapacity = false)
   }
 
   private def getProfile(categoryId: Int): SessionProfile = {
@@ -45,7 +42,7 @@ class CategorySessionProfileImpl extends SessionProfileProvider {
       getDefaultProfile
     } else {
       val p = rs.head
-      SessionProfile(p.ttiMinutes, p.concurrent, p.checkConcurrent, p.checkCapacity)
+      SessionProfile(p.ttiMinutes, p.concurrent, p.capacity, p.checkConcurrent, p.checkCapacity)
     }
   }
 }

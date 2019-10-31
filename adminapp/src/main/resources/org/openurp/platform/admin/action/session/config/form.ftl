@@ -4,8 +4,9 @@
 <style>form.listform label.title{width:150px;}</style>
   [@b.form action=b.rest.save(sessionConfig) theme="list"]
     [@b.select items=categories name="sessionConfig.category.id" label="用户分类" value="${sessionConfig.category!}" required="true"/]
-    [@b.textfield name="sessionConfig.ttiMinutes" label="过期时长(分)" value="${sessionConfig.serverName!}" required="true"/]
+    [@b.textfield name="sessionConfig.ttiMinutes" label="过期时长(分)" value=sessionConfig.ttiMinutes  required="true"/]
     [@b.textfield name="sessionConfig.concurrent" label="多重会话数" value=sessionConfig.concurrent  required="true"  /]
+    [@b.textfield name="sessionConfig.capacity" label="最大会话容量" value=sessionConfig.capacity  required="true"  /]
     [@b.radios name="sessionConfig.checkConcurrent" label="是否检查多重会话" value=sessionConfig.checkConcurrent required="true"/]
     [@b.radios name="sessionConfig.checkCapacity" label="是否检查系统会话容量" value=sessionConfig.checkCapacity required="true"/]
     [@b.formfoot]
