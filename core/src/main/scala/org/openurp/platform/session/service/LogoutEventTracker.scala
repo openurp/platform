@@ -41,7 +41,7 @@ class LogoutEventTracker extends EventListener[LogoutEvent] {
     logout.username = session.principal.asInstanceOf[Account].description
 
     val logoutType =
-      if (session.ttiMinutes == 0) {
+      if (session.ttiSeconds == 0) {
         "强制退出"
       } else if (session.expired) {
         "过期"
