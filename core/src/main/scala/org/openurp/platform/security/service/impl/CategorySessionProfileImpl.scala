@@ -31,7 +31,7 @@ class CategorySessionProfileImpl extends SessionProfileProvider {
   }
 
   private def getDefaultProfile: SessionProfile = {
-    SessionProfile(30, 1, Int.MaxValue, checkConcurrent = false, checkCapacity = false)
+    SessionProfile(30 * 60, 1, Int.MaxValue, checkConcurrent = false, checkCapacity = false)
   }
 
   private def getProfile(categoryId: Int): SessionProfile = {
@@ -42,7 +42,7 @@ class CategorySessionProfileImpl extends SessionProfileProvider {
       getDefaultProfile
     } else {
       val p = rs.head
-      SessionProfile(p.ttiMinutes, p.concurrent, p.capacity, p.checkConcurrent, p.checkCapacity)
+      SessionProfile(p.ttiMinutes * 60, p.concurrent, p.capacity, p.checkConcurrent, p.checkCapacity)
     }
   }
 }

@@ -18,7 +18,8 @@
  */
 package org.openurp.platform.session.service
 
-import java.time.Instant
+import java.time.{Instant, ZoneId}
+import java.time.format.DateTimeFormatter
 
 import org.beangle.commons.event.{Event, EventListener}
 import org.beangle.data.dao.EntityDao
@@ -29,6 +30,8 @@ import org.openurp.platform.session.model.SessionEvent
 class LogoutEventTracker extends EventListener[LogoutEvent] {
   var entityDao: EntityDao = _
 
+  private val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+
   override def onEvent(event: LogoutEvent): Unit = {
     val logout = new SessionEvent
     logout.eventType = EventTypes.Logout
@@ -37,10 +40,20 @@ class LogoutEventTracker extends EventListener[LogoutEvent] {
     logout.principal = session.principal.getName
     logout.username = session.principal.asInstanceOf[Account].description
 
-    logout.name = logout.principal + " " + logout.username + " 退出" + (if (null != event.reason) event.reason else "")
+    val logoutType =
+      if (session.ttiSeconds == 0) {
+        "强制退出"
+      } else if (session.expired) {
+        "过期"
+      } else {
+        "退出"
+      }
+    logout.name = logout.principal + " " + logout.username + " " + logoutType
 
     logout.ip = session.agent.ip
-    logout.detail = session.agent.name + " " + session.agent.os
+    val details = "最后访问于" + formatter.format(session.lastAccessAt.atZone(ZoneId.systemDefault())) + " " + session.agent.name + " " +
+      session.agent.os + (if (null != event.reason) " 退出原因:" + event.reason else "")
+    logout.detail = details
     entityDao.saveOrUpdate(logout)
   }
 
