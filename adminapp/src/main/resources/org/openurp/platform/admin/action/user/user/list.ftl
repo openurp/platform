@@ -5,7 +5,7 @@
   [@b.gridbar]
   function activateUser(isActivate){return action.multi("activate","确定提交?","isActivate="+isActivate);}
   bar.addItem("${b.text("action.modify")}",action.edit());
-  bar.addItem("${b.text("action.export")}",action.exportData("name,fullname,mail,creator.fullname,effectiveAt,invalidAt:common.invalidAt,passwordExpiredAt,createdAt:common.createdAt,updatedAt:common.updatedAt,enabled","Csv","&fileName=用户信息"));
+  bar.addItem("${b.text("action.export")}",action.exportData("code:账户,name:姓名,category.name:身份,beginOn:创建日期,endOn:结束日期,enabled:是否启用,locked:是否锁定","Xlsx","&fileName=用户信息"));
   [/@]
   [@b.row]
     [@b.boxcol/]
