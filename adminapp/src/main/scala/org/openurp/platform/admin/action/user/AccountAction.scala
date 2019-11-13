@@ -36,6 +36,10 @@ class AccountAction extends RestfulAction[User] {
 
   var userService: UserService = _
 
+  override def indexSetting(): Unit = {
+    put("categories", entityDao.getAll(classOf[UserCategory]))
+  }
+
   protected override def getQueryBuilder: OqlBuilder[User] = {
     val userQuery = OqlBuilder.from(classOf[User], "user")
     // 查询角色
