@@ -44,7 +44,7 @@ class DaoAccountStore(userService: UserService, entityDao: EntityDao, sf: Sessio
             .where("rm.user=:user and rm.member=true", user)
             .select("rm.role.id")
           val rs = entityDao.search(query)
-          account.authorities = rs.mkString(",")
+          account.authorities = rs.map(_.toString).toArray
 
           val upQuery = OqlBuilder.from(classOf[UserProfile], "up").where("up.user=:user", user)
           val ups = entityDao.search(upQuery)

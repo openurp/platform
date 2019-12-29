@@ -21,10 +21,12 @@ package org.openurp.platform.admin.action.session
 import java.sql.Timestamp
 
 import javax.sql.DataSource
+import org.beangle.commons.collection.page.SinglePage
 import org.beangle.commons.collection.{Collections, Order}
 import org.beangle.data.jdbc.query.JdbcExecutor
 import org.beangle.webmvc.api.action.ActionSupport
 import org.beangle.webmvc.api.view.View
+import org.beangle.webmvc.entity.helper.QueryHelper
 import org.openurp.platform.user.model.UserCategory
 
 class IndexAction(ds: DataSource) extends ActionSupport {
@@ -41,10 +43,9 @@ class IndexAction(ds: DataSource) extends ActionSupport {
     }
 
     sql = "select id,principal,description,ip,agent,os,login_at,last_access_at,category_id from session.session_infoes s"
-    get(Order.OrderStr).foreach { o =>
-      sql += (" order by " + o)
-    }
-    val list = jdbcExecutor.query(sql)
+    sql += (" order by " + get(Order.OrderStr, "login_at desc"))
+    val limit = QueryHelper.pageLimit
+    val list = jdbcExecutor.fetch(sql,limit)
     val datas = list.map { d =>
       val info = new SessionInfo()
       info.id = d(0).asInstanceOf[String]
@@ -66,7 +67,9 @@ class IndexAction(ds: DataSource) extends ActionSupport {
       }
       info
     }
-    put("sessionInfoes", datas)
+    val total = jdbcExecutor.queryForInt("select count(*) from session.session_infoes ")
+    val page = new SinglePage[SessionInfo](limit.pageIndex, limit.pageSize, total.getOrElse(0), datas)
+    put("sessionInfoes", page)
     forward()
   }
 

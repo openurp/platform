@@ -30,14 +30,17 @@ object DefaultMapping extends MappingModule {
 
     bind[Attachment]
 
-    bind[News].on(e => declare(
-      e.content is lob))
+    bind[News] declare { e =>
+      e.content is lob
+    }
 
-    bind[Notice].on(e => declare(
-      e.content is lob))
+    bind[Notice].declare { e =>
+      e.content is lob
+    }
 
-    bind[SensitiveWord].on(e => declare(
-      e.content is length(30)))
+    bind[SensitiveWord].declare { e =>
+      e.content is length(30)
+    }
 
     all.except(classOf[Attachment]).cacheAll()
   }

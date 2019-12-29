@@ -5,10 +5,13 @@ bar.addBack("${b.text("action.back")}");
 [/@]
 <table class="infoTable">
    <tr>
-   <td class="title" >&nbsp;${b.text("common.id")}:</td>
+   <td class="title" width="15%">&nbsp;${b.text("common.id")}:</td>
    <td class="content">${menu.indexno}  </td>
-   <td class="title" >&nbsp;${b.text("menu.entry")}:</td>
-   <td class="content">${menu.entry!}</td>
+   <td class="title"  width="15%">&nbsp;${b.text("menu.entry")}:</td>
+   <td class="content">
+   [#if menu.entry??]${menu.entry.name}[/#if]
+   [#if menu.params??]?${menu.params?html}[/#if]
+   </td>
    </tr>
    <tr>
    <td class="title" >&nbsp;标题:</td>
@@ -27,7 +30,7 @@ bar.addBack("${b.text("action.back")}");
    <tr>
    <td class="title" >&nbsp;引用资源:</td>
    <td class="content">[#list menu.resources as resource](${resource.name})${resource.title}<br/>[/#list]</td>
-   <td class="title">使用组:</td>
+   <td class="title">角色:</td>
    <td>
     [#list roles! as role]${role.name}[#if role_has_next]<br/>[/#if][/#list]
    </td>
