@@ -9,7 +9,7 @@
   [/@]
   [@b.row]
     [@b.boxcol/]
-    [@b.col property="code" width="12%"]&nbsp;[@b.a href="!info?id=${user.id}" target="_blank"]${user.code}[/@][/@]
+    [@b.col property="code" width="12%"]&nbsp;[@b.a href="!info?id=${user.id}"]${user.code}[/@][/@]
     [@b.col property="name" width="18%"/]
     [@b.col property="category.name" width="10%" /]
     [@b.col title="角色" width="27%"]

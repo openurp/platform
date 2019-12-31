@@ -30,7 +30,9 @@ class DefaultUrpSessionIdPolicy extends CookieSessionIdPolicy("URP_SID") {
   private val sessionIdGenerator = new DefaultIdGenerator("URP-", 35)
 
   override def init(): Unit = {
-    this.base = Urp.base
+    if (null == this.domain) {
+      this.base = Urp.base
+    }
   }
 
   protected override def generateId(request: HttpServletRequest): String = {

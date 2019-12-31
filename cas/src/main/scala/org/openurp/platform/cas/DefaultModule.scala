@@ -24,7 +24,7 @@ import org.beangle.cdi.PropertySource
 import org.beangle.cdi.bind.BindModule
 import org.beangle.commons.collection.Collections
 import org.beangle.commons.lang.Strings
-import org.beangle.ids.cas.LoginConfig
+import org.beangle.ids.cas.CasSetting
 import org.beangle.security.authz.PublicAuthorizer
 import org.beangle.security.web.access.{AuthorizationFilter, DefaultAccessDeniedHandler, DefaultSecurityContextBuilder, SecurityInterceptor}
 import org.beangle.security.web.{UrlEntryPoint, WebSecurityManager}
@@ -34,6 +34,8 @@ import org.openurp.app.{Urp, UrpApp}
  * @author chaostone
  */
 class DefaultModule extends BindModule with PropertySource {
+
+  private val clients = Collections.newBuffer[String]
 
   override def binding(): Unit = {
     // entry point
@@ -50,12 +52,13 @@ class DefaultModule extends BindModule with PropertySource {
     bind(classOf[DefaultSecurityContextBuilder])
     bind("security.Authorizer.public", PublicAuthorizer)
 
-    bind("loginConfig", classOf[LoginConfig])
+    bind("casSetting", classOf[CasSetting])
       .property("enableCaptcha", $("login.enableCaptcha"))
       .property("forceHttps", $("login.forceHttps"))
       .property("key", $("login.key"))
       .property("origin", $("login.origin"))
       .property("checkPasswordStrength", $("login.checkPasswordStrength"))
+      .property("clients",List("http://localhost",Urp.base) ++ clients)
   }
 
   override def properties: collection.Map[String, String] = {
@@ -84,6 +87,10 @@ class DefaultModule extends BindModule with PropertySource {
       if (!datas.contains("login.origin")) {
         datas += ("login.key" -> Urp.base)
         datas += ("login.origin" -> Urp.base)
+      }
+      (app \\ "config" \\ "client") foreach { c =>
+        val e = c.asInstanceOf[scala.xml.Elem]
+        clients += getAttribute(e, "base", null)
       }
       is.close()
     }

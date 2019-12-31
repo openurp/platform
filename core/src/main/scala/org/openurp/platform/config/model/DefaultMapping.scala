@@ -26,42 +26,47 @@ object DefaultMapping extends MappingModule {
     defaultIdGenerator("auto_increment")
     defaultCache("openurp.platform.security", "read-write")
 
-    bind[Org].on(e => declare(
-      e.code is(length(50), unique),
-      e.name & e.shortName are length(100),
-      e.wwwUrl & e.logoUrl are length(200)))
+    bind[Org].declare { e =>
+      e.code is(length(50), unique)
+      e.name & e.shortName are length(100)
+      e.wwwUrl & e.logoUrl are length(200)
+    }
 
-    bind[App].on(e => declare(
-      e.getName is(length(100), unique),
-      e.title is length(100),
-      e.secret is length(200),
-      e.url is length(200),
-      e.navStyle is length(50),
-      e.remark is length(200),
-      e.indexno is length(50),
-      e.datasources is depends("app")))
+    bind[App].declare { e =>
+      e.getName is(length(100), unique)
+      e.title is length(100)
+      e.secret is length(200)
+      e.url is length(200)
+      e.navStyle is length(50)
+      e.remark is length(200)
+      e.indexno is length(50)
+      e.datasources is depends("app")
+    }
 
-    bind[Credential].on(e => declare(
-      e.username is length(100),
-      e.password is length(200),
+    bind[Credential].declare { e =>
+      e.username is length(100)
+      e.password is length(200)
       e.name is length(100)
-    ))
+    }
 
-    bind[DataSource].on(e => declare(
-      e.name is length(100),
-      e.remark is length(200)))
+    bind[DataSource].declare { e =>
+      e.name is length(100)
+      e.remark is length(200)
+    }
 
-    bind[Db].on(e => declare(
-      e.name is(length(100), unique),
-      e.driver is length(100),
-      e.databaseName & e.serverName is length(100),
-      e.url is length(200),
-      e.remark is length(200)))
+    bind[Db].declare { e =>
+      e.name is(length(100), unique)
+      e.driver is length(100)
+      e.databaseName & e.serverName is length(100)
+      e.url is length(200)
+      e.remark is length(200)
+    }
 
-    bind[Domain].on(e => declare(
-      e.name is(length(100), unique),
-      e.title is length(200),
-      e.children is depends("parent")))
+    bind[Domain].declare { e =>
+      e.name is(length(100), unique)
+      e.title is length(200)
+      e.children is depends("parent")
+    }
 
     bind[AppType]
 

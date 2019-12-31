@@ -33,11 +33,8 @@ class ResourceWS(entityDao: EntityDao) extends ActionSupport with EntitySupport[
   @response
   def index(@param("app") app: String): Seq[Any] = {
     val query = OqlBuilder.from(classOf[FuncResource], "fr").where("fr.app.name=:name", app)
-    get("scope") match {
-      case Some("Private")   => query.where("fr.scope = :scope", Scopes.Private)
-      case Some("Protected") => query.where("fr.scope = :scope", Scopes.Protected)
-      case Some("Public")    => query.where("fr.scope = :scope", Scopes.Public)
-      case _                 =>
+    get("scope") foreach { s =>
+      query.where("fr.scope = :scope", Scopes.withName(s))
     }
     val resources = entityDao.search(query)
     val permissionQuery = OqlBuilder.from[Array[Object]](classOf[FuncPermission].getName, "fp")
@@ -47,7 +44,8 @@ class ResourceWS(entityDao: EntityDao) extends ActionSupport with EntitySupport[
 
     val permissions = Collections.newMap[Number, collection.mutable.Set[Number]]
     entityDao.search(permissionQuery) foreach { p =>
-      permissions.getOrElseUpdate(p(0).asInstanceOf[Number], new collection.mutable.HashSet[Number]) += p(1).asInstanceOf[Number]
+      val roles = permissions.getOrElseUpdate(p(0).asInstanceOf[Number], new collection.mutable.HashSet[Number])
+      roles += p(1).asInstanceOf[Number]
     }
 
     resources map { r =>

@@ -42,5 +42,6 @@ class SessionModule extends BindModule {
       .wiredEagerly(false)
 
     bind("security.SessionIdPolicy.urp", classOf[DefaultUrpSessionIdPolicy])
+      .property("base", $("login.origin"))
   }
 }

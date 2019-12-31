@@ -27,14 +27,14 @@ class CategorySessionProfileImpl extends SessionProfileProvider {
   var entityDao: EntityDao = _
 
   override def getProfile(account: Account): SessionProfile = {
-    getProfile(account.categoryId)
+    getCategoryProfile(account.categoryId)
   }
 
   private def getDefaultProfile: SessionProfile = {
     SessionProfile(30 * 60, 1, Int.MaxValue, checkConcurrent = false, checkCapacity = false)
   }
 
-  private def getProfile(categoryId: Int): SessionProfile = {
+  private def getCategoryProfile(categoryId: Int): SessionProfile = {
     val builder = OqlBuilder.from(classOf[SessionConfig], "sc").where("sc.category.id=:categoryId", categoryId)
       .cacheable(true)
     val rs = entityDao.search(builder)
