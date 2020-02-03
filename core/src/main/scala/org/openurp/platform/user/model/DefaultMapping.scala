@@ -34,9 +34,11 @@ object DefaultMapping extends MappingModule {
       e.properties is length(100)
     }
 
-    bind[RoleMember]
+    bind[RoleMember].declare { e =>
+      index("idx_role_member_user", false, e.user)
+    }
 
-    bind[Role].declare{e=>
+    bind[Role].declare { e =>
       e.getName is length(100)
       e.children is depends("parent")
       e.members is depends("role")
