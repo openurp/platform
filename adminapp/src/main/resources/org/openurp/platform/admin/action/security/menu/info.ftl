@@ -9,8 +9,7 @@ bar.addBack("${b.text("action.back")}");
    <td class="content">${menu.indexno}  </td>
    <td class="title"  width="15%">&nbsp;${b.text("menu.entry")}:</td>
    <td class="content">
-   [#if menu.entry??]${menu.entry.name}[/#if]
-   [#if menu.params??]?${menu.params?html}[/#if]
+   [#if menu.entry??]${menu.entry.name}[/#if][#if menu.params??]?${menu.params?html}[/#if]
    </td>
    </tr>
    <tr>
