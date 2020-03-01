@@ -42,12 +42,12 @@ class DefaultModule extends BindModule with PropertySource {
 
   override def binding(): Unit = {
     if (remoteCasServer.isDefined) {
-      bind(classOf[CasConfig]).constructor($("casServer"))
-        .property("gateway", true)
+      bind(classOf[CasConfig]).constructor($("remote.cas.server"))
+        .property("gateway", $("remote.cas.gateway"))
         .property("localLoginUri", "/login")
       bind("security.Filter.Preauth", classOf[CasPreauthFilter])
       bind(classOf[DefaultTicketValidator])
-      bind(classOf[CasEntryPoint]).shortName()
+      bind(classOf[CasEntryPoint]).property("allowSessionIdAsParameter", false).shortName()
     } else {
       // entry point
       bind("security.EntryPoint.url", classOf[UrlEntryPoint]).constructor("/login").primary()
@@ -56,9 +56,15 @@ class DefaultModule extends BindModule with PropertySource {
     bind("security.AccessDeniedHandler.default", classOf[DefaultAccessDeniedHandler])
       .constructor($("security.access.errorPage", "/403.html"))
     bind("security.Filter.authorization", classOf[AuthorizationFilter])
-    bind("web.Interceptor.security", classOf[SecurityInterceptor])
-      .property(
-        "filters", List(ref("security.Filter.authorization")))
+
+    val interceptor = bind("web.Interceptor.security", classOf[SecurityInterceptor])
+    var filters = List(ref("security.Filter.authorization"))
+    if (remoteCasServer.isDefined) {
+      filters = List(ref("security.Filter.Preauth"), ref("security.Filter.authorization"))
+    }
+    interceptor.property("filters", filters)
+
+
     //authorizer and manager
     bind("security.SecurityManager.default", classOf[WebSecurityManager])
     bind(classOf[DefaultSecurityContextBuilder])
@@ -105,18 +111,14 @@ class DefaultModule extends BindModule with PropertySource {
         datas += ("login.origin" -> Urp.base)
       }
       (app \\ "config" \\ "client") foreach { c =>
-        val e = c.asInstanceOf[scala.xml.Elem]
-        clients += getAttribute(e, "base", null)
+        clients += getAttribute(c, "base", null)
       }
       //在项目的配置文件中出现remote/cas节点的情况下才配置如下信息
       (app \\ "remote") foreach { r =>
         (r \ "cas") foreach { e =>
-          val casServer = (e \ "@server").text.trim
+          val casServer = getAttribute(e, "server", null)
+          val gateway = getAttribute(e, "gateway", "false")
           datas += ("remote.cas.server" -> casServer)
-          var gateway = "false"
-          (e \ "@gateway") foreach { g =>
-            gateway = g.text.trim
-          }
           datas += ("remote.cas.gateway" -> gateway)
           remoteCasServer = Some(casServer)
         }
@@ -126,7 +128,7 @@ class DefaultModule extends BindModule with PropertySource {
     datas.toMap
   }
 
-  private def getAttribute(e: scala.xml.Elem, name: String, defaultValue: String): String = {
+  private def getAttribute(e: scala.xml.Node, name: String, defaultValue: String): String = {
     val v = (e \ ("@" + name)).text.trim
     if (Strings.isEmpty(v)) {
       defaultValue
