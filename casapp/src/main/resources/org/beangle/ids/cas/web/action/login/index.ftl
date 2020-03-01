@@ -49,7 +49,7 @@
                 <td><label for="password">密　码:&nbsp;</label></td>
                 <td><input id="password" name="password"  tabindex="2" type="password" style="width:105px;" autocomplete="off" placeholder="密码"/></td>
             </tr>
-            [#if config.enableCaptcha]
+            [#if setting.enableCaptcha]
             <tr>
                 <td><label for="password">验证码:&nbsp;</label></td>
                 <td>
