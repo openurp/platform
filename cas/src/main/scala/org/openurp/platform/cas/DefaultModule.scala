@@ -26,6 +26,7 @@ import org.beangle.commons.collection.Collections
 import org.beangle.commons.lang.Strings
 import org.beangle.ids.cas.CasSetting
 import org.beangle.security.authz.PublicAuthorizer
+import org.beangle.security.realm.cas.{CasConfig, CasEntryPoint, CasPreauthFilter, DefaultTicketValidator}
 import org.beangle.security.web.access.{AuthorizationFilter, DefaultAccessDeniedHandler, DefaultSecurityContextBuilder, SecurityInterceptor}
 import org.beangle.security.web.{UrlEntryPoint, WebSecurityManager}
 import org.openurp.app.{Urp, UrpApp}
@@ -37,9 +38,20 @@ class DefaultModule extends BindModule with PropertySource {
 
   private val clients = Collections.newBuffer[String]
 
+  private var remoteCasServer: Option[String] = None
+
   override def binding(): Unit = {
-    // entry point
-    bind("security.EntryPoint.url", classOf[UrlEntryPoint]).constructor("/login").primary()
+    if (remoteCasServer.isDefined) {
+      bind(classOf[CasConfig]).constructor($("casServer"))
+        .property("gateway", true)
+        .property("localLoginUri", "/login")
+      bind("security.Filter.Preauth", classOf[CasPreauthFilter])
+      bind(classOf[DefaultTicketValidator])
+      bind(classOf[CasEntryPoint]).shortName()
+    } else {
+      // entry point
+      bind("security.EntryPoint.url", classOf[UrlEntryPoint]).constructor("/login").primary()
+    }
     //interceptor
     bind("security.AccessDeniedHandler.default", classOf[DefaultAccessDeniedHandler])
       .constructor($("security.access.errorPage", "/403.html"))
@@ -52,13 +64,17 @@ class DefaultModule extends BindModule with PropertySource {
     bind(classOf[DefaultSecurityContextBuilder])
     bind("security.Authorizer.public", PublicAuthorizer)
 
-    bind("casSetting", classOf[CasSetting])
+    val setting = bind("casSetting", classOf[CasSetting])
       .property("enableCaptcha", $("login.enableCaptcha"))
       .property("forceHttps", $("login.forceHttps"))
       .property("key", $("login.key"))
       .property("origin", $("login.origin"))
       .property("checkPasswordStrength", $("login.checkPasswordStrength"))
-      .property("clients",List("http://localhost",Urp.base) ++ clients)
+      .property("clients", List("http://localhost", Urp.base) ++ clients)
+
+    remoteCasServer foreach { casServer =>
+      setting.property("remoteLogoutUrl", new CasConfig(casServer).logoutUrl)
+    }
   }
 
   override def properties: collection.Map[String, String] = {
@@ -91,6 +107,19 @@ class DefaultModule extends BindModule with PropertySource {
       (app \\ "config" \\ "client") foreach { c =>
         val e = c.asInstanceOf[scala.xml.Elem]
         clients += getAttribute(e, "base", null)
+      }
+      //在项目的配置文件中出现remote/cas节点的情况下才配置如下信息
+      (app \\ "remote") foreach { r =>
+        (r \ "cas") foreach { e =>
+          val casServer = (e \ "@server").text.trim
+          datas += ("remote.cas.server" -> casServer)
+          var gateway = "false"
+          (e \ "@gateway") foreach { g =>
+            gateway = g.text.trim
+          }
+          datas += ("remote.cas.gateway" -> gateway)
+          remoteCasServer = Some(casServer)
+        }
       }
       is.close()
     }

@@ -88,7 +88,7 @@ ${b.script("virtual-keyboard","dist/js/jquery.keyboard.min.js")}
     var keyboardOption={usePreview :false,autoAccept:true,maxLength:20,display: { 'accept' : 'OK' }}
     $('#username').keyboard(keyboardOption);
     $('#password').keyboard(keyboardOption);
-     [#if config.enableCaptcha]
+     [#if setting.enableCaptcha]
     $('#captcha_response').keyboard(keyboardOption);
       [/#if]
     [/#if]
@@ -101,7 +101,7 @@ ${b.script("virtual-keyboard","dist/js/jquery.keyboard.min.js")}
         if(!form['password'].value){
             alert("密码不能为空");return false;
         }
-        [#if config.enableCaptcha]
+        [#if setting.enableCaptcha]
         if(!form['captcha_response'].value){
             alert("验证码不能为空");return false;
         }
