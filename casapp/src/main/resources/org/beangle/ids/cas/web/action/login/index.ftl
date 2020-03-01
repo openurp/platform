@@ -49,7 +49,7 @@
                 <td><label for="password">密　码:&nbsp;</label></td>
                 <td><input id="password" name="password"  tabindex="2" type="password" style="width:105px;" autocomplete="off" placeholder="密码"/></td>
             </tr>
-            [#if config.enableCaptcha]
+            [#if setting.enableCaptcha]
             <tr>
                 <td><label for="password">验证码:&nbsp;</label></td>
                 <td>
@@ -88,7 +88,7 @@ ${b.script("virtual-keyboard","dist/js/jquery.keyboard.min.js")}
     var keyboardOption={usePreview :false,autoAccept:true,maxLength:20,display: { 'accept' : 'OK' }}
     $('#username').keyboard(keyboardOption);
     $('#password').keyboard(keyboardOption);
-     [#if config.enableCaptcha]
+     [#if setting.enableCaptcha]
     $('#captcha_response').keyboard(keyboardOption);
       [/#if]
     [/#if]
@@ -101,7 +101,7 @@ ${b.script("virtual-keyboard","dist/js/jquery.keyboard.min.js")}
         if(!form['password'].value){
             alert("密码不能为空");return false;
         }
-        [#if config.enableCaptcha]
+        [#if setting.enableCaptcha]
         if(!form['captcha_response'].value){
             alert("验证码不能为空");return false;
         }
