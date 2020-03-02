@@ -1,7 +1,7 @@
 [#ftl]
 [@b.head/]
 <script type="text/javascript">
-  bg.ui.load("tabletree");
+  beangle.load(["bui-tabletree"]);
 </script>
 [#include "../status.ftl"/]
 [@b.grid  items=roles var="role" sortable="false"]

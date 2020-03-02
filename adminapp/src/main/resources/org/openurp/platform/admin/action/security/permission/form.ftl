@@ -2,7 +2,7 @@
 [@b.head/]
 [#include "../status.ftl"/]
 [<script type="text/javascript">
-  bg.ui.load("tabletree");
+  beangle.load(["bui-tabletree"]);
 </script>
 <script type="text/javascript">
   function getIds(){
