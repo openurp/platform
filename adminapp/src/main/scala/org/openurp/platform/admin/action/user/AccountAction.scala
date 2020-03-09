@@ -60,6 +60,7 @@ class AccountAction extends RestfulAction[User] {
       userQuery.where(roleCondition)
     }
     populateConditions(userQuery)
+    userQuery.tailOrder("user.id")
     userQuery.orderBy(get(Order.OrderStr).orNull).limit(getPageLimit)
     userQuery
   }
