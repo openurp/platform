@@ -20,22 +20,20 @@ package org.openurp.platform.admin.action.user
 
 import java.time.Instant
 
-import org.beangle.commons.collection.{ Collections, Order }
+import org.beangle.commons.collection.{Collections, Order}
 import org.beangle.commons.lang.Strings
-import org.beangle.data.dao.{ Condition, Operation, OqlBuilder }
+import org.beangle.data.dao.{Condition, Operation, OqlBuilder}
 import org.beangle.security.Securities
 import org.beangle.webmvc.api.context.Params
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.app.UrpApp
-import org.openurp.platform.user.model.{ MemberShip, Role, RoleMember, User }
-import org.openurp.platform.user.service.UserService
 import org.openurp.platform.admin.helper.UserDashboardHelper
-import org.openurp.platform.user.model.UserCategory
+import org.openurp.platform.user.model._
+import org.openurp.platform.user.service.UserService
 
 /**
  * 用户管理响应处理类
- *
  * @author chaostone 2005-9-29
  */
 class UserAction extends RestfulAction[User] {
@@ -96,7 +94,8 @@ class UserAction extends RestfulAction[User] {
     }
     populateConditions(userQuery)
     userQuery.orderBy(get(Order.OrderStr).orNull).limit(getPageLimit)
-      userQuery
+    userQuery.tailOrder("user.id")
+    userQuery
   }
 
   /**
@@ -143,7 +142,7 @@ class UserAction extends RestfulAction[User] {
     for (m <- removedMembers) ob.remove(m)
     entityDao.execute(ob)
     entityDao.refresh(user)
-      redirect("search", "info.save.success")
+    redirect("search", "info.save.success")
   }
 
   protected override def editSetting(user: User): Unit = {
