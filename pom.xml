@@ -24,6 +24,8 @@
 
   <properties>
     <openurp.app.version>0.1.30</openurp.app.version>
+    <beangle.commons.version>5.1.12</beangle.commons.version>
+    <beangle.ids.version>0.2.8</beangle.ids.version>
   </properties>
 
   <dependencyManagement>

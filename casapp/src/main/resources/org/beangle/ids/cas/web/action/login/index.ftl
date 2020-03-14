@@ -98,6 +98,9 @@ ${b.script("virtual-keyboard","dist/js/jquery.keyboard.min.js")}
         if(!form['username'].value){
             alert("用户名称不能为空");return false;
         }
+        if(!(/^\w+$/.test(form['username'].value))){
+            alert("用户名中只能包含数字,字母");return false;
+        }
         if(!form['password'].value){
             alert("密码不能为空");return false;
         }
