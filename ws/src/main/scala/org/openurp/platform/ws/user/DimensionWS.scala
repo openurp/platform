@@ -37,7 +37,7 @@ class DimensionWS(entityDao: EntityDao) extends ActionSupport {
     if (dimensions.isEmpty) new Properties()
     else {
       val dimension = dimensions(0)
-      new Properties(dimension, "id", "title", "source", "multiple", "required", "typeName", "keyName", "properties")
+      new Properties(dimension, "id", "name", "title", "source", "multiple", "required", "typeName", "keyName", "properties")
     }
   }
 }
