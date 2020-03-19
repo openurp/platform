@@ -22,7 +22,7 @@ import org.beangle.data.dao.EntityDao
 import org.beangle.security.session.SessionRegistry
 import org.beangle.webmvc.api.context.ActionContext
 import org.openurp.platform.security.service.{FuncPermissionService, MenuService, ProfileService}
-import org.openurp.platform.user.model.{User, UserProfile}
+import org.openurp.platform.user.model.{Credential, User, UserProfile}
 
 /**
  * @author chaostone
@@ -39,25 +39,12 @@ class UserDashboardHelper {
 
   var profileService: ProfileService = _
 
-  //  var sessioninfoLogService :SessioninfoLogService =_
-
   def buildDashboard(user: User): Unit = {
     ActionContext.current.attribute("user", user)
-    //populateMenus(user)
-    //    populateSessioninfoLogs(user)
-    //    populateOnlineActivities(user)
+    entityDao.findBy(classOf[Credential], "user", List(user)) foreach { c =>
+      ActionContext.current.attribute("credential", c)
+    }
     val myProfiles = entityDao.findBy(classOf[UserProfile], "user", List(user))
     new ProfileHelper(entityDao, profileService).populateInfo(myProfiles)
   }
-  //
-  //  private def populateOnlineActivities(user: User) {
-  //    ActionContext.current.attribute("sessioninfos", sessionRegistry.getSessioninfos(user.code, true))
-  //  }
-
-  //  private def populateSessioninfoLogs(user:User) {
-  //    List<SessioninfoLogBean> page = sessioninfoLogService.getLoggers(user.code, 5)
-  //    if (page instanceof Page) page = ((Page<SessioninfoLogBean>) page).getItems()
-  //    ActionContext.current.attribute("sessioninfoLogs", page)
-  //  }
-
 }

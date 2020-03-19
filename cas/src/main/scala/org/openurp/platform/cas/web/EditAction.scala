@@ -18,12 +18,11 @@
  */
 package org.openurp.platform.cas.web
 
-import java.time.Instant
-
 import org.beangle.data.dao.EntityDao
 import org.beangle.ids.cas.ticket.TicketRegistry
 import org.beangle.ids.cas.web.helper.SessionHelper
 import org.beangle.security.Securities
+import org.beangle.security.authc.DBCredentialStore
 import org.beangle.security.codec.DefaultPasswordEncoder
 import org.beangle.security.session.Session
 import org.beangle.security.web.WebSecurityManager
@@ -38,9 +37,12 @@ class EditAction(secuirtyManager: WebSecurityManager, ticketRegistry: TicketRegi
 
   var entityDao: EntityDao = _
 
+  var credentialStore: DBCredentialStore = _
+
   @mapping(value = "")
   def index(): View = {
     put("principal", Securities.session.get.principal)
+    put("urpapi", Urp.api)
     forward()
   }
 
@@ -49,14 +51,12 @@ class EditAction(secuirtyManager: WebSecurityManager, ticketRegistry: TicketRegi
       val users = entityDao.findBy(classOf[User], "code", List(Securities.user))
       if (users.size == 1) {
         val user = users.head
-        user.password = DefaultPasswordEncoder.generate(p, null, "sha")
-        user.updatedAt = Instant.now
+        credentialStore.updatePassword(user.code, DefaultPasswordEncoder.generate(p, null, "sha"))
       }
-      entityDao.saveOrUpdate(users)
     }
     get("service") match {
       case None =>
-        put("portal",Urp.portal)
+        put("portal", Urp.portal)
         forward("success")
       case Some(service) => forwardService(service, Securities.session.get)
     }

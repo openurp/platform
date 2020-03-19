@@ -10,7 +10,7 @@
     <module class="org.openurp.platform.cas.SessionModule"/>
     <module class="org.openurp.platform.cas.DaoRealmModule"/>
     <module class="org.openurp.platform.cas.DaoModule"/>
-    <module class="org.openurp.platform.cas.DBLdapCredentialsModule"/>
+    <module class="org.openurp.platform.cas.CredentialModule"/>
 
     <module class="org.openurp.platform.user.service.DefaultModule"/>
     <module class="org.openurp.platform.config.service.DefaultModule"/>

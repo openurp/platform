@@ -36,7 +36,7 @@ class DaoAccountStore(userService: UserService, entityDao: EntityDao, sf: Sessio
           val account = new DefaultAccount(user.code, user.name)
           account.accountExpired = user.accountExpired
           account.accountLocked = user.locked
-          account.credentialExpired = user.credentialExpired
+          account.credentialExpired = false
           account.disabled = !user.enabled
           account.categoryId = user.category.id
 
