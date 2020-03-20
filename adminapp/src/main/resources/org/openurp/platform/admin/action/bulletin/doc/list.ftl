@@ -21,10 +21,12 @@
         ${doc.name!}
       [/@]
     [/@]
-    [@b.col width="12%" property="app.title" title="应用"/]
-    [@b.col width="15%" title="用户类别"][#list doc.userCategories as uc]${uc.name}[#if uc_has_next]&nbsp;[/#if][/#list][/@]
+    [@b.col width="14%" property="app.title" title="应用"/]
+    [@b.col width="15%" title="用户类别"]
+      <span style="font-size:0.8em">[#list doc.userCategories as uc]${uc.name}[#if uc_has_next]&nbsp;[/#if][/#list]</span>
+    [/@]
     [@b.col width="10%" property="uploadBy" title="上传人"]${doc.uploadBy.name}[/@]
-    [@b.col width="15%" property="updatedAt" title="上传时间"]${doc.updatedAt?string("yy-MM-dd HH:mm")}[/@]
+    [@b.col width="13%" property="updatedAt" title="上传时间"]${doc.updatedAt?string("yy-MM-dd HH:mm")}[/@]
   [/@]
 [/@]
 [@b.foot/]
