@@ -48,12 +48,18 @@ object DefaultMapping extends MappingModule {
     bind[User].declare { e =>
       e.code is(length(30), unique)
       e.getName is length(100)
-      e.password is length(200)
       e.remark is length(100)
       e.roles is depends("user")
       e.groups is depends("user")
       e.properties is eleLength(2000)
     }
+
+    bind[Credential].declare { e =>
+      e.password is length(200)
+      index("idx_credential_user", true, e.user)
+    }
+
+    bind[PasswordConfig]
 
     bind[UserCategory].declare { e =>
       e.code is(length(30), unique)

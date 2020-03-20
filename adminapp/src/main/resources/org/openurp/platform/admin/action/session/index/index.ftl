@@ -1,5 +1,5 @@
 [@b.head/]
-[#assign sessionCaption]在线记录 ${sessionInfoes?size}[/#assign]
+[#assign sessionCaption]在线记录 ${sessionInfoes.totalItems}[/#assign]
 [@b.grid items=sessionInfoes  var="s" caption=sessionCaption]
   [@b.row]
     [@b.col title="序号" width="4%"]${s_index+1}[/@]

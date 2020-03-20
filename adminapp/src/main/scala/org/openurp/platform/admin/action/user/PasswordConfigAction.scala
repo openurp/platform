@@ -16,18 +16,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.openurp.platform.user.service
+package org.openurp.platform.admin.action.user
 
-import org.beangle.cdi.bind.BindModule
-import org.openurp.platform.user.service.impl.{DefaultCredentialStore, DefaultPasswordPolicyProvider, RoleServiceImpl, UserServiceImpl}
+import org.beangle.webmvc.api.view.View
+import org.beangle.webmvc.entity.action.RestfulAction
+import org.openurp.platform.user.model.PasswordConfig
 
-class DefaultModule extends BindModule {
+class PasswordConfigAction extends RestfulAction[PasswordConfig] {
 
-  override def binding(): Unit = {
-    bind(classOf[UserServiceImpl])
-    bind(classOf[RoleServiceImpl])
+  override def index(): View = {
+    put("passwordConfigs", entityDao.search(getQueryBuilder))
+    forward()
+  }
 
-    bind(classOf[DefaultPasswordPolicyProvider])
-    bind(classOf[DefaultCredentialStore])
+  override protected def saveAndRedirect(entity: PasswordConfig): View = {
+    saveOrUpdate(entity)
+    redirect("index", "info.save.success")
   }
 }

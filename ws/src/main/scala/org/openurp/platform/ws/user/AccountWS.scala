@@ -22,6 +22,7 @@ import org.beangle.commons.collection.Properties
 import org.beangle.data.dao.EntityDao
 import org.beangle.webmvc.api.action.ActionSupport
 import org.beangle.webmvc.api.annotation.{mapping, param, response}
+import org.openurp.platform.user.model.Credential
 import org.openurp.platform.user.service.UserService
 
 /**
@@ -34,15 +35,20 @@ class AccountWS(userService: UserService, entityDao: EntityDao) extends ActionSu
   def index(@param("userCode") userCode: String): Properties = {
     userService.get(userCode) match {
       case Some(user) =>
+        val credentials = entityDao.findBy(classOf[Credential], "user", List(user))
+        var credentialExpired = false
+        credentials foreach { c =>
+          credentialExpired = c.expired
+        }
         val properties = new Properties()
         properties += ("id" -> user.id)
         properties += ("principal" -> user.code)
         properties += ("description" -> user.name)
         properties += ("accountExpired" -> user.accountExpired)
         properties += ("accountLocked" -> user.locked)
-        properties += ("credentialExpired" -> user.credentialExpired)
+        properties += ("credentialExpired" -> credentialExpired)
         properties += ("enabled" -> user.enabled)
-        properties += ("authorities" -> user.roles.filter(_.member==true).map(_.role.id).mkString(","))
+        properties += ("authorities" -> user.roles.filter(_.member == true).map(_.role.id).mkString(","))
         val details = new Properties()
         details += ("category" -> user.category.id)
         properties += ("details" -> details)
