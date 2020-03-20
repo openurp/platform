@@ -16,18 +16,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.openurp.platform.user.service
+package org.openurp.platform.user.service.impl
 
-import org.beangle.cdi.bind.BindModule
-import org.openurp.platform.user.service.impl.{DefaultCredentialStore, DefaultPasswordPolicyProvider, RoleServiceImpl, UserServiceImpl}
+import org.beangle.commons.bean.Initializing
+import org.beangle.data.dao.EntityDao
+import org.beangle.security.authc.{PasswordPolicy, PasswordPolicyProvider}
+import org.openurp.platform.user.model.PasswordConfig
 
-class DefaultModule extends BindModule {
+class DefaultPasswordPolicyProvider extends PasswordPolicyProvider with Initializing {
+  var entityDao: EntityDao = _
+  var policy: PasswordPolicy = _
 
-  override def binding(): Unit = {
-    bind(classOf[UserServiceImpl])
-    bind(classOf[RoleServiceImpl])
-
-    bind(classOf[DefaultPasswordPolicyProvider])
-    bind(classOf[DefaultCredentialStore])
+  override def init(): Unit = {
+    val configs = entityDao.getAll(classOf[PasswordConfig])
+    policy =
+      if (configs.size > 0) {
+        configs.head
+      } else {
+        PasswordPolicy.Medium
+      }
   }
+
+  override def getPolicy: PasswordPolicy = policy
 }

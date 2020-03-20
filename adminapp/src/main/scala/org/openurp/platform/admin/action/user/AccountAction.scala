@@ -22,6 +22,7 @@ import org.beangle.commons.collection.Order
 import org.beangle.commons.lang.Strings
 import org.beangle.data.dao.{Condition, OqlBuilder}
 import org.beangle.security.Securities
+import org.beangle.security.authc.DBCredentialStore
 import org.beangle.security.codec.DefaultPasswordEncoder
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
@@ -35,6 +36,8 @@ import org.openurp.platform.user.service.UserService
 class AccountAction extends RestfulAction[User] {
 
   var userService: UserService = _
+
+  var credentialStore: DBCredentialStore = _
 
   override def indexSetting(): Unit = {
     put("categories", entityDao.getAll(classOf[UserCategory]))
@@ -78,13 +81,12 @@ class AccountAction extends RestfulAction[User] {
     if (Strings.isNotEmpty(errorMsg)) {
       return forward(to(this, "edit"), errorMsg)
     }
-    processPassword(user)
-
     if (!user.persisted) {
       userService.create(loginUser, user)
     } else {
       entityDao.saveOrUpdate(user)
     }
+    processPassword(user)
     redirect("search", "info.save.success")
   }
 
@@ -161,7 +163,7 @@ class AccountAction extends RestfulAction[User] {
       password = user.code
     }
     if (Strings.isNotBlank(password)) {
-      user.password = DefaultPasswordEncoder.generate(password, null, "sha")
+      credentialStore.updatePassword(user.code, DefaultPasswordEncoder.generate(password, null, "sha"))
     }
   }
 

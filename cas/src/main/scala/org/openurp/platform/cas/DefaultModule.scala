@@ -114,7 +114,7 @@ class DefaultModule extends BindModule with PropertySource {
         clients += getAttribute(c, "base", null)
       }
       //在项目的配置文件中出现remote/cas节点的情况下才配置如下信息
-      (app \\ "remote") foreach { r =>
+      (app \\ "config" \\ "remote") foreach { r =>
         (r \ "cas") foreach { e =>
           val casServer = getAttribute(e, "server", null)
           val gateway = getAttribute(e, "gateway", "false")

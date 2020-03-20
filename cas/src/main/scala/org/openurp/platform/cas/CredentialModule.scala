@@ -21,12 +21,11 @@ package org.openurp.platform.cas
 import java.io.FileInputStream
 
 import org.beangle.cdi.bind.BindModule
-import org.beangle.ids.cas.service.DBLdapCredentialsChecker
-import org.beangle.security.authc.DefaultPasswordStrengthChecker
-import org.beangle.security.realm.ldap.{PoolingContextSource, SimpleLdapUserStore}
+import org.beangle.ids.cas.service.DBLdapCredentialChecker
+import org.beangle.security.realm.ldap.{LdapCredentialStore, PoolingContextSource, SimpleLdapUserStore}
 import org.openurp.app.UrpApp
 
-class DBLdapCredentialsModule extends BindModule {
+class CredentialModule extends BindModule {
   override def binding(): Unit = {
     UrpApp.getUrpAppFile foreach { file =>
       val is = new FileInputStream(file)
@@ -36,13 +35,11 @@ class DBLdapCredentialsModule extends BindModule {
           .constructor($("ldap.url"), $("ldap.user"), $("ldap.password"))
         bind("security.LdapUserStore.default", classOf[SimpleLdapUserStore])
           .constructor(ref("security.ldap.source"), $("ldap.base"))
+        bind(classOf[LdapCredentialStore])
       }
       is.close()
     }
 
-    bind("security.CredentialsChecker.default", classOf[DBLdapCredentialsChecker])
-      .property("passwordSql", "select password from usr.users where code = ?")
-
-    bind(classOf[DefaultPasswordStrengthChecker]).constructor(8)
+    bind("security.CredentialsChecker.default", classOf[DBLdapCredentialChecker])
   }
 }

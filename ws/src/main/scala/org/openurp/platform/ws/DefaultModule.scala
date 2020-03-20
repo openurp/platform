@@ -40,7 +40,7 @@ class DefaultModule extends BindModule {
     bind(classOf[data.PermissionWS], classOf[data.ResourceWS])
 
     bind(classOf[AccountWS], classOf[AppWS], classOf[DimensionWS], classOf[AvatarWS])
-    bind(classOf[RootWS], classOf[ProfileWS])
+    bind(classOf[RootWS], classOf[ProfileWS], classOf[CredentialWS])
 
     bind(classOf[MemTokenRepository])
     bind("cache.Caffeine", classOf[CaffeineCacheManager]).constructor(true)

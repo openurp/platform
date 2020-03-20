@@ -29,6 +29,7 @@ class SecurityModule extends BindModule {
 
   protected override def binding(): Unit = {
     bind(classOf[AccountAction], classOf[DashboardAction], classOf[AvatarAction])
+    bind(classOf[PasswordConfigAction])
     bind(classOf[DimensionAction], classOf[PermissionAction], classOf[UserAction],
       classOf[RoleAction], classOf[ProfileAction])
 

@@ -20,21 +20,18 @@ package org.openurp.platform.user.service.impl
 
 import java.time.Instant
 
-import org.beangle.data.dao.{ EntityDao, OqlBuilder }
-import org.openurp.platform.user.model.{ RoleMember, Root, User, UserProfile }
-import org.openurp.platform.user.model.MemberShip.{ Granter, Manager, Member, Ship }
+import org.beangle.commons.collection.Collections
+import org.beangle.data.dao.{EntityDao, OqlBuilder}
+import org.beangle.data.model.Entity
+import org.openurp.platform.user.model.MemberShip.{Granter, Manager, Member, Ship}
+import org.openurp.platform.user.model._
 import org.openurp.platform.user.service.UserService
 
 class UserServiceImpl(val entityDao: EntityDao) extends UserService {
 
   def get(code: String): Option[User] = {
     val cache = OqlBuilder.from(classOf[User], "u").where("u.code=:code", code).cacheable()
-    val rs = entityDao.search(cache)
-    if (rs.isEmpty) {
-      None
-    } else {
-      Some(rs.head)
-    }
+    entityDao.search(cache).headOption
   }
 
   def get(id: Long): User = {
@@ -49,7 +46,7 @@ class UserServiceImpl(val entityDao: EntityDao) extends UserService {
     ship match {
       case Manager => user.roles.filter(m => m.manager)
       case Granter => user.roles.filter(m => m.granter)
-      case Member  => user.roles.filter(m => m.member)
+      case Member => user.roles.filter(m => m.member)
     }
   }
 
@@ -63,10 +60,8 @@ class UserServiceImpl(val entityDao: EntityDao) extends UserService {
   }
 
   def create(creator: User, user: User): Unit = {
-    //    user.creator = creator
     user.updatedAt = Instant.now
     entityDao.saveOrUpdate(user)
-    //    publish(new UserCreationEvent(Collections.singletonList(newUser)));
   }
 
   def updateState(manager: User, userIds: Iterable[Long], active: Boolean): Int = {
@@ -79,7 +74,10 @@ class UserServiceImpl(val entityDao: EntityDao) extends UserService {
 
   def remove(manager: User, user: User): Unit = {
     if (isManagedBy(manager, user)) {
-      entityDao.remove(entityDao.findBy(classOf[UserProfile], "user", List(user)), user);
+      val removed = Collections.newBuffer[Entity[_]]
+      removed ++= entityDao.findBy(classOf[Credential], "user", List(user))
+      removed ++= entityDao.findBy(classOf[UserProfile], "user", List(user))
+      entityDao.remove(removed, user);
     }
   }
 }

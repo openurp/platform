@@ -8,7 +8,7 @@
   </parent>
   <groupId>org.openurp.platform</groupId>
   <artifactId>openurp-platform-parent</artifactId>
-  <version>0.2.39-SNAPSHOT</version>
+  <version>0.3.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>OpenURP Platform Parent</name>
 
@@ -25,7 +25,8 @@
   <properties>
     <openurp.app.version>0.1.30</openurp.app.version>
     <beangle.commons.version>5.1.12</beangle.commons.version>
-    <beangle.ids.version>0.2.8</beangle.ids.version>
+    <beangle.ids.version>0.2.9-SNAPSHOT</beangle.ids.version>
+    <beangle.security.version>4.2.17-SNAPSHOT</beangle.security.version>
   </properties>
 
   <dependencyManagement>
