@@ -42,16 +42,19 @@
             <tr>
                 <td><label for="username">用户名:&nbsp;</label></td>
                 <td>
-                    <input name="username" id="username" tabindex="1" autofocus="autofocus" title="请输入用户名"  placeholder="用户名" type="text" value="${(Parameters['username']?html)!}" style="width:105px;"/>
+                    <input name="username" id="username" tabindex="1" autofocus="autofocus" title="请输入用户名"  maxlength="18" placeholder="用户名" type="text" value="${(Parameters['username']?html)!}" style="width:105px;"/>
                 </td>
             </tr>
             <tr>
-                <td><label for="password">密　码:&nbsp;</label></td>
-                <td><input id="password" name="password"  tabindex="2" type="password" style="width:105px;" autocomplete="off" placeholder="密码"/></td>
+                <td><label for="password_text">密　码:&nbsp;</label></td>
+                <td>
+                  <input id="password_text" name="password_text"  tabindex="2" type="password" style="width:105px;" autocomplete="off" placeholder="密码"/>
+                  <input name="password" type="hidden"/>
+                </td>
             </tr>
             [#if setting.enableCaptcha]
             <tr>
-                <td><label for="password">验证码:&nbsp;</label></td>
+                <td><label for="captcha_response">验证码:&nbsp;</label></td>
                 <td>
                   <input id="captcha_response" name="captcha_response" tabindex="3" type="text" style="width:50px;" placeholder="验证码"/>
                   <img src="${b.url("!captcha")}?t=${current_timestamp}" id="captcha_image" style="vertical-align:top;margin-top:1px;border:0px" width="90" height="25"  title="点击更换" onclick="change_captcha()">
@@ -101,7 +104,7 @@ ${b.script("virtual-keyboard","dist/js/jquery.keyboard.min.js")}
         if(!(/^\w+$/.test(form['username'].value))){
             alert("用户名中只能包含数字,字母");return false;
         }
-        if(!form['password'].value){
+        if(!form['password_text'].value){
             alert("密码不能为空");return false;
         }
         [#if setting.enableCaptcha]
@@ -110,8 +113,9 @@ ${b.script("virtual-keyboard","dist/js/jquery.keyboard.min.js")}
         }
         [/#if]
         try{
-        var encryptedData = CryptoJS.AES.encrypt(form['password'].value, key, {mode: CryptoJS.mode.ECB,padding: CryptoJS.pad.Pkcs7});
-        form['password'].value=("?"+encryptedData.ciphertext);
+          var encryptedData = CryptoJS.AES.encrypt(form['password_text'].value, key, {mode: CryptoJS.mode.ECB,padding: CryptoJS.pad.Pkcs7});
+          form['password_text'].disabled=true;
+          form['password'].value=("?"+encryptedData.ciphertext);
         }catch(e){alert(e);return false;}
         return true;
     }
