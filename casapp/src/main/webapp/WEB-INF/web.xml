@@ -3,17 +3,10 @@
 	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee  
 			     http://java.sun.com/xml/ns/javaee/web-app_4_0.xsd" version="4.0" metadata-complete="true">
-
   <absolute-ordering/>
-
   <listener>
     <listener-class>org.beangle.commons.web.init.BootstrapListener</listener-class>
   </listener>
-
-  <listener>
-    <listener-class>org.openurp.app.web.UrpPropertiesExporter</listener-class>
-  </listener>
-
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
