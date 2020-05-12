@@ -21,7 +21,7 @@ package org.openurp.platform.ws.user
 import org.beangle.cache.CacheManager
 import org.beangle.commons.activation.MediaTypes
 import org.beangle.commons.lang.ClassLoaders
-import org.beangle.data.dao.EntityDao
+import org.beangle.data.dao.{EntityDao, OqlBuilder}
 import org.beangle.webmvc.api.action.{ActionSupport, ServletSupport}
 import org.beangle.webmvc.api.annotation.{mapping, param}
 import org.beangle.webmvc.api.view.{Stream, View}
@@ -41,21 +41,24 @@ class AvatarWS(entityDao: EntityDao, cacheManager: CacheManager)
 
   @mapping("{avatarId}")
   def info(@param("avatarId") avatarId: String): View = {
-    loadAvatar(avatarId) match {
+    loadAvatarPath(avatarId) match {
       case Some(a) => deliver(a); null
       case None => this.redirect("defaultAvatar")
     }
   }
 
-  private def deliver(avatar: Avatar): Unit = {
-    UrpApp.getBlobRepository(true).path(avatar.path) match {
+  private def deliver(path: String): Unit = {
+    UrpApp.getBlobRepository(true).path(path) match {
       case Some(p) => response.sendRedirect(p)
       case None => response.setStatus(404)
     }
   }
 
-  private def loadAvatar(avatarId: String): Option[Avatar] = {
-    Option(entityDao.get(classOf[Avatar], avatarId))
+  private def loadAvatarPath(avatarId: String): Option[String] = {
+    val query = OqlBuilder.from[String](classOf[Avatar].getName, "a")
+    query.where("a.id = :id", avatarId)
+    query.select("a.path")
+    entityDao.search(query).headOption
   }
 
 }

@@ -68,16 +68,16 @@ class AvatarAction extends ActionSupport with ServletSupport {
         loadAvatar(avatarId) match {
           case None => Status.NotFound
           case Some(avatar) =>
-            UrpApp.getBlobRepository(true).url(avatar.path) match {
-              case Some(url) => response.sendRedirect(url.toString); null
-              case None => Status.NotFound
+            if (null == avatar.path) {
+              Status.NotFound
+            } else {
+              UrpApp.getBlobRepository(true).path(avatar.path) match {
+                case Some(url) => response.sendRedirect(url); null
+                case None => Status.NotFound
+              }
             }
         }
     }
-  }
-
-  private def decideContentType(fileName: String): String = {
-    MediaTypes.get(Strings.substringAfterLast(fileName, "."), MediaTypes.ApplicationOctetStream).toString
   }
 
   private def loadAvatar(avatarId: String): Option[Avatar] = {

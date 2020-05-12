@@ -19,10 +19,12 @@
 package org.openurp.platform.user.action
 
 import javax.servlet.http.Part
+import org.beangle.commons.codec.digest.Digests
 import org.beangle.data.dao.EntityDao
 import org.beangle.security.Securities
 import org.beangle.webmvc.api.action.ActionSupport
 import org.beangle.webmvc.api.view.{Status, View}
+import org.openurp.app.Urp
 import org.openurp.platform.user.model.User
 import org.openurp.platform.user.service.AvatarService
 
@@ -33,6 +35,8 @@ class AvatarAction extends ActionSupport {
   var avatarService: AvatarService = _
 
   def index(): View = {
+    put("avatar_url", Urp.api + "/platform/user/avatars/" + Digests.md5Hex(Securities.user)+"?t="+System.currentTimeMillis())
+    put("users",entityDao.findBy(classOf[User],"code",List(Securities.user)))
     forward()
   }
 
