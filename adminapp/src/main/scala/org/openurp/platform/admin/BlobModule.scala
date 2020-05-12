@@ -16,29 +16,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.openurp.platform.user.model
+package org.openurp.platform.admin
 
-import org.beangle.data.model.StringId
-import java.time.LocalDate
-import java.time.LocalDateTime
-import org.beangle.data.model.pojo.Updated
+import org.beangle.cdi.bind.BindModule
+import org.openurp.platform.admin.action.blob.{MetaAction, ProfileAction}
 
-object Avatar {
-  var MaxSize = 500 * 1024 //500k
-}
+class BlobModule extends BindModule {
 
-class Avatar extends StringId with Updated {
-
-  var user: User = _
-
-  var image: Array[Byte] = _
-
-  var path:String = _
-
-  var fileName: String = _
-
-  def this(user: User) {
-    this()
-    this.user = user
+  protected override def binding(): Unit = {
+    bind(classOf[ProfileAction])
+    bind(classOf[MetaAction])
   }
 }

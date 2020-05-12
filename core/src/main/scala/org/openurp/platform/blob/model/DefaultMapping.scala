@@ -16,29 +16,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.openurp.platform.user.model
+package org.openurp.platform.blob.model
 
-import org.beangle.data.model.StringId
-import java.time.LocalDate
-import java.time.LocalDateTime
-import org.beangle.data.model.pojo.Updated
+import org.beangle.data.orm.{IdGenerator, MappingModule}
 
-object Avatar {
-  var MaxSize = 500 * 1024 //500k
-}
+object DefaultMapping extends MappingModule {
 
-class Avatar extends StringId with Updated {
+  def binding(): Unit = {
+    defaultIdGenerator(IdGenerator.DateTime)
+    defaultCache("openurp.platform.security", "read-write")
 
-  var user: User = _
+    bind[Profile].declare { e =>
+      e.path & e.name are length(100)
+      e.users is length(200)
+    }.generator(IdGenerator.AutoIncrement)
 
-  var image: Array[Byte] = _
+    bind[BlobMeta].declare { e =>
+      e.owner is length(100)
+      e.name is length(300)
+      e.mediaType is length(60)
+      e.path is length(400)
+    }
 
-  var path:String = _
-
-  var fileName: String = _
-
-  def this(user: User) {
-    this()
-    this.user = user
+    all.except(classOf[BlobMeta]).cacheAll()
   }
+
 }

@@ -8,8 +8,7 @@
 [@b.messages/]
 [@b.tabs id="userinfotabs"]
   [@b.tab label="user.members"]
-  [@b.form name="userForm" action="!save" class="listform" theme="list" onsubmit="return validateMembers()"]
-
+  [@b.form name="userForm" action="!save" class="listform" theme="list"]
     [@b.grid  items=roles?sort_by("indexno") var="role" sortable="false"]
       [@b.row]
         <tr [#if role??]id="${role.indexno}"[/#if]>
@@ -50,20 +49,4 @@
   [/@]
   [/#if]
 [/@]
-<script  type="text/javascript">
-  function validateMembers(){
-    var memberselected=false;
-    jQuery('.security_member').each(
-      function(index,t){
-        if(t.checked) memberselected=true;
-      }
-    );
-    if(!memberselected){
-      jQuery('#userinfotabs > ul > li:nth-child(2)').removeClass('ui-state-default').addClass('ui-state-error');
-    }else{
-      jQuery('#userinfotabs > ul > li:nth-child(2)').removeClass('ui-state-error').addClass('ui-state-default');
-    }
-    return memberselected;
-  }
-</script>
 [@b.foot/]

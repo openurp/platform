@@ -19,7 +19,7 @@
 package org.openurp.platform.user.service
 
 import org.beangle.cdi.bind.BindModule
-import org.openurp.platform.user.service.impl.{DefaultCredentialStore, DefaultPasswordPolicyProvider, RoleServiceImpl, UserServiceImpl}
+import org.openurp.platform.user.service.impl.{AvatarServiceImpl, DefaultCredentialStore, DefaultPasswordPolicyProvider, RoleServiceImpl, UserServiceImpl}
 
 class DefaultModule extends BindModule {
 
@@ -29,5 +29,7 @@ class DefaultModule extends BindModule {
 
     bind(classOf[DefaultPasswordPolicyProvider])
     bind(classOf[DefaultCredentialStore])
+
+    bind(classOf[AvatarServiceImpl])
   }
 }

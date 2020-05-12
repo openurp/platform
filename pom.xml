@@ -23,7 +23,7 @@
   </modules>
 
   <properties>
-    <openurp.app.version>0.1.33</openurp.app.version>
+    <openurp.app.version>0.1.34-SNAPSHOT</openurp.app.version>
   </properties>
 
   <dependencyManagement>

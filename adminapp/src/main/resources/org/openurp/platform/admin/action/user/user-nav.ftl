@@ -1,5 +1,5 @@
 [#ftl]
-  [@b.nav class="nav nav-tabs"]
+  [@b.nav class="nav nav-tabs nav-tabs-compact"]
     [@b.navitem href="user"]用户管理[/@]
     [@b.navitem href="role"]角色管理[/@]
   [/@]

@@ -18,27 +18,8 @@
  */
 package org.openurp.platform.bulletin.model
 
-import java.io.{ByteArrayOutputStream, InputStream}
-import java.time.Instant
-
-import org.beangle.commons.io.IOs
-import org.beangle.commons.lang.Strings
 import org.beangle.data.model.LongId
 import org.beangle.data.model.pojo.Updated
-
-object Attachment {
-  def apply(name: String, is: InputStream): Attachment = {
-    val a = new Attachment
-    a.fileName = name
-
-    val buf = new ByteArrayOutputStream
-    IOs.copy(is, buf)
-    a.content = buf.toByteArray
-    a.size = a.content.length
-    a.updatedAt = Instant.now
-    a
-  }
-}
 
 class Attachment extends LongId with Updated {
 
@@ -47,15 +28,4 @@ class Attachment extends LongId with Updated {
   var content: Array[Byte] = _
 
   var fileName: String = _
-
-  def ext: String = {
-    Strings.substringAfterLast(fileName, ".")
-  }
-
-  def merge(newer: Attachment): Unit = {
-    this.size = newer.size
-    this.fileName = newer.fileName
-    this.content = newer.content
-    this.updatedAt = newer.updatedAt
-  }
 }

@@ -19,26 +19,28 @@
 package org.openurp.platform.admin.action.user
 
 import java.io._
-import java.time.Instant
 
 import javax.servlet.http.Part
 import org.apache.commons.compress.archivers.zip.ZipFile
 import org.beangle.commons.activation.MediaTypes
-import org.beangle.commons.codec.digest.Digests
 import org.beangle.commons.io.IOs
 import org.beangle.commons.lang.{Strings, SystemInfo, Throwables}
 import org.beangle.data.dao.{EntityDao, OqlBuilder}
-import org.beangle.webmvc.api.action.ActionSupport
+import org.beangle.webmvc.api.action.{ActionSupport, ServletSupport}
 import org.beangle.webmvc.api.annotation.{mapping, param}
-import org.beangle.webmvc.api.view.{Status, Stream, View}
+import org.beangle.webmvc.api.view.{Status, View}
 import org.beangle.webmvc.entity.helper.QueryHelper
+import org.openurp.app.UrpApp
 import org.openurp.platform.user.model.{Avatar, User}
+import org.openurp.platform.user.service.AvatarService
 
 import scala.jdk.javaapi.CollectionConverters.asScala
 
-class AvatarAction extends ActionSupport {
+class AvatarAction extends ActionSupport with ServletSupport {
 
   var entityDao: EntityDao = _
+
+  var avatarService: AvatarService = _
 
   def index(): View = {
     val query = OqlBuilder.from(classOf[User], "user")
@@ -66,7 +68,10 @@ class AvatarAction extends ActionSupport {
         loadAvatar(avatarId) match {
           case None => Status.NotFound
           case Some(avatar) =>
-            Stream(new ByteArrayInputStream(avatar.image), decideContentType(avatar.fileName), avatar.fileName)
+            UrpApp.getBlobRepository(true).url(avatar.path) match {
+              case Some(url) => response.sendRedirect(url.toString); null
+              case None => Status.NotFound
+            }
         }
     }
   }
@@ -112,16 +117,7 @@ class AvatarAction extends ActionSupport {
           logger.warn("Cannot find user info of " + usercode)
         } else {
           i += 1
-          val user = users.head
-          val bos = new ByteArrayOutputStream()
-          IOs.copy(new FileInputStream(dir.getAbsolutePath + "/" + name), bos)
-          val bytes = bos.toByteArray
-          if (bytes.length <= Avatar.MaxSize) {
-            saveOrUpdate(user, bytes, name)
-          } else {
-            logger.warn("Cannot import photo size greate than 500k")
-            i -= 1
-          }
+          avatarService.save(users.head, name, new FileInputStream(dir.getAbsolutePath + "/" + name))
         }
       }
     }
@@ -147,15 +143,7 @@ class AvatarAction extends ActionSupport {
               logger.warn("Cannot find user info of " + usercode)
             } else {
               val user = users.head
-              val bos = new ByteArrayOutputStream()
-              IOs.copy(file.getInputStream(ze), bos)
-              val bytes = bos.toByteArray
-              if (bytes.length <= Avatar.MaxSize) {
-                saveOrUpdate(user, bytes, photoname)
-              } else {
-                logger.warn("Cannot import photo size greate than 500k")
-                i -= 1
-              }
+              avatarService.save(users.head, photoname, file.getInputStream(ze))
             }
           }
         }
@@ -165,26 +153,6 @@ class AvatarAction extends ActionSupport {
       case e: IOException => Throwables.propagate(e)
     }
     i
-  }
-
-  def saveOrUpdate(user: User, bytes: Array[Byte], fileName: String): Unit = {
-    val usercode = user.code
-    val query = OqlBuilder.from(classOf[Avatar], "avatar")
-    query.where("avatar.user.id=:userId", user.id)
-    val avatars = entityDao.search(query)
-
-    var avatar: Avatar = null
-    if (avatars.isEmpty) {
-      avatar = new Avatar(user, bytes)
-      avatar.id = Digests.md5Hex(usercode)
-    } else {
-      avatar = avatars.head
-      avatar.image = bytes
-    }
-    user.avatarId = Some(avatar.id)
-    avatar.fileName = fileName
-    avatar.updatedAt = Instant.now
-    entityDao.saveOrUpdate(avatar, user)
   }
 
 }

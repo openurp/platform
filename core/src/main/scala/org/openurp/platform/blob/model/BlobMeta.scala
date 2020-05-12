@@ -16,29 +16,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.openurp.platform.user.model
+package org.openurp.platform.blob.model
 
-import org.beangle.data.model.StringId
-import java.time.LocalDate
-import java.time.LocalDateTime
+import org.beangle.data.model.LongId
 import org.beangle.data.model.pojo.Updated
 
-object Avatar {
-  var MaxSize = 500 * 1024 //500k
-}
-
-class Avatar extends StringId with Updated {
-
-  var user: User = _
-
-  var image: Array[Byte] = _
-
-  var path:String = _
-
-  var fileName: String = _
-
-  def this(user: User) {
-    this()
-    this.user = user
-  }
+class BlobMeta extends LongId with Updated {
+  var owner: String = _
+  var name: String = _
+  var size: Long = _
+  var sha: String = _
+  var mediaType: String = _
+  var profile: Profile = _
+  var path: String = _
 }

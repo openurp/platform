@@ -27,10 +27,13 @@ import org.beangle.webmvc.api.annotation.ignore
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.platform.bulletin.model._
+import org.openurp.platform.bulletin.service.DocService
 import org.openurp.platform.config.model.{App, AppType}
 import org.openurp.platform.user.model.{User, UserCategory}
 
 class NoticeAction extends RestfulAction[Notice] {
+
+  var docService:DocService=_
 
   override protected def indexSetting(): Unit = {
     put("userCategories", entityDao.getAll(classOf[UserCategory]))
@@ -94,12 +97,10 @@ class NoticeAction extends RestfulAction[Notice] {
     getAll("notice_doc", classOf[Part]) foreach { docFile =>
       val doc = new Doc
       doc.app = notice.app
-      val attachment = Attachment(docFile.getSubmittedFileName, docFile.getInputStream)
-      doc.file = attachment
-      doc.name = attachment.fileName
       doc.uploadBy = notice.operator
       doc.userCategories ++= notice.userCategories
       doc.updatedAt = Instant.now
+      docService.save(doc,docFile.getSubmittedFileName, docFile.getInputStream)
       entityDao.saveOrUpdate(doc.file, doc)
       notice.docs += doc
     }

@@ -18,7 +18,6 @@
  */
 package org.openurp.platform.admin.action.bulletin
 
-import java.io.ByteArrayInputStream
 import java.time.Instant
 
 import javax.servlet.http.Part
@@ -26,14 +25,19 @@ import org.beangle.commons.activation.MediaTypes
 import org.beangle.commons.lang.Strings
 import org.beangle.data.dao.OqlBuilder
 import org.beangle.security.Securities
+import org.beangle.webmvc.api.action.ServletSupport
 import org.beangle.webmvc.api.annotation.{ignore, param}
-import org.beangle.webmvc.api.view.{Stream, View}
+import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
-import org.openurp.platform.bulletin.model.{Attachment, Doc}
+import org.openurp.app.UrpApp
+import org.openurp.platform.bulletin.model.Doc
+import org.openurp.platform.bulletin.service.DocService
 import org.openurp.platform.config.model.{App, AppType}
 import org.openurp.platform.user.model.{User, UserCategory}
 
-class DocAction extends RestfulAction[Doc] {
+class DocAction extends RestfulAction[Doc] with ServletSupport {
+
+  var docService:DocService=_
 
   override protected def indexSetting(): Unit = {
     put("userCategories", entityDao.getAll(classOf[UserCategory]))
@@ -62,14 +66,13 @@ class DocAction extends RestfulAction[Doc] {
     put("apps", getWebApps)
   }
 
-  private def decideContentType(fileName: String): String = {
-    MediaTypes.get(Strings.substringAfterLast(fileName, "."), MediaTypes.ApplicationOctetStream).toString
-  }
-
   def download(@param("id") id: String): View = {
     val doc = entityDao.get(classOf[Doc], id.toLong)
-    Stream(new ByteArrayInputStream(doc.file.content), this.decideContentType(doc.file.fileName),
-      doc.file.fileName)
+    UrpApp.getBlobRepository(true).path(doc.path) match {
+      case Some(p) => response.sendRedirect(p)
+      case None => response.setStatus(404)
+    }
+    null
   }
 
   @ignore
@@ -92,13 +95,7 @@ class DocAction extends RestfulAction[Doc] {
     doc.userCategories.clear()
     doc.userCategories ++= entityDao.find(classOf[UserCategory], intIds("userCategory"))
     getAll("docfile", classOf[Part]) foreach { docFile =>
-      val attachment = Attachment(docFile.getSubmittedFileName, docFile.getInputStream)
-      if (doc.file != null) {
-        doc.file.merge(attachment)
-      } else {
-        doc.file = attachment
-      }
-      entityDao.saveOrUpdate(doc.file, doc)
+      docService.save(doc,docFile.getSubmittedFileName, docFile.getInputStream)
     }
     super.saveAndRedirect(doc)
   }
