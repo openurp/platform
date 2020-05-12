@@ -52,7 +52,6 @@ class UploadAction extends ActionSupport with ServletSupport{
     null
   }
 
-
   def uploadDoc(): View = {
     val query = OqlBuilder.from(classOf[Doc], "a")
     query.orderBy("a.id").limit(1, 100)
