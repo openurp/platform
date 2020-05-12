@@ -8,7 +8,6 @@
 [/@]
 [@b.form name="profileForm" action="!saveProfile"]
   <input type="hidden" name="role.id" value="${role.id}"/>
-  <input type="hidden" name="_params" value="&role.id=${role.id}"/>
   [@b.tabs]
     [#list fields?sort_by("title") as field]
     [@b.tab label="${field.name}(${field.title})"]

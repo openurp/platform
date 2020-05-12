@@ -81,8 +81,8 @@ object DefaultMapping extends MappingModule {
 
     bind[Avatar].declare { e =>
       e.id is length(50)
-      e.image is length(Avatar.MaxSize)
       e.fileName is length(50)
+      e.path is length(300)
     }.generator(IdGenerator.Assigned)
 
     bind[Root]

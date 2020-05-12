@@ -16,29 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.openurp.platform.user.model
+package org.openurp.platform.user.service
 
-import org.beangle.data.model.StringId
-import java.time.LocalDate
-import java.time.LocalDateTime
-import org.beangle.data.model.pojo.Updated
+import java.io.InputStream
 
-object Avatar {
-  var MaxSize = 500 * 1024 //500k
-}
+import org.openurp.platform.user.model.User
 
-class Avatar extends StringId with Updated {
+trait AvatarService {
 
-  var user: User = _
-
-  var image: Array[Byte] = _
-
-  var path:String = _
-
-  var fileName: String = _
-
-  def this(user: User) {
-    this()
-    this.user = user
-  }
+  def save(user:User,filename:String,is:InputStream):Unit
 }

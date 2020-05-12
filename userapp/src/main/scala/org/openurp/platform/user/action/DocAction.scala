@@ -18,20 +18,19 @@
  */
 package org.openurp.platform.user.action
 
-import java.io.ByteArrayInputStream
-
 import org.beangle.commons.activation.MediaTypes
 import org.beangle.commons.lang.Strings
 import org.beangle.data.dao.{EntityDao, OqlBuilder}
 import org.beangle.security.Securities
-import org.beangle.webmvc.api.action.ActionSupport
+import org.beangle.webmvc.api.action.{ActionSupport, ServletSupport}
 import org.beangle.webmvc.api.annotation.{mapping, param}
-import org.beangle.webmvc.api.view.{Stream, View}
+import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.helper.QueryHelper
+import org.openurp.app.UrpApp
 import org.openurp.platform.bulletin.model.Doc
 import org.openurp.platform.user.model.User
 
-class DocAction extends ActionSupport {
+class DocAction extends ActionSupport with ServletSupport {
 
   var entityDao: EntityDao = _
 
@@ -68,8 +67,11 @@ class DocAction extends ActionSupport {
   @mapping("{id}")
   def info(@param("id") id: String): View = {
     val doc = entityDao.get(classOf[Doc], id.toLong)
-    Stream(new ByteArrayInputStream(doc.file.content), this.decideContentType(doc.file.fileName),
-      doc.file.fileName)
+    UrpApp.getBlobRepository(true).path(doc.path) match {
+      case Some(p) => response.sendRedirect(p)
+      case None => response.setStatus(404)
+    }
+    null
   }
 
 }
