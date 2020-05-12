@@ -101,7 +101,6 @@ class NoticeAction extends RestfulAction[Notice] {
       doc.userCategories ++= notice.userCategories
       doc.updatedAt = Instant.now
       docService.save(doc,docFile.getSubmittedFileName, docFile.getInputStream)
-      entityDao.saveOrUpdate(doc.file, doc)
       notice.docs += doc
     }
     notice.status = NoticeStatus.Submited

@@ -25,4 +25,6 @@ import org.openurp.platform.bulletin.model.Doc
 trait DocService {
 
   def save(doc:Doc,filename:String,is:InputStream):Doc
+
+  def remove(doc:Doc):Unit
 }

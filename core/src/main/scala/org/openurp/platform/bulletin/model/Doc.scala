@@ -38,8 +38,6 @@ class Doc extends LongId with Updated {
 
   var path: String = _
 
-  var file: Attachment = _
-
   var userCategories: mutable.Set[UserCategory] = Collections.newSet
 
   var archived: Boolean = _
