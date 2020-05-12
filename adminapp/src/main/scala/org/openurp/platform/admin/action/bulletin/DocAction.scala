@@ -21,8 +21,6 @@ package org.openurp.platform.admin.action.bulletin
 import java.time.Instant
 
 import javax.servlet.http.Part
-import org.beangle.commons.activation.MediaTypes
-import org.beangle.commons.lang.Strings
 import org.beangle.data.dao.OqlBuilder
 import org.beangle.security.Securities
 import org.beangle.webmvc.api.action.ServletSupport
@@ -37,7 +35,7 @@ import org.openurp.platform.user.model.{User, UserCategory}
 
 class DocAction extends RestfulAction[Doc] with ServletSupport {
 
-  var docService:DocService=_
+  var docService: DocService = _
 
   override protected def indexSetting(): Unit = {
     put("userCategories", entityDao.getAll(classOf[UserCategory]))
@@ -78,8 +76,9 @@ class DocAction extends RestfulAction[Doc] with ServletSupport {
   @ignore
   override protected def removeAndRedirect(entities: Seq[Doc]): View = {
     try {
-      val files = entities.map(d => d.file)
-      entityDao.remove(entities, files)
+      entities.foreach { doc =>
+        docService.remove(doc)
+      }
       redirect("search", "info.remove.success")
     } catch {
       case e: Exception =>
@@ -95,7 +94,7 @@ class DocAction extends RestfulAction[Doc] with ServletSupport {
     doc.userCategories.clear()
     doc.userCategories ++= entityDao.find(classOf[UserCategory], intIds("userCategory"))
     getAll("docfile", classOf[Part]) foreach { docFile =>
-      docService.save(doc,docFile.getSubmittedFileName, docFile.getInputStream)
+      docService.save(doc, docFile.getSubmittedFileName, docFile.getInputStream)
     }
     super.saveAndRedirect(doc)
   }

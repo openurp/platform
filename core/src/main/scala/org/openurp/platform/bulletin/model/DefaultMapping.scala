@@ -28,8 +28,6 @@ object DefaultMapping extends MappingModule {
 
     bind[Doc]
 
-    bind[Attachment]
-
     bind[News] declare { e =>
       e.content is lob
     }
@@ -41,7 +39,5 @@ object DefaultMapping extends MappingModule {
     bind[SensitiveWord].declare { e =>
       e.content is length(30)
     }
-
-    all.except(classOf[Attachment]).cacheAll()
   }
 }

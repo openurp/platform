@@ -19,13 +19,11 @@
 package org.openurp.platform.admin
 
 import org.beangle.cdi.bind.BindModule
-import org.openurp.platform.admin.action.blob.UploadAction
 import org.openurp.platform.admin.action.bulletin.{DocAction, NewsAction, NoticeAction, NoticeAuditAction}
 
 class BulletinModule  extends BindModule {
 
   protected override def binding(): Unit = {
     bind(classOf[DocAction], classOf[NoticeAction], classOf[NewsAction], classOf[NoticeAuditAction])
-    bind(classOf[UploadAction])
   }
 }

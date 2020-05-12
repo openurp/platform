@@ -41,4 +41,10 @@ class DocServiceImpl extends DocService {
     entityDao.saveOrUpdate(doc)
     doc
   }
+
+  def remove(doc:Doc):Unit={
+    val repo = UrpApp.getBlobRepository(true)
+    repo.remove(doc.path)
+    entityDao.remove(doc)
+  }
 }
