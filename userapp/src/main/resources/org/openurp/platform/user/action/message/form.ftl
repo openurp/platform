@@ -3,11 +3,11 @@
 
 [@b.form action=b.rest.save(message) name="newMessageForm" onsubmit="validateMessage"]
 <input type="hidden" value="&message.status=1" name="_params">
-<div class="box box-primary">
-            <div class="box-header with-border">
-              <h3 class="box-title">编写新消息</h3>
+<div class="card card-primary card-outline">
+            <div class="card-header">
+              <h3 class="card-title">编写新消息</h3>
             </div>
-            <div class="box-body">
+            <div class="card-body">
               <div class="form-group">
                 <input  name="recipient.code" class="form-control" placeholder="发送给:" value="${Parameters['recipient.code']!}">
               </div>
@@ -19,7 +19,7 @@
               </div>
             </div>
             <div class="box-footer">
-              <div class="pull-right">
+              <div class="float-right">
                 <button type="submit"  class="btn btn-primary" onclick="bg.form.submit('newMessageForm',null,null,null);return false;"><i class="fa fa-envelope-o"></i> 发送</button>
               </div>
               <button type="reset" class="btn btn-default"  onclick="history.back(-1)"><i class="fa fa-times"></i>不写了</button>

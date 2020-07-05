@@ -7,7 +7,7 @@
     [@b.textfield name="credential.name" label="名称" value="${credential.name!}" required="true" maxlength="200"/]
     [@b.textfield name="credential.username" label="用户名" value="${credential.username!}" required="true" maxlength="200"/]
     [@b.textfield name="credential.password" label="密文" value="${credential.password!}" required="true" style="width:300px" maxlength="200"/]
-    [@b.datepicker name="credential.expiredAt" label="过期时间" value=credential.expiredAt required="true" format="datetime"/]
+    [@b.date name="credential.expiredAt" label="过期时间" value=credential.expiredAt required="true" format="datetime"/]
     [@b.formfoot]
       [@b.reset/]&nbsp;&nbsp;[@b.submit value="action.submit"/]
     [/@]

@@ -34,14 +34,13 @@ class ProfileServiceImpl extends ProfileService {
 
   def getDimensionValues(field: Dimension, keys: String*): collection.Seq[Any] = {
     val source = field.source
-    val keySet = keys.toSet
     if (source.startsWith("json:")) {
       val json = source.substring(5)
       JSON.parse(json).asInstanceOf[Seq[Any]].filter { x => Properties.get(x, field.keyName) }
     } else if (source.startsWith("csv:")) {
       val csv = source.substring(4)
-      val lines = Strings.split(csv, "\n")
-      val start = (0 until lines.length) find (x => Strings.isNotBlank(lines(x)))
+      val lines = Strings.split(Strings.replace(csv,"\r",""), "\n")
+      val start = lines.indices find (x => Strings.isNotBlank(lines(x)))
       val heads = Strings.split(lines(start.get), ",")
       val data = Collections.newBuffer[org.beangle.commons.collection.Properties]
       var i = start.get + 1
@@ -49,7 +48,7 @@ class ProfileServiceImpl extends ProfileService {
         if (!Strings.isBlank(lines(i))) {
           val datas = Strings.split(lines(i), ",")
           val p = new org.beangle.commons.collection.Properties
-          for (j <- 0 until heads.length) {
+          for (j <- heads.indices) {
             p.put(heads(j), datas(j))
           }
           p.get(field.keyName) foreach { id =>

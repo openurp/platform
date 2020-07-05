@@ -23,6 +23,7 @@ import org.beangle.data.dao.{EntityDao, OqlBuilder}
 import org.beangle.security.authz.Scopes
 import org.beangle.webmvc.api.action.{ActionSupport, EntitySupport}
 import org.beangle.webmvc.api.annotation.{mapping, param, response}
+import org.openurp.platform.config.service.AppService
 import org.openurp.platform.security.model.{FuncPermission, FuncResource}
 
 /**
@@ -30,20 +31,25 @@ import org.openurp.platform.security.model.{FuncPermission, FuncResource}
  */
 class ResourceWS(entityDao: EntityDao) extends ActionSupport with EntitySupport[FuncResource] {
 
+  var appService: AppService = _
+
   @response
-  def index(@param("app") app: String): Seq[Any] = {
-    val query = OqlBuilder.from(classOf[FuncResource], "fr").where("fr.app.name=:name", app)
+  def index(@param("app") appName: String): Seq[Any] = {
+    val app = appService.getApp(appName).head
+    val query = OqlBuilder.from(classOf[FuncResource], "fr")
+      .where("fr.app=:app", app)
+
     get("scope") foreach { s =>
       query.where("fr.scope = :scope", Scopes.withName(s))
     }
     val resources = entityDao.search(query)
-    val permissionQuery = OqlBuilder.from[Array[Object]](classOf[FuncPermission].getName, "fp")
-      .where("fp.resource.app.name = :appName", app)
+    val premQuery = OqlBuilder.from[Array[Object]](classOf[FuncPermission].getName, "fp")
+      .where("fp.resource.app = :app", app)
       .select("fp.resource.id,fp.role.id")
       .cacheable()
 
     val permissions = Collections.newMap[Number, collection.mutable.Set[Number]]
-    entityDao.search(permissionQuery) foreach { p =>
+    entityDao.search(premQuery) foreach { p =>
       val roles = permissions.getOrElseUpdate(p(0).asInstanceOf[Number], new collection.mutable.HashSet[Number])
       roles += p(1).asInstanceOf[Number]
     }
@@ -56,13 +62,15 @@ class ResourceWS(entityDao: EntityDao) extends ActionSupport with EntitySupport[
   }
 
   @response
-  def info(@param("app") app: String, @param("name") name: String): Properties = {
-    val query = OqlBuilder.from(classOf[FuncResource], "fr").where("fr.app.name=:app", app)
+  def info(@param("app") appName: String, @param("name") name: String): Properties = {
+    val app = appService.getApp(appName).head
+    val query = OqlBuilder.from(classOf[FuncResource], "fr").where("fr.app=:app", app)
     query.where("fr.name=:name", name).cacheable()
     val resources = entityDao.search(query)
     if (resources.nonEmpty) {
       val roleQuery = OqlBuilder.from[Integer](classOf[FuncPermission].getName, "fp")
-        .where("fp.resource.app.name = :appName", app).where("fp.resource.name =:resourceName", name)
+        .where("fp.resource.app = :app", app)
+        .where("fp.resource.name =:resourceName", name)
         .select("fp.role.id")
         .cacheable()
       val p = new Properties(resources.head, "id", "name", "title", "scope")
@@ -75,8 +83,10 @@ class ResourceWS(entityDao: EntityDao) extends ActionSupport with EntitySupport[
 
   @response
   @mapping("public")
-  def pub(@param("app") app: String): Seq[Any] = {
-    val query = OqlBuilder.from(classOf[FuncResource], "fr").where("fr.app.name=:name", app)
+  def pub(@param("app") appName: String): Seq[Any] = {
+    val app = appService.getApp(appName).head
+    val query = OqlBuilder.from(classOf[FuncResource], "fr")
+      .where("fr.app=:app", app)
       .where("fr.scope=:scope", Scopes.Public)
       .cacheable()
     entityDao.search(query)

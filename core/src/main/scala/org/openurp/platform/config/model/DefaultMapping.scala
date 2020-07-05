@@ -18,12 +18,13 @@
  */
 package org.openurp.platform.config.model
 
-import org.beangle.data.orm.MappingModule
+import org.beangle.data.orm.{IdGenerator, MappingModule}
 
 object DefaultMapping extends MappingModule {
 
   def binding(): Unit = {
-    defaultIdGenerator("auto_increment")
+    defaultIdGenerator(classOf[Int], IdGenerator.AutoIncrement)
+    defaultIdGenerator(classOf[Long], IdGenerator.AutoIncrement)
     defaultCache("openurp.platform.security", "read-write")
 
     bind[Org].declare { e =>
@@ -33,7 +34,7 @@ object DefaultMapping extends MappingModule {
     }
 
     bind[App].declare { e =>
-      e.getName is(length(100), unique)
+      e.getName is length(100)
       e.title is length(100)
       e.secret is length(200)
       e.url is length(200)
@@ -41,6 +42,10 @@ object DefaultMapping extends MappingModule {
       e.remark is length(200)
       e.indexno is length(50)
       e.datasources is depends("app")
+    }
+
+    bind[AppGroup].declare { e =>
+       e.name is length(100)
     }
 
     bind[Credential].declare { e =>
@@ -64,8 +69,8 @@ object DefaultMapping extends MappingModule {
 
     bind[Domain].declare { e =>
       e.name is(length(100), unique)
+      e.hostname is (length(100),unique)
       e.title is length(200)
-      e.children is depends("parent")
     }
 
     bind[AppType]

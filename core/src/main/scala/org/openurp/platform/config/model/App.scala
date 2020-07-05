@@ -35,12 +35,13 @@ class App extends IntId with Named with Enabled with Ordered[App] with Principal
   var base: String = _
   var logoUrl: Option[String] = None
   var indexno: String = _
+  var group: AppGroup = _
   var domain: Domain = _
   var navStyle: Option[String] = None
 
   def getName: String = name
 
-  def fullTitle: String = domain.title + " " + title
+  def fullTitle: String = group.title + " " + title
 
   override def compare(m: App): Int = {
     indexno.compareTo(m.indexno)

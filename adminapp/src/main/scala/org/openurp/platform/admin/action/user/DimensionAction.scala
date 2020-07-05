@@ -35,15 +35,19 @@ class DimensionAction extends RestfulAction[Dimension] {
     put("domains", domains)
   }
 
-  protected override def saveAndRedirect(field: Dimension): View = {
-    if (entityDao.duplicate(classOf[Dimension], field.id, "name", field.name)) {
+  protected override def saveAndRedirect(dimension: Dimension): View = {
+    if (entityDao.duplicate(classOf[Dimension], dimension.id, "name", dimension.name)) {
       addError("名称重复")
       return forward(to(this, "edit"))
     }
-    field.domains = new collection.mutable.ListBuffer[Domain]
+
+    dimension.domains = new collection.mutable.ListBuffer[Domain]
     val domainId2nd = getAll("domainId2nd", classOf[Int])
-    field.domains ++= entityDao.find(classOf[Domain], domainId2nd)
-    entityDao.saveOrUpdate(field)
+    dimension.domains ++= entityDao.find(classOf[Domain], domainId2nd)
+    if(dimension.source.contains("\r")){
+      dimension.source=dimension.source.replace("\r","");
+    }
+    entityDao.saveOrUpdate(dimension)
     redirect("search", "info.save.success")
   }
 }

@@ -19,9 +19,7 @@
 package org.openurp.platform.config.service
 
 import org.beangle.cdi.bind.BindModule
-import org.openurp.platform.config.service.impl.DataSourceManagerImpl
-import org.openurp.platform.config.service.impl.DbServiceImpl
-import org.openurp.platform.config.service.impl.AppServiceImpl
+import org.openurp.platform.config.service.impl.{AppServiceImpl, DataSourceManagerImpl, DbServiceImpl, DomainServiceImpl}
 
 class DefaultModule extends BindModule {
 
@@ -29,5 +27,6 @@ class DefaultModule extends BindModule {
     bind(classOf[DataSourceManagerImpl])
     bind(classOf[DbServiceImpl])
     bind(classOf[AppServiceImpl])
+    bind(classOf[DomainServiceImpl])
   }
 }

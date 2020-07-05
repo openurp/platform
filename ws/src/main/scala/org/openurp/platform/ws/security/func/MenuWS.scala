@@ -18,7 +18,7 @@
  */
 package org.openurp.platform.ws.security.func
 
-import org.beangle.commons.collection.Properties
+import org.beangle.commons.collection.{Collections, Properties}
 import org.beangle.data.dao.EntityDao
 import org.beangle.webmvc.api.action.{ActionSupport, EntitySupport}
 import org.beangle.webmvc.api.annotation.{mapping, param, response}
@@ -26,7 +26,7 @@ import org.openurp.platform.config.model.Domain
 import org.openurp.platform.config.service.AppService
 import org.openurp.platform.security.model.Menu
 import org.openurp.platform.security.service.MenuService
-import org.openurp.platform.user.model.{Role, User}
+import org.openurp.platform.user.model.User
 import org.openurp.platform.user.service.UserService
 
 import scala.collection.mutable
@@ -66,9 +66,10 @@ class MenuWS extends ActionSupport with EntitySupport[Menu] {
           getDomainMenus(app.domain, u)
         } else {
           val appProps = new Properties(app, "id", "name", "title", "base", "url", "logoUrl", "navStyle")
-          appProps.add("domain", app.domain, "id", "name", "title", "indexno")
           val menus = menuService.getTopMenus(app, u) map (m => convert(m))
-          AppMenus(appProps, menus)
+          val domain = new Properties(app.domain, "id", "name", "title", "indexno")
+          val group = new Properties(app.group, "id", "name", "title", "indexno")
+          DomainMenus(domain, List(GroupMenus(group, List(AppMenus(appProps, menus)))))
         }
       case None =>
         appService.getDomain(appName) match {
@@ -78,50 +79,26 @@ class MenuWS extends ActionSupport with EntitySupport[Menu] {
     }
   }
 
-  @response
-  @mapping("role/{roleId}")
-  def role(@param("app") appName: String, @param("roleId") roleId: Int): Iterable[Any] = {
-    appService.getApp(appName) match {
-      case Some(app) =>
-        val roles = entityDao.findBy(classOf[Role], "id", List(roleId))
-        menuService.getTopMenus(app, roles.head) map (m => convert(m))
-      case None => List.empty[Menu]
-    }
-  }
-
   private def getDomainMenus(dm: Domain, u: User): DomainMenus = {
-    val menus = menuService.getTopMenus(Some(dm), u)
+    val menus = menuService.getTopMenus(dm, u)
     val appsMenus = menus.groupBy(_.app)
-    val domainApps = appsMenus.keys.groupBy(_.domain)
-    val directMenuMaps = domainApps map {
+    val groupApps = appsMenus.keys.groupBy(_.group)
+    val directMenuMaps = groupApps map {
       case (oned, _) =>
-        val domain = new Properties(oned, "id", "name", "title", "indexno")
-        val appMenus = domainApps(oned).toBuffer.sorted map { app =>
+        val group = new Properties(oned, "id", "name", "title", "indexno")
+        val appMenus = groupApps(oned).toBuffer.sorted map { app =>
           val appProps = new Properties(app, "id", "name", "title", "base", "url", "logoUrl", "navStyle")
           AppMenus(appProps, appsMenus(app).map(convert))
         }
-        (oned, DomainMenus(domain, appMenus, new mutable.ArrayBuffer[DomainMenus]))
+        (oned, GroupMenus(group, appMenus))
     }
 
-    val domainMenuMaps = new mutable.HashMap[Domain, DomainMenus]
-    domainMenuMaps ++= directMenuMaps
-
-    directMenuMaps.keys.toSeq.sorted foreach (addParent(_, domainMenuMaps))
-    domainMenuMaps.get(dm).orNull
-  }
-
-  private def addParent(domain: Domain, domainMenuMaps: mutable.HashMap[Domain, DomainMenus]): Unit = {
-    domain.parent foreach { pd =>
-      val parent = domainMenuMaps.get(pd) match {
-        case Some(s) => s
-        case None =>
-          val s = DomainMenus(new Properties(pd, "id", "name", "title", "indexno"), List.empty, new mutable.ArrayBuffer[DomainMenus])
-          domainMenuMaps.put(pd, s)
-          s
-      }
-      parent.children += domainMenuMaps(domain)
-      pd.parent foreach (addParent(_, domainMenuMaps))
+    val groups = Collections.newBuffer[GroupMenus]
+    directMenuMaps.keys.toSeq.sorted foreach { g =>
+      groups += directMenuMaps(g)
     }
+    val domain = new Properties(dm, "id", "name", "title", "indexno")
+    DomainMenus(domain, groups)
   }
 
   private def convert(one: Menu): Properties = {
@@ -136,9 +113,10 @@ class MenuWS extends ActionSupport with EntitySupport[Menu] {
     }
     menu
   }
-
 }
 
 case class AppMenus(app: Properties, menus: Iterable[Properties])
 
-case class DomainMenus(domain: Properties, appMenus: Iterable[AppMenus], children: mutable.Buffer[DomainMenus])
+case class GroupMenus(group: Properties, appMenus: Iterable[AppMenus])
+
+case class DomainMenus(domain: Properties, groups: Iterable[GroupMenus]);

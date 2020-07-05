@@ -18,14 +18,16 @@
  */
 package org.openurp.platform.config.service.impl
 
-import org.beangle.data.dao.{ EntityDao, OqlBuilder }
-import org.openurp.platform.config.model.{ App, AppType, Domain }
+import org.beangle.data.dao.{EntityDao, OqlBuilder}
+import org.openurp.platform.config.model.{App, AppType, Domain}
 import org.openurp.platform.config.service.AppService
 
 /**
  * @author chaostone
  */
 class AppServiceImpl(entityDao: EntityDao) extends AppService {
+
+  var domainService: DomainService = _
 
   override def getDomain(name: String): Option[Domain] = {
     val query = OqlBuilder.from(classOf[Domain], "d")
@@ -35,30 +37,31 @@ class AppServiceImpl(entityDao: EntityDao) extends AppService {
 
   override def getApp(name: String, secret: String): Option[App] = {
     val query = OqlBuilder.from(classOf[App], "app")
-      .where("app.name=:name and app.secret=:secret", name, secret).cacheable()
-    val apps = entityDao.search(query)
-    initialize(apps)
-    apps.headOption
+      .where("app.name=:name and app.secret=:secret", name, secret)
+      .where("app.domain=:domain", domainService.getDomain)
+      .cacheable()
+    entityDao.search(query).headOption
   }
 
   override def getApp(name: String): Option[App] = {
-    val query = OqlBuilder.from(classOf[App], "app").where("app.name=:name ", name).cacheable()
-    val apps = entityDao.search(query)
-    initialize(apps)
-    apps.headOption
-  }
-
-  private def initialize(apps: Iterable[App]): Unit = {
-    apps foreach { app =>
-      app.domain.title
-    }
+    val query = OqlBuilder.from(classOf[App], "app")
+      .where("app.name=:name ", name)
+      .where("app.domain=:domain", domainService.getDomain)
+      .cacheable()
+    entityDao.search(query).headOption
   }
 
   override def getWebapps: Seq[App] = {
-    entityDao.search(OqlBuilder.from(classOf[App], "app").where("app.appType.name=:typ and app.enabled=true", AppType.Webapp).orderBy("app.indexno"))
+    entityDao.search(OqlBuilder.from(classOf[App], "app")
+      .where("app.appType.name=:typ and app.enabled=true", AppType.Webapp)
+      .where("app.domain=:domain", domainService.getDomain)
+      .orderBy("app.indexno"))
   }
 
   override def getApps: Seq[App] = {
-    entityDao.search(OqlBuilder.from(classOf[App], "app").where("app.enabled=true").orderBy("app.indexno"))
+    entityDao.search(OqlBuilder.from(classOf[App], "app")
+      .where("app.enabled=true")
+      .where("app.domain=:domain", domainService.getDomain)
+      .orderBy("app.indexno"))
   }
 }

@@ -20,14 +20,13 @@ package org.openurp.platform.security.service.impl
 
 import org.beangle.commons.collection.Collections
 import org.beangle.commons.lang.Strings
-import org.beangle.data.dao.{ EntityDao, OqlBuilder }
+import org.beangle.data.dao.{EntityDao, OqlBuilder}
 import org.beangle.data.model.util.Hierarchicals
 import org.beangle.security.authz.Scopes
-import org.openurp.platform.config.model.App
-import org.openurp.platform.security.model.{ FuncPermission, FuncResource, Menu }
+import org.openurp.platform.config.model.{App, Domain}
+import org.openurp.platform.security.model.{FuncPermission, FuncResource, Menu}
 import org.openurp.platform.security.service.MenuService
-import org.openurp.platform.user.model.{ Role, User }
-import org.openurp.platform.config.model.Domain
+import org.openurp.platform.user.model.{Role, User}
 
 /**
  * @author chaostone
@@ -39,7 +38,7 @@ class MenuServiceImpl(val entityDao: EntityDao) extends MenuService {
     getTopMenus(null, Some(app), roles)
   }
 
-  def getTopMenus(domain: Option[Domain], user: User): collection.Seq[Menu] = {
+  def getTopMenus(domain: Domain, user: User): collection.Seq[Menu] = {
     val roles = user.roles.filter(m => m.member).map { m => m.role }
     getTopMenus(domain, None, roles)
   }
@@ -48,7 +47,7 @@ class MenuServiceImpl(val entityDao: EntityDao) extends MenuService {
     getTopMenus(null, Some(app), List(role))
   }
 
-  private def getTopMenus(domain: Option[Domain], app: Option[App], roles: Iterable[Role]): collection.Seq[Menu] = {
+  private def getTopMenus(domain: Domain, app: Option[App], roles: Iterable[Role]): collection.Seq[Menu] = {
     val menuSet = Collections.newSet[Menu]
     roles foreach { role =>
       val query = OqlBuilder.from[Menu](classOf[Menu].getName + " menu," + classOf[FuncPermission].getName + " fp")
@@ -59,10 +58,7 @@ class MenuServiceImpl(val entityDao: EntityDao) extends MenuService {
 
       app match {
         case Some(p) => query.where("menu.app=:app", p)
-        case None =>
-          domain foreach { dm =>
-            query.where("menu.app.domain in (:domains) and menu.app.enabled=true", Hierarchicals.getFamily(dm))
-          }
+        case None => query.where("menu.app.group.domain  =:domains and menu.app.enabled=true", domain)
       }
 
       query.cacheable()
@@ -233,6 +229,7 @@ class MenuServiceImpl(val entityDao: EntityDao) extends MenuService {
       None
     }
   }
+
   private def findFuncResource(app: App, name: String): Option[FuncResource] = {
     val builder = OqlBuilder.from(classOf[FuncResource], "fr").where("fr.app=:app", app)
     builder.where("fr.name=:name", name)

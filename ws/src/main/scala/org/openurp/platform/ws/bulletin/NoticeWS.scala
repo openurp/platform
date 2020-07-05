@@ -25,8 +25,11 @@ import org.beangle.data.dao.{EntityDao, OqlBuilder}
 import org.beangle.webmvc.api.action.{ActionSupport, EntitySupport}
 import org.beangle.webmvc.api.annotation.{mapping, param, response}
 import org.openurp.platform.bulletin.model.{Notice, NoticeStatus}
+import org.openurp.platform.config.service.impl.DomainService
 
 class NoticeWS(entityDao: EntityDao) extends ActionSupport with EntitySupport[Notice] {
+
+  var domainService: DomainService = _
 
   @mapping(value = "{app}/{category}")
   @response
@@ -34,6 +37,7 @@ class NoticeWS(entityDao: EntityDao) extends ActionSupport with EntitySupport[No
     val query = OqlBuilder.from(classOf[Notice], "notice")
     query.join("notice.userCategories", "uc")
     query.where("uc.id=:categoryId", category.toInt)
+    query.where("notice.app.domain=:domain",domainService.getDomain)
     query.where(":now between notice.beginOn and notice.endOn", LocalDate.now)
     query.where("notice.status=:status", NoticeStatus.Passed)
     query.orderBy("notice.sticky desc,notice.publishedAt desc")

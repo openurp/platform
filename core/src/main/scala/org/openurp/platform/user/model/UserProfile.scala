@@ -20,6 +20,7 @@ package org.openurp.platform.user.model
 
 import org.beangle.commons.collection.Collections
 import org.beangle.data.model.LongId
+import org.beangle.data.model.pojo.Named
 import org.openurp.platform.config.model.Domain
 
 import scala.collection.mutable
@@ -27,7 +28,7 @@ import scala.collection.mutable
 /**
  * 用户在某个App上的配置
  */
-class UserProfile extends LongId with Profile {
+class UserProfile extends LongId with Profile with Named {
   var user: User = _
   var domain: Domain = _
   var properties: mutable.Map[Dimension, String] = Collections.newMap[Dimension, String]

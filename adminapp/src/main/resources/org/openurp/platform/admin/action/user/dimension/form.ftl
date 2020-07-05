@@ -7,9 +7,9 @@
   [@b.textfield name="dimension.typeName" value=dimension.typeName! required="true" style="width:300px"/]
   [@b.textfield name="dimension.keyName" value="${dimension.keyName!}" maxlength="50" style="width:50px"/]
   [@b.textfield name="dimension.properties" value="${(dimension.properties)!}" style="width:300x;" maxlength="100" comment="多个属性用,分割"/]
-  [@b.textarea name="dimension.source" value="${(dimension.source)!}" style="width:400px;" maxlength="6000" comment="基本类型，此处可以为空;使用json:/csv:"/]
+  [@b.textarea name="dimension.source"  required="true" value="${(dimension.source)!}" style="width:400px;" maxlength="6000" comment="基本类型，此处可以为空;使用json:/csv:"/]
   [@b.radios name="dimension.multiple"  value=dimension.multiple/]
-  [@b.select2 label="应用领域" name1st="domainId1st" name2nd="domainId2nd"
+  [@b.select2 label="应用领域" name1st="domainId1st" name2nd="domainId2nd" required="true"
      items1st=domains items2nd= dimension.domains
      option="id,title"/]
   [@b.formfoot]

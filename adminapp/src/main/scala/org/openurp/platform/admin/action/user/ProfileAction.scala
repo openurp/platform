@@ -59,6 +59,17 @@ class ProfileAction(profileService: ProfileService) extends RestfulAction[UserPr
   protected override def saveAndRedirect(profile: UserProfile): View = {
     val helper = new ProfileHelper(entityDao, profileService)
     helper.dataResolver = dataResolver
+    //            if (!d.multiple && dvalues.nonEmpty) {
+    //              dvalues.head match {
+    //                case properties: Properties =>
+    //                  if (properties.contains("name")) {
+    //                    pname.append(properties("name"))
+    //                  } else if (properties.contains("title")) {
+    //                    pname.append(properties("title"))
+    //                  }
+    //                case _ =>
+    //              }
+    //            }
     //FIXME
     helper.populateSaveInfo(profile, isAdmin = true, profile.domain)
     if (profile.properties.isEmpty) {

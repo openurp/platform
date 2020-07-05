@@ -27,7 +27,6 @@ import org.beangle.data.model.pojo.{ Enabled, Hierarchical, Named, Remark, Updat
 /**
  * @author chaostone
  */
-
 class Group extends IntId with Named with Updated with Enabled with Hierarchical[Group] with Profile with Principal with Remark {
   var properties: collection.mutable.Map[Dimension, String] = new collection.mutable.HashMap[Dimension, String]
   var creator: User = _

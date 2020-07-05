@@ -142,7 +142,7 @@ class RoleAction(val roleService: RoleService, val userService: UserService) ext
     helper.dataResolver = dataResolver
     val role = entityDao.get(classOf[Role], intId("role"))
     val app = entityDao.get(classOf[App], intId("app"))
-    helper.populateSaveInfo(role, userService.isRoot(me, app.name), app.domain)
+    helper.populateSaveInfo(role, userService.isRoot(me, app.name), app.group.domain)
     entityDao.saveOrUpdate(role)
     redirect("profile", "info.save.success")
   }

@@ -19,19 +19,23 @@
 package org.openurp.platform.ws.security.data
 
 import org.beangle.commons.collection.Properties
-import org.beangle.data.dao.OqlBuilder
-import org.beangle.data.dao.EntityDao
-import org.beangle.webmvc.api.action.{ ActionSupport, EntitySupport }
-import org.beangle.webmvc.api.annotation.{ param, response }
+import org.beangle.data.dao.{EntityDao, OqlBuilder}
+import org.beangle.webmvc.api.action.{ActionSupport, EntitySupport}
+import org.beangle.webmvc.api.annotation.{param, response}
+import org.openurp.platform.config.service.impl.DomainService
 import org.openurp.platform.security.model.DataResource
 
 class ResourceWS extends ActionSupport with EntitySupport[DataResource] {
 
   var entityDao: EntityDao = _
 
+  var domainService: DomainService = _
+
   @response
   def info(@param("name") name: String): Properties = {
-    val query = OqlBuilder.from(classOf[DataResource], "fr").where("fr.name=:name", name)
+    val query = OqlBuilder.from(classOf[DataResource], "dr")
+      .where("dr.name=:name", name)
+      .where("dr.domain=:domain", domainService.getDomain)
     val resources = entityDao.search(query)
     if (resources.nonEmpty) new Properties(resources.head, "id", "name", "title", "scope")
     else new Properties

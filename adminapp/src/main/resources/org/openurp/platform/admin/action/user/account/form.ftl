@@ -10,7 +10,7 @@
     [@b.radios name="user.locked" value=user.locked items="1:锁定,0:解锁"/]
     [@b.password label="user.password" name="password" value="" maxlength="20" showStrength="true"/]
     [@b.startend label="user.beginOn-endOn" name="user.beginOn,user.endOn" required="true,false" start=user.beginOn end=user.endOn format="date"/]
-    [@b.datepicker name="user.passwordExpiredOn" value=user.passwordExpiredOn format="date"/]
+    [@b.date name="user.passwordExpiredOn" value=user.passwordExpiredOn format="date"/]
     [@b.textarea cols="50" rows="1" name="user.remark" value=user.remark! maxlength="50"/]
     [@b.formfoot][@b.reset/]&nbsp;&nbsp;[@b.submit value="action.submit"/][/@]
 [/@]

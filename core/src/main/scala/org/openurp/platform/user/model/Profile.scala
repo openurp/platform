@@ -29,6 +29,8 @@ object Property {
  */
 trait Profile {
 
+  def name: String
+  
   def properties: collection.mutable.Map[Dimension, String]
 
   def setProperty(field: Dimension, value: String): Unit = {

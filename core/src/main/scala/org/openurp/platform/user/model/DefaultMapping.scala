@@ -19,11 +19,13 @@
 package org.openurp.platform.user.model
 
 import org.beangle.data.orm.{IdGenerator, MappingModule}
+import org.openurp.platform.config.model.DefaultMapping.defaultIdGenerator
 
 object DefaultMapping extends MappingModule {
 
   def binding(): Unit = {
-    defaultIdGenerator("auto_increment")
+    defaultIdGenerator(classOf[Int], IdGenerator.AutoIncrement)
+    defaultIdGenerator(classOf[Long], IdGenerator.AutoIncrement)
     defaultCache("openurp.platform.security", "read-write")
 
     bind[Dimension].declare { e =>
