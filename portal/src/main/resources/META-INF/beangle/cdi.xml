@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<cdi>
+  <container name="web">
+    <module class="org.openurp.platform.portal.DefaultModule"/>
+  </container>
+
+  <container>
+    <module class="org.openurp.app.cas.DefaultModule"/>
+    <module class="org.openurp.platform.portal.DaoModule"/>
+    <module class="org.openurp.platform.user.service.DefaultModule"/>
+    <module class="org.openurp.platform.config.service.DefaultModule"/>
+    <module class="org.openurp.platform.security.service.DefaultModule"/>
+  </container>
+</cdi>

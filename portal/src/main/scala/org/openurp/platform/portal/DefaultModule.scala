@@ -16,10 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.openurp.platform.config.service.impl
+package org.openurp.platform.portal
 
-import org.openurp.platform.config.model.Domain
+import org.beangle.cdi.bind.BindModule
+import org.openurp.platform.portal.action.IndexAction
 
-trait DomainService {
-   def getDomain:Domain
+class DefaultModule extends BindModule {
+
+  protected override def binding(): Unit = {
+    bind(classOf[IndexAction])
+  }
 }

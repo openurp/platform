@@ -8,7 +8,7 @@
   </parent>
   <groupId>org.openurp.platform</groupId>
   <artifactId>openurp-platform-parent</artifactId>
-  <version>0.4.2-SNAPSHOT</version>
+  <version>0.5.0</version>
   <packaging>pom</packaging>
   <name>OpenURP Platform Parent</name>
 
@@ -19,6 +19,7 @@
     <module>adminapp</module>
     <module>userapp</module>
     <module>casapp</module>
+    <module>portal</module>
     <module>indexapp</module>
   </modules>
 
