@@ -1,5 +1,5 @@
 [#ftl]
-  [@b.nav class="nav nav-tabs nav-tabs-compact"]
+  [@b.nav class="nav-tabs nav-tabs-compact"]
     [@b.navitem href="meta"]文件信息[/@]
     [@b.navitem href="profile"]业务配置[/@]
   [/@]

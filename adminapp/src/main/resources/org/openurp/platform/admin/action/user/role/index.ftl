@@ -1,14 +1,14 @@
 [#ftl]
 [@b.head/]
 [#include "../user-nav.ftl"/]
-<table  class="indexpanel">
-  <tr>
-    <td class="index_view">
+<div class="search-container">
+ <div class="search-panel">
     [@b.form name="roleSearchForm"  action="!search" target="rolelist" title="ui.searchForm" theme="search"]
       [@b.textfields names="role.name;common.name,role.creator.name;common.creator"/]
     [/@]
-    </td>
-    <td class="index_content">[@b.div id="rolelist" href="!search?orderBy=role.indexno" /]</td>
-  </tr>
-</table>
+ </div>
+ <div class="search-list">
+  [@b.div id="rolelist" href="!search?orderBy=role.indexno" /]
+ </div>
+</div>
 [@b.foot/]

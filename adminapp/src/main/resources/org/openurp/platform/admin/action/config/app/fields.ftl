@@ -2,7 +2,7 @@
 [@b.textfield name="app.name" label="名称" value="${app.name!}" required="true" maxlength="200"/]
 [@b.textfield name="app.title" label="标题" value="${app.title!}" required="true" maxlength="200"/]
 [@b.select name="app.appType.id" label="类型" items=appTypes option="id,title" value=app.appType required="true" /]
-[@b.select name="app.domain.id" label="领域" value="${(app.domain.id)!}" option="id,title" required="true" items=domains/]
+[@b.select name="app.group.id" label="分组" value="${(app.group.id)!}" option="id,title" required="true" items=groups/]
 [@b.textfield name="app.base" label="上下文地址" value="${app.base!}" required="true" maxlength="200" style="width:300px"/]
 [@b.textfield name="app.url" label="入口" value="${app.url!}" required="true" maxlength="200" style="width:300px"/]
 [@b.textfield name="app.navStyle" label="导航风格" value=app.navStyle required="false" /]
@@ -23,7 +23,7 @@
         [#list app.datasources as v]
           <tr>
             <td>${v.db.name}</td>
-            <td><input name="ds${v.db.id}.name" value="${v.name!}" style="width:40px" maxlength="40"/></td>
+            <td><input name="ds${v.db.id}.name" value="${v.name!}" style="width:60px" maxlength="40"/></td>
             <td>
               <select name="ds${v.db.id}.credential.id" style="width:100px">
                  [#list credentials as credential]
@@ -37,12 +37,12 @@
                <input class="maximumPoolSize" name="ds${v.db.id}.maximumPoolSize" value="${v.maximumPoolSize}" style="width:60px"/>
             </td>
             <td><input name="ds${v.db.id}.remark" value="${v.remark!}" style="width:100px"/></td>
-            <td><button class="delDataSourceBtn">删除</button></td>
+            <td><button class="delDataSourceBtn btn btn-sm btn-danger"><i class="fas fa-minus"></i>删除</button></td>
            </tr>
         [/#list]
       </tbody>
     </table>
-    <p><button class="addBtn">添加</button><p>
+    <p><button class="addBtn btn btn-sm btn-info"><i class="fas fa-plus"></i>添加</button><p>
   </div>
 [/@]
 [@b.radios name="app.enabled" label="是否可用"  value=app.enabled required="true" /]
@@ -68,7 +68,7 @@
             '<td><select name="ds'+id+'.credential.id" style="width:100px">[#list credentials as c]<option value="${c.id}">${c.name}</option>[/#list]</select></td>'+
             '<td><input class="maximumPoolSize" name="ds'+id+'.maximumPoolSize" style="width:60px"/></td>'+
             '<td><input name="ds'+id+'.remark" style="width:100px"/></td>'+
-            '<td><button class="delDataSourceBtn">删除</button></td></tr>');
+            '<td><button class="delDataSourceBtn btn btn-sm btn-danger"><i class="fas fa-minus"></i>删除</button></td></tr>');
         $(".dstable").append(tr);
         tr.hide().fadeIn();
     });

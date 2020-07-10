@@ -1,8 +1,7 @@
 [#ftl]
 [@b.head/]
-<table class="indexpanel">
-  <tr>
-    <td class="index_view">
+<div class="search-container">
+ <div class="search-panel">
     [@b.form name="noticeSearchForm" action="!search" target="noticelist" title="ui.searchForm" theme="search"]
       [@b.textfields names="notice.title;标题"/]
       [@b.select label="用户类别" name="userCategory.id" items=userCategories  empty="..."/]
@@ -14,9 +13,9 @@
       [@b.select label="包含附件" name="attached" items={"1":"是","0":"否"} empty="..."/]
       <input type="hidden" name="orderBy" value="notice.publishedAt desc"/>
     [/@]
-    </td>
-    <td class="index_content">[@b.div id="noticelist" href="!search?orderBy=notice.createdAt desc"/]
-    </td>
-  </tr>
-</table>
+ </div>
+ <div class="search-list">
+   [@b.div id="noticelist" href="!search?orderBy=notice.createdAt desc"/]
+ </div>
+</div>
 [@b.foot/]
