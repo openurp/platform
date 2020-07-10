@@ -38,7 +38,6 @@ class AppWS(userService: UserService, entityDao: EntityDao) extends ActionSuppor
   @response
   @mapping("{userCode}")
   def index(@param("userCode") userCode: String): collection.Seq[Properties] = {
-
     userService.get(userCode) match {
       case Some(user) =>
         val domain = domainService.getDomain

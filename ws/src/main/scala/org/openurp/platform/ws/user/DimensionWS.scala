@@ -22,6 +22,7 @@ import org.beangle.commons.collection.Properties
 import org.beangle.data.dao.{EntityDao, OqlBuilder}
 import org.beangle.webmvc.api.action.ActionSupport
 import org.beangle.webmvc.api.annotation.{mapping, param, response}
+import org.openurp.platform.config.service.impl.DomainService
 import org.openurp.platform.user.model.Dimension
 
 /**
@@ -29,14 +30,20 @@ import org.openurp.platform.user.model.Dimension
  */
 class DimensionWS(entityDao: EntityDao) extends ActionSupport {
 
+  var domainService: DomainService = _
+
   @response
   @mapping("{name}")
   def index(@param("name") name: String): Properties = {
-    val query = OqlBuilder.from(classOf[Dimension], "d").where("d.name=:name", name).cacheable()
+    val query = OqlBuilder.from(classOf[Dimension], "d")
+      .where("d.name=:name", name)
+      .where("d.org=:org", domainService.getOrg)
+      .cacheable()
     val dimensions = entityDao.search(query)
-    if (dimensions.isEmpty) new Properties()
-    else {
-      val dimension = dimensions(0)
+    if (dimensions.isEmpty) {
+      new Properties()
+    } else {
+      val dimension = dimensions.head
       new Properties(dimension, "id", "name", "title", "source", "multiple", "required", "typeName", "keyName", "properties")
     }
   }

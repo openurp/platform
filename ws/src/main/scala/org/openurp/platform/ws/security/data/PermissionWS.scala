@@ -24,7 +24,7 @@ import org.beangle.webmvc.api.action.ActionSupport
 import org.beangle.webmvc.api.annotation.{mapping, param, response}
 import org.openurp.platform.config.service.AppService
 import org.openurp.platform.security.model.DataPermission
-import org.openurp.platform.user.model.User
+import org.openurp.platform.user.service.UserService
 
 /**
  * @author chaostone
@@ -32,12 +32,12 @@ import org.openurp.platform.user.model.User
 class PermissionWS(entityDao: EntityDao) extends ActionSupport {
 
   var appService: AppService = _
+  var userService: UserService = _
 
   @response
   @mapping("user/{userCode}")
   def index(@param("app") appName: String, @param("userCode") userCode: String, @param("data") dataName: String): Any = {
-    val userQuery = OqlBuilder.from(classOf[User], "u").where("u.code =:userCode", userCode)
-    val users = entityDao.search(userQuery)
+    val users = userService.get(userCode)
     val apps = appService.getApp(appName)
     if (users.isEmpty || apps.isEmpty) {
       List.empty
