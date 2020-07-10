@@ -23,15 +23,20 @@ import java.time.Instant
 import org.beangle.commons.collection.Collections
 import org.beangle.data.dao.{EntityDao, OqlBuilder}
 import org.beangle.data.model.Entity
+import org.openurp.platform.config.service.impl.DomainService
 import org.openurp.platform.user.model.MemberShip.{Granter, Manager, Member, Ship}
 import org.openurp.platform.user.model._
 import org.openurp.platform.user.service.UserService
 
 class UserServiceImpl(val entityDao: EntityDao) extends UserService {
 
+  var domainService: DomainService = _
+
   def get(code: String): Option[User] = {
-    val cache = OqlBuilder.from(classOf[User], "u").where("u.code=:code", code).cacheable()
-    entityDao.search(cache).headOption
+    val query = OqlBuilder.from(classOf[User], "u")
+    query.where("u.org=:org", domainService.getOrg)
+    query.where("u.code=:code", code)
+    entityDao.search(query).headOption
   }
 
   def get(id: Long): User = {

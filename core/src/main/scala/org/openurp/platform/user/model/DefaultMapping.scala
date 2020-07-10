@@ -19,7 +19,6 @@
 package org.openurp.platform.user.model
 
 import org.beangle.data.orm.{IdGenerator, MappingModule}
-import org.openurp.platform.config.model.DefaultMapping.defaultIdGenerator
 
 object DefaultMapping extends MappingModule {
 
@@ -34,6 +33,7 @@ object DefaultMapping extends MappingModule {
       e.typeName is notnull
       e.keyName is length(20)
       e.properties is length(100)
+      index("idx_dimension_name", true, e.org, e.name)
     }
 
     bind[RoleMember].declare { e =>
@@ -45,15 +45,17 @@ object DefaultMapping extends MappingModule {
       e.children is depends("parent")
       e.members is depends("role")
       e.properties is eleLength(2000)
+      index("idx_role_name", true, e.domain, e.name)
     }
 
     bind[User].declare { e =>
-      e.code is(length(30), unique)
+      e.code is length(30)
       e.getName is length(100)
       e.remark is length(100)
       e.roles is depends("user")
       e.groups is depends("user")
       e.properties is eleLength(2000)
+      index("idx_user_code", true, e.org, e.code)
     }
 
     bind[Credential].declare { e =>
@@ -61,11 +63,14 @@ object DefaultMapping extends MappingModule {
       index("idx_credential_user", true, e.user)
     }
 
-    bind[PasswordConfig]
+    bind[PasswordConfig].declare { e =>
+      index("idx_password_config", true, e.org)
+    }
 
     bind[UserCategory].declare { e =>
       e.code is(length(30), unique)
       e.name is length(100)
+      index("idx_user_category", true, e.org, e.name)
     }
 
     bind[UserProfile].declare { e =>
@@ -79,6 +84,7 @@ object DefaultMapping extends MappingModule {
       e.children is depends("parent")
       e.members is depends("group")
       e.properties is eleLength(2000)
+      index("idx_group", true, e.org, e.name)
     }
 
     bind[Avatar].declare { e =>

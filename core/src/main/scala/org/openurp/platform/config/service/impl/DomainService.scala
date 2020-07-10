@@ -18,8 +18,9 @@
  */
 package org.openurp.platform.config.service.impl
 
-import org.openurp.platform.config.model.Domain
+import org.openurp.platform.config.model.{Domain, Org}
 
 trait DomainService {
-   def getDomain:Domain
+  def getDomain: Domain
+  def getOrg: Org
 }

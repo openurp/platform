@@ -27,6 +27,7 @@ import org.beangle.data.model.pojo.{Named, Updated}
  * 用于数据源认证
  */
 class Credential extends IntId with Named with Updated {
+  var org: Org = _
   var username: String = _
   var password: String = _
   var expiredAt: Instant = _

@@ -24,4 +24,5 @@ import org.beangle.data.model.pojo.Named
 class Domain extends IntId with Named {
   var title: String = _
   var hostname: String = _
+  var org: Org = _
 }

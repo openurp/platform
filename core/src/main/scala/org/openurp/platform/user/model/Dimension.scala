@@ -21,12 +21,13 @@ package org.openurp.platform.user.model
 import org.beangle.commons.collection.Collections
 import org.beangle.data.model.IntId
 import org.beangle.data.model.pojo.Named
-import org.openurp.platform.config.model.Domain
+import org.openurp.platform.config.model.{Domain, Org}
 
 /**
  * @author chaostone
  */
 class Dimension extends IntId with Named {
+  var org: Org = _
   var title: String = _
   var source: String = _
   var multiple: Boolean = _

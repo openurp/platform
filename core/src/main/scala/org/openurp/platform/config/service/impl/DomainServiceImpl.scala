@@ -21,22 +21,31 @@ package org.openurp.platform.config.service.impl
 import org.beangle.commons.bean.Initializing
 import org.beangle.data.dao.EntityDao
 import org.openurp.app.Urp
-import org.openurp.platform.config.model.Domain
+import org.openurp.platform.config.model.{Domain, Org}
 
 class DomainServiceImpl extends DomainService with Initializing {
   var entityDao: EntityDao = _
 
   var domain: Domain = _
 
+  var org: Org = _
+
   override def getDomain: Domain = {
     domain
+  }
+
+  override def getOrg: Org = {
+    org
   }
 
   override def init(): Unit = {
     val rs = entityDao.findBy(classOf[Domain], "hostname", List(Urp.hostname))
     rs.headOption match {
-      case Some(d) => domain = d
-      case None => throw new RuntimeException("Cannot find domain with hostname :" + Urp.hostname)
+      case Some(d) =>
+        domain = d
+        org = entityDao.get(classOf[Org], domain.org.id)
+      case None =>
+        throw new RuntimeException("Cannot find domain with hostname :" + Urp.hostname)
     }
   }
 }

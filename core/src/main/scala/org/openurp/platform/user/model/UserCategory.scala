@@ -19,7 +19,8 @@
 package org.openurp.platform.user.model
 
 import org.beangle.data.model.IntId
-import org.beangle.data.model.pojo.{ Coded, Named, Remark, TemporalOn, Updated }
+import org.beangle.data.model.pojo.{Coded, Named, Remark, TemporalOn, Updated}
+import org.openurp.platform.config.model.Org
 
 /**
  * 用户分类
@@ -27,6 +28,7 @@ import org.beangle.data.model.pojo.{ Coded, Named, Remark, TemporalOn, Updated }
  */
 class UserCategory extends IntId with Coded with TemporalOn with Named with Updated with Remark {
   var enName: String = _
+  var org: Org = _
   override def toString = {
     name
   }

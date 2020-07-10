@@ -20,11 +20,12 @@ package org.openurp.platform.user.model
 
 import java.security.Principal
 import java.time.LocalDate
-import java.{ util => ju }
+import java.{util => ju}
 
 import org.beangle.commons.collection.Collections
 import org.beangle.data.model.LongId
-import org.beangle.data.model.pojo.{ Coded, Enabled, Named, Remark, TemporalOn, Updated }
+import org.beangle.data.model.pojo.{Coded, Enabled, Named, Remark, TemporalOn, Updated}
+import org.openurp.platform.config.model.Org
 
 /**
  * @author chaostone
@@ -36,7 +37,7 @@ class User extends LongId with Coded with Named with Updated with TemporalOn wit
   var groups = Collections.newBuffer[GroupMember]
   var properties = Collections.newMap[Dimension, String]
   var category: UserCategory = _
-
+  var org: Org = _
   var avatarId: Option[String] = None
 
   def accountExpired: Boolean = {

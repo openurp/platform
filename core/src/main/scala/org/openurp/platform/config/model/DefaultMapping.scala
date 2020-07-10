@@ -42,21 +42,25 @@ object DefaultMapping extends MappingModule {
       e.remark is length(200)
       e.indexno is length(50)
       e.datasources is depends("app")
+      index("idx_app", true, e.domain, e.name)
     }
 
     bind[AppGroup].declare { e =>
-       e.name is length(100)
+      e.name is length(100)
+      index("idx_app_group", true, e.domain, e.name)
     }
 
     bind[Credential].declare { e =>
       e.username is length(100)
       e.password is length(200)
       e.name is length(100)
+      index("idx_credential", true, e.org, e.name)
     }
 
     bind[DataSource].declare { e =>
       e.name is length(100)
       e.remark is length(200)
+      index("idx_datasource", true, e.app, e.name)
     }
 
     bind[Db].declare { e =>
@@ -65,12 +69,14 @@ object DefaultMapping extends MappingModule {
       e.databaseName & e.serverName is length(100)
       e.url is length(200)
       e.remark is length(200)
+      index("idx_db", true, e.org, e.name)
     }
 
     bind[Domain].declare { e =>
       e.name is(length(100), unique)
-      e.hostname is (length(100),unique)
+      e.hostname is(length(100), unique)
       e.title is length(200)
+      index("idx_domain", true, e.org, e.hostname)
     }
 
     bind[AppType]
