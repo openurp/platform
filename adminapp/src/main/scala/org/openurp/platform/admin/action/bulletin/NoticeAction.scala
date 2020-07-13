@@ -29,28 +29,26 @@ import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.platform.bulletin.model._
 import org.openurp.platform.bulletin.service.DocService
 import org.openurp.platform.config.model.{App, AppType}
+import org.openurp.platform.config.service.{AppService, DomainService}
 import org.openurp.platform.user.model.{User, UserCategory}
+import org.openurp.platform.user.service.UserService
 
 class NoticeAction extends RestfulAction[Notice] {
 
-  var docService:DocService=_
+  var docService: DocService = _
+  var userService: UserService = _
+  var domainService: DomainService = _
+  var appService: AppService = _
 
   override protected def indexSetting(): Unit = {
-    put("userCategories", entityDao.getAll(classOf[UserCategory]))
-    put("apps", getWebApps)
+    put("userCategories", userService.getCategories())
+    put("apps", appService.getWebapps)
   }
 
-  private def getWebApps: Iterable[App] = {
-    val query = OqlBuilder.from(classOf[App], "app").where("app.enabled =true")
-    query.where("app.appType.name=:appType", AppType.Webapp)
-    query.orderBy("app.indexno")
-    query.cacheable()
-    entityDao.search(query)
-  }
 
   override protected def editSetting(entity: Notice): Unit = {
-    put("userCategories", entityDao.getAll(classOf[UserCategory]))
-    put("apps", getWebApps)
+    put("userCategories", userService.getCategories())
+    put("apps", appService.getWebapps)
     if (null == entity.status) {
       entity.status = NoticeStatus.Draft
     }
@@ -58,13 +56,14 @@ class NoticeAction extends RestfulAction[Notice] {
 
 
   override protected def removeAndRedirect(notices: Seq[Notice]): View = {
-    val docs = notices.map(_.docs).flatten
+    val docs = notices.flatMap(_.docs)
     entityDao.remove(notices, docs)
     redirect("search", "info.remove.success")
   }
 
   override protected def getQueryBuilder: OqlBuilder[Notice] = {
     val builder = super.getQueryBuilder
+    builder.where("notice.app.domain=:domain", domainService.getDomain)
     getInt("userCategory.id") foreach { categoryId =>
       builder.join("notice.userCategories", "uc")
       builder.where("uc.id=:userCategoryId", categoryId)
@@ -100,7 +99,7 @@ class NoticeAction extends RestfulAction[Notice] {
       doc.uploadBy = notice.operator
       doc.userCategories ++= notice.userCategories
       doc.updatedAt = Instant.now
-      docService.save(doc,docFile.getSubmittedFileName, docFile.getInputStream)
+      docService.save(doc, docFile.getSubmittedFileName, docFile.getInputStream)
       notice.docs += doc
     }
     notice.status = NoticeStatus.Submited

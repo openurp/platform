@@ -28,7 +28,9 @@ object DefaultMapping extends MappingModule {
       e.detail is length(1000)
     }
 
-    bind[SessionConfig]
+    bind[SessionConfig].declare { e =>
+      index("idx_session_config", true, e.domain, e.category)
+    }
   }
 
 }

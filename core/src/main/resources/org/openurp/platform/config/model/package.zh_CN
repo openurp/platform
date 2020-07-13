@@ -35,5 +35,5 @@ Db.driver=驱动
 Db.serverName=服务器地址
 Db.url=Java数据库连接字符串
 
-Domain=业务领域
+Domain=业务系统
 Domain.title=标题

@@ -18,9 +18,10 @@
  */
 package org.openurp.platform.admin.action.user
 
+import org.beangle.data.dao.OqlBuilder
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
-import org.openurp.platform.config.model.Domain
+import org.openurp.platform.config.service.DomainService
 import org.openurp.platform.user.model.Dimension
 
 /**
@@ -29,23 +30,18 @@ import org.openurp.platform.user.model.Dimension
  */
 class DimensionAction extends RestfulAction[Dimension] {
 
-  override def editSetting(dimension: Dimension): Unit = {
+  var domainService: DomainService = _
 
-    val domains = entityDao.getAll(classOf[Domain]).toBuffer.subtractAll(dimension.domains)
-    put("domains", domains)
+  override protected def getQueryBuilder: OqlBuilder[Dimension] = {
+    val builder = super.getQueryBuilder
+    builder.where("dimension.domain=:domain", domainService.getDomain)
+    builder
   }
 
   protected override def saveAndRedirect(dimension: Dimension): View = {
-    if (entityDao.duplicate(classOf[Dimension], dimension.id, "name", dimension.name)) {
-      addError("名称重复")
-      return forward(to(this, "edit"))
-    }
-
-    dimension.domains = new collection.mutable.ListBuffer[Domain]
-    val domainId2nd = getAll("domainId2nd", classOf[Int])
-    dimension.domains ++= entityDao.find(classOf[Domain], domainId2nd)
-    if(dimension.source.contains("\r")){
-      dimension.source=dimension.source.replace("\r","");
+    dimension.domain = domainService.getDomain
+    if (dimension.source.contains("\r")) {
+      dimension.source = dimension.source.replace("\r", "");
     }
     entityDao.saveOrUpdate(dimension)
     redirect("search", "info.save.success")

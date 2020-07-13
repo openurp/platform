@@ -26,7 +26,7 @@ import org.beangle.webmvc.api.view.View
 import org.openurp.app.Urp
 import org.openurp.app.web.NavContext
 import org.openurp.platform.bulletin.model.{Doc, Notice}
-import org.openurp.platform.config.service.impl.DomainService
+import org.openurp.platform.config.service.DomainService
 import org.openurp.platform.user.model.User
 
 class IndexAction extends ActionSupport with ServletSupport {
@@ -39,7 +39,6 @@ class IndexAction extends ActionSupport with ServletSupport {
     val ctx = NavContext.get(request)
     put("nav", ctx)
 
-    domainService.getDomain
     put("domain", domainService.getDomain)
     put("urp", Urp)
     forward()
@@ -47,24 +46,26 @@ class IndexAction extends ActionSupport with ServletSupport {
 
   def welcome(): View = {
     val me: User = entityDao.findBy(classOf[User], "code", List(Securities.user)).head
-    val docQuery = OqlBuilder.from(classOf[Doc], "doc")
-    docQuery.join("doc.userCategories", "uc")
-    docQuery.where("uc.id=:category", me.category.id)
-    docQuery.where("doc.archived=false")
-    docQuery.limit(1, 10)
-    docQuery.orderBy("doc.updatedAt desc")
-    val docs = entityDao.search(docQuery)
-
     val noticeQuery = OqlBuilder.from(classOf[Notice], "notice")
     noticeQuery.join("notice.userCategories", "uc")
     noticeQuery.where("uc.id=:category", me.category.id)
     noticeQuery.where("notice.archived=false")
+    noticeQuery.where("notice.app.domain=:domain", domainService.getDomain)
     noticeQuery.limit(1, 10)
     noticeQuery.orderBy("notice.publishedAt desc")
     val notices = entityDao.search(noticeQuery)
 
-    put("docs", docs)
+    val docQuery = OqlBuilder.from(classOf[Doc], "doc")
+    docQuery.join("doc.userCategories", "uc")
+    docQuery.where("uc.id=:category", me.category.id)
+    docQuery.where("doc.archived=false")
+    docQuery.where("doc.app.domain=:domain", domainService.getDomain)
+    docQuery.limit(1, 10)
+    docQuery.orderBy("doc.updatedAt desc")
+    val docs = entityDao.search(docQuery)
+
     put("notices", notices)
+    put("docs", docs)
     put("user", me)
     put("webappBase", Urp.webapp)
     forward()

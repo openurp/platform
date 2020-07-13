@@ -23,7 +23,8 @@ import org.beangle.commons.lang.Strings
 import org.beangle.data.dao.{EntityDao, OqlBuilder}
 import org.beangle.data.model.util.Hierarchicals
 import org.beangle.security.authz.Scopes
-import org.openurp.platform.config.model.{App, Domain}
+import org.openurp.platform.config.model.App
+import org.openurp.platform.config.service.DomainService
 import org.openurp.platform.security.model.{FuncPermission, FuncResource, Menu}
 import org.openurp.platform.security.service.MenuService
 import org.openurp.platform.user.model.{Role, User}
@@ -33,21 +34,23 @@ import org.openurp.platform.user.model.{Role, User}
  */
 class MenuServiceImpl(val entityDao: EntityDao) extends MenuService {
 
+  var domainService: DomainService = _
+
   def getTopMenus(app: App, user: User): collection.Seq[Menu] = {
     val roles = user.roles.filter(m => m.member).map { m => m.role }
-    getTopMenus(null, Some(app), roles)
+    getTopMenus(Some(app), roles)
   }
 
-  def getTopMenus(domain: Domain, user: User): collection.Seq[Menu] = {
+  def getTopMenus(user: User): collection.Seq[Menu] = {
     val roles = user.roles.filter(m => m.member).map { m => m.role }
-    getTopMenus(domain, None, roles)
+    getTopMenus(None, roles)
   }
 
   def getTopMenus(app: App, role: Role): collection.Seq[Menu] = {
-    getTopMenus(null, Some(app), List(role))
+    getTopMenus(Some(app), List(role))
   }
 
-  private def getTopMenus(domain: Domain, app: Option[App], roles: Iterable[Role]): collection.Seq[Menu] = {
+  private def getTopMenus(app: Option[App], roles: Iterable[Role]): collection.Seq[Menu] = {
     val menuSet = Collections.newSet[Menu]
     roles foreach { role =>
       val query = OqlBuilder.from[Menu](classOf[Menu].getName + " menu," + classOf[FuncPermission].getName + " fp")
@@ -56,10 +59,8 @@ class MenuServiceImpl(val entityDao: EntityDao) extends MenuService {
         .where("fp.resource=menu.entry")
         .select("menu")
 
-      app match {
-        case Some(p) => query.where("menu.app=:app", p)
-        case None => query.where("menu.app.group.domain  =:domains and menu.app.enabled=true", domain)
-      }
+      app foreach { p => query.where("menu.app=:app", p) }
+      query.where("menu.app.domain =:domain and menu.app.enabled=true", domainService.getDomain)
 
       query.cacheable()
 
@@ -179,19 +180,19 @@ class MenuServiceImpl(val entityDao: EntityDao) extends MenuService {
         menu.indexno = indexno
         menu.app = app
 
-        val name = (m \ "@name")
+        val name = m \ "@name"
         if (name.isEmpty) {
           menu.name = menu.title
         } else {
           menu.name = name.text.trim
         }
-        val params = (m \ "@params")
+        val params = m \ "@params"
         if (params.isEmpty || Strings.isBlank(params.text)) {
           menu.params = None
         } else {
           menu.params = Some(params.text.trim)
         }
-        val enabled = (m \ "@enabled")
+        val enabled = m \ "@enabled"
         if (enabled.isEmpty) {
           menu.enabled = true
         } else {
@@ -212,8 +213,8 @@ class MenuServiceImpl(val entityDao: EntityDao) extends MenuService {
       } else {
         menu = menus.head
       }
-      val children = (m \ "children")
-      if (!children.isEmpty) {
+      val children = m \ "children"
+      if (children.nonEmpty) {
         parseMenu(app, Some(menu), children.head)
       }
     }
@@ -222,23 +223,13 @@ class MenuServiceImpl(val entityDao: EntityDao) extends MenuService {
   private def findMenu(app: App, indexno: String, title: String): Option[Menu] = {
     val builder = OqlBuilder.from(classOf[Menu], "m").where("m.app=:app", app)
     builder.where("m.indexno=:indexno and m.title=:title", indexno, title)
-    val res = entityDao.search(builder)
-    if (res.size >= 1) {
-      Some(res.head)
-    } else {
-      None
-    }
+    entityDao.search(builder).headOption
   }
 
   private def findFuncResource(app: App, name: String): Option[FuncResource] = {
     val builder = OqlBuilder.from(classOf[FuncResource], "fr").where("fr.app=:app", app)
     builder.where("fr.name=:name", name)
-    val res = entityDao.search(builder)
-    if (res.size >= 1) {
-      Some(res.head)
-    } else {
-      None
-    }
+    entityDao.search(builder).headOption
   }
 
   private def findOrCreateFuncResource(app: App, name: String, title: String, scope: String, enabled: String): FuncResource = {

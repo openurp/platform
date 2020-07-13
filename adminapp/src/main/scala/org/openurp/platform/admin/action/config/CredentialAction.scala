@@ -18,9 +18,26 @@
  */
 package org.openurp.platform.admin.action.config
 
+import org.beangle.data.dao.OqlBuilder
+import org.beangle.webmvc.api.annotation.ignore
+import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
-import org.openurp.platform.config.model.{Credential}
+import org.openurp.platform.config.model.Credential
+import org.openurp.platform.config.service.DomainService
 
-class CredentialAction  extends RestfulAction[Credential] {
+class CredentialAction extends RestfulAction[Credential] {
 
+  var domainService: DomainService = _
+
+  @ignore
+  override protected def saveAndRedirect(credential: Credential): View = {
+    credential.domain = domainService.getDomain
+    super.saveAndRedirect(credential)
+  }
+
+  override protected def getQueryBuilder: OqlBuilder[Credential] = {
+    val builder = super.getQueryBuilder
+    builder.where("credential.domain=:domain", domainService.getDomain)
+    builder
+  }
 }

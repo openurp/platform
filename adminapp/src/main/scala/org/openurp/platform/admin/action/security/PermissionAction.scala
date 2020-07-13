@@ -28,7 +28,7 @@ import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.app.UrpApp
 import org.openurp.platform.admin.helper.AppHelper
 import org.openurp.platform.config.model.App
-import org.openurp.platform.config.service.AppService
+import org.openurp.platform.config.service.{AppService, DomainService}
 import org.openurp.platform.security.model.{FuncPermission, FuncResource, Menu}
 import org.openurp.platform.security.service.{FuncPermissionService, MenuService}
 import org.openurp.platform.user.model.{Role, User}
@@ -44,6 +44,7 @@ class PermissionAction extends RestfulAction[FuncPermission] {
   var funcPermissionService: FuncPermissionService = _
   var userService: UserService = _
   var appService: AppService = _
+  var domainService: DomainService = _
 
   /**
    * 根据菜单配置来分配权限
@@ -52,11 +53,13 @@ class PermissionAction extends RestfulAction[FuncPermission] {
   override def edit(@param("role.id") id: String): View = {
     val roleId = Numbers.toInt(id)
     val role = entityDao.get(classOf[Role], roleId)
-    val user = entityDao.findBy(classOf[User], "code", List(Securities.user)).head
+    val user = userService.get(Securities.user).head
     put("manager", user)
     val isPlatformRoot = userService.isRoot(user, UrpApp.name)
     val mngRoles = new collection.mutable.ListBuffer[Role]
-    val roles = entityDao.search(OqlBuilder.from(classOf[Role], "r").orderBy("r.indexno"))
+    val roleQuery = OqlBuilder.from(classOf[Role], "r").orderBy("r.indexno")
+    roleQuery.where("r.domain=:domain", domainService.getDomain)
+    val roles = entityDao.search(roleQuery)
     val granterRoles = user.roles filter (m => m.granter) map (m => m.role)
     for (r <- roles) {
       if (granterRoles.contains(r) || isPlatformRoot) mngRoles += r

@@ -25,7 +25,7 @@ import org.beangle.security.session.jdbc.DBSessionRegistry
 import org.beangle.security.session.protobuf.{AccountSerializer, AgentSerializer, SessionSerializer}
 import org.beangle.security.session.{DefaultSession, Session}
 import org.beangle.serializer.protobuf.ProtobufSerializer
-import org.openurp.platform.cas.service.DefaultUrpSessionIdPolicy
+import org.openurp.platform.cas.service.{DefaultDomainProvider, DefaultUrpSessionIdPolicy}
 
 class SessionModule extends BindModule {
   override def binding(): Unit = {
@@ -35,9 +35,10 @@ class SessionModule extends BindModule {
     protobuf.register(classOf[DefaultAccount], AccountSerializer)
     protobuf.register(classOf[Session.Agent], AgentSerializer)
 
+    bind("domainProvider", classOf[DefaultDomainProvider])
     bind("Serializer.protobuf", protobuf)
     bind("security.SessionRegistry.db", classOf[DBSessionRegistry])
-      .constructor(?, ref("cache.Caffeine"), protobuf)
+      .constructor(ref("domainProvider"), ?, ref("cache.Caffeine"), protobuf)
       .property("sessionTable", "session.session_infoes")
       .wiredEagerly(false)
 

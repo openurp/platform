@@ -17,7 +17,7 @@
     [@b.col width="8%" property="indexno" title="分类号"/]
     [@b.col width="20%" property="name" title="名称"][@b.a href="!info?id=${app.id}"]${app.name!}[/@][/@]
     [@b.col width="18%" property="title" title="标题"/]
-    [@b.col width="8%" property="domain.title" title="领域"/]
+    [@b.col width="8%" property="group.title" title="分组"/]
     [@b.col width="8%" property="appType.title" title="类型"/]
     [@b.col width="21%" title="数据源" ]
       [#list app.datasources as  ds]<span title="${ds.db.serverName!} ${ds.db.databaseName!}">${ds.name}(${ds.maximumPoolSize})</span>[/#list]

@@ -31,19 +31,25 @@ import org.openurp.app.UrpApp
 import org.openurp.platform.bulletin.model.Doc
 import org.openurp.platform.bulletin.service.DocService
 import org.openurp.platform.config.model.{App, AppType}
+import org.openurp.platform.config.service.{AppService, DomainService}
 import org.openurp.platform.user.model.{User, UserCategory}
+import org.openurp.platform.user.service.UserService
 
 class DocAction extends RestfulAction[Doc] with ServletSupport {
 
   var docService: DocService = _
+  var userService: UserService = _
+  var domainService: DomainService = _
+  var appService: AppService = _
 
   override protected def indexSetting(): Unit = {
-    put("userCategories", entityDao.getAll(classOf[UserCategory]))
+    put("userCategories", userService.getCategories())
   }
 
 
   override protected def getQueryBuilder: OqlBuilder[Doc] = {
     val builder = super.getQueryBuilder
+    builder.where("doc.app.domain=:domain", domainService.getDomain)
     getInt("userCategory.id") foreach { categoryId =>
       builder.join("doc.userCategories", "uc")
       builder.where("uc.id=:userCategoryId", categoryId)
@@ -51,17 +57,9 @@ class DocAction extends RestfulAction[Doc] with ServletSupport {
     builder
   }
 
-  private def getWebApps: Iterable[App] = {
-    val query = OqlBuilder.from(classOf[App], "app").where("app.enabled =true")
-    query.where("app.appType.name=:appType", AppType.Webapp)
-    query.orderBy("app.indexno")
-    query.cacheable()
-    entityDao.search(query)
-  }
-
-  override protected def editSetting(entity: Doc): Unit = {
+   override protected def editSetting(entity: Doc): Unit = {
     put("userCategories", entityDao.getAll(classOf[UserCategory]))
-    put("apps", getWebApps)
+    put("apps", appService.getWebapps)
   }
 
   def download(@param("id") id: String): View = {

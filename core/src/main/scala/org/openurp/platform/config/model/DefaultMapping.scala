@@ -54,7 +54,7 @@ object DefaultMapping extends MappingModule {
       e.username is length(100)
       e.password is length(200)
       e.name is length(100)
-      index("idx_credential", true, e.org, e.name)
+      index("idx_credential", true, e.domain, e.name)
     }
 
     bind[DataSource].declare { e =>
@@ -69,7 +69,7 @@ object DefaultMapping extends MappingModule {
       e.databaseName & e.serverName is length(100)
       e.url is length(200)
       e.remark is length(200)
-      index("idx_db", true, e.org, e.name)
+      index("idx_db", true, e.domain, e.name)
     }
 
     bind[Domain].declare { e =>

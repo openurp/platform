@@ -20,23 +20,25 @@ package org.openurp.platform.admin.action.security
 
 import org.beangle.data.dao.OqlBuilder
 import org.beangle.data.model.Entity
+import org.beangle.security.authz.Scopes
 import org.beangle.webmvc.api.annotation.ignore
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.platform.admin.helper.AppHelper
-import org.openurp.platform.config.service.AppService
-import org.openurp.platform.security.model.{ FuncPermission, FuncResource, Menu }
+import org.openurp.platform.config.service.{AppService, DomainService}
+import org.openurp.platform.security.model.{FuncPermission, FuncResource, Menu}
 import org.openurp.platform.security.service.FuncPermissionService
-import org.beangle.security.authz.Scopes
+
 /**
  * 系统模块管理响应类
- *
  * @author chaostone 2005-10-9
  */
 class FuncResourceAction extends RestfulAction[FuncResource] {
 
   var funcPermissionService: FuncPermissionService = _
   var appService: AppService = _
+  var domainService: DomainService = _
+
   /**
    * 禁用或激活一个或多个模块
    */
@@ -63,6 +65,12 @@ class FuncResourceAction extends RestfulAction[FuncResource] {
     AppHelper.remember("resource.app.id")
     super.search()
     forward()
+  }
+
+  override def getQueryBuilder: OqlBuilder[FuncResource] = {
+    val builder = super.getQueryBuilder
+    builder.where("resource.app.domain=:domain", domainService.getDomain)
+    builder
   }
 
   override def info(id: String): View = {

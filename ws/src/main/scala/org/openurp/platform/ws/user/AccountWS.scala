@@ -19,39 +19,30 @@
 package org.openurp.platform.ws.user
 
 import org.beangle.commons.collection.Properties
-import org.beangle.data.dao.EntityDao
 import org.beangle.webmvc.api.action.ActionSupport
 import org.beangle.webmvc.api.annotation.{mapping, param, response}
-import org.openurp.platform.user.model.Credential
-import org.openurp.platform.user.service.UserService
+import org.openurp.platform.user.service.AccountService
 
 /**
  * @author chaostone
  */
-class AccountWS(userService: UserService, entityDao: EntityDao) extends ActionSupport {
+class AccountWS(accountService: AccountService) extends ActionSupport {
 
   @response
   @mapping("{userCode}")
   def index(@param("userCode") userCode: String): Properties = {
-    userService.get(userCode) match {
-      case Some(user) =>
-        val credentials = entityDao.findBy(classOf[Credential], "user", List(user))
-        var credentialExpired = false
-        credentials foreach { c =>
-          credentialExpired = c.expired
-        }
+    accountService.getAuthAccount(userCode) match {
+      case Some(acc) =>
         val properties = new Properties()
-        properties += ("id" -> user.id)
-        properties += ("principal" -> user.code)
-        properties += ("description" -> user.name)
-        properties += ("accountExpired" -> user.accountExpired)
-        properties += ("accountLocked" -> user.locked)
-        properties += ("credentialExpired" -> credentialExpired)
-        properties += ("enabled" -> user.enabled)
-        properties += ("authorities" -> user.roles.filter(_.member == true).map(_.role.id).mkString(","))
-        val details = new Properties()
-        details += ("category" -> user.category.id)
-        properties += ("details" -> details)
+        properties += ("name" -> acc.name)
+        properties += ("description" -> acc.description)
+        properties += ("accountExpired" -> acc.accountExpired)
+        properties += ("accountLocked" -> acc.accountLocked)
+        properties += ("credentialExpired" -> acc.credentialExpired)
+        properties += ("enabled" -> !acc.disabled)
+
+        properties += ("authorities" -> acc.authorities)
+        properties += ("details" -> acc.details)
         properties
       case None => new Properties()
     }

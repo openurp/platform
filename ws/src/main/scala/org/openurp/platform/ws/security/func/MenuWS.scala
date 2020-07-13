@@ -22,8 +22,7 @@ import org.beangle.commons.collection.{Collections, Properties}
 import org.beangle.data.dao.EntityDao
 import org.beangle.webmvc.api.action.{ActionSupport, EntitySupport}
 import org.beangle.webmvc.api.annotation.{mapping, param, response}
-import org.openurp.platform.config.model.Domain
-import org.openurp.platform.config.service.AppService
+import org.openurp.platform.config.service.{AppService, DomainService}
 import org.openurp.platform.security.model.Menu
 import org.openurp.platform.security.service.MenuService
 import org.openurp.platform.user.model.User
@@ -38,6 +37,8 @@ class MenuWS extends ActionSupport with EntitySupport[Menu] {
   var menuService: MenuService = _
 
   var appService: AppService = _
+
+  var domainService: DomainService = _
 
   var userService: UserService = _
 
@@ -63,24 +64,21 @@ class MenuWS extends ActionSupport with EntitySupport[Menu] {
     app match {
       case Some(app) =>
         if (forDomain) {
-          getDomainMenus(app.domain, u)
+          getDomainMenus(u)
         } else {
           val appProps = new Properties(app, "id", "name", "title", "base", "url", "logoUrl", "navStyle")
           val menus = menuService.getTopMenus(app, u) map (m => convert(m))
-          val domain = new Properties(app.domain, "id", "name", "title", "indexno")
+          val domain = new Properties(app.domain, "id", "name", "title")
           val group = new Properties(app.group, "id", "name", "title", "indexno")
           DomainMenus(domain, List(GroupMenus(group, List(AppMenus(appProps, menus)))))
         }
       case None =>
-        appService.getDomain(appName) match {
-          case None => "{}"
-          case Some(d) => getDomainMenus(d, u)
-        }
+        getDomainMenus(u)
     }
   }
 
-  private def getDomainMenus(dm: Domain, u: User): DomainMenus = {
-    val menus = menuService.getTopMenus(dm, u)
+  private def getDomainMenus(u: User): DomainMenus = {
+    val menus = menuService.getTopMenus(u)
     val appsMenus = menus.groupBy(_.app)
     val groupApps = appsMenus.keys.groupBy(_.group)
     val directMenuMaps = groupApps map {
@@ -97,7 +95,7 @@ class MenuWS extends ActionSupport with EntitySupport[Menu] {
     directMenuMaps.keys.toSeq.sorted foreach { g =>
       groups += directMenuMaps(g)
     }
-    val domain = new Properties(dm, "id", "name", "title", "indexno")
+    val domain = new Properties(domainService.getDomain, "id", "name", "title")
     DomainMenus(domain, groups)
   }
 

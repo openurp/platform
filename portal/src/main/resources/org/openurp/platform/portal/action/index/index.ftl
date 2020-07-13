@@ -52,7 +52,7 @@
 }
 </style>
 <div class="wrapper">
-    <nav class="main-header navbar navbar-expand navbar-dark navbar-lightblue sticky-top">
+    <nav class="main-header navbar navbar-expand navbar-dark navbar-lightblue sticky-top border-bottom-0">
       <ul class="nav navbar-nav">
          <li class="nav-item">
             <a class="nav-link" data-widget="pushmenu"  title="隐藏/显示菜单" href="#" role="button"><i class="fas fa-bars"></i></a>
@@ -196,7 +196,7 @@
         if(i != "id"){
           params[i] = default_p[i];
         }
-     }
+      }
       params['maxTopItem']=7;
     }
     [/#if]

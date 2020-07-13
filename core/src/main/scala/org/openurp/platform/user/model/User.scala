@@ -31,21 +31,14 @@ import org.openurp.platform.config.model.Org
  * @author chaostone
  */
 
-class User extends LongId with Coded with Named with Updated with TemporalOn with Enabled with Profile with Principal with Remark {
-  var locked: Boolean = _
+class User extends LongId with Coded with Named with Updated with TemporalOn with Profile with Principal with Remark {
+  var org: Org = _
   var roles = Collections.newBuffer[RoleMember]
   var groups = Collections.newBuffer[GroupMember]
   var properties = Collections.newMap[Dimension, String]
+  var acounts = Collections.newBuffer[Account]
   var category: UserCategory = _
-  var org: Org = _
   var avatarId: Option[String] = None
-
-  def accountExpired: Boolean = {
-    endOn match {
-      case Some(e) => LocalDate.now.isAfter(e)
-      case None => false
-    }
-  }
 
   override def getName: String = {
     name

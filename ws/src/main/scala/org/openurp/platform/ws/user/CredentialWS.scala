@@ -22,7 +22,7 @@ import org.beangle.data.dao.EntityDao
 import org.beangle.security.authc.{PasswordPolicy, PasswordStrengthChecker}
 import org.beangle.webmvc.api.action.ActionSupport
 import org.beangle.webmvc.api.annotation.{param, response}
-import org.openurp.platform.config.service.impl.DomainService
+import org.openurp.platform.config.service.DomainService
 import org.openurp.platform.user.model.PasswordConfig
 
 class CredentialWS extends ActionSupport {

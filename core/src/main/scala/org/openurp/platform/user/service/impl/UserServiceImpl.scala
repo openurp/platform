@@ -23,7 +23,7 @@ import java.time.Instant
 import org.beangle.commons.collection.Collections
 import org.beangle.data.dao.{EntityDao, OqlBuilder}
 import org.beangle.data.model.Entity
-import org.openurp.platform.config.service.impl.DomainService
+import org.openurp.platform.config.service.DomainService
 import org.openurp.platform.user.model.MemberShip.{Granter, Manager, Member, Ship}
 import org.openurp.platform.user.model._
 import org.openurp.platform.user.service.UserService
@@ -48,10 +48,11 @@ class UserServiceImpl(val entityDao: EntityDao) extends UserService {
   }
 
   def getRoles(user: User, ship: Ship): collection.Seq[RoleMember] = {
+    val domain = domainService.getDomain
     ship match {
-      case Manager => user.roles.filter(m => m.manager)
-      case Granter => user.roles.filter(m => m.granter)
-      case Member => user.roles.filter(m => m.member)
+      case Manager => user.roles.filter(m => m.manager && m.role.domain == domain)
+      case Granter => user.roles.filter(m => m.granter && m.role.domain == domain)
+      case Member => user.roles.filter(m => m.member && m.role.domain == domain)
     }
   }
 
@@ -61,28 +62,30 @@ class UserServiceImpl(val entityDao: EntityDao) extends UserService {
   }
 
   override def isRoot(user: User, appName: String): Boolean = {
-    !entityDao.search(OqlBuilder.from(classOf[Root], "r").where("r.user=:user and r.app.name=:appName", user, appName)).isEmpty
+    val rootQuery = OqlBuilder.from(classOf[Root], "r")
+    rootQuery.where("r.user=:user and r.app.name=:appName", user, appName)
+    rootQuery.where("r.app.domain=:domain", domainService.getDomain)
+    entityDao.search(rootQuery).nonEmpty
   }
 
   def create(creator: User, user: User): Unit = {
     user.updatedAt = Instant.now
+    user.org = domainService.getOrg
     entityDao.saveOrUpdate(user)
-  }
-
-  def updateState(manager: User, userIds: Iterable[Long], active: Boolean): Int = {
-    val users = entityDao.find(classOf[User], userIds)
-    val updated = users.filter(u => isManagedBy(manager, u))
-    updated.foreach { u => u.enabled = active }
-    entityDao.saveOrUpdate(updated)
-    updated.size
   }
 
   def remove(manager: User, user: User): Unit = {
     if (isManagedBy(manager, user)) {
       val removed = Collections.newBuffer[Entity[_]]
-      removed ++= entityDao.findBy(classOf[Credential], "user", List(user))
+      removed ++= entityDao.findBy(classOf[Account], "user", List(user))
       removed ++= entityDao.findBy(classOf[UserProfile], "user", List(user))
-      entityDao.remove(removed, user);
+      entityDao.remove(removed, user)
     }
+  }
+
+  override def getCategories(): Seq[UserCategory] = {
+    val query = OqlBuilder.from(classOf[UserCategory], "uc")
+    query.where("uc.org=:org", domainService.getOrg).cacheable()
+    entityDao.search(query)
   }
 }

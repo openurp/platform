@@ -22,7 +22,7 @@ import org.beangle.commons.collection.{Collections, Properties}
 import org.beangle.data.dao.{EntityDao, OqlBuilder}
 import org.beangle.webmvc.api.action.ActionSupport
 import org.beangle.webmvc.api.annotation.{mapping, param, response}
-import org.openurp.platform.config.service.impl.DomainService
+import org.openurp.platform.config.service.DomainService
 import org.openurp.platform.security.service.ProfileService
 import org.openurp.platform.user.model.UserProfile
 import org.openurp.platform.user.service.UserService
@@ -66,8 +66,9 @@ class ProfileWS(entityDao: EntityDao) extends ActionSupport {
                 dimension.put("id", d.id)
                 dimension.put("name", d.name)
                 dimension.put("title", d.title)
-                dimension.put("typeName", d.typeName)
-                dimension.put("keyName", d.keyName)
+                d.keyName foreach { kn =>
+                  dimension.put("keyName", kn)
+                }
                 entry.put("dimension", dimension)
                 entry.put("value", profileService.getDimensionValues(d, v))
                 properties += entry

@@ -24,11 +24,11 @@ import org.beangle.webmvc.api.annotation.ignore
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.platform.admin.helper.ProfileHelper
-import org.openurp.platform.config.model.Domain
+import org.openurp.platform.config.service.DomainService
 import org.openurp.platform.security.service.ProfileService
-import org.openurp.platform.user.model.{ Dimension, UserProfile }
-import org.openurp.platform.user.service.{ DataResolver, UserService }
+import org.openurp.platform.user.model.UserProfile
 import org.openurp.platform.user.service.impl.CsvDataResolver
+import org.openurp.platform.user.service.{DataResolver, DimensionService, UserService}
 
 /**
  * @author chaostone
@@ -36,12 +36,16 @@ import org.openurp.platform.user.service.impl.CsvDataResolver
 class ProfileAction(profileService: ProfileService) extends RestfulAction[UserProfile] {
 
   var userService: UserService = _
+  var dimensionService: DimensionService = _
+  var domainService: DomainService = _
   val dataResolver: DataResolver = CsvDataResolver
 
   protected override def indexSetting(): Unit = {
     val userId = getLong("profile.user.id").get
-    val helper = new ProfileHelper(entityDao, profileService)
-    val builder = OqlBuilder.from(classOf[UserProfile], "up").where("up.user.id=:userId", userId)
+    val helper = new ProfileHelper(entityDao, profileService, dimensionService)
+    val builder = OqlBuilder.from(classOf[UserProfile], "up")
+      .where("up.user.id=:userId", userId)
+      .where("up.domain=:domain", domainService.getDomain)
     val profiles = entityDao.search(builder)
     helper.populateInfo(profiles)
   }
@@ -57,7 +61,7 @@ class ProfileAction(profileService: ProfileService) extends RestfulAction[UserPr
 
   @ignore
   protected override def saveAndRedirect(profile: UserProfile): View = {
-    val helper = new ProfileHelper(entityDao, profileService)
+    val helper = new ProfileHelper(entityDao, profileService, dimensionService)
     helper.dataResolver = dataResolver
     //            if (!d.multiple && dvalues.nonEmpty) {
     //              dvalues.head match {
@@ -71,7 +75,8 @@ class ProfileAction(profileService: ProfileService) extends RestfulAction[UserPr
     //              }
     //            }
     //FIXME
-    helper.populateSaveInfo(profile, isAdmin = true, profile.domain)
+    helper.populateSaveInfo(profile, isAdmin = true)
+    profile.domain=domainService.getDomain
     if (profile.properties.isEmpty) {
       if (profile.persisted) {
         entityDao.remove(profile)
@@ -87,10 +92,7 @@ class ProfileAction(profileService: ProfileService) extends RestfulAction[UserPr
   protected override def removeAndRedirect(entities: Seq[UserProfile]): View = {
     val profile = entities.head
     try {
-      entities foreach { e =>
-        entityDao.remove(e)
-      }
-      entityDao.saveOrUpdate(profile.user)
+      //entityDao.remove(entities)
       redirect("index", s"&profile.user.id=${profile.user.id}", "info.remove.success")
     } catch {
       case e: Exception =>
@@ -100,14 +102,9 @@ class ProfileAction(profileService: ProfileService) extends RestfulAction[UserPr
   }
 
   protected override def editSetting(profile: UserProfile): Unit = {
-    val helper = new ProfileHelper(entityDao, profileService)
-    val builder=OqlBuilder.from[Domain](classOf[Dimension].getName,"d")
-    builder.join("d.domains", "domain").select("distinct domain")
-    val domains = entityDao.search(builder)
-    if (null == profile.domain && domains.nonEmpty) profile.domain = domains.head
+    val helper = new ProfileHelper(entityDao, profileService, dimensionService)
     if (null == profile.user) profile.user = userService.get(Securities.user).get
-    put("domains", domains)
-    helper.fillEditInfo(profile, isAdmin = true, profile.domain)
+    helper.fillEditInfo(profile, isAdmin = true)
   }
 
 }

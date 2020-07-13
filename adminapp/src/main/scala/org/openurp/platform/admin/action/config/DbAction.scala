@@ -22,15 +22,27 @@ import java.sql.DriverManager
 
 import org.beangle.commons.collection.Collections
 import org.beangle.commons.lang.{Strings, Throwables}
+import org.beangle.data.dao.OqlBuilder
 import org.beangle.data.jdbc.vendor.Vendors
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.app.util.AesEncryptor
 import org.openurp.platform.config.model.{Credential, Db}
+import org.openurp.platform.config.service.{CredentialService, DomainService}
 
 class DbAction extends RestfulAction[Db] {
 
   override def simpleEntityName = "db"
+
+  var domainService: DomainService = _
+
+  var credentialService:CredentialService=_
+
+  override protected def getQueryBuilder: OqlBuilder[Db] = {
+    val builder = super.getQueryBuilder
+    builder.where("db.domain=:domain", domainService.getDomain)
+    builder
+  }
 
   def testSetting(): View = {
     val entities = getModels[Db](entityName, ids(simpleEntityName, entityDao.domain.getEntity(entityName).get.id.clazz))
@@ -54,13 +66,14 @@ class DbAction extends RestfulAction[Db] {
     }
     val removedKey = db.properties.keys.toSet -- keys
     db.properties.subtractAll(removedKey)
+    db.domain = domainService.getDomain
     super.saveAndRedirect(db)
   }
 
   def test(): View = {
     var username = get("username", "")
     var password = get("password", "")
-    put("credentials", entityDao.getAll(classOf[Credential]))
+    put("credentials", credentialService.getAll())
     val entities = getModels[Db](entityName, ids(simpleEntityName, entityDao.domain.getEntity(entityName).get.id.clazz))
     val cfg = entities.head
 

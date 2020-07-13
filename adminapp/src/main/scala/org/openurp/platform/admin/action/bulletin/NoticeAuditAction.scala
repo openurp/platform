@@ -26,14 +26,18 @@ import org.beangle.webmvc.api.annotation.{mapping, param}
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.EntityAction
 import org.openurp.platform.bulletin.model.{Notice, NoticeStatus}
-import org.openurp.platform.config.model.App
-import org.openurp.platform.user.model.{User, UserCategory}
+import org.openurp.platform.config.service.{AppService, DomainService}
+import org.openurp.platform.user.model.User
+import org.openurp.platform.user.service.UserService
 
 class NoticeAuditAction extends ActionSupport with EntityAction[Notice] {
+  var userService: UserService = _
+  var domainService: DomainService = _
+  var appService: AppService = _
 
   def index(): View = {
-    put("userCategories", entityDao.getAll(classOf[UserCategory]))
-    put("apps", entityDao.getAll(classOf[App]))
+    put("userCategories", userService.getCategories())
+    put("apps", appService.getWebapps)
     forward()
   }
 
@@ -52,6 +56,7 @@ class NoticeAuditAction extends ActionSupport with EntityAction[Notice] {
   def search(): View = {
     val builder = getQueryBuilder
     builder.where("notice.status != :status", NoticeStatus.Draft)
+    builder.where("notice.app.domain=:domain", domainService.getDomain)
     getInt("userCategory.id") foreach { categoryId =>
       builder.join("notice.userCategories", "uc")
       builder.where("uc.id=:userCategoryId", categoryId)

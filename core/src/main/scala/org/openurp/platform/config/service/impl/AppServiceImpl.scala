@@ -20,7 +20,7 @@ package org.openurp.platform.config.service.impl
 
 import org.beangle.data.dao.{EntityDao, OqlBuilder}
 import org.openurp.platform.config.model.{App, AppGroup, AppType, Domain}
-import org.openurp.platform.config.service.AppService
+import org.openurp.platform.config.service.{AppService, DomainService}
 
 /**
  * @author chaostone
@@ -33,12 +33,6 @@ class AppServiceImpl(entityDao: EntityDao) extends AppService {
     val query = OqlBuilder.from(classOf[AppGroup], "ag")
     query.where("ag.domain=:domain", domainService.getDomain)
     entityDao.search(query)
-  }
-
-  override def getDomain(name: String): Option[Domain] = {
-    val query = OqlBuilder.from(classOf[Domain], "d")
-      .where("d.name=:name", name).cacheable()
-    entityDao.search(query).headOption
   }
 
   override def getApp(name: String, secret: String): Option[App] = {

@@ -22,8 +22,9 @@ import org.beangle.commons.bean.Initializing
 import org.beangle.data.dao.EntityDao
 import org.openurp.app.Urp
 import org.openurp.platform.config.model.{Domain, Org}
+import org.openurp.platform.config.service.DomainService
 
-class DomainServiceImpl extends DomainService with Initializing {
+class DomainServiceImpl extends DomainService with Initializing  {
   var entityDao: EntityDao = _
 
   var domain: Domain = _

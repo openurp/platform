@@ -1,15 +1,5 @@
 [@b.head/]
 
-<style>
-.thin-table.table > tbody > tr > td {
-  padding: 0.5rem;
-  height:35px;
-  font-size:13px;
-  line-height:1.42857;
-  vertical-align: top;
-  border-top: 1px solid #dee2e6;
-}
-</style>
 <div class="content-header">
   <div class="container-fluid">
     <div class="row mb-2">
@@ -31,14 +21,15 @@
     <section class="col-lg-6">
       [@b.card class="card-info card-primary card-outline"]
         [#assign title]<i class="far fa-bell"></i> 通知公告[/#assign]
-        [@b.card_header class="border-transparent" title=title  minimal="true" closeable="true" style="cursor: move;"/]
+        [@b.card_header class="border-transparent" title=title  minimal="true" closeable="true"/]
         [@b.card_body class="p-0"]
           <div class="table-responsive">
-            <table id="notice_table" class="table no-margin m-0 thin-table">
+            <table id="notice_table" class="table no-margin m-0 compact">
               <tbody>
               [#list notices as notice]
               <tr>
-                <td><a href="${webappBase}/platform/user/notice/${notice.id}" target="_blank">${notice.title}</a></td>
+                <td>${notice.app.title}</td>
+                <td><a href="${webappBase}/platform/user/notice/${notice.id}" target="_blank"> ${notice.title}</a></td>
                 <td>${notice.createdAt?string('yyyy-MM-dd')}</td>
               </tr>
               [/#list]
@@ -53,15 +44,16 @@
     </section>
     <section class="col-lg-6">
       [@b.card class="card-info card-primary card-outline"]
-        [#assign title]<i class="fas fa-file-pdf"></i> 通知公告[/#assign]
-        [@b.card_header class="border-transparent" title=title  minimal="true" closeable="true" style="cursor: move;"/]
+        [#assign title]<i class="fas fa-file-pdf"></i> 文档下载[/#assign]
+        [@b.card_header class="border-transparent" title=title  minimal="true" closeable="true"/]
         [@b.card_body class="p-0"]
           <div class="table-responsive">
-            <table class="table no-margin m-0  thin-table">
+            <table class="table no-margin m-0  compact">
               <tbody>
               [#assign extMap={"xls":'xls.gif',"xlsx":'xls.gif',"docx":"doc.gif","doc":"doc.gif","pdf":"pdf.gif","zip":"zip.gif","":"generic.gif"}]
               [#list docs as doc]
               <tr>
+                <td>${doc.app.title}</td>
                 <td>
                   <image src="${b.static_url("openurp-default","images/file/"+extMap[doc.name?keep_after_last(".")]?default("generic.gif"))}">&nbsp;
                   <a href="${webappBase}/platform/user/doc/${doc.id}" target="_blank">${doc.name}</a>

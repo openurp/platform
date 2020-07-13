@@ -21,23 +21,35 @@ package org.openurp.platform.user.model
 import java.time.LocalDate
 
 import org.beangle.data.model.LongId
-import org.beangle.data.model.pojo.Updated
+import org.beangle.data.model.pojo.{Enabled, TemporalOn, Updated}
+import org.openurp.platform.config.model.Domain
 
-class Credential extends LongId with Updated {
+class Account extends LongId with Updated with Enabled with TemporalOn {
+
+  var domain: Domain = _
 
   var user: User = _
 
+  var locked: Boolean = _
+
   var password: String = _
 
-  var expiredOn: LocalDate = _
+  var passwdExpiredOn: LocalDate = _
 
-  var inactiveOn: LocalDate = _
+  var passwdInactiveOn: LocalDate = _
 
-  def expired: Boolean = {
-    LocalDate.now.isAfter(expiredOn)
+  def accountExpired: Boolean = {
+    endOn match {
+      case Some(e) => LocalDate.now.isAfter(e)
+      case None => false
+    }
   }
 
-  def inactive: Boolean = {
-    LocalDate.now.isAfter(inactiveOn)
+  def passwdExpired: Boolean = {
+    LocalDate.now.isAfter(passwdExpiredOn)
+  }
+
+  def passwdInactive: Boolean = {
+    LocalDate.now.isAfter(passwdInactiveOn)
   }
 }

@@ -25,8 +25,6 @@ import org.openurp.platform.config.model.{App, AppGroup, Domain}
  */
 trait AppService {
 
-  def getDomain(name: String): Option[Domain]
-
   def getApp(name: String, secret: String): Option[App]
 
   def getApp(name: String): Option[App]

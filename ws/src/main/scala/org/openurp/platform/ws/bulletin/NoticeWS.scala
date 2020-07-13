@@ -26,8 +26,7 @@ import org.beangle.webmvc.api.action.{ActionSupport, EntitySupport}
 import org.beangle.webmvc.api.annotation.{mapping, param, response}
 import org.openurp.app.UrpApp
 import org.openurp.platform.bulletin.model.{Notice, NoticeStatus}
-import org.openurp.platform.config.service.AppService
-import org.openurp.platform.config.service.impl.DomainService
+import org.openurp.platform.config.service.{AppService, DomainService}
 
 class NoticeWS(entityDao: EntityDao) extends ActionSupport with EntitySupport[Notice] {
 

@@ -27,13 +27,14 @@ import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.platform.admin.helper.AppHelper
 import org.openurp.platform.config.model.App
-import org.openurp.platform.config.service.AppService
+import org.openurp.platform.config.service.{AppService, DomainService}
 import org.openurp.platform.security.model.{FuncPermission, FuncResource, Menu}
 import org.openurp.platform.security.service.MenuService
 
 class MenuAction extends RestfulAction[Menu] {
   var menuService: MenuService = _
   var appService: AppService = _
+  var domainService: DomainService = _
 
   protected override def indexSetting(): Unit = {
     val apps = appService.getWebapps
@@ -44,6 +45,12 @@ class MenuAction extends RestfulAction[Menu] {
     AppHelper.remember("menu.app.id")
     super.search()
     forward()
+  }
+
+  override def getQueryBuilder: OqlBuilder[Menu] = {
+    val builder = super.getQueryBuilder
+    builder.where("menu.app.domain=:domain", domainService.getDomain)
+    builder
   }
 
   protected override def editSetting(menu: Menu): Unit = {

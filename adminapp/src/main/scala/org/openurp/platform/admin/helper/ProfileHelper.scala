@@ -20,16 +20,15 @@ package org.openurp.platform.admin.helper
 
 import org.beangle.commons.bean.Properties
 import org.beangle.commons.lang.Strings
-import org.beangle.data.dao.{EntityDao, OqlBuilder}
+import org.beangle.data.dao.EntityDao
 import org.beangle.security.Securities
 import org.beangle.webmvc.api.context.{ActionContext, Params}
-import org.openurp.platform.config.model.Domain
 import org.openurp.platform.security.service.ProfileService
 import org.openurp.platform.user.model.{Dimension, Profile, UserProfile}
-import org.openurp.platform.user.service.DataResolver
 import org.openurp.platform.user.service.impl.CsvDataResolver
+import org.openurp.platform.user.service.{DataResolver, DimensionService}
 
-class ProfileHelper(entityDao: EntityDao, profileService: ProfileService) {
+class ProfileHelper(entityDao: EntityDao, profileService: ProfileService, dimensionService: DimensionService) {
   var dataResolver: DataResolver = CsvDataResolver
 
   /**
@@ -42,7 +41,7 @@ class ProfileHelper(entityDao: EntityDao, profileService: ProfileService) {
       for ((field, value) <- profile.properties) {
         val fieldName = field.name
         if (Strings.isNotEmpty(value)) {
-          if (null == field.source) {
+          if (field.source.startsWith("text")) {
             aoDimensions.put(fieldName, value)
           } else if (value.equals("*")) {
             aoDimensions.put(fieldName, "不限")
@@ -57,7 +56,7 @@ class ProfileHelper(entityDao: EntityDao, profileService: ProfileService) {
     ActionContext.current.attribute("fieldMaps", fieldMaps)
   }
 
-  def fillEditInfo(profile: Profile, isAdmin: Boolean, domain: Domain): Unit = {
+  def fillEditInfo(profile: Profile, isAdmin: Boolean): Unit = {
     //val me = entityDao.findBy(classOf[User], "code", List(Securities.user)).head
     val mngDimensions = new collection.mutable.HashMap[String, Object]
     val userDimensions = new collection.mutable.HashMap[String, Object]
@@ -67,7 +66,7 @@ class ProfileHelper(entityDao: EntityDao, profileService: ProfileService) {
     ActionContext.current.attribute("ignoreDimensions", ignores)
     val userIgnoreDimensions = new collection.mutable.HashSet[Dimension]
     ActionContext.current.attribute("userIgnoreDimensions", userIgnoreDimensions)
-    val fields = getDimensions(domain)
+    val fields = dimensionService.getAll()
     ActionContext.current.attribute("fields", fields)
     for (field <- fields) {
       var mngDimensionValues = new collection.mutable.ListBuffer[Any]
@@ -123,30 +122,25 @@ class ProfileHelper(entityDao: EntityDao, profileService: ProfileService) {
         if ("*" == p) {
           profileService.getDimensionValues(field)
         } else {
-          if (field.keyName == null) {
-            Strings.split(p, ",").toList
-          } else {
-            var values = profileService.getDimensionValues(field)
-            val myValues = Strings.split(p, ",").toSet
-            values = values.filter { v =>
-              myValues.contains(Properties.get(v, field.keyName))
-            }
-            values
+          field.keyName match {
+            case None => Strings.split(p, ",").toList
+            case Some(keyname) =>
+              var values = profileService.getDimensionValues(field)
+              val myValues = Strings.split(p, ",").toSet
+              values = values.filter { v =>
+                myValues.contains(Properties.get(v, keyname))
+              }
+              values
           }
         }
       case None => null
     }
   }
 
-  private def getDimensions(domain: Domain): collection.Seq[Dimension] = {
-    entityDao.search(OqlBuilder.from(classOf[Dimension], "dim").where(":app in elements(dim.domains)", domain))
-  }
-
-  def populateSaveInfo(profile: Profile, isAdmin: Boolean, domain: Domain): Unit = {
-    //val me = entityDao.findBy(classOf[User], "code", List(Securities.user)).head
-    val myProfiles = entityDao.findBy(classOf[UserProfile], "user.code", List(Securities.user))
+  def populateSaveInfo(profile: Profile, isAdmin: Boolean): Unit = {
+    val myProfiles = profileService.getProfiles(Securities.user)
     val ignoreDimensions = getIgnoreDimensions(myProfiles)
-    for (field <- getDimensions(domain)) {
+    for (field <- dimensionService.getAll()) {
       val values = Params.getAll(field.name).asInstanceOf[Iterable[String]]
       if ((ignoreDimensions.contains(field) || isAdmin) && Params.getBoolean("ignoreDimension" + field.id).getOrElse(false)) {
         profile.setProperty(field, "*")

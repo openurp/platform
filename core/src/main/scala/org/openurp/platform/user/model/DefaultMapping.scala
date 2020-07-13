@@ -30,10 +30,9 @@ object DefaultMapping extends MappingModule {
     bind[Dimension].declare { e =>
       e.name & e.title are length(40)
       e.source is length(6000)
-      e.typeName is notnull
       e.keyName is length(20)
       e.properties is length(100)
-      index("idx_dimension_name", true, e.org, e.name)
+      index("idx_dimension_name", true, e.domain, e.name)
     }
 
     bind[RoleMember].declare { e =>
@@ -54,17 +53,18 @@ object DefaultMapping extends MappingModule {
       e.remark is length(100)
       e.roles is depends("user")
       e.groups is depends("user")
+      e.acounts is depends("user")
       e.properties is eleLength(2000)
       index("idx_user_code", true, e.org, e.code)
     }
 
-    bind[Credential].declare { e =>
+    bind[Account].declare { e =>
       e.password is length(200)
-      index("idx_credential_user", true, e.user)
+      index("idx_account", true,e.user,e.domain)
     }
 
     bind[PasswordConfig].declare { e =>
-      index("idx_password_config", true, e.org)
+      index("idx_password_config", true, e.domain)
     }
 
     bind[UserCategory].declare { e =>
@@ -75,6 +75,7 @@ object DefaultMapping extends MappingModule {
 
     bind[UserProfile].declare { e =>
       e.properties is eleLength(2000)
+      index("idx_user_profile",false,e.user,e.domain)
     }
 
     bind[GroupMember]

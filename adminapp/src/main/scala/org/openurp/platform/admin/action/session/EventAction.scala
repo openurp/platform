@@ -18,9 +18,15 @@
  */
 package org.openurp.platform.admin.action.session
 
+import org.beangle.data.dao.OqlBuilder
 import org.beangle.webmvc.entity.action.RestfulAction
+import org.openurp.platform.config.service.DomainService
 import org.openurp.platform.session.model.SessionEvent
 
 class EventAction extends RestfulAction[SessionEvent] {
+  var domainService: DomainService = _
 
+  override protected def getQueryBuilder: OqlBuilder[SessionEvent] = {
+    super.getQueryBuilder.where("sessionEvent.domain=:domain", domainService.getDomain)
+  }
 }

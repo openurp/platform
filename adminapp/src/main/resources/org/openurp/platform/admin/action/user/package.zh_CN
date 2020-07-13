@@ -64,11 +64,11 @@ ui.userInfo=用户基本信息
 ui.dataPermission.info=数据权限策略
 
 user.manage=用户管理
-user.newPassword=新密码
-user.oldPassword=旧密码
-user.passwordExpiredOn=密码过期时间
-user.password.sendmail.body=登录名{0};密码{1}
-user.password.sendmail.title=密码找回
-user.password=密码
-user.repeatPassword=确认密码
+account.newPassword=新密码
+account.oldPassword=旧密码
+account.passwdExpiredOn=密码过期时间
+account.password.sendmail.body=登录名{0};密码{1}
+account.password.sendmail.title=密码找回
+account.password=密码
+account.repeatPassword=确认密码
 

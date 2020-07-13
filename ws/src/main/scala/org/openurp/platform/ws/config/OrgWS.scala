@@ -21,7 +21,7 @@ package org.openurp.platform.ws.config
 import org.beangle.commons.collection.Properties
 import org.beangle.webmvc.api.action.ActionSupport
 import org.beangle.webmvc.api.annotation.response
-import org.openurp.platform.config.service.impl.DomainService
+import org.openurp.platform.config.service.DomainService
 
 class OrgWS extends ActionSupport {
 

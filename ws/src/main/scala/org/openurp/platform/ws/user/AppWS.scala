@@ -23,7 +23,7 @@ import org.beangle.data.dao.{EntityDao, OqlBuilder}
 import org.beangle.webmvc.api.action.{ActionSupport, EntitySupport}
 import org.beangle.webmvc.api.annotation.{mapping, param, response}
 import org.openurp.platform.config.model.{App, AppType}
-import org.openurp.platform.config.service.impl.DomainService
+import org.openurp.platform.config.service.DomainService
 import org.openurp.platform.security.model.FuncPermission
 import org.openurp.platform.user.model.{Root, User}
 import org.openurp.platform.user.service.UserService

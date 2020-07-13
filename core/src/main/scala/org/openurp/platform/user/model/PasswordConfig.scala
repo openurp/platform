@@ -20,7 +20,7 @@ package org.openurp.platform.user.model
 
 import org.beangle.data.model.IntId
 import org.beangle.security.authc.PasswordPolicy
-import org.openurp.platform.config.model.Org
+import org.openurp.platform.config.model.Domain
 
 object PasswordConfig {
   def apply(policy: PasswordPolicy): PasswordConfig = {
@@ -42,7 +42,7 @@ object PasswordConfig {
  */
 class PasswordConfig extends IntId with PasswordPolicy {
 
-  var org: Org = _
+  var domain: Domain = _
   /** 密码的最小长度 */
   var minlen: Int = 6
   /** 密码的最大长度 */

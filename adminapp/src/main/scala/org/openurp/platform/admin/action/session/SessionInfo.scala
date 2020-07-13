@@ -20,9 +20,11 @@ package org.openurp.platform.admin.action.session
 
 import java.time.Instant
 
+import org.openurp.platform.config.model.Domain
 import org.openurp.platform.user.model.UserCategory
 
 class SessionInfo extends Serializable {
+  var domain: Domain = _
   var id: String = _
   var principal: String = _
   var description: Option[String] = _

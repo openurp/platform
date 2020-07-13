@@ -18,9 +18,18 @@
  */
 package org.openurp.platform.config.service.impl
 
-import org.openurp.platform.config.model.{Domain, Org}
+import org.beangle.data.dao.{EntityDao, OqlBuilder}
+import org.openurp.platform.config.model.Credential
+import org.openurp.platform.config.service.{CredentialService, DomainService}
 
-trait DomainService {
-  def getDomain: Domain
-  def getOrg: Org
+class CredentialServiceImpl(entityDao: EntityDao) extends CredentialService {
+
+  var domainService: DomainService = _
+
+  override def getAll(): Seq[Credential] = {
+    val query = OqlBuilder.from(classOf[Credential], "o")
+    query.where("o.domain=:domain", domainService.getDomain)
+    entityDao.search(query)
+  }
+
 }

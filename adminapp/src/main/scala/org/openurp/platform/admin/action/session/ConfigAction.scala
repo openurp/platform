@@ -18,14 +18,31 @@
  */
 package org.openurp.platform.admin.action.session
 
+import org.beangle.data.dao.OqlBuilder
+import org.beangle.webmvc.api.annotation.ignore
+import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
+import org.openurp.platform.config.service.DomainService
 import org.openurp.platform.session.model.SessionConfig
-import org.openurp.platform.user.model.UserCategory
+import org.openurp.platform.user.service.UserService
 
 class ConfigAction extends RestfulAction[SessionConfig] {
 
+  var domainService: DomainService = _
+
+  var userService: UserService = _
+
   protected override def editSetting(resource: SessionConfig): Unit = {
-    put("categories", entityDao.getAll(classOf[UserCategory]))
+    put("categories", userService.getCategories())
   }
 
+  @ignore
+  override protected def saveAndRedirect(config: SessionConfig): View = {
+    config.domain = domainService.getDomain
+    super.saveAndRedirect(config)
+  }
+
+  override protected def getQueryBuilder: OqlBuilder[SessionConfig] = {
+    super.getQueryBuilder.where("sessionConfig.domain=:domain", domainService.getDomain)
+  }
 }
