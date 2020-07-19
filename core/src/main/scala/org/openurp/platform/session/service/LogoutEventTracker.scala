@@ -53,8 +53,9 @@ class LogoutEventTracker extends EventListener[LogoutEvent] {
     logout.name = logout.principal + " " + logout.username + " " + logoutType
 
     logout.ip = session.agent.ip
-    val details = "最后访问于" + formatter.format(session.lastAccessAt.atZone(ZoneId.systemDefault())) + " " + session.agent.name + " " +
-      session.agent.os + (if (null != event.reason) " 退出原因:" + event.reason else "")
+    val details = session.agent.name + " " +
+      session.agent.os + " 最后访问" + formatter.format(session.lastAccessAt.atZone(ZoneId.systemDefault())) +
+      " " + (if (null != event.reason) event.reason + "退出" else "")
     logout.detail = details
     logout.domain = domainService.getDomain
     entityDao.saveOrUpdate(logout)

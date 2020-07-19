@@ -69,7 +69,7 @@ class AccountAction extends RestfulAction[Account] {
       sb.append(')')
     }
     if (sb.nonEmpty) {
-      val roleCondition = new Condition(sb.toString())
+      val roleCondition = new Condition(sb.toString)
       roleCondition.params(params)
       accQuery.where(roleCondition)
     }
@@ -114,7 +114,9 @@ class AccountAction extends RestfulAction[Account] {
     val userMembers = user.roles
     val memberMap = new collection.mutable.HashMap[Role, RoleMember]
     for (gm <- userMembers) {
-      memberMap.put(gm.role, gm.asInstanceOf[RoleMember])
+      if (gm.role.domain == domainService.getDomain) {
+        memberMap.put(gm.role, gm.asInstanceOf[RoleMember])
+      }
     }
     val newMembers = Collections.newBuffer[RoleMember]
     val removedMembers = Collections.newBuffer[RoleMember]
@@ -122,7 +124,8 @@ class AccountAction extends RestfulAction[Account] {
     val platformAdmin = userService.isRoot(manager, UrpApp.name)
     val members =
       if (platformAdmin) {
-        entityDao.search(OqlBuilder.from(classOf[Role], "r")).map(r => new RoleMember(manager, r, MemberShip.Granter))
+        val adminRoleQuery = OqlBuilder.from(classOf[Role], "r").where("r.domain=:domain", domainService.getDomain)
+        entityDao.search(adminRoleQuery).map(r => new RoleMember(manager, r, MemberShip.Granter))
       } else {
         userService.getRoles(manager, MemberShip.Granter)
       }

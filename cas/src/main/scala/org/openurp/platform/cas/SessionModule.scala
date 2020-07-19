@@ -20,9 +20,9 @@ package org.openurp.platform.cas
 
 import org.beangle.cache.caffeine.CaffeineCacheManager
 import org.beangle.cdi.bind.BindModule
-import org.beangle.security.authc.DefaultAccount
+import org.beangle.security.authc.{DefaultAccount, Profile}
 import org.beangle.security.session.jdbc.DBSessionRegistry
-import org.beangle.security.session.protobuf.{AccountSerializer, AgentSerializer, SessionSerializer}
+import org.beangle.security.session.protobuf.{AccountSerializer, AgentSerializer, ProfileSerializer, SessionSerializer}
 import org.beangle.security.session.{DefaultSession, Session}
 import org.beangle.serializer.protobuf.ProtobufSerializer
 import org.openurp.platform.cas.service.{DefaultDomainProvider, DefaultUrpSessionIdPolicy}
@@ -34,6 +34,7 @@ class SessionModule extends BindModule {
     protobuf.register(classOf[DefaultSession], SessionSerializer)
     protobuf.register(classOf[DefaultAccount], AccountSerializer)
     protobuf.register(classOf[Session.Agent], AgentSerializer)
+    protobuf.register(classOf[Profile], ProfileSerializer)
 
     bind("domainProvider", classOf[DefaultDomainProvider])
     bind("Serializer.protobuf", protobuf)

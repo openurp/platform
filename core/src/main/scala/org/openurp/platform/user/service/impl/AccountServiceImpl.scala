@@ -2,9 +2,8 @@ package org.openurp.platform.user.service.impl
 
 import java.time.{Instant, LocalDate, ZoneId}
 
-import org.beangle.commons.collection.Collections
 import org.beangle.data.dao.{EntityDao, OqlBuilder}
-import org.beangle.security.authc.{CredentialAge, DefaultAccount}
+import org.beangle.security.authc.{CredentialAge, DefaultAccount, Profile}
 import org.openurp.platform.config.service.DomainService
 import org.openurp.platform.user.model.{Account, RoleMember, User, UserProfile}
 import org.openurp.platform.user.service.{AccountService, PasswordConfigService, UserService}
@@ -59,16 +58,12 @@ class AccountServiceImpl extends AccountService {
         val ups = entityDao.search(upQuery)
 
         if (ups.nonEmpty) {
-          val str = new StringBuilder
-          str += '['
-          val profiles = Collections.newBuffer[String]
+          account.profiles = Array.ofDim(ups.size)
+          var i = 0
           ups foreach { up =>
-            val ps = up.properties.map(e => s""""${e._1.name}":"${e._2}"""")
-            profiles += "{" + ps.mkString(",") + "}"
+            account.profiles(i) = Profile(up.id, up.name, up.properties.map(x => (x._1.name, x._2)).toMap)
+            i += 1
           }
-          str ++= profiles.mkString(",")
-          str += ']'
-          account.details += "profiles" -> str.toString
         }
         Some(account)
       case None => None

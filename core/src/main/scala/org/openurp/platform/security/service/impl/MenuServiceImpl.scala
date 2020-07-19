@@ -36,14 +36,18 @@ class MenuServiceImpl(val entityDao: EntityDao) extends MenuService {
 
   var domainService: DomainService = _
 
+  private def getRoles(user: User): Seq[Role] = {
+    val domain = domainService.getDomain
+    val roles = user.roles.filter(m => m.member && m.role.domain == domain).map { m => m.role }
+    roles.toSeq
+  }
+
   def getTopMenus(app: App, user: User): collection.Seq[Menu] = {
-    val roles = user.roles.filter(m => m.member).map { m => m.role }
-    getTopMenus(Some(app), roles)
+    getTopMenus(Some(app), getRoles(user))
   }
 
   def getTopMenus(user: User): collection.Seq[Menu] = {
-    val roles = user.roles.filter(m => m.member).map { m => m.role }
-    getTopMenus(None, roles)
+    getTopMenus(None, getRoles(user))
   }
 
   def getTopMenus(app: App, role: Role): collection.Seq[Menu] = {
