@@ -18,9 +18,9 @@
  */
 package org.openurp.platform.user.model
 
-import java.time.LocalDateTime
-import org.beangle.data.model.LongId
 import java.time.Instant
+
+import org.beangle.data.model.LongId
 
 object Notification {
   val Information = 1

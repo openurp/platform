@@ -22,7 +22,8 @@ import org.beangle.data.dao.EntityDao
 import org.beangle.security.session.SessionRegistry
 import org.beangle.webmvc.api.context.ActionContext
 import org.openurp.platform.security.service.{FuncPermissionService, MenuService, ProfileService}
-import org.openurp.platform.user.model.{Credential, User, UserProfile}
+import org.openurp.platform.user.model.{Account, User, UserProfile}
+import org.openurp.platform.user.service.DimensionService
 
 /**
  * @author chaostone
@@ -39,12 +40,14 @@ class UserDashboardHelper {
 
   var profileService: ProfileService = _
 
+  var dimensionService: DimensionService = _
+
   def buildDashboard(user: User): Unit = {
     ActionContext.current.attribute("user", user)
-    entityDao.findBy(classOf[Credential], "user", List(user)) foreach { c =>
+    entityDao.findBy(classOf[Account], "user", List(user)) foreach { c =>
       ActionContext.current.attribute("credential", c)
     }
     val myProfiles = entityDao.findBy(classOf[UserProfile], "user", List(user))
-    new ProfileHelper(entityDao, profileService).populateInfo(myProfiles)
+    new ProfileHelper(entityDao, profileService, dimensionService).populateInfo(myProfiles)
   }
 }

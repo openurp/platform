@@ -29,10 +29,11 @@ object Property {
  */
 trait Profile {
 
+  def name: String
+
   def properties: collection.mutable.Map[Dimension, String]
 
   def setProperty(field: Dimension, value: String): Unit = {
-    val property = getProperty(field)
     if (Strings.isNotBlank(value))
       properties.put(field, value)
     else properties -= field

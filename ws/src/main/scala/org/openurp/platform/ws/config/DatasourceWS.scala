@@ -22,15 +22,19 @@ import org.beangle.commons.collection.Properties
 import org.beangle.data.dao.{EntityDao, OqlBuilder}
 import org.beangle.webmvc.api.action.{ActionSupport, EntitySupport}
 import org.beangle.webmvc.api.annotation.{mapping, param, response}
-import org.openurp.platform.config.model.{App, DataSource}
+import org.openurp.platform.config.model.DataSource
+import org.openurp.platform.config.service.AppService
 
 class DatasourceWS(entityDao: EntityDao) extends ActionSupport with EntitySupport[DataSource] {
+
+  var appService: AppService = _
 
   @mapping(value = "{app}/{name}")
   @response
   def index(@param("app") app: String, @param("name") name: String): AnyRef = {
     val secret = get("secret", "")
-    val apps = entityDao.findBy(classOf[App], "name", List(app))
+
+    val apps = appService.getApp(app)
     if (apps.isEmpty) return "error:error_app_name"
     val exist = apps.head
     if (exist.secret != secret) return "error:error_secret"

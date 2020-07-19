@@ -4,11 +4,11 @@
   <parent>
     <groupId>org.openurp</groupId>
     <artifactId>openurp-parent</artifactId>
-    <version>0.3.22</version>
+    <version>0.3.23</version>
   </parent>
   <groupId>org.openurp.platform</groupId>
   <artifactId>openurp-platform-parent</artifactId>
-  <version>0.4.1</version>
+  <version>0.5.0</version>
   <packaging>pom</packaging>
   <name>OpenURP Platform Parent</name>
 
@@ -19,11 +19,12 @@
     <module>adminapp</module>
     <module>userapp</module>
     <module>casapp</module>
+    <module>portal</module>
     <module>indexapp</module>
   </modules>
 
   <properties>
-    <openurp.app.version>0.1.34</openurp.app.version>
+    <openurp.app.version>0.2.0</openurp.app.version>
   </properties>
 
   <dependencyManagement>

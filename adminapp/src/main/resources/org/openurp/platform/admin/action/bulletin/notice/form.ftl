@@ -5,43 +5,22 @@
 <p class="bg-danger">该公告已经审核通过，不能更改，如需更改需审核环节退回</p>
   [#include "info_panel.ftl"/]
 [#else]
-${b.css("kindeditor","themes/default/default.css")}
-${b.script("kindeditor","kindeditor-all-min.js")}
-${b.script("kindeditor","lang/zh-CN.js")}
 [@b.toolbar title="新建/修改通知公告"]bar.addBack();[/@]
-[@b.form action=b.rest.save(notice) theme="list" onsubmit="syncEditor" enctype="multipart/form-data"]
+[@b.form action=b.rest.save(notice) theme="list"]
   [@b.textfield name="notice.title" label="标题" value="${notice.title!}" required="true" maxlength="100"/]
   [@b.select name="notice.app.id" label="应用" value=notice.app option="id,title" required="true" items=apps?sort_by('title')/]
   [@b.checkboxes name="userCategory.id" label="面向用户" value=notice.userCategories required="true" items=userCategories/]
   [@b.radios name="notice.sticky" label="是否置顶" value=notice.sticky required="true" /]
   [@b.radios name="notice.popup" label="是否弹窗" value=notice.popup required="true" /]
   [@b.startend label="有效期限" name="notice.beginOn,notice.endOn" required="true,true" start=notice.beginOn end=notice.endOn format="date"/]
-  [@b.textarea name="notice.content" id="notice_content" label="内容" rows="20" cols="100" value=notice.content maxlength="10000"/]
+  [@b.editor name="notice.content" id="notice_content" label="内容" rows="20" cols="80" value=notice.content maxlength="10000" required="true"/]
 
   [#list 1..(3-notice.docs?size) as i]
-  [@b.field label="附件"+i]
-  <input type="file" name="notice_doc"/>
-  [/@]
+  [@b.file label="附件"+i name="notice_doc" maxSize="5MB" extensions="doc,docx,pdf,xls,xlsx"/]
   [/#list]
   [@b.formfoot]
    [@b.reset/]&nbsp;&nbsp;[@b.submit value="action.submit"/]
   [/@]
 [/@]
-<script>
-      var editor;
-      jQuery(document).ready(function (){
-          editor = KindEditor.create('textarea[name="notice\.content"]', {
-          resizeType : 1,
-          allowPreviewEmoticons : false,
-          allowImageUpload : false,
-          allowFileManager:false
-        });
-      });
-
-      function syncEditor(){
-         $('#notice_content').val(editor.html());
-         return true;
-      }
-    </script>
 [/#if]
 [@b.foot/]

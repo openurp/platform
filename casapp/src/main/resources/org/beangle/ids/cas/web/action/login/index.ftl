@@ -11,7 +11,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>教学管理系统</title>
     ${b.css("bootstrap","css/bootstrap.min.css")}
-    ${b.css("bootstrap","css/bootstrap-theme.min.css")}
     ${b.css("openurp-default","css/login.css")}
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>

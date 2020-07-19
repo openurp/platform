@@ -23,6 +23,7 @@ import org.beangle.data.dao.{EntityDao, OqlBuilder}
 import org.beangle.webmvc.api.action.{ActionSupport, EntitySupport}
 import org.beangle.webmvc.api.annotation.{mapping, param, response}
 import org.openurp.platform.config.model.{App, AppType}
+import org.openurp.platform.config.service.DomainService
 import org.openurp.platform.security.model.FuncPermission
 import org.openurp.platform.user.model.{Root, User}
 import org.openurp.platform.user.service.UserService
@@ -32,15 +33,19 @@ import org.openurp.platform.user.service.UserService
  */
 class AppWS(userService: UserService, entityDao: EntityDao) extends ActionSupport with EntitySupport[User] {
 
+  var domainService: DomainService = _
+
   @response
   @mapping("{userCode}")
   def index(@param("userCode") userCode: String): collection.Seq[Properties] = {
     userService.get(userCode) match {
       case Some(user) =>
+        val domain = domainService.getDomain
         val fpAppQuery = OqlBuilder.from[App](classOf[FuncPermission].getName, "fp")
           .join("fp.role.members", "m")
           .where("m.user=:user and m.member=true", user)
           .where("fp.resource.app.enabled=true")
+          .where("fp.resource.app.domain=:domain", domain)
           .where(s"fp.resource.app.appType.name='${AppType.Webapp}'")
           .select("distinct fp.resource.app").cacheable()
 
@@ -50,18 +55,18 @@ class AppWS(userService: UserService, entityDao: EntityDao) extends ActionSuppor
         apps ++= fpApps
 
         val rootsQuery = OqlBuilder.from(classOf[Root], "root")
+          .where("root.app.domain=:domain", domain)
           .where(s"root.user=:user and root.app.enabled=true and root.app.appType.name='${AppType.Webapp}'", user)
           .cacheable()
         val roots = entityDao.search(rootsQuery)
         apps ++= roots.map(a => a.app)
-        val domain = get("domain")
-        domain foreach { d =>
-          apps --= apps.filter { a => a.domain == null || a.domain.name != d }
+        var appBuffer = apps.toBuffer.sorted
+        get("q") foreach { q =>
+          appBuffer = appBuffer.filter(a => a.title.contains(q))
         }
-        val appBuffer = apps.toBuffer.sorted
         appBuffer.map { app =>
           val p = new Properties(app, "id", "name", "title", "base", "url", "logoUrl", "navStyle")
-          p.add("domain", app.domain, "id", "name", "title")
+          p.add("group", app.group, "id", "name", "title")
           p
         }
       case None => Seq.empty

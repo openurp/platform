@@ -22,6 +22,7 @@ import org.beangle.commons.collection.{Collections, Properties}
 import org.beangle.data.dao.{EntityDao, OqlBuilder}
 import org.beangle.webmvc.api.action.ActionSupport
 import org.beangle.webmvc.api.annotation.{mapping, param, response}
+import org.openurp.platform.config.service.DomainService
 import org.openurp.platform.security.service.ProfileService
 import org.openurp.platform.user.model.UserProfile
 import org.openurp.platform.user.service.UserService
@@ -35,14 +36,16 @@ class ProfileWS(entityDao: EntityDao) extends ActionSupport {
 
   var profileService: ProfileService = _
 
+  var domainService: DomainService = _
+
   @response
   @mapping("{userCode}")
-  def index(@param("userCode") userCode: String, @param("domain") domain: String): Any = {
+  def index(@param("userCode") userCode: String): Any = {
     userService.get(userCode) match {
       case Some(user) =>
         val userProfileQuery = OqlBuilder.from(classOf[UserProfile], "up")
           .where("up.user =:user", user)
-          .where("up.domain.name=:domainName", domain)
+          .where("up.domain=:domain", domainService.getDomain)
           .cacheable()
 
         val appProfiles = entityDao.search(userProfileQuery)
@@ -51,23 +54,29 @@ class ProfileWS(entityDao: EntityDao) extends ActionSupport {
         val resolved = getBoolean("resolved", defaultValue = false)
         profiles map { profile =>
           val p = new Properties()
-          val properties = Collections.newBuffer[Properties]
-          p.put("properties", properties)
-          profile.properties foreach {
-            case (d, v) =>
-              val entry = new Properties()
-              val dimension = new Properties()
-              dimension.put("id", d.id)
-              dimension.put("name", d.name)
-              dimension.put("title", d.title)
-              dimension.put("typeName", d.typeName)
-              dimension.put("keyName", d.keyName)
-              entry.put("dimension", dimension)
-              entry.put("value", v)
-              if (resolved) {
+          p.put("id", profile.id)
+          p.put("name", profile.name)
+          if (resolved) {
+            val properties = Collections.newBuffer[Properties]
+            p.put("properties", properties)
+            profile.properties foreach {
+              case (d, v) =>
+                val entry = new Properties()
+                val dimension = new Properties()
+                dimension.put("id", d.id)
+                dimension.put("name", d.name)
+                dimension.put("title", d.title)
+                d.keyName foreach { kn =>
+                  dimension.put("keyName", kn)
+                }
+                entry.put("dimension", dimension)
                 entry.put("value", profileService.getDimensionValues(d, v))
-              }
-              properties += entry
+                properties += entry
+            }
+          } else {
+            profile.properties foreach {
+              case (d, v) => p.put(d.name, v)
+            }
           }
           p
         }

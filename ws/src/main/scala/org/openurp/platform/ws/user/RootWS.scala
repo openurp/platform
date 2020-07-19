@@ -21,19 +21,22 @@ package org.openurp.platform.ws.user
 import org.beangle.data.dao.{EntityDao, OqlBuilder}
 import org.beangle.webmvc.api.action.{ActionSupport, EntitySupport}
 import org.beangle.webmvc.api.annotation.{param, response}
+import org.openurp.platform.config.service.DomainService
 import org.openurp.platform.user.model.{Root, User}
-import org.openurp.platform.user.service.UserService
 
 /**
  * @author chaostone
  */
-class RootWS(userService: UserService, entityDao: EntityDao) extends ActionSupport with EntitySupport[User] {
+class RootWS(domainService: DomainService, entityDao: EntityDao) extends ActionSupport with EntitySupport[User] {
 
   @response
   def index(@param("app") app: String): Seq[String] = {
+    val domain = domainService.getDomain
     val query = OqlBuilder.from[String](classOf[Root].getName, "r")
-    query.where("r.app.name = :appName", app).select("r.user.code")
-    .cacheable()
+    query.where("r.app.name = :appName", app)
+      .where("r.app.domain=:domain", domain)
+      .select("r.user.code")
+      .cacheable()
     entityDao.search(query)
   }
 }

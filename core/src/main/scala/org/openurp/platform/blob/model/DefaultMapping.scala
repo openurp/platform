@@ -23,7 +23,7 @@ import org.beangle.data.orm.{IdGenerator, MappingModule}
 object DefaultMapping extends MappingModule {
 
   def binding(): Unit = {
-    defaultIdGenerator(IdGenerator.DateTime)
+    defaultIdGenerator(classOf[Long],IdGenerator.DateTime)
     defaultCache("openurp.platform.security", "read-write")
 
     bind[Profile].declare { e =>

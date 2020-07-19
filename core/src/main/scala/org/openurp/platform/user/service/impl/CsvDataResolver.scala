@@ -18,20 +18,19 @@
  */
 package org.openurp.platform.user.service.impl
 
-import org.beangle.commons.lang.Strings
-import org.openurp.platform.user.service.DataResolver
-import org.beangle.commons.conversion.impl.DefaultConversion
 import org.beangle.commons.bean.Properties
-import org.beangle.commons.lang.reflect.Reflections
+import org.beangle.commons.collection.Collections
+import org.beangle.commons.lang.Strings
 import org.openurp.platform.user.model.Dimension
+import org.openurp.platform.user.service.DataResolver
 
 object CsvDataResolver extends DataResolver {
 
   def marshal(field: Dimension, items: Seq[Any]): String = {
     if (null == items || items.isEmpty) return ""
     val properties = new collection.mutable.ListBuffer[String]
-    if (null != field.keyName) properties += field.keyName
-    if (null != field.properties) properties ++= Strings.split(field.properties, ",")
+    field.keyName foreach (properties += _)
+    field.properties foreach (x => properties ++= Strings.split(x, ","))
     val sb = new StringBuilder()
     if (properties.isEmpty) {
       for (obj <- items) if (null != obj) sb.append(String.valueOf(obj)).append(',')
@@ -56,46 +55,32 @@ object CsvDataResolver extends DataResolver {
     sb.toString()
   }
 
-  def unmarshal[T](field: Dimension, source: String): collection.Seq[T] = {
+  def unmarshal(field: Dimension, source: String): collection.Seq[Map[String, String]] = {
     if (Strings.isEmpty(source)) return List.empty
 
     val properties = new collection.mutable.ListBuffer[String]
-    if (null != field.keyName) properties += field.keyName
-    if (null != field.properties) properties ++= Strings.split(field.properties, ",")
-
-    val datas = Strings.split(source, ",")
-    val rs = new collection.mutable.ListBuffer[T]
+    field.keyName foreach (properties += _)
+    field.properties foreach (x => properties ++= Strings.split(x, ","))
+    val rs = new collection.mutable.ListBuffer[Map[String, String]]
     if (properties.isEmpty) {
-      val clazz = Class.forName(field.typeName).asInstanceOf[Class[T]]
-      val conversion = DefaultConversion.Instance
-      for (data <- datas) rs += conversion.convert(data, clazz)
-      return rs
+      val datas = Strings.split(source, ",")
+      for (data <- datas) rs += Map(field.keyName.get -> data)
     } else {
       properties.clear()
-      var startIndex = 0
-      var names = Array(field.keyName)
-      if (-1 != datas(0).indexOf(';')) {
-        names = Strings.split(datas(0), ";")
-        startIndex = 1
-      }
+      var startIndex = 1
+      val datas = Strings.split(source, ",")
+      var names = Array(field.keyName.get)
+      names = Strings.split(datas(0), ",")
       properties ++= names
       (startIndex until datas.length) foreach { i =>
-        val obj = newInstance(field)
+        val obj = Collections.newMap[String, String]
         val dataItems = Strings.split(datas(i), ";")
-        (0 until properties.size) foreach { j =>
-          Properties.copy(obj, properties(j), dataItems(j))
+        properties.indices foreach { j =>
+          obj.put(properties(j), dataItems(j))
         }
-        rs += obj.asInstanceOf[T]
+        rs += obj.toMap
       }
     }
     rs
-  }
-
-  def newInstance(field: Dimension): Object = {
-    try {
-      Reflections.newInstance[Object](field.typeName)
-    } catch {
-      case t: Throwable => new collection.mutable.HashMap[String, Any]
-    }
   }
 }

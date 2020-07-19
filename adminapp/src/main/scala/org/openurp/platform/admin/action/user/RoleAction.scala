@@ -28,10 +28,11 @@ import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.app.UrpApp
 import org.openurp.platform.admin.helper.ProfileHelper
 import org.openurp.platform.config.model.App
+import org.openurp.platform.config.service.DomainService
 import org.openurp.platform.security.service.ProfileService
 import org.openurp.platform.user.model.{Role, User}
 import org.openurp.platform.user.service.impl.CsvDataResolver
-import org.openurp.platform.user.service.{DataResolver, RoleService, UserService}
+import org.openurp.platform.user.service.{DataResolver, DimensionService, RoleService, UserService}
 
 /**
  * 角色信息维护响应类
@@ -40,7 +41,8 @@ import org.openurp.platform.user.service.{DataResolver, RoleService, UserService
 class RoleAction(val roleService: RoleService, val userService: UserService) extends RestfulAction[Role] {
 
   var dataResolver: DataResolver = CsvDataResolver
-
+  var domainService: DomainService = _
+  var dimensionService: DimensionService = _
   var profileService: ProfileService = _
 
   /**
@@ -56,11 +58,12 @@ class RoleAction(val roleService: RoleService, val userService: UserService) ext
   override def editSetting(role: Role): Unit = {
     put("role", role)
     val query = OqlBuilder.from(classOf[Role], "role")
-    val me = entityDao.findBy(classOf[User], "code", List(Securities.user)).head
+    val me = userService.get(Securities.user).head
     if (!userService.isRoot(me, UrpApp.name)) {
       query.join("role.members", "gm")
       query.where("gm.user=:me and gm.manager=true", me)
     }
+    query.where("role.domain=:domain", domainService.getDomain)
     val parents = new collection.mutable.ListBuffer[Role]
     parents ++= entityDao.search(query)
     parents --= Hierarchicals.getFamily(role)
@@ -70,17 +73,14 @@ class RoleAction(val roleService: RoleService, val userService: UserService) ext
 
   protected override def getQueryBuilder: OqlBuilder[Role] = {
     val entityQuery = OqlBuilder.from(classOf[Role], "role")
-    //val me = entityDao.findBy(classOf[User], "code", List(Securities.user)).head
-    //    if (!userService.isRoot(me, app.name)) {
-    //      entityQuery.join("role.members", "gm")
-    //      entityQuery.where("gm.user=:me and gm.manager=true", me)
-    //    }
     populateConditions(entityQuery)
+    entityQuery.where("role.domain=:domain", domainService.getDomain)
     val orderBy = get("orderBy", "role.indexno")
     entityQuery.limit(getPageLimit).orderBy(orderBy)
   }
 
   protected override def saveAndRedirect(entity: Role): View = {
+    entity.domain = domainService.getDomain
     val me = entityDao.findBy(classOf[User], "code", List(Securities.user)).head
     val role = entity.asInstanceOf[Role]
     if (entity.persisted) {
@@ -115,7 +115,7 @@ class RoleAction(val roleService: RoleService, val userService: UserService) ext
 
   def profile(): View = {
     val role = entityDao.get(classOf[Role], intId("role"))
-    val helper = new ProfileHelper(entityDao, profileService)
+    val helper = new ProfileHelper(entityDao, profileService, dimensionService)
     helper.populateInfo(List(role))
     put("role", role)
     forward()
@@ -123,8 +123,8 @@ class RoleAction(val roleService: RoleService, val userService: UserService) ext
 
   def editProfile(): View = {
     val role = entityDao.get(classOf[Role], intId("role"))
-    val helper = new ProfileHelper(entityDao, profileService)
-    helper.fillEditInfo(role, isAdmin = true, null)
+    val helper = new ProfileHelper(entityDao, profileService, dimensionService)
+    helper.fillEditInfo(role, isAdmin = true)
     put("role", role)
     forward()
   }
@@ -138,11 +138,11 @@ class RoleAction(val roleService: RoleService, val userService: UserService) ext
 
   def saveProfile(): View = {
     val me = entityDao.findBy(classOf[User], "code", List(Securities.user)).head
-    val helper = new ProfileHelper(entityDao, profileService)
+    val helper = new ProfileHelper(entityDao, profileService, dimensionService)
     helper.dataResolver = dataResolver
     val role = entityDao.get(classOf[Role], intId("role"))
     val app = entityDao.get(classOf[App], intId("app"))
-    helper.populateSaveInfo(role, userService.isRoot(me, app.name), app.domain)
+    helper.populateSaveInfo(role, userService.isRoot(me, app.name))
     entityDao.saveOrUpdate(role)
     redirect("profile", "info.save.success")
   }
@@ -151,7 +151,7 @@ class RoleAction(val roleService: RoleService, val userService: UserService) ext
    * 删除一个或多个角色
    */
   override def remove(): View = {
-    val me = entityDao.findBy(classOf[User], "code", List(Securities.user)).head
+    val me = userService.get(Securities.user).head
     roleService.remove(me, entityDao.find(classOf[Role], intIds("role")))
     redirect("search", "info.remove.success")
   }

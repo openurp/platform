@@ -22,15 +22,18 @@ import org.beangle.data.dao.EntityDao
 import org.beangle.security.authc.{PasswordPolicy, PasswordStrengthChecker}
 import org.beangle.webmvc.api.action.ActionSupport
 import org.beangle.webmvc.api.annotation.{param, response}
+import org.openurp.platform.config.service.DomainService
 import org.openurp.platform.user.model.PasswordConfig
 
 class CredentialWS extends ActionSupport {
 
   var entityDao: EntityDao = _
 
+  var domainService: DomainService = _
+
   private def getConfig: PasswordConfig = {
-    val configs = entityDao.getAll(classOf[PasswordConfig])
-    if (configs.size > 0) {
+    val configs = entityDao.findBy(classOf[PasswordConfig], "org", List(domainService.getOrg))
+    if (configs.nonEmpty) {
       configs.head
     } else {
       PasswordConfig(PasswordPolicy.Medium)

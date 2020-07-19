@@ -22,6 +22,6 @@ import org.openurp.platform.config.model.Db
 
 trait DbService {
 
-  def list(): Seq[Db]
+  def getAll(): Seq[Db]
 
 }

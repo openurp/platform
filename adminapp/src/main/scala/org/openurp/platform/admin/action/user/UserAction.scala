@@ -29,6 +29,7 @@ import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.app.UrpApp
 import org.openurp.platform.admin.helper.UserDashboardHelper
+import org.openurp.platform.config.service.DomainService
 import org.openurp.platform.user.model._
 import org.openurp.platform.user.service.UserService
 
@@ -40,6 +41,7 @@ class UserAction extends RestfulAction[User] {
 
   var userService: UserService = _
   var userDashboardHelper: UserDashboardHelper = _
+  var domainService: DomainService = _
 
   override def indexSetting(): Unit = {
     put("categories", entityDao.getAll(classOf[UserCategory]))
@@ -74,6 +76,7 @@ class UserAction extends RestfulAction[User] {
   }
 
   protected override def getQueryBuilder: OqlBuilder[User] = {
+    put("domain", domainService.getDomain)
     val userQuery = OqlBuilder.from(classOf[User], "user")
     // 查询角色
     val sb = new StringBuilder("exists(from user.roles m where ")

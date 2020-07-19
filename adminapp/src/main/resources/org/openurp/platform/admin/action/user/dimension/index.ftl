@@ -1,15 +1,13 @@
 [#ftl]
 [@b.head/]
-<table class="indexpanel">
-<tr>
-  <td class="index_view">
+<div class="search-container">
+ <div class="search-panel">
   [@b.form name="searchForm" action="!search" title="ui.searchForm" target="dimensionList" theme="search"]
     [@b.textfields names="dimension.name,dimension.title"/]
   [/@]
-  </td>
-  <td class="index_content">
+ </div>
+ <div class="search-list">
   [@b.div id="dimensionList" href="!search" /]
-  </td>
-</tr>
-</table>
+ </div>
+</div>
 [@b.foot/]

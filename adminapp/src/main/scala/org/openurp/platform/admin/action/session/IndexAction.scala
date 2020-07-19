@@ -27,10 +27,13 @@ import org.beangle.data.jdbc.query.JdbcExecutor
 import org.beangle.webmvc.api.action.ActionSupport
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.helper.QueryHelper
+import org.openurp.platform.config.service.DomainService
 import org.openurp.platform.user.model.UserCategory
 
 class IndexAction(ds: DataSource) extends ActionSupport {
   val jdbcExecutor = new JdbcExecutor(ds)
+
+  var domainService: DomainService = _
 
   def index(): View = {
     var sql = "select id,name from usr.user_categories"
@@ -43,9 +46,10 @@ class IndexAction(ds: DataSource) extends ActionSupport {
     }
 
     sql = "select id,principal,description,ip,agent,os,login_at,last_access_at,category_id from session.session_infoes s"
+    sql += " where s.domain_id=" + domainService.getDomain.id
     sql += (" order by " + get(Order.OrderStr, "login_at desc"))
     val limit = QueryHelper.pageLimit
-    val list = jdbcExecutor.fetch(sql,limit)
+    val list = jdbcExecutor.fetch(sql, limit)
     val datas = list.map { d =>
       val info = new SessionInfo()
       info.id = d(0).asInstanceOf[String]
@@ -67,7 +71,7 @@ class IndexAction(ds: DataSource) extends ActionSupport {
       }
       info
     }
-    val total = jdbcExecutor.queryForInt("select count(*) from session.session_infoes ")
+    val total = jdbcExecutor.queryForInt("select count(*) from session.session_infoes where domain_id=" + domainService.getDomain.id)
     val page = new SinglePage[SessionInfo](limit.pageIndex, limit.pageSize, total.getOrElse(0), datas)
     put("sessionInfoes", page)
     forward()

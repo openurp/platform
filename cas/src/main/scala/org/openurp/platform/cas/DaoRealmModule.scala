@@ -18,15 +18,12 @@
  */
 package org.openurp.platform.cas
 
-import java.time.LocalDateTime
-
 import org.beangle.cdi.bind.BindModule
 import org.beangle.security.authc.{DefaultAccountRealm, RealmAuthenticator}
 import org.openurp.platform.cas.service.DaoAccountStore
 
 class DaoRealmModule extends BindModule {
   override def binding(): Unit = {
-    val now =LocalDateTime.now()
     bind("security.Realm.default", classOf[DefaultAccountRealm])
       .constructor(bean(classOf[DaoAccountStore]), ref("security.CredentialsChecker.default"))
     bind("security.Authenticator", classOf[RealmAuthenticator])

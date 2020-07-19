@@ -19,12 +19,12 @@
 package org.openurp.platform.admin
 
 import org.beangle.cdi.bind.BindModule
-import org.openurp.platform.admin.action.config.{AppAction, CredentialAction, DbAction}
+import org.openurp.platform.admin.action.config.{AppAction, AppGroupAction, CredentialAction, DbAction}
 
 class ConfigModule extends BindModule {
 
   protected override def binding(): Unit = {
-    bind(classOf[AppAction])
+    bind(classOf[AppAction],classOf[AppGroupAction])
     bind(classOf[DbAction])
     bind(classOf[CredentialAction])
   }

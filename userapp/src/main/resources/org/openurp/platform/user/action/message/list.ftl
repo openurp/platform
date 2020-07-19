@@ -1,37 +1,37 @@
 [#ftl]
 [@b.head/]
 [#assign boxnames={'1':'收件箱','2':'已读消息','3':'垃圾箱'}/]
-<div class="box box-primary">
-   [@b.form  name="messageListForm" id="messageListForm" action="!search"]
+<div class="card card-primary card-outline">
+   [@b.form name="messageListForm" id="messageListForm" action="!search"]
    [#list Parameters as k,v]
    [#if k!="message.id" && k!="message.title" ]
    <input name="${k}" value="${v}" type="hidden"/>
    [/#if]
    [/#list]
-    <div class="box-header with-border">
-      <h3 class="box-title">${boxnames[Parameters['message.status']]}</h3>
-      <div class="box-tools pull-right">
-        <div class="has-feedback">
+    <div class="card-header">
+      <h3 class="card-title">${boxnames[Parameters['message.status']]}</h3>
+      <div class="card-tools">
+        <div class="input-group input-group-sm">
           <input type="text" id="messageSearchBox" name="message.title" value="${Parameters['message.title']!}" class="form-control input-sm" placeholder="查询消息" >
-          <span class="glyphicon glyphicon-search form-control-feedback"></span>
+          <div class="input-group-append"><div class="btn btn-primary"><i class="fas fa-search" onclick="bg.form.submit(document.messageListForm);"></i></div></div>
         </div>
       </div>
     </div>
    [/@]
 
-    <div class="box-body no-padding">
+    <div class="card-body p-0">
       <div class="mailbox-controls">
-        <button type="button" class="btn btn-default btn-sm checkbox-toggle" onclick="toggleAll()"><i class="fa fa-square-o"></i>
+        <button type="button" class="btn btn-default btn-sm checkbox-toggle" onclick="toggleAll()"><i class="far fa-square"></i>
         </button>
         <div class="btn-group">
           [#if Parameters['message.status']=='3']
           <button type="button" id="deleteButton" class="btn btn-default btn-sm"><i class="fa fa-times"></i></button>
           [#else]
-          <button type="button" id="trashButton" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>
+          <button type="button" id="trashButton" class="btn btn-default btn-sm"><i class="far fa-trash-alt"></i></button>
           [/#if]
-          <button type="button" class="btn btn-default btn-sm"  onclick="gotoPage(${messages.pageIndex})"><i class="fa fa-refresh"></i></button>
+          <button type="button" class="btn btn-default btn-sm"  onclick="gotoPage(${messages.pageIndex})"><i class="fas fa-sync-alt"></i></button>
         </div>
-        <div class="pull-right">
+        <div class="float-right">
           [#if messages.totalItems==0]
           0-0/0
           [#else]
@@ -49,12 +49,12 @@
           <tbody>
           [#list messages as message]
           <tr>
-            <td><input type="checkbox" name="message.id" value="${message.id}"></td>
-            <td class="mailbox-name">[@b.a href="!info?id=${message.id}"]${message.sender.name}[/@]</td>
-            <td class="mailbox-subject">
+            <td width="7%"><input type="checkbox" name="message.id" value="${message.id}"></td>
+            <td class="mailbox-name" width="13%">[@b.a href="!info?id=${message.id}"]${message.sender.name}[/@]</td>
+            <td class="mailbox-subject" width="65%">
                <b>${message.title}</b> - [#if message.content?length>30]${message.content?substring(0,30)?html}...[#else]${message.content?html}[/#if]
             </td>
-            <td class="mailbox-date">${message.sentAt?string('yy-MM-dd HH:mm')}</td>
+            <td class="mailbox-date" style="font-size:0.8em" width="15%">${message.sentAt?string('yy-MM-dd HH:mm')}</td>
           </tr>
           [/#list]
           </tbody>

@@ -19,9 +19,10 @@
 package org.openurp.platform.config.model
 
 import org.beangle.data.model.IntId
-import org.beangle.data.model.pojo.{ Hierarchical, Named }
+import org.beangle.data.model.pojo.Named
 
-class Domain extends IntId with Named with Hierarchical[Domain] {
+class Domain extends IntId with Named {
   var title: String = _
-
+  var hostname: String = _
+  var org: Org = _
 }

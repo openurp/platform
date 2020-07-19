@@ -1,28 +1,28 @@
 [#ftl]
 [@b.head/]
 [#assign statusMap={'1':'未读','2':'已读','3':'删除'}/]
-<div class="box box-primary">
+<div class="card card-primary card-outline">
    [@b.form  name="messageListForm" id="messageListForm" action="!sentList"]
    [#list Parameters as k,v]
    [#if k!="message.id" && k!="message.title" ]
    <input name="${k}" value="${v}" type="hidden"/>
    [/#if]
    [/#list]
-    <div class="box-header with-border">
-      <h3 class="box-title">已发送消息</h3>
-      <div class="box-tools pull-right">
-        <div class="has-feedback">
+    <div class="card-header">
+      <h3 class="card-title">已发送消息</h3>
+      <div class="card-tools float-right">
+        <div class="input-group input-group-sm">
           <input type="text" id="messageSearchBox" name="message.title" value="${Parameters['message.title']!}" class="form-control input-sm" placeholder="查询消息" >
-          <span class="glyphicon glyphicon-search form-control-feedback"></span>
+          <div class="input-group-append"><div class="btn btn-primary"><i class="fas fa-search"></i></div></div>
         </div>
       </div>
     </div>
    [/@]
 
-    <div class="box-body no-padding">
+    <div class="card-body p-0">
       <div class="mailbox-controls">
-        <button type="button" class="btn btn-default btn-sm"  onclick="gotoPage(${messages.pageIndex})"><i class="fa fa-refresh"></i></button>
-        <div class="pull-right">
+        <button type="button" class="btn btn-default btn-sm"  onclick="gotoPage(${messages.pageIndex})"><i class="fas fa-sync-alt"></i></button>
+        <div class="float-right">
           [#if messages.totalItems==0]
           0-0/0
           [#else]
@@ -40,12 +40,12 @@
           <tbody>
           [#list messages as message]
           <tr>
-            <td class="mailbox-name">[@b.a href="!info?id=${message.id}"]${message.recipient.name}[/@]</td>
-            <td class="mailbox-subject">
+            <td class="mailbox-name"  width="13%">[@b.a href="!info?id=${message.id}"]${message.recipient.name}[/@]</td>
+            <td class="mailbox-subject" width="65%">
                <b>${message.title}</b> - [#if message.content?length>30]${message.content?substring(0,30)?html}...[#else]${message.content?html}[/#if]
             </td>
-            <td>${statusMap[message.status?string]}</td>
-            <td class="mailbox-date">${message.sentAt?string('yy-MM-dd HH:mm')}</td>
+            <td  width="7%">${statusMap[message.status?string]}</td>
+            <td class="mailbox-date" style="font-size:0.8em"  width="15%">${message.sentAt?string('yy-MM-dd HH:mm')}</td>
           </tr>
           [/#list]
           </tbody>

@@ -18,30 +18,43 @@
  */
 package org.openurp.platform.security.service.impl
 
-import org.openurp.platform.user.model.{ Dimension, Profile, User }
+import org.beangle.commons.bean.Properties
+import org.beangle.commons.collection.Collections
+import org.beangle.commons.lang.Strings
+import org.beangle.data.dao.{EntityDao, OqlBuilder}
+import org.openurp.app.util.JSON
+import org.openurp.platform.config.service.DomainService
 import org.openurp.platform.security.model.FuncResource
 import org.openurp.platform.security.service.ProfileService
-import org.beangle.commons.bean.Properties
-import org.beangle.commons.lang.Strings
-import org.beangle.commons.collection.Collections
-import org.openurp.app.util.JSON
+import org.openurp.platform.user.model.{Dimension, Profile, User, UserProfile}
 
 class ProfileServiceImpl extends ProfileService {
 
-  def getProfiles(user: User, resource: FuncResource): collection.Seq[Profile] = {
+  var domainService: DomainService = _
+  var entityDao: EntityDao = _
+
+  override def getProfiles(user: User, resource: FuncResource): collection.Seq[Profile] = {
     Seq.empty
+  }
+
+  override def getProfiles(usercode: String): Seq[UserProfile] = {
+    val builder = OqlBuilder.from(classOf[UserProfile], "up")
+    builder.where("up.user.code=:code and up.user.org=:org and up.domain=:domain",
+      usercode, domainService.getOrg, domainService.getDomain)
+    entityDao.search(builder)
   }
 
   def getDimensionValues(field: Dimension, keys: String*): collection.Seq[Any] = {
     val source = field.source
-    val keySet = keys.toSet
+    val keyname = field.keyName.getOrElse("")
+
     if (source.startsWith("json:")) {
       val json = source.substring(5)
-      JSON.parse(json).asInstanceOf[Seq[Any]].filter { x => Properties.get(x, field.keyName) }
+      JSON.parse(json).asInstanceOf[Seq[Any]].filter { x => Properties.get(x, keyname) }
     } else if (source.startsWith("csv:")) {
       val csv = source.substring(4)
-      val lines = Strings.split(csv, "\n")
-      val start = (0 until lines.length) find (x => Strings.isNotBlank(lines(x)))
+      val lines = Strings.split(Strings.replace(csv, "\r", ""), "\n")
+      val start = lines.indices find (x => Strings.isNotBlank(lines(x)))
       val heads = Strings.split(lines(start.get), ",")
       val data = Collections.newBuffer[org.beangle.commons.collection.Properties]
       var i = start.get + 1
@@ -49,10 +62,10 @@ class ProfileServiceImpl extends ProfileService {
         if (!Strings.isBlank(lines(i))) {
           val datas = Strings.split(lines(i), ",")
           val p = new org.beangle.commons.collection.Properties
-          for (j <- 0 until heads.length) {
+          for (j <- heads.indices) {
             p.put(heads(j), datas(j))
           }
-          p.get(field.keyName) foreach { id =>
+          p.get(keyname) foreach { id =>
             if (keys.isEmpty || keys.contains("*") || keys.contains(id)) {
               data += p
             }

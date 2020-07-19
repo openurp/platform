@@ -18,34 +18,45 @@
  */
 package org.openurp.platform.admin.action.config
 
+import org.beangle.data.dao.OqlBuilder
 import org.beangle.webmvc.api.annotation.ignore
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.platform.config.model._
-import org.openurp.platform.config.service.DbService
+import org.openurp.platform.config.service.{AppService, DbService, DomainService}
 
 class AppAction(dbService: DbService) extends RestfulAction[App] {
 
   override def simpleEntityName = "app"
 
+  var domainService: DomainService = _
+  var appService: AppService = _
+
   def datasource(): View = {
-    put("dataSources", dbService.list())
+    put("dataSources", dbService.getAll())
     forward()
   }
 
   protected override def indexSetting(): Unit = {
-    put("domains", entityDao.getAll(classOf[Domain]))
+    put("groups", appService.getGroups())
     put("appTypes", entityDao.getAll(classOf[AppType]))
   }
 
   protected override def editSetting(entity: App): Unit = {
-    put("domains", entityDao.getAll(classOf[Domain]))
+    put("groups", appService.getGroups())
     put("appTypes", entityDao.getAll(classOf[AppType]))
     put("credentials", entityDao.getAll(classOf[Credential]))
   }
 
+  override protected def getQueryBuilder: OqlBuilder[App] = {
+    val builder = super.getQueryBuilder
+    builder.where("app.domain=:domain", domainService.getDomain)
+    builder
+  }
+
   @ignore
   override protected def saveAndRedirect(app: App): View = {
+    app.domain = domainService.getDomain
     try {
       val sets = app.datasources
       val processed = new collection.mutable.HashSet[Integer]

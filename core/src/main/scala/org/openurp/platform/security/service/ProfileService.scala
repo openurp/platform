@@ -18,12 +18,14 @@
  */
 package org.openurp.platform.security.service
 
-import org.openurp.platform.user.model.{ Dimension, Profile, User }
 import org.openurp.platform.security.model.FuncResource
+import org.openurp.platform.user.model.{Dimension, Profile, User, UserProfile}
 
 trait ProfileService {
 
   def getProfiles(user: User, resource: FuncResource): collection.Seq[Profile]
+
+  def getProfiles(usercode: String): Seq[UserProfile]
 
   def getDimensionValues(field: Dimension, keys: String*): collection.Seq[Any]
 

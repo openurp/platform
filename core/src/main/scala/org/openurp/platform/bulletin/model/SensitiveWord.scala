@@ -19,8 +19,9 @@
 package org.openurp.platform.bulletin.model
 
 import org.beangle.data.model.IntId
+import org.openurp.platform.config.model.Domain
 
-class SensitiveWord extends IntId{
-
-  var content:String=_
+class SensitiveWord extends IntId {
+  var domain: Domain = _
+  var content: String = _
 }

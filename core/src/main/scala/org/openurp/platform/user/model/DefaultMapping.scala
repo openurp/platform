@@ -23,15 +23,16 @@ import org.beangle.data.orm.{IdGenerator, MappingModule}
 object DefaultMapping extends MappingModule {
 
   def binding(): Unit = {
-    defaultIdGenerator("auto_increment")
+    defaultIdGenerator(classOf[Int], IdGenerator.AutoIncrement)
+    defaultIdGenerator(classOf[Long], IdGenerator.AutoIncrement)
     defaultCache("openurp.platform.security", "read-write")
 
     bind[Dimension].declare { e =>
       e.name & e.title are length(40)
       e.source is length(6000)
-      e.typeName is notnull
       e.keyName is length(20)
       e.properties is length(100)
+      index("idx_dimension_name", true, e.domain, e.name)
     }
 
     bind[RoleMember].declare { e =>
@@ -43,31 +44,38 @@ object DefaultMapping extends MappingModule {
       e.children is depends("parent")
       e.members is depends("role")
       e.properties is eleLength(2000)
+      index("idx_role_name", true, e.domain, e.name)
     }
 
     bind[User].declare { e =>
-      e.code is(length(30), unique)
+      e.code is length(30)
       e.getName is length(100)
       e.remark is length(100)
       e.roles is depends("user")
       e.groups is depends("user")
+      e.acounts is depends("user")
       e.properties is eleLength(2000)
+      index("idx_user_code", true, e.org, e.code)
     }
 
-    bind[Credential].declare { e =>
+    bind[Account].declare { e =>
       e.password is length(200)
-      index("idx_credential_user", true, e.user)
+      index("idx_account", true,e.user,e.domain)
     }
 
-    bind[PasswordConfig]
+    bind[PasswordConfig].declare { e =>
+      index("idx_password_config", true, e.domain)
+    }
 
     bind[UserCategory].declare { e =>
       e.code is(length(30), unique)
       e.name is length(100)
+      index("idx_user_category", true, e.org, e.name)
     }
 
     bind[UserProfile].declare { e =>
       e.properties is eleLength(2000)
+      index("idx_user_profile",false,e.user,e.domain)
     }
 
     bind[GroupMember]
@@ -77,6 +85,7 @@ object DefaultMapping extends MappingModule {
       e.children is depends("parent")
       e.members is depends("group")
       e.properties is eleLength(2000)
+      index("idx_group", true, e.org, e.name)
     }
 
     bind[Avatar].declare { e =>

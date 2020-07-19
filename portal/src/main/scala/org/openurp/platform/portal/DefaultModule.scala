@@ -16,28 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.openurp.platform.user.model
+package org.openurp.platform.portal
 
-import java.time.LocalDate
+import org.beangle.cdi.bind.BindModule
+import org.openurp.platform.portal.action.IndexAction
 
-import org.beangle.data.model.LongId
-import org.beangle.data.model.pojo.Updated
+class DefaultModule extends BindModule {
 
-class Credential extends LongId with Updated {
-
-  var user: User = _
-
-  var password: String = _
-
-  var expiredOn: LocalDate = _
-
-  var inactiveOn: LocalDate = _
-
-  def expired: Boolean = {
-    LocalDate.now.isAfter(expiredOn)
-  }
-
-  def inactive: Boolean = {
-    LocalDate.now.isAfter(inactiveOn)
+  protected override def binding(): Unit = {
+    bind(classOf[IndexAction])
   }
 }

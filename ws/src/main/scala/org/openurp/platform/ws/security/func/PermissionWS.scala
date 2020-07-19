@@ -22,6 +22,7 @@ import org.beangle.commons.collection.Properties
 import org.beangle.data.dao.{EntityDao, OqlBuilder}
 import org.beangle.webmvc.api.action.ActionSupport
 import org.beangle.webmvc.api.annotation.{mapping, param, response}
+import org.openurp.platform.config.service.AppService
 import org.openurp.platform.security.model.{FuncPermission, FuncResource}
 
 /**
@@ -29,11 +30,14 @@ import org.openurp.platform.security.model.{FuncPermission, FuncResource}
  */
 class PermissionWS(entityDao: EntityDao) extends ActionSupport {
 
+  var appService: AppService = _
+
   @response
   @mapping("role/{roleId}")
-  def role(@param("app") app: String, @param("roleId") roleId: Int): Any = {
+  def role(@param("app") appName: String, @param("roleId") roleId: Int): Any = {
+    val app = appService.getApp(appName).head
     val roleQuery = OqlBuilder.from[FuncResource](classOf[FuncPermission].getName, "fp")
-      .where("fp.resource.app.name = :appName", app).where("fp.role.id = :roleId", roleId)
+      .where("fp.resource.app = :app", app).where("fp.role.id = :roleId", roleId)
       .cacheable()
       .select("fp.resource")
     val resources = entityDao.search(roleQuery)

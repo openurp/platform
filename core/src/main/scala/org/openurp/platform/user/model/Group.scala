@@ -20,18 +20,19 @@ package org.openurp.platform.user.model
 
 import java.security.Principal
 
-import org.beangle.commons.lang.{ Numbers, Strings }
+import org.beangle.commons.lang.{Numbers, Strings}
 import org.beangle.data.model.IntId
-import org.beangle.data.model.pojo.{ Enabled, Hierarchical, Named, Remark, Updated }
+import org.beangle.data.model.pojo._
+import org.openurp.platform.config.model.Org
 
 /**
  * @author chaostone
  */
-
 class Group extends IntId with Named with Updated with Enabled with Hierarchical[Group] with Profile with Principal with Remark {
   var properties: collection.mutable.Map[Dimension, String] = new collection.mutable.HashMap[Dimension, String]
   var creator: User = _
   var members: collection.mutable.Seq[GroupMember] = new collection.mutable.ListBuffer[GroupMember]
+  var org: Org = _
 
   override def getName: String = {
     name

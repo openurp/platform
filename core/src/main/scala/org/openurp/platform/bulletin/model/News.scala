@@ -19,9 +19,12 @@
 package org.openurp.platform.bulletin.model
 
 import java.time.LocalDate
+
 import org.beangle.data.model.LongId
+import org.openurp.platform.config.model.Domain
 
 class News extends LongId {
+  var domain: Domain = _
   var title: String = _
   var publishedOn: LocalDate = _
   var url: String = _

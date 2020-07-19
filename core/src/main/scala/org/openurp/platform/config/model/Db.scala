@@ -25,6 +25,7 @@ import org.beangle.data.model.pojo.{Named, Remark}
 import scala.collection.mutable
 
 class Db extends IntId with Named with Remark {
+  var domain: Domain = _
   var url: Option[String] = None
   var driver: String = _
   var serverName: String = _

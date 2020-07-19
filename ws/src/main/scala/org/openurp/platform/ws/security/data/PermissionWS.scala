@@ -22,21 +22,23 @@ import org.beangle.commons.collection.Properties
 import org.beangle.data.dao.{EntityDao, OqlBuilder}
 import org.beangle.webmvc.api.action.ActionSupport
 import org.beangle.webmvc.api.annotation.{mapping, param, response}
-import org.openurp.platform.config.model.App
+import org.openurp.platform.config.service.AppService
 import org.openurp.platform.security.model.DataPermission
-import org.openurp.platform.user.model.User
+import org.openurp.platform.user.service.UserService
 
 /**
  * @author chaostone
  */
 class PermissionWS(entityDao: EntityDao) extends ActionSupport {
 
+  var appService: AppService = _
+  var userService: UserService = _
+
   @response
   @mapping("user/{userCode}")
   def index(@param("app") appName: String, @param("userCode") userCode: String, @param("data") dataName: String): Any = {
-    val userQuery = OqlBuilder.from(classOf[User], "u").where("u.code =:userCode", userCode)
-    val users = entityDao.search(userQuery)
-    val apps = entityDao.findBy(classOf[App], "name", List(appName))
+    val users = userService.get(userCode)
+    val apps = appService.getApp(appName)
     if (users.isEmpty || apps.isEmpty) {
       List.empty
     } else {
@@ -44,10 +46,10 @@ class PermissionWS(entityDao: EntityDao) extends ActionSupport {
       val app = apps.head
 
       val roleSet = u.roles.filter(r => r.member).map(r => r.role).toSet
-      val permissionQuery = OqlBuilder.from(classOf[DataPermission], "dp")
-      permissionQuery.where("dp.domain=:domain and dp.resource.name=:dataName", app.domain, dataName)
+      val premQuery = OqlBuilder.from(classOf[DataPermission], "dp")
+      premQuery.where("dp.domain=:domain and dp.resource.name=:dataName", app.domain, dataName)
         .cacheable(true)
-      val permissions = entityDao.search(permissionQuery)
+      val permissions = entityDao.search(premQuery)
       val mostFavorates = permissions find (p => p.app.isDefined && p.role.isDefined && roleSet.contains(p.role.get))
       val p = mostFavorates match {
         case Some(p) => p

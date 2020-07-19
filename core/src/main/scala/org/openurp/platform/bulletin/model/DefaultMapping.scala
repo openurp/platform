@@ -18,12 +18,12 @@
  */
 package org.openurp.platform.bulletin.model
 
-import org.beangle.data.orm.MappingModule
+import org.beangle.data.orm.{IdGenerator, MappingModule}
 
 object DefaultMapping extends MappingModule {
 
   override def binding(): Unit = {
-    defaultIdGenerator("auto_increment")
+    defaultIdGenerator(classOf[Long],IdGenerator.DateTime)
     defaultCache("openurp.platform.security", "read-write")
 
     bind[Doc]

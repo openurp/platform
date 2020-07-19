@@ -18,9 +18,7 @@
  */
 package org.openurp.platform.user.service
 
-import org.openurp.platform.user.model.MemberShip
-import org.openurp.platform.user.model.RoleMember
-import org.openurp.platform.user.model.User
+import org.openurp.platform.user.model.{MemberShip, RoleMember, User, UserCategory}
 
 trait UserService {
 
@@ -36,9 +34,9 @@ trait UserService {
 
   def create(creator: User, user: User): Unit
 
-  def updateState(manager: User, userIds: Iterable[Long], active: Boolean): Int
-
   def remove(creator: User, user: User): Unit
 
   def isRoot(user: User, appName: String): Boolean
+
+  def getCategories():Seq[UserCategory]
 }

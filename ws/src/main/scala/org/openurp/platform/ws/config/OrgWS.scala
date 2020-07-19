@@ -19,20 +19,18 @@
 package org.openurp.platform.ws.config
 
 import org.beangle.commons.collection.Properties
-import org.beangle.data.dao.EntityDao
 import org.beangle.webmvc.api.action.ActionSupport
 import org.beangle.webmvc.api.annotation.response
-import org.openurp.platform.config.model.Org
+import org.openurp.platform.config.service.DomainService
 
-class OrgWS(entityDao: EntityDao) extends ActionSupport {
+class OrgWS extends ActionSupport {
+
+  var domainService: DomainService = _
 
   @response
   def index(): Properties = {
-    val orgs = entityDao.getAll(classOf[Org])
-    if (orgs.isEmpty) {
-      new Properties()
-    } else {
-      new Properties(orgs.head, "id", "code", "name", "shortName", "logoUrl", "wwwUrl")
-    }
+    val org = domainService.getOrg
+    new Properties(org, "id", "code", "name", "shortName", "logoUrl", "wwwUrl")
   }
+
 }

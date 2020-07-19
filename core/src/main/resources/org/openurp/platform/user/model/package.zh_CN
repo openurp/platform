@@ -1,18 +1,21 @@
 User=用户
 User.code=帐号
 User.name=姓名
-User.enabled=是否启用
-User.locked=是否锁定
+
 User.remark=备注
 User.roles=角色
 User.members=成员
 User.name=姓名
-User.password=密码
-User.passwordExpiredOn=密码过期日期
 User.category.name=身份
-User.beginOn-endOn=生效日期
+User.beginOn-endOn=有效期
 User.avatarId=头像ID
 User.properties=属性
+
+
+Account.enabled=是否启用
+Account.locked=是否锁定
+Account.password=密码
+Account.passwdExpiredOn=密码过期日期
 
 UserCategory=用户类别
 UserCategory.enName=英文名
@@ -44,13 +47,13 @@ Avatar.fileName=文件名
 
 Dimension=数据维度
 Dimension.name=名称
-Dimension.domains=关联领域
+Dimension.domain=业务系统
 Dimension.keyName=关键字
 Dimension.title=标题
 Dimension.source=来源
 Dimension.multiple=是否多值
 Dimension.required=是否必须
-Dimension.typeName=类型名
+Dimension.valueType=值类型
 Dimension.properties=其他属性
 
 UserProfile=用户配置
