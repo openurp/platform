@@ -10,7 +10,7 @@
   </parent>
   <artifactId>openurp-platform-cas</artifactId>
   <packaging>war</packaging>
-  <name>Openurp Platform Cas</name>
+  <name>OpenURP Platform Cas</name>
 
   <properties>
     <bundle.symbolicName>org.openurp.platform.cas</bundle.symbolicName>

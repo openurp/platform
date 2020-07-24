@@ -10,7 +10,7 @@
   </parent>
   <artifactId>openurp-platform-portal</artifactId>
   <packaging>war</packaging>
-  <name>Openurp Openurp Portal</name>
+  <name>OpenURP Platform Portal</name>
 
   <properties>
     <bundle.symbolicName>org.openurp.platform.portal</bundle.symbolicName>
