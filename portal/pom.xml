@@ -6,11 +6,11 @@
   <parent>
     <groupId>org.openurp.platform</groupId>
     <artifactId>openurp-platform-parent</artifactId>
-    <version>0.5.1</version>
+    <version>0.5.2</version>
   </parent>
   <artifactId>openurp-platform-portal</artifactId>
   <packaging>war</packaging>
-  <name>Openurp Openurp Portal</name>
+  <name>OpenURP Platform Portal</name>
 
   <properties>
     <bundle.symbolicName>org.openurp.platform.portal</bundle.symbolicName>
