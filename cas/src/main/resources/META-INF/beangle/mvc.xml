@@ -1,6 +1,10 @@
 <?xml version="1.0"?>
 <mvc>
-  <profile name="openurp.platform.cas" package="org.openurp.platform.cas.web">
+  <static>
+    <bundle name="cryptojs" version="3.1.2"/>
+    <bundle version="1.26.5" name="virtual-keyboard"/>
+  </static>
+  <profile name="cas.cas" package="org.beangle.ems.cas.action">
     <url path="/" suffix=""  style="seo" />
     <interceptors>
       <interceptor name="web.Interceptor.security"/>

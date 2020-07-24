@@ -1,72 +1,45 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.openurp.platform</groupId>
     <artifactId>openurp-platform-parent</artifactId>
-    <version>0.5.0</version>
+    <version>0.5.1</version>
   </parent>
-  <groupId>org.openurp.platform</groupId>
   <artifactId>openurp-platform-cas</artifactId>
-  <packaging>jar</packaging>
-  <name>OpenURP Platform Cas</name>
+  <packaging>war</packaging>
+  <name>Openurp Platform Cas</name>
 
   <properties>
     <bundle.symbolicName>org.openurp.platform.cas</bundle.symbolicName>
-    <bundle.namespace>org.openurp.platform</bundle.namespace>
+    <bundle.namespace>org.openurp</bundle.namespace>
   </properties>
 
   <dependencies>
     <dependency>
-      <groupId>org.beangle.ids</groupId>
-      <artifactId>beangle-ids-cas_2.13</artifactId>
-      <version>${beangle.ids.version}</version>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.beangle.cache</groupId>
-      <artifactId>beangle-cache-caffeine_2.13</artifactId>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-core</artifactId>
+      <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>org.beangle.cache</groupId>
-      <artifactId>beangle-cache-redis_2.13</artifactId>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>org.beangle.security</groupId>
-      <artifactId>beangle-security-cas_2.13</artifactId>
+      <groupId>org.beangle.ems</groupId>
+      <artifactId>beangle-ems-web_2.13</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.beangle.security</groupId>
-      <artifactId>beangle-security-session_2.13</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.beangle.data</groupId>
-      <artifactId>beangle-data-hibernate_2.13</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-jcache</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.ehcache</groupId>
-      <artifactId>ehcache</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.openurp.app</groupId>
-      <artifactId>openurp-app-api</artifactId>
-      <version>${openurp.app.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.openurp.platform</groupId>
-      <artifactId>openurp-platform-core</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>javax.servlet-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.zaxxer</groupId>
-      <artifactId>HikariCP</artifactId>
+      <groupId>org.beangle.webui</groupId>
+      <artifactId>beangle-webui-bootstrap_2.13</artifactId>
+      <version>${beangle.webui.version}</version>
     </dependency>
   </dependencies>
 </project>
