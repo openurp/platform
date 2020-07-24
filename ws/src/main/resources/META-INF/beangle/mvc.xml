@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <mvc>
-  <profile name="openurp-platform-ws" package="org.openurp.platform.ws">
+  <profile name="ems-ws" package="org.beangle.ems.ws">
     <action suffix="WS" defaultMethod="index" />
     <url path="/" suffix="" style="plur-seo" />
     <interceptors>
@@ -9,7 +9,7 @@
     </interceptors>
   </profile>
 
-  <profile name="openurp-platform-ws-security-func" package="org.openurp.platform.ws.security.func">
+  <profile name="ems-ws-security-func" package="org.beangle.ems.ws.security.func">
     <action suffix="WS" defaultMethod="index" />
     <url path="/security/func/{app}/" suffix="" style="plur-seo" />
     <interceptors>
@@ -18,7 +18,7 @@
     </interceptors>
   </profile>
 
-  <profile name="openurp-platform-ws-security-data" package="org.openurp.platform.ws.security.data">
+  <profile name="ems-ws-security-data" package="org.beangle.ems.ws.security.data">
     <action suffix="WS" defaultMethod="index" />
     <url path="/security/data/" suffix="" style="plur-seo" />
     <interceptors>

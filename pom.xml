@@ -13,46 +13,21 @@
   <name>OpenURP Platform Parent</name>
 
   <modules>
-    <module>core</module>
     <module>ws</module>
     <module>cas</module>
-    <module>adminapp</module>
-    <module>userapp</module>
-    <module>casapp</module>
     <module>portal</module>
-    <module>indexapp</module>
   </modules>
 
   <properties>
-    <openurp.app.version>0.2.0</openurp.app.version>
+    <beangle.ems.version>4.1.0</beangle.ems.version>
   </properties>
 
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>org.openurp.app</groupId>
-        <artifactId>openurp-app-api</artifactId>
-        <version>${openurp.app.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.openurp.app</groupId>
-        <artifactId>openurp-app-cas</artifactId>
-        <version>${openurp.app.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.openurp.app</groupId>
-        <artifactId>openurp-app-web</artifactId>
-        <version>${openurp.app.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.openurp.platform</groupId>
-        <artifactId>openurp-platform-core</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.openurp.platform</groupId>
-        <artifactId>openurp-platform-admin</artifactId>
-        <version>${project.version}</version>
+        <groupId>org.beangle.ems</groupId>
+        <artifactId>beangle-ems-web_2.13</artifactId>
+        <version>${beangle.ems.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

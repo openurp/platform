@@ -22,7 +22,7 @@
         <heap unit="entries">10000</heap>
     </cache>
 
-    <cache alias="openurp.platform.security">
+    <cache alias="ems.security">
         <key-type>java.lang.Object</key-type>
         <value-type>java.lang.Object</value-type>
         <expiry>
