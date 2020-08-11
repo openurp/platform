@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.openurp.platform</groupId>
     <artifactId>openurp-platform-parent</artifactId>
-    <version>0.5.4-SNAPSHOT</version>
+    <version>0.5.4</version>
   </parent>
   <artifactId>openurp-platform-ws</artifactId>
   <packaging>war</packaging>
