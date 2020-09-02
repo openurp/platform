@@ -33,6 +33,10 @@
       <scope>runtime</scope>
     </dependency>
     <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.beangle.ems</groupId>
       <artifactId>beangle-ems-web_2.13</artifactId>
     </dependency>

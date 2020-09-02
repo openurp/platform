@@ -49,24 +49,26 @@ class EditAction(secuirtyManager: WebSecurityManager, ticketRegistry: TicketRegi
   var openurpJdbcExecutor: JdbcExecutor = _
 
   override def init(): Unit = {
-        val f = new File(EmsApp.getAppFile.get.getCanonicalPath)
-        if (f.exists) {
-          val urlAddr = f.toURI.toURL
-          var finded = false
-          (scala.xml.XML.load(urlAddr.openStream()) \\ "datasource") foreach { elem =>
-            val one = DataSourceUtils.parseXml(elem)
-            if (one.name == "openurp") {
-              finded = true
-            }
-          }
-          if (finded) {
-            val df = new AppDataSourceFactory()
-            df.name = "openurp"
-            df.init()
-            openurpJdbcExecutor = new JdbcExecutor(df.result)
-          }
+    val f = new File(EmsApp.getAppFile.get.getCanonicalPath)
+    if (f.exists) {
+      val urlAddr = f.toURI.toURL
+      var finded = false
+      (scala.xml.XML.load(urlAddr.openStream()) \\ "datasource") foreach { elem =>
+        val one = DataSourceUtils.parseXml(elem)
+        if (one.name == "openurp") {
+          finded = true
         }
+      }
+      if (finded) {
+        val df = new AppDataSourceFactory()
+        df.name = "openurp"
+        df.init()
+        openurpJdbcExecutor = new JdbcExecutor(df.result)
+        this.logger.info("connect openurp database.")
+      }
+    }
   }
+
   @mapping(value = "")
   def index(): View = {
     put("principal", Securities.session.get.principal)
@@ -81,7 +83,7 @@ class EditAction(secuirtyManager: WebSecurityManager, ticketRegistry: TicketRegi
         val user = users.head
         credentialStore.updatePassword(user.code, DefaultPasswordEncoder.generate(p, null, "sha"))
         if (null != openurpJdbcExecutor) {
-          val password= DefaultPasswordEncoder.generate(p, null, "md5")
+          val password = DefaultPasswordEncoder.generate(p, null, "md5")
           openurpJdbcExecutor.update(
             "update base.users set password=? where code=?",
             Strings.substringAfter(password, "{MD5}"), user.code)
