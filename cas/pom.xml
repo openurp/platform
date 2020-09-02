@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.openurp.platform</groupId>
     <artifactId>openurp-platform-parent</artifactId>
-    <version>0.5.5</version>
+    <version>0.5.6</version>
   </parent>
   <artifactId>openurp-platform-cas</artifactId>
   <packaging>war</packaging>
@@ -31,6 +31,10 @@
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
       <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
     </dependency>
     <dependency>
       <groupId>org.beangle.ems</groupId>
