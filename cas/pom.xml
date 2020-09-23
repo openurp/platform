@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.openurp.platform</groupId>
     <artifactId>openurp-platform-parent</artifactId>
-    <version>0.5.7-SNAPSHOT</version>
+    <version>0.5.7</version>
   </parent>
   <artifactId>openurp-platform-cas</artifactId>
   <packaging>war</packaging>
@@ -33,8 +33,8 @@
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>javax.servlet-api</artifactId>
+      <groupId>jakarta.servlet</groupId>
+      <artifactId>jakarta.servlet-api</artifactId>
     </dependency>
     <dependency>
       <groupId>org.beangle.ems</groupId>
