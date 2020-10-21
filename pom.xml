@@ -18,6 +18,13 @@
     <module>portal</module>
   </modules>
 
+  <properties>
+    <beangle.security.version>4.2.22</beangle.security.version>
+    <beangle.serializer.version>0.0.16</beangle.serializer.version>
+    <beangle.ids.version>0.2.13</beangle.ids.version>
+    <beangle.ems.version>4.1.8</beangle.ems.version>
+  </properties>
+
   <dependencyManagement>
     <dependencies>
       <dependency>
