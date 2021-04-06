@@ -4,11 +4,11 @@
   <parent>
     <groupId>org.openurp</groupId>
     <artifactId>openurp-parent</artifactId>
-    <version>0.4.8</version>
+    <version>0.4.10</version>
   </parent>
   <groupId>org.openurp.platform</groupId>
   <artifactId>openurp-platform-parent</artifactId>
-  <version>0.5.11</version>
+  <version>0.5.12</version>
   <packaging>pom</packaging>
   <name>OpenURP Platform Parent</name>
 
@@ -19,8 +19,10 @@
   </modules>
 
   <properties>
-    <beangle.ems.version>4.1.12</beangle.ems.version>
+    <beangle.ems.version>4.1.14</beangle.ems.version>
+    <beangle.security.version>4.2.25</beangle.security.version>
   </properties>
+
   <dependencyManagement>
     <dependencies>
       <dependency>
