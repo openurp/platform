@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.openurp</groupId>
     <artifactId>openurp-parent</artifactId>
-    <version>0.4.10</version>
+    <version>0.4.11</version>
   </parent>
   <groupId>org.openurp.platform</groupId>
   <artifactId>openurp-platform-parent</artifactId>
@@ -17,12 +17,6 @@
     <module>cas</module>
     <module>portal</module>
   </modules>
-
-  <properties>
-    <beangle.ems.version>4.1.15</beangle.ems.version>
-    <beangle.ids.version>0.2.17</beangle.ids.version>
-    <beangle.security.version>4.2.25</beangle.security.version>
-  </properties>
 
   <dependencyManagement>
     <dependencies>
