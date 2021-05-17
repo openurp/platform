@@ -4,6 +4,10 @@
     <bundle name="echarts" version="4.5.0">
       <module name="echarts" js="dist/echarts.js"/>
     </bundle>
+    <bundle name="fullcalendar" version="5.6.0">
+      <module name="fullcalendar" js="main.js" css="main.min.css"/>
+      <module name="fullcalendar-locale" js="locales-all.js" depends="fullcalendar"/>
+    </bundle>
   </static>
 
   <profile name="ems-portal" package="org.beangle.ems.portal.*.action">
